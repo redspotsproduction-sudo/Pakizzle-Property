@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pakizzle-ai"
+version = "0.1.0"
+description = "Pakizzle AI service — Gemini-backed chat, valuation, and semantic search."
+requires-python = ">=3.12"
+readme = "README.md"
+authors = [{ name = "Pakizzle" }]
+# v1 dependency set — minimal surface to ship the chatbot + valuation.
+# Heavy ML deps (sentence-transformers, pgvector, asyncpg) deferred to v2.
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "google-genai>=0.3.0",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "httpx>=0.27",
+    "python-multipart>=0.0.12",
+    "python-jose[cryptography]>=3.3",
+    "structlog>=24.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.7",
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+]
+# Full embeddings/RAG stack — install when wiring pgvector search.
+embeddings = [
+    "asyncpg>=0.30",
+    "pgvector>=0.3",
+    "sentence-transformers>=3.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

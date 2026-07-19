@@ -1,0 +1,20 @@
+# Pakizzle robots.txt for Search Engine Optimization
+User-agent: *
+Allow: /
+Allow: /marketplace
+Allow: /reels
+Allow: /insurance
+Allow: /inspection
+Allow: /financing
+Allow: /pricing
+
+# Prevent crawling of personal/administrative protocol areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /chat/
+Disallow: /edit/
+Disallow: /settings/
+Disallow: /verification/
+
+# Sitemap location
+Sitemap: https://pakizzle.com/sitemap.xml

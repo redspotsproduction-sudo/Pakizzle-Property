@@ -1,0 +1,313 @@
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Building2, 
+  Check, 
+  X, 
+  Star, 
+  Info, 
+  Sliders, 
+  Zap, 
+  Percent, 
+  ShieldCheck, 
+  Clock, 
+  Compass, 
+  Scale, 
+  ArrowRight,
+  Filter,
+  CheckCircle,
+  HelpCircle,
+  ChevronRight
+} from 'lucide-react';
+import { cn, formatPrice } from '../lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+
+interface FinancingProduct {
+  id: string;
+  bankName: string;
+  logoUrl: string;
+  type: 'islamic' | 'conventional';
+  apr: string;
+  processingFee: string;
+  minDownPayment: string;
+  approvalSpeed: string;
+  rating: number;
+  isFeatured: boolean;
+  usp: string;
+  insuranceRequired: string;
+  documentsLevel: 'Minimal Digital' | 'Standard Bank Docs' | 'Heavy Physical Docs';
+}
+
+const FINANCING_PRODUCTS: FinancingProduct[] = [
+  {
+    id: 'pakizzle_capital',
+    bankName: 'Pakizzle Instant Capital™',
+    logoUrl: 'https://picsum.photos/seed/pakizzlefinance/100/100',
+    type: 'islamic',
+    apr: '14.9% - 15.5%',
+    processingFee: '0% Processing',
+    minDownPayment: '30% Down Payment',
+    approvalSpeed: 'Instant (12-24 Hours)',
+    rating: 4.9,
+    isFeatured: true,
+    usp: '100% digital, zero physical bank visits, free tracker installation included',
+    insuranceRequired: 'Free Takaful Included',
+    documentsLevel: 'Minimal Digital'
+  },
+  {
+    id: 'meezan_ijarah',
+    bankName: 'Meezan Bank Car Ijarah',
+    logoUrl: 'https://picsum.photos/seed/meezan/100/100',
+    type: 'islamic',
+    apr: '15.75% - 16.5%',
+    processingFee: 'PKR 12,000 + Tax',
+    minDownPayment: '30% Down Payment',
+    approvalSpeed: '4 - 7 Business Days',
+    rating: 4.7,
+    isFeatured: false,
+    usp: 'First & largest Shariah-compliant Islamic auto financing network in Pakistan',
+    insuranceRequired: 'Mandatory Takaful Pool',
+    documentsLevel: 'Standard Bank Docs'
+  },
+  {
+    id: 'alfalah_auto',
+    bankName: 'Bank Alfalah Auto Loan',
+    logoUrl: 'https://picsum.photos/seed/alfalah/100/100',
+    type: 'conventional',
+    apr: '16.0% - 17.5%',
+    processingFee: 'PKR 10,000 Flat',
+    minDownPayment: '30% Down Payment',
+    approvalSpeed: '3 - 5 Business Days',
+    rating: 4.5,
+    isFeatured: false,
+    usp: 'Highly flexible tenures up to 7 years with multi-partner comprehensive insurance options',
+    insuranceRequired: 'Commercial Insurance',
+    documentsLevel: 'Standard Bank Docs'
+  },
+  {
+    id: 'hbl_auto',
+    bankName: 'HBL Car Loan',
+    logoUrl: 'https://picsum.photos/seed/hbl/100/100',
+    type: 'conventional',
+    apr: '16.5% - 18.0%',
+    processingFee: 'PKR 15,000 + Tax',
+    minDownPayment: '35% Down Payment',
+    approvalSpeed: '7 - 10 Business Days',
+    rating: 4.3,
+    isFeatured: false,
+    usp: 'Deep national network stability, preferential pricing for existing HBL account holders',
+    insuranceRequired: 'Commercial Insurance',
+    documentsLevel: 'Heavy Physical Docs'
+  }
+];
+
+export default function FinancingComparisonTable() {
+  const navigate = useNavigate();
+  const [filterType, setFilterType] = useState<'all' | 'islamic' | 'conventional'>('all');
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+
+  const filteredProducts = useMemo(() => {
+    return FINANCING_PRODUCTS.filter(p => {
+      if (filterType === 'all') return true;
+      return p.type === filterType;
+    });
+  }, [filterType]);
+
+  const handleApplyNow = (product: FinancingProduct) => {
+    toast.success(`Lease plan lock achieved!`, {
+      description: `Redirecting to financing portal configured for ${product.bankName}`
+    });
+    navigate(`/financing/apply/${product.id === 'pakizzle_capital' ? 'personal' : 'business'}`);
+  };
+
+  return (
+    <div className="max-w-[1024px] mx-auto px-6 sm:px-8 py-12">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+        <div className="space-y-2">
+          <span className="text-[10px] font-extrabold text-apple-blue uppercase tracking-[0.2em] block">
+            MARKET COMPARISON PORTAL
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+            Compare Pakizzle Capital vs Top Banks
+          </h2>
+          <p className="text-xs text-[#86868B] max-w-2xl leading-relaxed">
+            Choose from Pakistan's leading auto leasing products. Select and lock preferred rates instantly.
+          </p>
+        </div>
+
+        {/* Filter Controls */}
+        <div className="flex items-center gap-2 bg-[#F5F5F7] dark:bg-black/35 p-1 rounded-full border border-black/[0.03] dark:border-white/[0.02] shrink-0 self-start md:self-auto">
+          <button
+            onClick={() => setFilterType('all')}
+            className={cn(
+              "px-4 py-1.5 text-[10px] font-bold rounded-full transition-all",
+              filterType === 'all'
+                ? "bg-white dark:bg-[#1C1C1E] text-[#1D1D1F] dark:text-white shadow-sm"
+                : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+            )}
+          >
+            All Products
+          </button>
+          <button
+            onClick={() => setFilterType('islamic')}
+            className={cn(
+              "px-4 py-1.5 text-[10px] font-bold rounded-full transition-all",
+              filterType === 'islamic'
+                ? "bg-emerald-500 text-white shadow-sm"
+                : "text-[#86868B] hover:text-emerald-500"
+            )}
+          >
+            Islamic (Ijarah)
+          </button>
+          <button
+            onClick={() => setFilterType('conventional')}
+            className={cn(
+              "px-4 py-1.5 text-[10px] font-bold rounded-full transition-all",
+              filterType === 'conventional'
+                ? "bg-apple-blue text-white shadow-sm"
+                : "text-[#86868B] hover:text-apple-blue"
+            )}
+          >
+            Conventional
+          </button>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] shadow-[0_4px_30px_rgba(0,0,0,0.01)] transition-colors duration-300">
+        <table className="w-full text-left border-collapse min-w-[800px]">
+          <thead>
+            <tr className="border-b border-black/[0.03] dark:border-white/[0.02] bg-[#F5F5F7]/50 dark:bg-black/20 text-[10px] font-black uppercase text-[#86868B] tracking-wider">
+              <th className="py-5 px-6">Financing Solution</th>
+              <th className="py-5 px-4">Type / Markup</th>
+              <th className="py-5 px-4">Processing Fee</th>
+              <th className="py-5 px-4">Approval Speed</th>
+              <th className="py-5 px-4">Documentation</th>
+              <th className="py-5 px-6 text-right">Commitment</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-black/[0.03] dark:divide-white/[0.02]">
+            {filteredProducts.map((prod) => {
+              const isSelected = selectedProductId === prod.id;
+              return (
+                <tr 
+                  key={prod.id}
+                  onClick={() => setSelectedProductId(isSelected ? null : prod.id)}
+                  className={cn(
+                    "hover:bg-[#F5F5F7]/30 dark:hover:bg-white/[0.01] transition-colors cursor-pointer text-xs",
+                    prod.isFeatured ? "bg-amber-500/[0.01] dark:bg-amber-500/[0.005]" : "",
+                    isSelected ? "bg-black/[0.01] dark:bg-white/[0.01]" : ""
+                  )}
+                >
+                  {/* Name and logo */}
+                  <td className="py-6 px-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.05] dark:border-white/10 shrink-0 flex items-center justify-center font-bold text-[#86868B] text-[10px]">
+                        <Building2 className="w-5 h-5 text-[#86868B]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.bankName}</span>
+                          {prod.isFeatured && (
+                            <span className="bg-amber-500/10 text-amber-500 border border-amber-500/15 text-[8px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <Star className="w-2 h-2 fill-current" />
+                              Best Value
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-[#86868B] mt-0.5 line-clamp-1 max-w-[280px]">{prod.usp}</p>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Markup rate */}
+                  <td className="py-6 px-4">
+                    <div>
+                      <span className="font-extrabold font-mono text-[#1D1D1F] dark:text-white block">{prod.apr}</span>
+                      <span className={cn(
+                        "text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full border tracking-wider inline-block mt-1",
+                        prod.type === 'islamic'
+                          ? "bg-emerald-500/5 text-emerald-500 border-emerald-500/10"
+                          : "bg-apple-blue/5 text-apple-blue border-apple-blue/10"
+                      )}>
+                        {prod.type === 'islamic' ? 'Islamic (Ijarah)' : 'Conventional'}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Processing Fee */}
+                  <td className="py-6 px-4">
+                    <div className="space-y-0.5">
+                      <span className="font-bold text-[#1D1D1F] dark:text-white block">{prod.processingFee}</span>
+                      <span className="text-[9px] text-[#86868B]">{prod.minDownPayment}</span>
+                    </div>
+                  </td>
+
+                  {/* Speed */}
+                  <td className="py-6 px-4">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className={cn("w-3.5 h-3.5 shrink-0", prod.id === 'pakizzle_capital' ? "text-amber-500" : "text-[#86868B]")} />
+                      <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.approvalSpeed}</span>
+                    </div>
+                  </td>
+
+                  {/* Documents required */}
+                  <td className="py-6 px-4">
+                    <span className={cn(
+                      "text-[9px] font-bold px-2 py-1 rounded-full border uppercase tracking-wider",
+                      prod.documentsLevel === 'Minimal Digital' 
+                        ? "bg-emerald-500/5 text-emerald-500 border-emerald-500/10" 
+                        : prod.documentsLevel === 'Standard Bank Docs'
+                        ? "bg-apple-blue/5 text-apple-blue border-apple-blue/10"
+                        : "bg-amber-500/5 text-amber-500 border-amber-500/10"
+                    )}>
+                      {prod.documentsLevel}
+                    </span>
+                  </td>
+
+                  {/* Action */}
+                  <td className="py-6 px-6 text-right">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleApplyNow(prod);
+                      }}
+                      className={cn(
+                        "px-4 py-2 text-[10px] font-bold rounded-full transition-all flex items-center gap-1.5 ml-auto shadow-sm hover:scale-105 active:scale-95",
+                        prod.id === 'pakizzle_capital'
+                          ? "bg-apple-blue text-white hover:bg-blue-600"
+                          : "bg-[#F5F5F7] dark:bg-white/5 text-[#1D1D1F] dark:text-white border border-transparent hover:border-black/10 dark:hover:border-white/10"
+                      )}
+                    >
+                      Apply Now
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Accordion Note / Expansion */}
+      <div className="mt-6 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
+        <div className="flex gap-3 items-center text-center sm:text-left">
+          <div className="w-9 h-9 rounded-full bg-apple-blue/5 dark:bg-apple-blue/10 flex items-center justify-center text-apple-blue shrink-0">
+            <Info className="w-4 h-4" />
+          </div>
+          <p className="text-[10px] text-[#86868B] max-w-xl leading-relaxed">
+            <strong>Regulatory Guidelines Note:</strong> Under current prudential regulations of Pakistan, the maximum loan amount for locally assembled vehicles is subject to salary limits, and some imported cars might carry restriction thresholds. Our credit team handles full verification for you.
+          </p>
+        </div>
+        <button 
+          onClick={() => navigate('/financing/apply/personal')}
+          className="text-[10px] font-bold text-apple-blue hover:underline shrink-0 flex items-center gap-1"
+        >
+          Check Specific Constraints
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}

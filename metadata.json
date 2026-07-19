@@ -1,0 +1,6 @@
+{
+  "name": "Pakizzle - Premium Automotive Portal",
+  "description": "A next-generation, Apple-style automotive marketplace for Pakistan featuring AI-powered valuations, verified listings, and a futuristic user experience.",
+  "requestFramePermissions": ["geolocation", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

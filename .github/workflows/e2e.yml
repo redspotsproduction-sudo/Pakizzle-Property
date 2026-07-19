@@ -1,0 +1,142 @@
+name: e2e
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Sequential — there's only one shared Postgres + gateway.
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: pakizzle
+          POSTGRES_PASSWORD: pakizzle_dev
+          POSTGRES_DB: pakizzle
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pakizzle"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+
+    env:
+      DATABASE_URL: postgres://pakizzle:pakizzle_dev@localhost:5432/pakizzle?sslmode=disable
+      JWT_SECRET: ci-test-secret-do-not-use-in-prod
+      ADMIN_EMAIL: e2e-admin@pakizzle.test
+      AI_SERVICE_URL: http://localhost:8000
+      GATEWAY_URL: http://localhost:8080
+      BASE_URL: http://localhost:3000
+      NEXT_PUBLIC_GATEWAY_URL: http://localhost:8080
+      NEXT_PUBLIC_AI_URL: http://localhost:8000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+          cache: true
+          cache-dependency-path: apps/gateway/go.sum
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h localhost -U pakizzle; then echo "postgres ready"; break; fi
+            sleep 1
+          done
+
+      # ── Gateway ──────────────────────────────────────────────────────────
+      - name: Build gateway
+        working-directory: apps/gateway
+        run: go build -o /tmp/pakizzle-gateway ./cmd/gateway
+
+      - name: Start gateway
+        working-directory: apps/gateway
+        run: |
+          /tmp/pakizzle-gateway &
+          echo "GATEWAY_PID=$!" >> $GITHUB_ENV
+        env:
+          PORT: "8080"
+          ENV: ci
+
+      - name: Wait for gateway
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:8080/healthz >/dev/null; then echo "gateway ready"; break; fi
+            sleep 1
+          done
+          curl -fsS http://localhost:8080/healthz
+
+      # ── Seed demo data ───────────────────────────────────────────────────
+      - name: Seed demo data
+        run: |
+          PGPASSWORD=pakizzle_dev psql -h localhost -U pakizzle -d pakizzle \
+            -f apps/gateway/cmd/gateway/migrations/005_seed_demo.sql
+
+      # ── Web ──────────────────────────────────────────────────────────────
+      - name: Install web deps
+        working-directory: apps/web
+        run: npm ci
+
+      - name: Build web
+        working-directory: apps/web
+        run: npm run build
+
+      - name: Start web
+        working-directory: apps/web
+        run: |
+          npm run start &
+          echo "WEB_PID=$!" >> $GITHUB_ENV
+
+      - name: Wait for web
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:3000 >/dev/null; then echo "web ready"; break; fi
+            sleep 1
+          done
+
+      # ── Playwright ───────────────────────────────────────────────────────
+      - name: Install Playwright browsers
+        working-directory: apps/web
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        working-directory: apps/web
+        run: npm run e2e
+
+      - name: Upload Playwright report on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7
+
+      - name: Tail gateway log on failure
+        if: ${{ failure() }}
+        run: |
+          echo "::group::gateway status"
+          ps -p "${GATEWAY_PID:-0}" -o pid,etime,command || true
+          echo "::endgroup::"

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Portal -->
+  <url>
+    <loc>https://pakizzle.com/</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- City Hubs -->
+  <url>
+    <loc>https://pakizzle.com/pakizzle</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- Live Auto Marketplace -->
+  <url>
+    <loc>https://pakizzle.com/marketplace</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- Visual Video Reels Feed (Speed Previews) -->
+  <url>
+    <loc>https://pakizzle.com/reels</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Premium Car Subscriptions & Multi-tier Ads Packages -->
+  <url>
+    <loc>https://pakizzle.com/pricing</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Auction Verification & Security Check Page -->
+  <url>
+    <loc>https://pakizzle.com/auction-verification</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Automotive Insurance Subsystems -->
+  <url>
+    <loc>https://pakizzle.com/insurance</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pakizzle.com/insurance/car</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Specialized Vehicle Inspections -->
+  <url>
+    <loc>https://pakizzle.com/inspection</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Smart Financing Matrices -->
+  <url>
+    <loc>https://pakizzle.com/financing</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

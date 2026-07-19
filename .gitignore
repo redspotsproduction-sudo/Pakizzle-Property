@@ -1,0 +1,38 @@
+# Node / Vite / Next.js
+node_modules/
+.next/
+build/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+
+# Go
+apps/gateway/gateway
+apps/gateway/bin/
+apps/gateway/tmp/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+
+# Env / secrets
+.env*
+!.env.example
+k8s/pakizzle-app-secrets.yaml
+k8s/*-secret.yaml
+!k8s/01-secrets.example.yaml
+
+# OS / editor
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Playwright local artifacts (regenerated on every run)
+apps/web/playwright-report/
+apps/web/test-results/

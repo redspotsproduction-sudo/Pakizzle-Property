@@ -1,0 +1,291 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ---------------------------------------------------------
+    // Global Safety Net
+    // ---------------------------------------------------------
+    match /{document=**} { allow read, write: if false; }
+
+    // ---------------------------------------------------------
+    // Phase 3: Global Helpers
+    // ---------------------------------------------------------
+    function isSignedIn() { return request.auth != null; }
+    
+    function isAdmin() { 
+      return isSignedIn() && (
+        request.auth.token.email == 'redspotsproduction@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // ---------------------------------------------------------
+    // Users & Profiles
+    // ---------------------------------------------------------
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'status', 'role']) &&
+             data.uid == request.auth.uid &&
+             data.email is string &&
+             data.status in ['active', 'suspended', 'banned', 'pending'] &&
+             data.role in ['user', 'admin', 'moderator', 'finance', 'support'];
+    }
+
+    match /users/{userId} {
+      allow read: if true; 
+      allow create: if isSignedIn() && isValidUser(incoming()) && userId == request.auth.uid;
+      
+      // Action: Profile Update
+      function isProfileUpdate() {
+        return incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName', 'photoURL', 'username', 'phoneNumber', 'phone', 
+          'isOnline', 'lastSeen', 'notificationSettings', 'dob', 
+          'nationality', 'gender', 'updatedAt', 'rating', 'ratingCount'
+        ]);
+      }
+
+      // Action: Verification Sync (Required for real-time verification status task)
+      function isVerificationUpdate() {
+        return incoming().diff(existing()).affectedKeys().hasOnly([
+          'isEmailVerified', 'email_verified', 'email_verified_at',
+          'isPhoneVerified', 'phone_verified', 'phone_verified_at',
+          'isOtpVerified', 'identity_status', 'verificationLevel', 'updatedAt', 'phone', 'email'
+        ]);
+      }
+
+      // Action: Onboarding Initialization & Transition
+      function isTransitioningOnboarding() {
+        return (
+          !('onboardingCompletedAt' in existing()) || 
+          (existing().isPendingOnboarding == true) || 
+          existing().status == 'pending'
+        ) && 
+        incoming().role == 'user' &&
+        (
+          (!('accountType' in incoming()) || incoming().accountType == 'user' && incoming().status == 'active') ||
+          (incoming().accountType in ['dealer', 'company'] && incoming().status == 'pending')
+        );
+      }
+
+      allow update: if isSignedIn() && (
+        (isOwner(userId) && 
+         (
+           isTransitioningOnboarding() ||
+           (
+             (incoming().role == existing().role || (!('role' in incoming()) && !('role' in existing()))) &&
+             (incoming().status == existing().status || (!('status' in incoming()) && !('status' in existing())))
+           )
+         )
+        ) || isAdmin()
+      );
+      
+      match /addresses/{addressId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+      
+      match /payment_methods/{methodId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // ---------------------------------------------------------
+    // Categories & Fields
+    // ---------------------------------------------------------
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /category_fields/{fieldId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /category_versions/{versionId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // Vehicles
+    // ---------------------------------------------------------
+    function isValidVehicle(data) {
+      return data.keys().hasAll(['id', 'make', 'model', 'price', 'seller', 'status', 'createdAt']) &&
+             data.seller.uid == request.auth.uid &&
+             data.price is number && data.price >= 0;
+    }
+
+    match /vehicles/{vehicleId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidVehicle(incoming()) && vehicleId == incoming().id;
+      allow update: if isSignedIn() && (
+        (isOwner(existing().seller.uid) && 
+         incoming().seller.uid == existing().seller.uid &&
+         incoming().diff(existing()).affectedKeys().hasOnly(['make', 'model', 'year', 'price', 'mileage', 'location', 'city', 'area', 'images', 'type', 'category', 'condition', 'transmission', 'fuelType', 'engineSize', 'specs', 'features', 'description', 'status', 'updatedAt', 'isAuctionVerified', 'isFeatured', 'featuredUntil', 'views', 'favorites', 'badges'])
+        ) || isAdmin()
+      );
+      allow delete: if isSignedIn() && (isOwner(existing().seller.uid) || isAdmin());
+    }
+
+    // ---------------------------------------------------------
+    // Notifications
+    // ---------------------------------------------------------
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && (incoming().userId == request.auth.uid || isAdmin()); 
+      allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin()) && 
+                    incoming().diff(existing()).affectedKeys().hasOnly(['status']);
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // Conversations
+    // ---------------------------------------------------------
+    match /conversations/{convId} {
+      allow read: if isSignedIn() && (resource == null || request.auth.uid in resource.data.participantIds || isAdmin());
+      allow create: if isSignedIn() && (request.auth.uid in incoming().participantIds) && convId == incoming().id;
+      allow update: if isSignedIn() && (request.auth.uid in resource.data.participantIds || isAdmin());
+      
+      match /messages/{messageId} {
+        allow read: if isSignedIn() && (get(/databases/$(database)/documents/conversations/$(convId)).data.participantIds.hasAny([request.auth.uid]) || isAdmin());
+        allow create: if isSignedIn() && (get(/databases/$(database)/documents/conversations/$(convId)).data.participantIds.hasAny([request.auth.uid])) &&
+                      incoming().senderId == request.auth.uid;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // Other Collections
+    // ---------------------------------------------------------
+    match /financing_requests/{requestId} {
+      allow read, write: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+    }
+    match /insurance_requests/{requestId} {
+      allow read, write: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+    }
+    match /inspection_requests/{requestId} {
+      allow read, write: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+    }
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isSignedIn() && incoming().reviewerId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+    match /security_alerts/{alertId} {
+      allow read, write: if isAdmin();
+    }
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+    }
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /insurance_companies/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /inspection_companies/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /financing_companies/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /auction_companies/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /popular_styles/{styleId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /saved_searches/{searchId} {
+      allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && (incoming().userId == request.auth.uid || request.auth.uid != null);
+      allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+    match /ads_configurations/{adId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() || (
+        incoming().diff(existing()).affectedKeys().hasAny(['views', 'clicks']) &&
+        incoming().diff(existing()).affectedKeys().size() <= 2 &&
+        incoming().id == existing().id &&
+        incoming().status == existing().status &&
+        incoming().title == existing().title &&
+        incoming().imageUrl == existing().imageUrl
+      );
+      allow delete: if isAdmin();
+    }
+    match /reels/{reelId} {
+      allow read: if true;
+      allow create: if isSignedIn() && incoming().sellerId == request.auth.uid;
+      allow update: if isSignedIn() && (
+        // Action: Owner self editing caption or details
+        (existing().sellerId == request.auth.uid && incoming().sellerId == request.auth.uid) ||
+        // Action: Atomic interactions (likes Count, comments Count, views Count) by search or user flow
+        (incoming().diff(existing()).affectedKeys().hasAny(['likesCount', 'commentsCount', 'viewsCount']) &&
+         incoming().diff(existing()).affectedKeys().size() <= 3) ||
+        isAdmin()
+      );
+      allow delete: if isSignedIn() && (existing().sellerId == request.auth.uid || isAdmin());
+    }
+
+    match /reels_comments/{commentId} {
+      allow read: if true;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow update: if isSignedIn() && existing().userId == request.auth.uid && incoming().userId == request.auth.uid;
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+    }
+
+    match /reels_likes/{likeId} {
+      allow read: if true;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+    }
+
+    match /reels_saves/{saveId} {
+      allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    match /reels_offers/{offerId} {
+      allow read: if isSignedIn() && (
+        resource == null ||
+        resource.data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/reels/$(resource.data.reelId)).data.sellerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && incoming().status == 'pending';
+      allow update: if isSignedIn() && (
+        // The offer owner can edit notes, priceOffer or status
+        (existing().userId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['priceOffer', 'notes', 'status'])) ||
+        // The showroom owner (seller) of the reel can accept/reject (change status)
+        (get(/databases/$(database)/documents/reels/$(existing().reelId)).data.sellerId == request.auth.uid &&
+         incoming().diff(existing()).affectedKeys().hasOnly(['status'])) ||
+        isAdmin()
+      );
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+    }
+
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+  }
+}

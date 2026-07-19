@@ -1,0 +1,442 @@
+{
+  "entities": {
+    "Category": {
+      "title": "Category",
+      "description": "Category for automobile marketplace",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "nameUr": { "type": "string" },
+        "slug": { "type": "string" },
+        "parentId": { "type": "string" },
+        "level": { "type": "number" },
+        "icon": { "type": "string" },
+        "banner": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "hidden", "disabled", "draft"] },
+        "showOnHomepage": { "type": "boolean" },
+        "isFeatured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "visibilityRules": { "type": "object" },
+        "seo": { "type": "object" },
+        "version": { "type": "number" },
+        "isDraft": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "slug", "level", "status"]
+    },
+    "CategoryField": {
+      "title": "Category Field",
+      "description": "Custom fields for a category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "name": { "type": "string" },
+        "key": { "type": "string" },
+        "type": { "type": "string" },
+        "required": { "type": "boolean" },
+        "filterable": { "type": "boolean" },
+        "searchable": { "type": "boolean" },
+        "showOnCard": { "type": "boolean" },
+        "order": { "type": "number" },
+        "groupName": { "type": "string" },
+        "validation": { "type": "object" },
+        "options": { "type": "array" },
+        "conditionalLogic": { "type": "object" },
+        "status": { "type": "string" }
+      }
+    },
+    "CategoryVersion": {
+      "title": "Category Version",
+      "description": "Snapshots of category configurations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "version": { "type": "number" },
+        "data": { "type": "object" },
+        "fields": { "type": "array" },
+        "publishedAt": { "type": "string" },
+        "publishedBy": { "type": "string" }
+      }
+    },
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "Vehicle listing on the marketplace",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "make": { "type": "string" },
+        "model": { "type": "string" },
+        "price": { "type": "number" },
+        "seller": {
+          "type": "object",
+          "properties": {
+            "uid": { "type": "string" }
+          }
+        },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "make", "model", "price", "seller", "status", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User profile and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "status": { "type": "string" },
+        "email_verified": { "type": "boolean" },
+        "phone_verified": { "type": "boolean" },
+        "email_verified_at": { "type": "string", "format": "date-time" },
+        "phone_verified_at": { "type": "string", "format": "date-time" },
+        "identity_status": { "type": "string", "enum": ["unverified", "partial", "verified"] },
+        "isEmailVerified": { "type": "boolean" },
+        "isPhoneVerified": { "type": "boolean" }
+      },
+      "required": ["uid", "email", "role", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notification",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["unread", "read"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Chat conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "participantIds": { "type": "array", "items": { "type": "string" } },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "InsuranceCompany": {
+      "title": "Insurance Company",
+      "description": "Auto insurance provider details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "rate": { "type": "string" },
+        "trackerFee": { "type": "string" },
+        "isFeatured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "hidden"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "rate", "trackerFee"]
+    },
+    "InspectionCompany": {
+      "title": "Inspection Company",
+      "description": "Vehicle inspection service provider details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "baseFee": { "type": "string" },
+        "engineersCount": { "type": "number" },
+        "coverageCities": { "type": "string" },
+        "description": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "isFeatured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "hidden"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "baseFee"]
+    },
+    "FinancingCompany": {
+      "title": "Financing Company",
+      "description": "Financing bank / capital provider details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "minInterestRate": { "type": "string" },
+        "maxTenureYears": { "type": "number" },
+        "minDownPayment": { "type": "string" },
+        "processingFee": { "type": "string" },
+        "description": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "isFeatured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "hidden"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "minInterestRate", "maxTenureYears"]
+    },
+    "AuctionCompany": {
+      "title": "Auction Company",
+      "description": "Auction verification agency/center details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "verificationFee": { "type": "string" },
+        "reportTurnaround": { "type": "string" },
+        "coverageAuctions": { "type": "string" },
+        "description": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "isFeatured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "hidden"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "verificationFee", "reportTurnaround"]
+    },
+    "PopularStyle": {
+      "title": "Popular Vehicle Style",
+      "description": "Popular vehicle style circular filters cloned from Carvana style layout",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "iconPreset": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "customSvgPath": { "type": "string" },
+        "filterKey": { "type": "string" },
+        "filterValue": { "type": "string" },
+        "order": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "hidden"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "iconPreset", "filterKey", "filterValue", "status", "order"]
+    },
+    "SavedSearch": {
+      "title": "Saved Search",
+      "description": "User saved search criteria for real-time alerts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "filters": { "type": "object" },
+        "frequency": { "type": "string", "enum": ["instant", "daily"] },
+        "alertMethods": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastCheckedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "name", "filters", "frequency"]
+    },
+    "CustomAd": {
+      "title": "Custom Featured Ad",
+      "description": "Featured Ads layout and configuration properties for portal monetization",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "link": { "type": "string" },
+        "cta": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "slotType": { "type": "string", "enum": ["leaderboard", "sidebar-medium", "sidebar-tall", "native-feed", "all"] },
+        "badge": { "type": "string" },
+        "views": { "type": "number" },
+        "clicks": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "description", "imageUrl", "link", "cta", "status", "slotType"]
+    },
+    "Reel": {
+      "title": "Vehicle Reel",
+      "description": "TikTok-style video showcase reel linked to a vehicle listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "caption": { "type": "string" },
+        "listingId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "sellerName": { "type": "string" },
+        "sellerAvatar": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "commentsCount": { "type": "number" },
+        "viewsCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "videoUrl", "listingId", "sellerId", "createdAt"]
+    },
+    "ReelComment": {
+      "title": "Reel Comment",
+      "description": "A comment left on a video reel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reelId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userAvatar": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "reelId", "userId", "text", "createdAt"]
+    },
+    "ReelLike": {
+      "title": "Reel Like",
+      "description": "User like on a video reel",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "reelId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "reelId", "createdAt"]
+    },
+    "ReelSave": {
+      "title": "Reel Save",
+      "description": "User bookmark/save of a video reel",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "reelId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "reelId", "createdAt"]
+    },
+    "ReelOffer": {
+      "title": "Reel Offer",
+      "description": "User bid proposal submitted directly on a video reel listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reelId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "priceOffer": { "type": "number" },
+        "notes": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "reelId", "userId", "priceOffer", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "categories": {
+      "schema": "Category",
+      "description": "Collection of categories"
+    },
+    "category_fields": {
+      "schema": "CategoryField",
+      "description": "Custom fields for categories"
+    },
+    "category_versions": {
+      "schema": "CategoryVersion",
+      "description": "Snapshots of category configurations"
+    },
+    "audit_logs": {
+      "schema": "object",
+      "description": "System-wide activity logs"
+    },
+    "users": {
+      "schema": "UserProfile",
+      "description": "User profile collection"
+    },
+    "vehicles": {
+      "schema": "Vehicle",
+      "description": "Vehicle marketplace listings"
+    },
+    "notifications": {
+      "schema": "Notification",
+      "description": "Real-time user notifications"
+    },
+    "conversations": {
+      "schema": "Conversation",
+      "description": "Chat conversations"
+    },
+    "insurance_companies": {
+      "schema": "InsuranceCompany",
+      "description": "Collection of insurance providers"
+    },
+    "inspection_companies": {
+      "schema": "InspectionCompany",
+      "description": "Collection of vehicle inspection service providers"
+    },
+    "financing_companies": {
+      "schema": "FinancingCompany",
+      "description": "Collection of financing banks and capital providers"
+    },
+    "auction_companies": {
+      "schema": "AuctionCompany",
+      "description": "Collection of auction verification agency partners"
+    },
+    "reviews": {
+      "schema": "object",
+      "description": "User reviews and ratings"
+    },
+    "financing_requests": {
+      "schema": "object",
+      "description": "Vehicle financing applications"
+    },
+    "insurance_requests": {
+      "schema": "object",
+      "description": "Insurance quote requests"
+    },
+    "inspection_requests": {
+      "schema": "object",
+      "description": "Vehicle inspection bookings"
+    },
+    "banners": {
+      "schema": "object",
+      "description": "Promotional banners"
+    },
+    "popular_styles": {
+      "schema": "PopularStyle",
+      "description": "Collection of Carvana-style popular vehicle body types"
+    },
+    "saved_searches": {
+      "schema": "SavedSearch",
+      "description": "Collection of user saved searches and watch parameters"
+    },
+    "ads_configurations": {
+      "schema": "CustomAd",
+      "description": "Collection of dynamic banner and interactive ads configured by administrators"
+    },
+    "reels": {
+      "schema": "Reel",
+      "description": "TikTok-style video reels linked to active vehicle listings"
+    },
+    "reels_comments": {
+      "schema": "ReelComment",
+      "description": "Comments left on video reels"
+    },
+    "reels_likes": {
+      "schema": "ReelLike",
+      "description": "User likes on video reels"
+    },
+    "reels_saves": {
+      "schema": "ReelSave",
+      "description": "Bookmarked/saved video reels per user"
+    },
+    "reels_offers": {
+      "schema": "ReelOffer",
+      "description": "Offers and bids submitted directly on video reels"
+    }
+  }
+}
