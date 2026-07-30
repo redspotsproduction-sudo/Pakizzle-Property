@@ -24,7 +24,7 @@ const pool = dbUrl ? new Pool({
 }) : null;
 
 if (!pool) {
-  console.log("[DB] No DATABASE_URL provided. Operating in mock-only mode for car data.");
+  console.log("[DB] No DATABASE_URL provided. Operating in mock-only mode for property data.");
 }
 
 // Helper to query pool safely
@@ -35,23 +35,22 @@ const safeQuery = async (text: string, params: any[] = []) => {
 
 // --- MOCK DATA FOR FALLBACK (If DB fails or is empty) ---
 const mockMakes = [
-  { id: 1, name: "Toyota", slug: "toyota", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_car_logo.svg", sortOrder: 1, isActive: true },
-  { id: 2, name: "Honda", slug: "honda", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Honda_Logo.svg", sortOrder: 2, isActive: true },
-  { id: 3, name: "Suzuki", slug: "suzuki", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/12/Suzuki_logo_2.svg", sortOrder: 3, isActive: true },
+  { id: 1, name: "House", slug: "house", logoUrl: "", sortOrder: 1, isActive: true },
+  { id: 2, name: "Apartment", slug: "apartment", logoUrl: "", sortOrder: 2, isActive: true },
+  { id: 3, name: "Plot", slug: "plot", logoUrl: "", sortOrder: 3, isActive: true },
 ];
 
 const mockModels = [
-  { id: 1, makeId: 1, name: "Corolla", slug: "corolla", sortOrder: 1, isActive: true },
-  { id: 2, makeId: 1, name: "Camry", slug: "camry", sortOrder: 2, isActive: true },
-  { id: 3, makeId: 2, name: "Civic", slug: "civic", sortOrder: 1, isActive: true },
-  { id: 4, makeId: 2, name: "City", slug: "city", sortOrder: 2, isActive: true },
-  { id: 5, makeId: 3, name: "Alto", slug: "alto", sortOrder: 1, isActive: true },
+  { id: 1, makeId: 1, name: "Luxury Contemporary Villa", slug: "luxury-villa", sortOrder: 1, isActive: true },
+  { id: 2, makeId: 1, name: "Standard Townhouse", slug: "standard-townhouse", sortOrder: 2, isActive: true },
+  { id: 3, makeId: 2, name: "Studio Apartment", slug: "studio-apartment", sortOrder: 1, isActive: true },
+  { id: 4, makeId: 2, name: "Penthouse Suite", slug: "penthouse-suite", sortOrder: 2, isActive: true },
+  { id: 5, makeId: 3, name: "Residential Plot", slug: "residential-plot", sortOrder: 1, isActive: true },
 ];
 
 const mockVariants = [
-  { id: 1, modelId: 1, name: "GLi", slug: "gli", engineCc: "1300", fuelType: "petrol", transmission: "manual", bodyType: "sedan", isActive: true },
-  { id: 2, modelId: 1, name: "Altis", slug: "altis", engineCc: "1600", fuelType: "petrol", transmission: "automatic", bodyType: "sedan", isActive: true },
-  { id: 3, modelId: 3, name: "RS", slug: "rs", engineCc: "1500", fuelType: "petrol", transmission: "cvt", bodyType: "sedan", isActive: true },
+  { id: 1, modelId: 1, name: "Furnished", slug: "furnished", engineCc: "5 Beds", fuelType: "House", transmission: "furnished", bodyType: "house", isActive: true },
+  { id: 2, modelId: 4, name: "Unfurnished", slug: "unfurnished", engineCc: "3 Beds", fuelType: "Apartment", transmission: "unfurnished", bodyType: "apartment", isActive: true },
 ];
 
 // --- CONFIGURATION ---
@@ -600,6 +599,286 @@ async function startServer() {
     }
   });
 
+  // --- PAKISTAN REAL ESTATE FALLBACK VALUATION ENGINE ---
+  function getFallbackPropertyValuation(
+    propertyType: string,
+    city: string,
+    areaName: string,
+    size: number,
+    sizeUnit: string,
+    beds: number,
+    baths: number,
+    condition: string,
+    floors: string,
+    features: string[]
+  ) {
+    let sizeInSqFt = 0;
+    const unit = sizeUnit || "Marla";
+    if (unit === "Marla") {
+      sizeInSqFt = size * 225;
+    } else if (unit === "Kanal") {
+      sizeInSqFt = size * 20 * 225;
+    } else if (unit === "Sq. Yards") {
+      sizeInSqFt = size * 9;
+    } else {
+      sizeInSqFt = size;
+    }
+
+    let baseRatePerSqFt = 6000;
+    if (propertyType === "House") baseRatePerSqFt = 8500;
+    else if (propertyType === "Apartment") baseRatePerSqFt = 11000;
+    else if (propertyType === "Penthouse") baseRatePerSqFt = 15000;
+    else if (propertyType === "Plot") baseRatePerSqFt = 4000;
+    else if (propertyType === "Commercial") baseRatePerSqFt = 18000;
+
+    let cityMultiplier = 1.0;
+    const lowerCity = (city || "").toLowerCase();
+    if (lowerCity.includes("islamabad")) cityMultiplier = 1.35;
+    else if (lowerCity.includes("karachi")) cityMultiplier = 1.2;
+    else if (lowerCity.includes("lahore")) cityMultiplier = 1.15;
+    else if (lowerCity.includes("rawalpindi")) cityMultiplier = 0.9;
+    else if (lowerCity.includes("peshawar")) cityMultiplier = 0.8;
+    else if (lowerCity.includes("multan")) cityMultiplier = 0.75;
+    else if (lowerCity.includes("faisalabad")) cityMultiplier = 0.75;
+    else if (lowerCity.includes("quetta")) cityMultiplier = 0.7;
+    else cityMultiplier = 0.6;
+
+    let areaMultiplier = 1.0;
+    const lowerArea = (areaName || "").toLowerCase();
+    if (
+      lowerArea.includes("dha") || 
+      lowerArea.includes("defence") || 
+      lowerArea.includes("clifton") || 
+      lowerArea.includes("gulberg") || 
+      lowerArea.includes("bahria") || 
+      lowerArea.includes("askari") || 
+      lowerArea.includes("e-11") || 
+      lowerArea.includes("f-11") || 
+      lowerArea.includes("g-11") || 
+      lowerArea.includes("f-6") || 
+      lowerArea.includes("f-7") || 
+      lowerArea.includes("f-8") || 
+      lowerArea.includes("f-10") || 
+      lowerArea.includes("cantonment") || 
+      lowerArea.includes("cantt")
+    ) {
+      areaMultiplier = 1.9;
+    } else if (
+      lowerArea.includes("johar") || 
+      lowerArea.includes("model town") || 
+      lowerArea.includes("gulshan") || 
+      lowerArea.includes("federal b") || 
+      lowerArea.includes("i-8") || 
+      lowerArea.includes("g-13")
+    ) {
+      areaMultiplier = 1.3;
+    } else if (lowerArea.includes("suburb") || lowerArea.includes("scheme")) {
+      areaMultiplier = 0.85;
+    }
+
+    let baseValue = sizeInSqFt * baseRatePerSqFt * cityMultiplier * areaMultiplier;
+
+    if (propertyType !== "Plot") {
+      baseValue += (beds || 0) * 1200000;
+      baseValue += (baths || 0) * 600000;
+    }
+
+    let conditionMultiplier = 1.0;
+    const lowerCond = (condition || "").toLowerCase();
+    if (lowerCond.includes("new") || lowerCond.includes("brand")) conditionMultiplier = 1.25;
+    else if (lowerCond.includes("excellent")) conditionMultiplier = 1.1;
+    else if (lowerCond.includes("good")) conditionMultiplier = 1.0;
+    else if (lowerCond.includes("fair")) conditionMultiplier = 0.85;
+    else if (lowerCond.includes("renovated")) conditionMultiplier = 1.05;
+    else if (lowerCond.includes("raw")) conditionMultiplier = 0.75;
+
+    baseValue *= conditionMultiplier;
+
+    if (propertyType === "House" || propertyType === "Commercial") {
+      if (floors === "Double Story") baseValue *= 1.15;
+      else if (floors === "Triple Story") baseValue *= 1.25;
+    }
+
+    let featureAdditions = 0;
+    if (Array.isArray(features)) {
+      features.forEach(f => {
+        const lf = f.toLowerCase();
+        if (lf.includes("generator") || lf.includes("solar")) featureAdditions += 2000000;
+        if (lf.includes("corner")) featureAdditions += (baseValue * 0.08);
+        if (lf.includes("boulevard")) featureAdditions += (baseValue * 0.12);
+        if (lf.includes("basement")) featureAdditions += 3500000;
+        if (lf.includes("security") || lf.includes("gated")) featureAdditions += 400000;
+      });
+    }
+
+    let estimatedValue = baseValue + featureAdditions;
+    if (estimatedValue < 2500000) estimatedValue = 2500000;
+
+    estimatedValue = Math.round(estimatedValue / 100000) * 100000;
+
+    const low = Math.round((estimatedValue * 0.92) / 100000) * 100000;
+    const high = Math.round((estimatedValue * 1.08) / 100000) * 100000;
+
+    let grossYield = 4.0;
+    if (propertyType === "Apartment") grossYield = 6.0;
+    else if (propertyType === "Penthouse") grossYield = 6.5;
+    else if (propertyType === "Commercial") grossYield = 8.0;
+    else if (propertyType === "Plot") grossYield = 0.0;
+
+    const estimatedRent = grossYield > 0 
+      ? Math.round((estimatedValue * (grossYield / 100) / 12) / 5000) * 5000 
+      : 0;
+
+    const stampDuty = Math.round(estimatedValue * 0.02);
+    const transferFee = Math.round(estimatedValue * 0.01);
+    const filerFbrTax = Math.round(estimatedValue * 0.03);
+    const nonFilerFbrTax = Math.round(estimatedValue * 0.10);
+
+    const displaySize = `${size} ${unit}`;
+    const comparableProperties = [
+      {
+        title: `Similar ${propertyType} in ${areaName || 'Sector'}`,
+        price: Math.round((estimatedValue * 0.95) / 500000) * 500000,
+        size: displaySize,
+        source: "Pakizzle Verified Database"
+      },
+      {
+        title: `${conditionMultiplier >= 1.1 ? 'Newly Constructed' : 'Standard'} ${propertyType} nearby`,
+        price: Math.round((estimatedValue * 1.04) / 500000) * 500000,
+        size: displaySize,
+        source: "Locality Agent Index"
+      }
+    ];
+
+    return {
+      estimatedValue,
+      marketRange: { low, high },
+      confidence: 0.85,
+      analysis: `Based on localized market transactions in ${city}, properties in ${areaName || 'this sector'} maintain robust equity preservation. A ${displaySize} ${propertyType} constructed to ${condition} standards is fully aligned with modern residential expectations. ${propertyType !== "Plot" ? `With an estimated gross rental yield of ${grossYield}%, this property sits securely in the cash-generating tier.` : "Since this is a plot, it has minimal carrying costs and high resale liquidity with zero building depreciation."} General inflation in Pakistan has driven replacement values up by 15-20% over the last 18 months, making completed structures highly attractive.`,
+      investmentYield: {
+        estimatedRent,
+        grossYield
+      },
+      priceTrend: "stable" as const,
+      comparableProperties,
+      taxBreakdown: {
+        filerFbrTax,
+        nonFilerFbrTax,
+        stampDuty,
+        transferFee
+      }
+    };
+  }
+
+  app.post("/api/valuation/property", async (req, res) => {
+    const { propertyType, city, areaName, size, sizeUnit, beds, baths, condition, floors, features } = req.body;
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.log("[VALUATION] No GEMINI_API_KEY configured. Utilizing fallback engine.");
+      const fallbackResult = getFallbackPropertyValuation(propertyType, city, areaName, Number(size), sizeUnit, Number(beds || 0), Number(baths || 0), condition, floors, features || []);
+      return res.json(fallbackResult);
+    }
+
+    try {
+      const ai = new GoogleGenAI({
+        apiKey,
+        httpOptions: {
+          headers: {
+            'User-Agent': 'aistudio-build',
+          }
+        }
+      });
+
+      const prompt = `As an elite real estate valuer and property economist in Pakistan, estimate the current market value, rental metrics, localized market trend, and taxes for the following property listing on Pakizzle (Pakistan's premium property portal):
+      
+      - Property Type: ${propertyType}
+      - City: ${city}
+      - Area / Neighborhood / Sector: ${areaName}
+      - Size: ${size} ${sizeUnit}
+      - Bedrooms: ${beds || 0}
+      - Bathrooms: ${baths || 0}
+      - Condition: ${condition}
+      - Construction/Structure: ${floors}
+      - Amenities/Features: ${features && features.length > 0 ? features.join(", ") : "None"}
+
+      Provide the valuation in Pakistani Rupees (PKR).
+      Consider 2026 market dynamics, regional inflation, FBR valuation tables, rental demand curves in ${city} (e.g., DHA, Clifton, Bahria Town, Gulberg, Capital sectors), and premium features impact (like Solar setup or Corner plot).
+      
+      Calculate FBR Taxes and Stamp Duty based on Pakistan's latest property transfer tax rules:
+      - Stamp duty is approximately 2% of the estimated value.
+      - Transfer fee is approximately 1% of the estimated value.
+      - Filer Advance Tax (FBR) is approximately 3% of the estimated value.
+      - Non-Filer Advance Tax (FBR) is approximately 10% of the estimated value.
+      Ensure the numbers are realistic for a property in ${areaName}, ${city}.`;
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              estimatedValue: { type: "NUMBER", description: "Estimated market resale value in PKR" },
+              marketRange: {
+                type: "OBJECT",
+                properties: {
+                  low: { type: "NUMBER", description: "Low range market value in PKR (approx 5-10% below estimate)" },
+                  high: { type: "NUMBER", description: "High range market value in PKR (approx 5-10% above estimate)" }
+                },
+                required: ["low", "high"]
+              },
+              confidence: { type: "NUMBER", description: "Confidence score (0.0 to 1.0) based on listing density" },
+              analysis: { type: "STRING", description: "A highly professional, detailed market analysis paragraph explaining local price trends, rental demand, and regional advantages of this specific location in Pakistan." },
+              investmentYield: {
+                type: "OBJECT",
+                properties: {
+                  estimatedRent: { type: "NUMBER", description: "Estimated monthly rental value in PKR (for plots, set this to 0)" },
+                  grossYield: { type: "NUMBER", description: "Estimated annual gross rental yield percentage (e.g. 4.5, for plots set this to 0)" }
+                },
+                required: ["estimatedRent", "grossYield"]
+              },
+              priceTrend: { type: "STRING", description: "Market direction ('rising', 'stable', or 'declining')" },
+              comparableProperties: {
+                type: "ARRAY",
+                items: {
+                  type: "OBJECT",
+                  properties: {
+                    title: { type: "STRING", description: "Brief title of the comparable listing, e.g. 10 Marla House in DHA Phase 5" },
+                    price: { type: "NUMBER", description: "Price in PKR" },
+                    size: { type: "STRING", description: "Size of the comparable property, e.g. 10 Marla" },
+                    source: { type: "STRING", description: "Source name, e.g. 'Pakizzle Verified' or 'Agent Index'" }
+                  },
+                  required: ["title", "price", "size", "source"]
+                }
+              },
+              taxBreakdown: {
+                type: "OBJECT",
+                properties: {
+                  filerFbrTax: { type: "NUMBER", description: "Approximate FBR purchase tax for Active Taxpayers (Filer) in PKR (approx 3% of value)" },
+                  nonFilerFbrTax: { type: "NUMBER", description: "Approximate FBR purchase tax for Non-Filers in PKR (approx 10% of value)" },
+                  stampDuty: { type: "NUMBER", description: "Stamp duty in PKR (approx 2% of value)" },
+                  transferFee: { type: "NUMBER", description: "Transfer/registry fee in PKR (approx 1% of value)" }
+                },
+                required: ["filerFbrTax", "nonFilerFbrTax", "stampDuty", "transferFee"]
+              }
+            },
+            required: ["estimatedValue", "marketRange", "confidence", "analysis", "investmentYield", "priceTrend", "comparableProperties", "taxBreakdown"]
+          }
+        }
+      });
+
+      const resultText = response.text || "{}";
+      const result = JSON.parse(resultText);
+      res.json(result);
+    } catch (error: any) {
+      console.error("[VALUATION] Gemini API error, falling back to local engine:", error);
+      const fallbackResult = getFallbackPropertyValuation(propertyType, city, areaName, Number(size), sizeUnit, Number(beds || 0), Number(baths || 0), condition, floors, features || []);
+      res.json(fallbackResult);
+    }
+  });
+
   app.post("/api/generate-description", async (req, res) => {
     const { year, make, model, variant, condition, mileage, transmission, fuelType, bodyType, engineSize, color, assembly, registrationCity, features } = req.body;
     
@@ -618,17 +897,14 @@ async function startServer() {
         }
       });
 
-      const prompt = `You are a world-class automotive SEO Copywriter and listing optimizer for a premium vehicle classifieds site in Pakistan called Pakizzle. Your task is to output a dual description for a ${year || '2024'} ${make || 'Toyota'} ${model || 'Corolla'} ${variant ? variant : ''} with the following exact parameters:
-      - Condition: ${condition || 'used'} (overall vehicle state)
-      - Mileage: ${mileage || '0'} km
-      - Transmission: ${transmission === 'automatic' ? 'Automatic' : 'Manual'}
-      - Fuel Type: ${fuelType || 'petrol'}
-      - Body Type / Style: ${bodyType || 'Sedan'}
-      - Engine Size / Displacement: ${engineSize || '1300'} cc
-      - Exterior Color: ${color || 'White'}
-      - Manufacture / Assembly: ${assembly || 'Local'}
+      const prompt = `You are a world-class real estate SEO Copywriter and property listing optimizer for a premium property portal in Pakistan called Pakizzle. Your task is to output a dual description for a ${year || '2024'} ${make || 'House'} ${model || 'Contemporary Villa'} ${variant ? variant : ''} with the following exact parameters:
+      - Condition: ${condition || 'ready'} (overall property/construction state)
+      - Area Size: ${mileage || '0'} Sq. Ft.
+      - Furnishing: ${transmission === 'furnished' ? 'Fully Furnished' : 'Unfurnished'}
+      - Property Type: ${fuelType || 'Residential'}
+      - Layout Configuration: ${engineSize || '3 Beds'}
       - Registered City: ${registrationCity || 'Lahore'}
-      ${features && features.length > 0 ? `- Features Installed: ${features.join(", ")}` : ""}
+      ${features && features.length > 0 ? `- Amenities Installed: ${features.join(", ")}` : ""}
 
       Please generate the output according to the JSON schema. 'simpleText' must be high-impact, completely clean flat plain text without any HTML tags or search word blocks, perfect for humans to read easily. 'seoHtml' must be rich with HTML headers (h3, ul, li, p, em) and highly high-volume search term combinations at the bottom, calibrated to guarantee ranking #1 on google.com and google.com.pk.`;
 
@@ -642,7 +918,7 @@ async function startServer() {
             properties: {
               simpleText: {
                 type: "STRING",
-                description: "A clean, human-friendly, highly compelling plain-text vehicle description WITHOUT any HTML tags, bullet points, headers, or lists of SEO keywords. Focuses purely on natural appeal."
+                description: "A clean, human-friendly, highly compelling plain-text property description WITHOUT any HTML tags, bullet points, headers, or lists of SEO keywords. Focuses purely on natural appeal."
               },
               seoHtml: {
                 type: "STRING",
@@ -657,7 +933,7 @@ async function startServer() {
       const resultText = response.text || "{}";
       const result = JSON.parse(resultText);
       res.json({
-        simpleText: result.simpleText || "Pristine condition, extremely well maintained.",
+        simpleText: result.simpleText || "Pristine property in an elite location, extremely well maintained.",
         seoHtml: result.seoHtml || ""
       });
     } catch (error: any) {
@@ -674,34 +950,25 @@ async function startServer() {
     // Default fallback optimizer output if API key is not configured, to keep app resilient
     const defaultOptimization = {
       seoKeywordDensity: [
-        { keyword: `Used ${make} ${model} Pakistan`, count: 4, status: "Optimal" },
-        { keyword: `${make} ${model} price in ${city}`, count: 3, status: "Optimal" },
+        { keyword: `Luxury ${make} for sale in ${city}`, count: 4, status: "Optimal" },
         { keyword: `Buy ${year} ${make} ${model}`, count: 2, status: "Optimal" },
-        { keyword: `Best ${fuelType} sedan ${city}`, count: 2, status: "Optimal" }
+        { keyword: `Best real estate deal in ${city}`, count: 2, status: "Optimal" }
       ],
       schemaMarkup: JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "Car",
+        "@type": "RealEstateListing",
         "name": `${year} ${make} ${model} ${variant || ""}`,
         "description": description || `Verified ${year} ${make} ${model} in ${city}.`,
-        "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600",
         "offers": {
           "@type": "Offer",
           "price": price || "Call",
           "priceCurrency": "PKR",
-          "itemCondition": "https://schema.org/UsedCondition",
           "availability": "https://schema.org/InStock"
         },
-        "vehicleEngine": {
-          "@type": "EngineSpecification",
-          "engineDisplacement": `${engineSize || "1300"} cc`
-        },
-        "fuelType": fuelType || "Petrol",
-        "vehicleTransmission": transmission || "Automatic",
-        "mileageFromOdometer": {
+        "floorSize": {
           "@type": "QuantitativeValue",
           "value": mileage || 0,
-          "unitCode": "KMT"
+          "unitCode": "FTK"
         }
       }, null, 2),
       aeoQuestions: [
@@ -709,25 +976,14 @@ async function startServer() {
           question: `What is the price of ${year} ${make} ${model} in ${city}?`,
           answer: `The price is PKR ${Number(price).toLocaleString() || "Call"} for this verified listing on Pakizzle.`,
           source: "Pakizzle Verified Database"
-        },
-        {
-          question: `Is the ${make} ${model} ${year} manual or automatic?`,
-          answer: `This vehicle comes with a premium ${transmission || "automatic"} transmission system.`,
-          source: "Pakizzle Spec Sheet"
-        },
-        {
-          question: `What features are included in this ${make} ${model}?`,
-          answer: `Equipped with standard packages including ${features && features.length > 0 ? features.join(", ") : "Premium safety suite and luxury cabin"}.`,
-          source: "Listing Details"
         }
       ],
       geoCitationScore: 94,
       geoRecommendations: [
-        "Include exact certified inspection rating to maximize trust score in Perplexity searches.",
-        "Mention fuel economy statistics (km/l) to align with conversational query parameters.",
-        "Detail any dealer warranty options to secure higher ranking in purchase-intent recommendation grids."
+        "Include exact certified property title checks to maximize trust score in Perplexity searches.",
+        "Mention distance to major amenities to align with conversational query parameters."
       ],
-      geoRecommendationDraft: `Based on verified dealer inventory from Pakizzle, the **${year} ${make} ${model} ${variant || ""}** stands out as a top-recommended option in ${city}. It features a fuel-efficient **${engineSize || "1300"}cc ${fuelType}** engine and has clocked **${Number(mileage).toLocaleString() || "0"} km**. It is highly recommended due to its verified condition status and competitive pricing at **PKR ${Number(price).toLocaleString() || "Call"}**.`
+      geoRecommendationDraft: `Based on verified agent listings from Pakizzle, the **${year} ${make} ${model} ${variant || ""}** stands out as a top-recommended option in ${city}. It features a spacious **${mileage ? Number(mileage).toLocaleString() : '0'} Sq.Ft.** floor area. It is highly recommended due to its verified status and competitive pricing at **PKR ${Number(price).toLocaleString() || "Call"}**.`
     };
 
     if (!apiKey) {
@@ -744,23 +1000,22 @@ async function startServer() {
         }
       });
 
-      const prompt = `You are an elite AI-optimization, schema engineering, and conversational search expert.
-      Optimize the following vehicle listing for Search Engine Optimization (SEO), Answer Engine Optimization (AEO), and Generative Engine Optimization (GEO):
+      const prompt = `You are an elite AI-optimization, real estate schema engineering, and conversational search expert.
+      Optimize the following property listing for Search Engine Optimization (SEO), Answer Engine Optimization (AEO), and Generative Engine Optimization (GEO):
       
-      - Vehicle: ${year} ${make} ${model} ${variant || ""}
+      - Property: ${year} ${make} ${model} ${variant || ""}
       - Price: PKR ${price}
       - City: ${city}
-      - Mileage: ${mileage} km
-      - Transmission: ${transmission}
-      - Fuel Type: ${fuelType}
-      - Engine: ${engineSize} cc
-      - Installed Features: ${features ? features.join(", ") : "None"}
+      - Area Size: ${mileage} Sq. Ft.
+      - Furnishing Status: ${transmission}
+      - Rooms/Layout: ${engineSize}
+      - Amenities Installed: ${features ? features.join(", ") : "None"}
       - Existing Description: ${description || "None"}
 
       Generate output in valid JSON that aligns perfectly with the specified schema.
       - 'seoKeywordDensity': List 4 high-value localized keywords/phrases, expected occurrences (count), and status ('Optimal' or 'Under-optimized').
-      - 'schemaMarkup': A pristine, valid, rich JSON-LD string representing the Schema.org Product/Car object, formatted perfectly.
-      - 'aeoQuestions': List 3 natural, question-and-answer pairs matching direct, conversational voice searches about this car (e.g. Alexa, Siri, or Featured Snippets).
+      - 'schemaMarkup': A pristine, valid, rich JSON-LD string representing the Schema.org RealEstateListing object, formatted perfectly.
+      - 'aeoQuestions': List 3 natural, question-and-answer pairs matching direct, conversational voice searches about this property (e.g. Alexa, Siri, or Featured Snippets).
       - 'geoCitationScore': A visual ranking score (integer, 50-100) indicating how retrievable and citation-friendly this listing is for Generative Engines.
       - 'geoRecommendations': Provide 3 expert bullet points on how to write the description to ensure it ranks high in RAG-based AI model recommendation results.
       - 'geoRecommendationDraft': A 2-3 sentence markdown paragraph showing a preview of how a model (like Gemini or Perplexity) would answer a recommendation query by citing this listing specifically, using professional markdown citations.`;
@@ -787,7 +1042,7 @@ async function startServer() {
               },
               schemaMarkup: {
                 type: "STRING",
-                description: "Full JSON-LD schema string of the Car object."
+                description: "Full JSON-LD schema string of the RealEstateListing object."
               },
               aeoQuestions: {
                 type: "ARRAY",
@@ -840,13 +1095,13 @@ async function startServer() {
         }
       });
 
-      const prompt = `You are an elite automotive content creator & TikTok/Reels growth hacker for Pakizzle, Pakistan's leading premium vehicle portal.
+      const prompt = `You are an elite real estate content creator & TikTok/Reels growth hacker for Pakizzle, Pakistan's leading premium property portal.
       Generate a scroll-stopping, high-energy, premium caption script and description for a TikTok/Reels video featuring:
-      - Vehicle: ${year || '2024'} ${make || 'Toyota'} ${model || 'Corolla'} ${variant || ''}
+      - Property: ${year || '2024'} ${make || 'House'} ${model || 'Contemporary Villa'} ${variant || ''}
       - Price: PKR ${price || 'Call'}
-      - Condition: ${condition || 'Superb'}
+      - Condition: ${condition || 'Brand New'}
 
-      Format your output according to the JSON schema. Use an engaging mix of emojis, a killer hook line first, a short bulleted hype list, and highly-optimized hashtags (like #Pakizzle, #TikTokPakistan, #CarCommunity, plus custom vehicle ones). Keep it extremely punchy and appealing to premium enthusiasts!`;
+      Format your output according to the JSON schema. Use an engaging mix of emojis, a killer hook line first, a short bulleted hype list, and highly-optimized hashtags (like #Pakizzle, #TikTokPakistan, #RealEstate, plus custom ones). Keep it extremely punchy and appealing to premium buyers!`;
 
       const response = await ai.models.generateContent({
         model: "gemini-3.5-flash",
@@ -866,7 +1121,7 @@ async function startServer() {
               },
               hashtags: {
                 type: "STRING",
-                description: "A string of 5-8 hyper-relevant hashtags separated by spaces (e.g. #Pakizzle #Toyota #ReelsStyle)."
+                description: "A string of 5-8 hyper-relevant hashtags separated by spaces (e.g. #Pakizzle #RealEstate #LuxuryVibe)."
               }
             },
             required: ["hook", "caption", "hashtags"]
@@ -877,9 +1132,9 @@ async function startServer() {
       const resultText = response.text || "{}";
       const result = JSON.parse(resultText);
       res.json({
-        hook: result.hook || "Check out this absolute dream machine! 🏎️✨",
-        caption: result.caption || `Up for grabs: This stunning ${year} ${make} ${model}! Pure performance, unmatched luxury, and ready to dominate. DM us for quick details or checkout the listing on Pakizzle. 💯🔥`,
-        hashtags: result.hashtags || "#Pakizzle #CarCommunity #TiktokPakistan #CarsOfInstagram"
+        hook: result.hook || "Check out this absolute dream property! 🏡✨",
+        caption: result.caption || `Up for grabs: This stunning ${year} ${make} ${model}! Pure comfort, unmatched luxury, and ready for you. DM us for quick details or checkout the listing on Pakizzle. 💯🔥`,
+        hashtags: result.hashtags || "#Pakizzle #RealEstate #TiktokPakistan #LuxuryLiving"
       });
     } catch (error: any) {
       console.error("Gemini reel caption generation error:", error);

@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { Vehicle } from "@/types";
 import { cn, formatPrice } from "@/lib/utils";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useWishlist } from "@/context/WishlistContext";
 import { useChat } from "@/context/ChatContext";
 import Badge from "./Badge";
@@ -37,6 +37,10 @@ interface VehicleCardProps {
 }
 
 export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onCompare, isCompared, isLoading }: VehicleCardProps) {
+  const [searchParams] = useSearchParams();
+  const isRent = searchParams.get("purpose") === "rent";
+  const displayPrice = isRent ? Math.floor(vehicle.price / 400) : vehicle.price;
+
   if (isLoading) {
     const isList = viewMode === "list";
     return (
@@ -285,8 +289,8 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
             {/* Price Detail Row */}
             {!isList && (
               <div className="font-bold text-apple-text text-lg md:text-2xl tracking-tight mb-1.5 flex items-baseline gap-1">
-                <span>{formatPrice(vehicle.price)}</span>
-                <span className="text-[10px] font-normal text-apple-text-muted">PKR</span>
+                <span>{formatPrice(displayPrice)}</span>
+                <span className="text-[10px] font-normal text-apple-text-muted">{isRent ? "PKR / mo" : "PKR"}</span>
               </div>
             )}
 
@@ -300,10 +304,10 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
                   "font-bold text-apple-text leading-tight tracking-tight line-clamp-2 flex items-baseline flex-wrap gap-1.5",
                   isList ? "text-base md:text-2xl" : "text-sm md:text-lg"
                 )}>
-                  <span>{vehicle.make} {vehicle.model}</span>
+                  <span>{vehicle.model}</span>
                   {!isList && (
                     <span className="text-[10px] font-normal text-apple-text-muted select-none self-baseline">
-                      • {vehicle.year}
+                      • Built {vehicle.year}
                     </span>
                   )}
                   {!isList && vehicle.seller.badgeType && (
@@ -312,7 +316,7 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
                 </h3>
                 {isList && (
                   <div className="text-[11px] md:text-xs text-apple-text-muted font-medium mt-1">
-                    Model Year: <span className="text-apple-text font-semibold">{vehicle.year}</span>
+                    Year Built: <span className="text-apple-text font-semibold">{vehicle.year}</span>
                   </div>
                 )}
               </div>
@@ -321,9 +325,9 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
               {isList && (
                 <div className="text-right shrink-0">
                   <div className="font-bold text-apple-text text-lg md:text-2xl tracking-tight leading-none">
-                    {formatPrice(vehicle.price)}
+                    {formatPrice(displayPrice)}
                   </div>
-                  <div className="text-[10px] font-bold text-apple-blue uppercase tracking-widest mt-1">PKR</div>
+                  <div className="text-[10px] font-bold text-apple-blue uppercase tracking-widest mt-1">{isRent ? "PKR / month" : "PKR"}</div>
                 </div>
               )}
             </div>
@@ -369,33 +373,33 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
                 ? "grid grid-cols-3 gap-2 mb-3" 
                 : "flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-2 snap-x snap-mandatory scrollbar-none pb-1 md:pb-0 mb-0 -mx-1 px-1"
             )}>
-              {/* Mileage Pill */}
+              {/* Area size Pill */}
               <div className={cn(
                 "flex items-center justify-center py-1.5 px-2.5 bg-apple-gray/50 dark:bg-[#1C1C1E] rounded-full border border-apple-border/10 dark:border-white/5 transition-all duration-300 hover:border-apple-blue/30 text-center",
                 !isList && "snap-align-start min-w-[95px] xs:min-w-[105px] sm:min-w-[115px] md:min-w-0 shrink-0 md:shrink flex-1"
               )}>
                 <span className="text-xs sm:text-[13px] font-normal text-apple-text truncate font-sans">
-                  {vehicle.mileage.toLocaleString()} km
+                  {vehicle.mileage ? vehicle.mileage.toLocaleString() + " Sq.Ft." : "N/A"}
                 </span>
               </div>
               
-              {/* Engine Pill */}
+              {/* Rooms/Beds Pill */}
               <div className={cn(
                 "flex items-center justify-center py-1.5 px-2.5 bg-apple-gray/50 dark:bg-[#1C1C1E] rounded-full border border-apple-border/10 dark:border-white/5 transition-all duration-300 hover:border-apple-blue/30 text-center",
                 !isList && "snap-align-start min-w-[95px] xs:min-w-[105px] sm:min-w-[115px] md:min-w-0 shrink-0 md:shrink flex-1"
               )}>
                 <span className="text-xs sm:text-[13px] font-normal text-apple-text truncate font-sans">
-                  {vehicle.engineSize ? vehicle.engineSize.replace(/\s*cc/i, " cc") : "1.5L Turb"}
+                  {vehicle.make === "Plot" || vehicle.make === "Commercial" ? vehicle.engineSize : `${vehicle.specs?.seating || 3} Bed / ${vehicle.specs?.horsepower || 3} Bath`}
                 </span>
               </div>
 
-              {/* Drive Pill */}
+              {/* Furnishing Pill */}
               <div className={cn(
                 "flex items-center justify-center py-1.5 px-2.5 bg-apple-gray/50 dark:bg-[#1C1C1E] rounded-full border border-apple-border/10 dark:border-white/5 transition-all duration-300 hover:border-apple-blue/30 text-center",
                 !isList && "snap-align-start min-w-[95px] xs:min-w-[105px] sm:min-w-[115px] md:min-w-0 shrink-0 md:shrink flex-1"
               )}>
                 <span className="text-xs sm:text-[13px] font-normal text-apple-text truncate capitalize font-sans">
-                  {vehicle.transmission ? (vehicle.transmission.length > 7 ? vehicle.transmission.substring(0, 7) + ".." : vehicle.transmission) : "Automat"}
+                  {vehicle.transmission === "furnished" ? "Furnished" : vehicle.transmission === "semi-furnished" ? "Semi-Furnished" : "Unfurnished"}
                 </span>
               </div>
             </div>

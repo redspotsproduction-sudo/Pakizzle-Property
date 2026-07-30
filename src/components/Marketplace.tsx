@@ -67,6 +67,8 @@ export default function Marketplace() {
   const [selectedMake, setSelectedMake] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [selectedVariant, setSelectedVariant] = useState<string>("");
+  const [minBeds, setMinBeds] = useState<number | null>(null);
+  const [minBaths, setMinBaths] = useState<number | null>(null);
   const [categoryFilter, setCategoryFilter] = useState({
     categoryId: "",
     parentId: "",
@@ -224,6 +226,12 @@ export default function Marketplace() {
     if (searchParams.get("filter") === "true") {
       setIsFilterOpen(true);
     }
+
+    const bedsParam = searchParams.get("beds");
+    if (bedsParam) setMinBeds(parseInt(bedsParam));
+
+    const bathsParam = searchParams.get("baths");
+    if (bathsParam) setMinBaths(parseInt(bathsParam));
   }, [searchParams, trackSearch]);
 
   // Advanced Filtering & Sorting Logic
@@ -268,8 +276,11 @@ export default function Marketplace() {
         const matchesFuel = selectedFuel.length === 0 || selectedFuel.includes(v.fuelType || "");
         const matchesBodyType = selectedBodyType.length === 0 || (v.bodyType && selectedBodyType.includes(v.bodyType));
         const matchesVerified = !onlyVerified || !!v.seller?.isVerified;
-        const matchesMaxPrice = !maxPrice || (v.price !== undefined && v.price <= maxPrice);
-        const matchesMinPrice = !minPrice || (v.price !== undefined && v.price >= minPrice);
+        const isRentPurpose = searchParams.get("purpose") === "rent";
+        const displayPrice = isRentPurpose && v.price !== undefined ? Math.floor(v.price / 400) : v.price;
+
+        const matchesMaxPrice = !maxPrice || (displayPrice !== undefined && displayPrice <= maxPrice);
+        const matchesMinPrice = !minPrice || (displayPrice !== undefined && displayPrice >= minPrice);
         
         const matchesMinYear = !minYear || (v.year !== undefined && v.year >= minYear);
         const matchesMaxYear = !maxYear || (v.year !== undefined && v.year <= maxYear);
@@ -277,9 +288,12 @@ export default function Marketplace() {
         const matchesMinMileage = !minMileage || (v.mileage !== undefined && v.mileage >= minMileage);
         const matchesMaxMileage = !maxMileage || (v.mileage !== undefined && v.mileage <= maxMileage);
         
-        const matchesMake = !selectedMake || v.make === selectedMake;
+        const matchesMake = !selectedMake || selectedMake.split(",").some(mk => v.make?.toLowerCase() === mk.trim().toLowerCase());
         const matchesModel = !selectedModel || v.model === selectedModel;
         const matchesVariant = !selectedVariant || (v.id && v.id.includes(selectedVariant));
+
+        const matchesBeds = !minBeds || (v.specs?.seating !== undefined && v.specs.seating >= minBeds);
+        const matchesBaths = !minBaths || (v.specs?.horsepower !== undefined && v.specs.horsepower >= minBaths);
 
         const matchesLocation = (selectedCities.length === 0 || selectedCities.includes(v.city || "")) &&
                                (selectedLocations.length === 0 || selectedLocations.includes(v.area || "")) &&
@@ -302,7 +316,7 @@ export default function Marketplace() {
           return vehicleValue === value;
         });
 
-        return matchesSearch && matchesCondition && matchesFuel && matchesBodyType && matchesVerified && matchesMaxPrice && matchesMinPrice && matchesMinYear && matchesMaxYear && matchesMinMileage && matchesMaxMileage && matchesLocation && matchesCategory && matchesMake && matchesModel && matchesVariant && matchesCustomFilters;
+        return matchesSearch && matchesCondition && matchesFuel && matchesBodyType && matchesVerified && matchesMaxPrice && matchesMinPrice && matchesMinYear && matchesMaxYear && matchesMinMileage && matchesMaxMileage && matchesLocation && matchesCategory && matchesMake && matchesModel && matchesVariant && matchesCustomFilters && matchesBeds && matchesBaths;
       });
 
       // Apply Sorting with full clone to avoid mutation side effects
@@ -339,7 +353,7 @@ export default function Marketplace() {
       console.error("Error in filteredVehicles useMemo:", e);
       return vehicles; // Guarded fallback path
     }
-  }, [searchQuery, selectedCondition, selectedFuel, selectedBodyType, onlyVerified, maxPrice, minPrice, minYear, maxYear, minMileage, maxMileage, selectedCities, userLocation, sortBy, vehicles, trackSearch, customFilters, selectedMake, selectedModel, selectedVariant, isDataLoaded]);
+  }, [searchQuery, selectedCondition, selectedFuel, selectedBodyType, onlyVerified, maxPrice, minPrice, minYear, maxYear, minMileage, maxMileage, selectedCities, userLocation, sortBy, vehicles, trackSearch, customFilters, selectedMake, selectedModel, selectedVariant, isDataLoaded, minBeds, minBaths, searchParams]);
 
   const toggleCompare = useCallback((vehicle: Vehicle) => {
     setCompareList(prev => {

@@ -1,6 +1,6 @@
 {
-  "name": "Pakizzle - Premium Automotive Portal",
-  "description": "A next-generation, Apple-style automotive marketplace for Pakistan featuring AI-powered valuations, verified listings, and a futuristic user experience.",
+  "name": "Pakizzle - Elite Real Estate Portal",
+  "description": "A next-generation, high-performance property listing portal for Pakistan featuring AI-powered valuations, verified real estate listings, interactive agent portals, and a professional admin command center.",
   "requestFramePermissions": ["geolocation", "camera"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

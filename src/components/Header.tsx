@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { Search, User, Menu, Car, Plus, Heart, LogOut, LayoutDashboard, ShieldCheck, MessageSquare, CheckCircle2, MoreHorizontal, Settings, MapPin, ChevronDown, Sun, Moon, Bell, Sparkles, Video } from "lucide-react";
+import { Search, User, Menu, Car, Plus, Heart, LogOut, LayoutDashboard, ShieldCheck, MessageSquare, CheckCircle2, MoreHorizontal, Settings, MapPin, ChevronDown, Sun, Moon, Bell, Sparkles, Video, Home } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
@@ -95,7 +95,7 @@ export default function Header() {
         <div className="flex items-center gap-2 lg:gap-8">
           <Link to="/" className="flex items-center gap-1.5 lg:gap-2 group">
             <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-apple-blue to-blue-600 rounded-lg lg:rounded-[12px] flex items-center justify-center shadow-[0_8px_16px_rgba(0,125,255,0.2)] group-hover:scale-105 group-hover:shadow-[0_12px_24px_rgba(0,125,255,0.3)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
-              <Car className="w-5 h-5 lg:w-6 lg:h-6 text-white stroke-[2.2]" />
+              <Home className="w-5 h-5 lg:w-6 lg:h-6 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg lg:text-xl font-semibold tracking-tight text-apple-text group-hover:text-apple-blue transition-colors duration-500">Pakizzle</span>
           </Link>
@@ -362,8 +362,8 @@ export default function Header() {
                       onClick={() => setShowUserMenu(false)}
                       className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-apple-text-muted hover:bg-apple-blue/10 hover:text-apple-blue transition-colors"
                     >
-                      <Car className="w-4 h-4" />
-                      My Ads
+                      <Home className="w-4 h-4" />
+                      My Listings
                     </Link>
                     <Link 
                       to="/dashboard/reels" 

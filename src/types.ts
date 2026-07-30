@@ -9,16 +9,16 @@ export interface Vehicle {
   city: string;
   area?: string;
   images: string[];
-  type: 'car' | 'bike' | 'part';
+  type: 'residential' | 'commercial' | 'plot' | 'car' | 'bike' | 'part';
   category?: {
     parentId: string;
     childId?: string;
     subChildId?: string;
   };
-  condition: 'new' | 'used' | 'certified';
-  transmission: 'automatic' | 'manual';
-  fuelType: 'petrol' | 'diesel' | 'hybrid' | 'electric';
-  engineSize: string;
+  condition: 'ready' | 'under_construction' | 'off_plan' | 'new' | 'used' | 'certified';
+  transmission: 'furnished' | 'unfurnished' | 'semi-furnished' | 'automatic' | 'manual';
+  fuelType: 'house' | 'apartment' | 'penthouse' | 'plot' | 'commercial' | 'petrol' | 'diesel' | 'hybrid' | 'electric';
+  engineSize: string; // E.g., "5 Beds", "3 Beds", "10 Marla"
   seller: {
     uid?: string;
     name: string;

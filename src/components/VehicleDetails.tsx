@@ -31,7 +31,11 @@ import {
   ShieldAlert,
   Clock,
   UserCheck,
-  X
+  X,
+  Home,
+  Building2,
+  Layers,
+  Sparkles
 } from "lucide-react";
 import { useVehicles } from "@/context/VehicleContext";
 import RecentlyViewed from "./RecentlyViewed";
@@ -49,14 +53,10 @@ import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "./ui/Skeleton";
 
 const FEATURE_ICONS: Record<string, any> = {
-  "Adaptive Cruise Control": Wind,
-  "Panoramic Sunroof": Sun,
-  "360 Degree Camera": Camera,
-  "Heated & Ventilated Seats": Zap,
-  "Premium Sound System": Music,
-  "Ambient Lighting": Lightbulb,
-  "Keyless Entry": Key,
-  "Matrix LED Headlights": Eye
+  "Smart Security Systems": ShieldCheck,
+  "Backup Power Setup": Zap,
+  "Smart Home Automation": Lightbulb,
+  "Designer Modular Kitchen": Sparkles
 };
 
 export default function VehicleDetails() {
@@ -72,22 +72,19 @@ export default function VehicleDetails() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Sync scroll position of gallery container with state index
-  useEffect(() => {
+  const scrollToImage = (index: number) => {
     if (scrollRef.current) {
       const container = scrollRef.current;
       const width = container.clientWidth;
       if (width > 0) {
-        const currentScrollIndex = Math.round(container.scrollLeft / width);
-        if (currentScrollIndex !== activeImageIndex) {
-          container.scrollTo({
-            left: width * activeImageIndex,
-            behavior: "smooth"
-          });
-        }
+        container.scrollTo({
+          left: width * index,
+          behavior: "smooth"
+        });
+        setActiveImageIndex(index);
       }
     }
-  }, [activeImageIndex]);
+  };
 
   // Adjust scroll position during window resize to keep current image centered
   useEffect(() => {
@@ -105,6 +102,7 @@ export default function VehicleDetails() {
     const container = e.currentTarget;
     const width = container.clientWidth;
     if (width > 0) {
+      // Use floor/ceil or round to determine active slide index from native scroll snap
       const newIndex = Math.round(container.scrollLeft / width);
       if (newIndex !== activeImageIndex && newIndex >= 0 && newIndex < (vehicle?.images?.length || 0)) {
         setActiveImageIndex(newIndex);
@@ -284,7 +282,7 @@ export default function VehicleDetails() {
           <div className="flex items-center gap-4">
             <div className="flex flex-col">
               <h2 className="text-xs md:text-base font-bold text-apple-text tracking-tight">
-                {vehicle.make} {vehicle.model}
+                {vehicle.model}
               </h2>
               <p className="text-[9px] md:text-xs font-bold text-apple-blue uppercase tracking-widest">
                 {formatPrice(vehicle.price)}
@@ -361,7 +359,7 @@ export default function VehicleDetails() {
                   onClick={(e) => {
                     e.stopPropagation();
                     const newIndex = activeImageIndex === 0 ? vehicle.images.length - 1 : activeImageIndex - 1;
-                    setActiveImageIndex(newIndex);
+                    scrollToImage(newIndex);
                   }}
                   className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-white/40 transition-all pointer-events-auto shadow-lg"
                 >
@@ -371,7 +369,7 @@ export default function VehicleDetails() {
                   onClick={(e) => {
                     e.stopPropagation();
                     const newIndex = activeImageIndex === vehicle.images.length - 1 ? 0 : activeImageIndex + 1;
-                    setActiveImageIndex(newIndex);
+                    scrollToImage(newIndex);
                   }}
                   className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-white/40 transition-all pointer-events-auto shadow-lg"
                 >
@@ -390,7 +388,7 @@ export default function VehicleDetails() {
                       key={idx}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setActiveImageIndex(idx);
+                        scrollToImage(idx);
                       }}
                       className={cn(
                         "h-1 rounded-full transition-all duration-500",
@@ -437,11 +435,12 @@ export default function VehicleDetails() {
                   </div>
                 </div>
 
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tighter text-apple-text mb-2 leading-[0.9]">
-                  {vehicle.make}
-                </h1>
-                <div className="text-2xl md:text-3xl font-medium text-apple-text-muted mb-10 tracking-tight">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-apple-text mb-2 leading-[1.0]">
                   {vehicle.model}
+                </h1>
+                <div className="text-lg md:text-xl font-medium text-apple-blue mb-10 tracking-tight uppercase tracking-widest font-semibold flex items-center gap-1.5">
+                  <Home className="w-5 h-5 shrink-0" />
+                  <span>{vehicle.make} • Verified Listing</span>
                 </div>
 
                 <div className="flex flex-col gap-1 mb-3">
@@ -461,15 +460,15 @@ export default function VehicleDetails() {
                 <div className="grid grid-cols-3 gap-4 mb-5 py-3 border-y border-apple-border/30">
                   <div className="text-center group cursor-default">
                     <div className="text-2xl md:text-3xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors">{vehicle.year}</div>
-                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Model Year</div>
+                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Year Built</div>
                   </div>
                   <div className="text-center group cursor-default">
-                    <div className="text-2xl md:text-3xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors">{vehicle.mileage.toLocaleString()}</div>
-                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Kilometers</div>
+                    <div className="text-xl md:text-2xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors truncate">{vehicle.mileage ? vehicle.mileage.toLocaleString() : "0"}</div>
+                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Sq. Ft.</div>
                   </div>
                   <div className="text-center group cursor-default">
-                    <div className="text-2xl md:text-3xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors capitalize">{vehicle.transmission[0]}</div>
-                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Trans.</div>
+                    <div className="text-lg md:text-xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors capitalize truncate">{vehicle.transmission === "furnished" ? "Furnished" : vehicle.transmission === "semi-furnished" ? "Semi-Furn" : "Unfurnished"}</div>
+                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Furnishing</div>
                   </div>
                 </div>
               </motion.section>
@@ -568,17 +567,17 @@ export default function VehicleDetails() {
                 transition={{ duration: 0.8, delay: 0.8 }}
                 className="mb-10"
               >
-                <h2 className="text-sm font-bold text-apple-text uppercase tracking-[0.2em] mb-4">Specifications</h2>
+                <h2 className="text-sm font-bold text-apple-text uppercase tracking-[0.2em] mb-4">Property Specifications</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-6 gap-x-8">
                   {[
-                    { label: "Fuel Type", value: vehicle.fuelType },
-                    { label: "Engine Size", value: vehicle.engineSize },
-                    { label: "Transmission", value: vehicle.transmission },
-                    { label: "Condition", value: vehicle.condition },
-                    { label: "Body Type", value: vehicle.bodyType },
-                    { label: "Color", value: vehicle.customFields?.color || "White" },
-                    { label: "Assembly", value: vehicle.customFields?.assembly || "Local" },
-                    { label: "Reg. City", value: vehicle.customFields?.registrationCity || "Lahore" }
+                    { label: "Property Type", value: vehicle.make },
+                    { label: "Area Size", value: vehicle.mileage ? vehicle.mileage.toLocaleString() + " Sq.Ft." : "N/A" },
+                    { label: "Beds/Rooms", value: vehicle.make === "Plot" ? "N/A" : vehicle.engineSize },
+                    { label: "Furnishing", value: vehicle.transmission === "furnished" ? "Fully Furnished" : vehicle.transmission === "semi-furnished" ? "Semi-Furnished" : "Unfurnished" },
+                    { label: "Status", value: vehicle.condition === "ready" ? "Ready to Move" : vehicle.condition === "under_construction" ? "Under Construction" : "Off-Plan Plot" },
+                    { label: "Purpose", value: vehicle.transmission === "furnished" ? "For Rent" : "For Sale" },
+                    { label: "City", value: vehicle.city },
+                    { label: "Sectors/Area", value: vehicle.area || "Main Sector" }
                   ].map((spec, i) => (
                     <div key={i} className="border-l-2 border-apple-blue/20 pl-4 py-1">
                       <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mb-1">{spec.label}</div>
@@ -596,15 +595,15 @@ export default function VehicleDetails() {
                 className="mb-10"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-sm font-bold text-apple-text uppercase tracking-widest">Advanced Systems</h2>
+                  <h2 className="text-sm font-bold text-apple-text uppercase tracking-widest">Property Amenities</h2>
                   <div className="text-[10px] font-bold text-apple-blue uppercase tracking-widest cursor-pointer hover:underline">View All</div>
                 </div>
                 <div className="grid grid-cols-1 gap-3">
                   {[
-                    { name: "Adaptive Cruise Control", desc: "Neural-linked distance management" },
-                    { name: "Panoramic Sunroof", desc: "Ultra-clear acoustic glass" },
-                    { name: "360 Degree Camera", desc: "High-fidelity surround view" },
-                    { name: "Heated & Ventilated Seats", desc: "Climate-controlled comfort" }
+                    { name: "Smart Security Systems", desc: "AI-linked smart security and 24/7 guard patrol" },
+                    { name: "Backup Power Setup", desc: "Heavy duty solar net metering and backup generator" },
+                    { name: "Smart Home Automation", desc: "Integrated smart lighting, thermostat, and keyless locks" },
+                    { name: "Designer Modular Kitchen", desc: "Premium Italian fittings and imported marble countertops" }
                   ].map((feature, i) => {
                     const Icon = FEATURE_ICONS[feature.name] || CheckCircle2;
                     return (
