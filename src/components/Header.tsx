@@ -381,7 +381,7 @@ export default function Header() {
                       <LayoutDashboard className="w-4 h-4" />
                       Dashboard
                     </Link>
-                    {isAdmin && (
+                    {isAdmin ? (
                       <Link 
                         to="/admin" 
                         onClick={() => setShowUserMenu(false)}
@@ -389,6 +389,15 @@ export default function Header() {
                       >
                         <ShieldCheck className="w-4 h-4 text-apple-blue" />
                         Admin Panel
+                      </Link>
+                    ) : (
+                      <Link 
+                        to="/admin/login" 
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-apple-text-muted hover:bg-apple-blue/10 hover:text-apple-blue transition-colors"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        Admin Portal Login
                       </Link>
                     )}
                     <Link 

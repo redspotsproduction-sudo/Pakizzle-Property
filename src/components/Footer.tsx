@@ -156,6 +156,7 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
               <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-apple-text-muted hover:text-apple-text transition-colors">Privacy</Link>
               <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-apple-text-muted hover:text-apple-text transition-colors">Terms</Link>
               <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-apple-text-muted hover:text-apple-text transition-colors">Cookies</Link>
+              <Link to="/admin/login" className="text-[10px] font-semibold uppercase tracking-widest text-apple-blue hover:underline transition-colors flex items-center gap-1">Admin Portal</Link>
             </div>
           </div>
 

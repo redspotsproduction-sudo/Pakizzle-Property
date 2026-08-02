@@ -125,6 +125,7 @@ const InspectionManagement = lazy(() => import('./components/Admin/InspectionMan
 const ReelsFeed = lazy(() => import('./components/Reels/ReelsFeed'));
 const ReelsManagement = lazy(() => import('./components/Admin/ReelsManagement'));
 const SeoAeoGeoHub = lazy(() => import('./components/Admin/SeoAeoGeoHub'));
+const AdminLogin = lazy(() => import('./components/Admin/AdminLogin'));
 
 // Admin Route Guard
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
@@ -136,7 +137,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
   
-  if (!isAdmin) return <Navigate to="/" replace />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace />;
   
   return <>{children}</>;
 };
@@ -638,6 +639,7 @@ export default function App() {
         } />
 
         {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={
           <AdminRoute>
             <AdminLayout>
