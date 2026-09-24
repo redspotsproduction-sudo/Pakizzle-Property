@@ -2,10 +2,12 @@ import { Vehicle } from "../types";
 import { PAKISTAN_LOCATIONS } from "../constants/locations";
 
 const AGENCIES = [
-  { uid: "user-redspots", name: "Redspots Real Estate", isVerified: true, rating: 4.9, badgeType: "business" },
-  { uid: "agency-emaar", name: "Emaar Pakistan Properties", isVerified: true, rating: 5.0, badgeType: "business" },
-  { uid: "agency-dha", name: "DHA Estates Official", isVerified: true, rating: 4.8, badgeType: "business" },
-  { uid: "agency-zameen", name: "Pakizzle Heights Brokers", isVerified: true, rating: 4.9, badgeType: "business" }
+  { uid: "user-redspots", name: "Redspots Real Estate", isVerified: true, rating: 4.9, badgeType: "business" as const, verified_badge_type: "business" as const },
+  { uid: "agency-emaar", name: "Emaar Pakistan Properties", isVerified: true, rating: 5.0, badgeType: "business" as const, verified_badge_type: "business" as const },
+  { uid: "seller-tariq", name: "Tariq Mahmood (Verified Seller)", isVerified: true, rating: 4.8, badgeType: "identity" as const, verified_badge_type: "identity" as const },
+  { uid: "seller-ahmed", name: "Ahmed Malik (Private Owner)", isVerified: true, rating: 4.7, badgeType: "basic" as const, verified_badge_type: "basic" as const },
+  { uid: "agency-dha", name: "DHA Estates Official", isVerified: true, rating: 4.9, badgeType: "business" as const, verified_badge_type: "business" as const },
+  { uid: "seller-new", name: "Usman Builders & Homes", isVerified: false, rating: 4.5, badgeType: "none" as const, verified_badge_type: "none" as const }
 ];
 
 const LOCATIONS = Object.keys(PAKISTAN_LOCATIONS);

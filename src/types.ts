@@ -25,6 +25,7 @@ export interface Vehicle {
     username?: string;
     isVerified: boolean;
     badgeType?: 'none' | 'basic' | 'identity' | 'business';
+    verified_badge_type?: 'none' | 'basic' | 'identity' | 'business';
     rating: number;
   };
   createdAt: string;
@@ -88,7 +89,10 @@ export interface UserProfile {
   email_verified?: boolean;
   phone_verified_at?: string;
   email_verified_at?: string;
-  identity_status?: 'unverified' | 'partial' | 'verified';
+  identity_status?: 'unverified' | 'pending' | 'verified' | 'rejected' | 'partial';
+  business_status?: 'unverified' | 'pending' | 'approved' | 'rejected' | 'none';
+  verified_badge_type?: 'none' | 'basic' | 'identity' | 'business';
+  rejection_reason?: string;
   trustScore: number;
   createdAt: string;
   lastLoginAt?: string;

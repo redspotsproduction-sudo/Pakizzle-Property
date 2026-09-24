@@ -643,14 +643,13 @@ export default function VehicleDetails() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-apple-text mb-0.5 group-hover:text-apple-blue transition-colors flex items-center gap-1.5 flex-wrap">
-                      {vehicle.seller.badgeType === 'basic' && (
-                        <Badge type="basic" size="sm" />
-                      )}
+                    <div className="text-xl font-bold text-apple-text mb-0.5 group-hover:text-apple-blue transition-colors flex items-center gap-2 flex-wrap">
                       <span>{vehicle.seller.name}</span>
-                      {vehicle.seller.badgeType && vehicle.seller.badgeType !== 'basic' && (
-                        <Badge type={vehicle.seller.badgeType} size="sm" />
-                      )}
+                      <Badge 
+                        type={vehicle.seller.verified_badge_type || vehicle.seller.badgeType || (vehicle.seller.isVerified ? 'identity' : 'none')} 
+                        size="sm" 
+                        showText={true} 
+                      />
                     </div>
                     <p className="text-xs font-bold text-apple-blue mb-2">@{vehicle.seller.username || (vehicle.seller.name).toLowerCase().replace(/\s+/g, '_')}</p>
                     <div className="flex items-center gap-2">

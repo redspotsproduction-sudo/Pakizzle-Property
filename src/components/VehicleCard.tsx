@@ -404,12 +404,39 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
               </div>
             </div>
 
+            {/* Grid View Seller Bar with Verified Badge */}
+            {!isList && (
+              <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-apple-border/20">
+                <Link 
+                  to={`/profile/${vehicle.seller.uid || 'user-redspots'}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-1.5 min-w-0 group/seller max-w-[70%]"
+                >
+                  <div className="w-5 h-5 rounded-full bg-apple-blue/10 dark:bg-white/5 flex items-center justify-center text-[10px] font-bold text-apple-blue shrink-0 group-hover/seller:scale-105 transition-all">
+                    {vehicle.seller.name ? vehicle.seller.name[0] : "S"}
+                  </div>
+                  <span className="text-xs font-semibold text-apple-text-muted group-hover/seller:text-apple-blue truncate transition-colors">
+                    {vehicle.seller.name}
+                  </span>
+                  <Badge 
+                    type={vehicle.seller.verified_badge_type || vehicle.seller.badgeType || (vehicle.seller.isVerified ? 'identity' : 'none')} 
+                    size="sm" 
+                  />
+                </Link>
+                
+                <div className="flex items-center gap-1 text-[11px] font-semibold text-apple-text-muted shrink-0">
+                  <Star className="w-3 h-3 fill-apple-orange text-apple-orange" />
+                  <span>{vehicle.seller.rating || "5.0"}</span>
+                </div>
+              </div>
+            )}
+
             {/* Bottom Premium Action Console */}
             {isList && (
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-auto pt-3 border-t border-apple-border/10 gap-2.5">
                 {/* Seller details with subtle link action */}
                 <Link 
-                  to={`/profile/${vehicle.seller.uid}`}
+                  to={`/profile/${vehicle.seller.uid || 'user-redspots'}`}
                   onClick={(e) => e.stopPropagation()}
                   className="flex items-center gap-3 min-w-0 group/seller"
                 >
@@ -419,9 +446,10 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
                   <div className="min-w-0">
                     <div className="text-xs md:text-sm font-bold text-apple-text truncate group-hover/seller:text-apple-blue transition-colors flex items-center gap-1.5 flex-wrap">
                       <span>{vehicle.seller.name}</span>
-                      {vehicle.seller.badgeType && vehicle.seller.badgeType !== 'none' && (
-                        <Badge type={vehicle.seller.badgeType} size="sm" />
-                      )}
+                      <Badge 
+                        type={vehicle.seller.verified_badge_type || vehicle.seller.badgeType || (vehicle.seller.isVerified ? 'identity' : 'none')} 
+                        size="sm" 
+                      />
                     </div>
                     <div className="flex items-center gap-0.5 mt-0.5">
                       {[...Array(5)].map((_, i) => (

@@ -248,11 +248,12 @@ export default function UserProfile() {
                 </div>
 
                 <div className="space-y-1">
-                  <h1 className="text-xl font-bold tracking-tight text-[#1D1D1F] dark:text-white flex items-center justify-center gap-1.5">
+                  <h1 className="text-xl font-bold tracking-tight text-[#1D1D1F] dark:text-white flex items-center justify-center gap-2 flex-wrap">
                     <span>{profile?.displayName}</span>
-                    {profile?.isVerified && (
-                      <ShieldCheck className="w-5 h-5 text-apple-blue fill-apple-blue/10 shrink-0" />
-                    )}
+                    <Badge 
+                      type={profile?.verified_badge_type || profile?.badgeType || (profile?.isVerified ? 'identity' : 'none')} 
+                      size="md" 
+                    />
                   </h1>
                   <p className="text-xs font-bold text-apple-blue font-mono">
                     @{profile?.username || (profile?.displayName || "user").toLowerCase().replace(/\s+/g, "_")}
@@ -261,8 +262,12 @@ export default function UserProfile() {
 
                 {/* Badge tags */}
                 <div className="mt-4 flex flex-wrap gap-1.5 justify-center">
-                  {profile?.badgeType && (
-                    <Badge type={profile.badgeType} size="sm" showText />
+                  {(profile?.verified_badge_type || profile?.badgeType) && (
+                    <Badge 
+                      type={profile?.verified_badge_type || profile?.badgeType} 
+                      size="sm" 
+                      showText={true} 
+                    />
                   )}
                   {profile?.isOnline && (
                     <span className="px-2 py-0.5 rounded-full bg-apple-green/5 border border-apple-green/15 text-[8px] font-black uppercase tracking-wider text-apple-green">
