@@ -1,45 +1,52 @@
 import { motion, AnimatePresence } from "motion/react";
 import { Link, useNavigate } from "react-router-dom";
-import { ShieldCheck, Zap, Car, Mountain, Gem, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShieldCheck, Zap, Home, Building2, Map, Gem, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../lib/utils";
 import { bannerService } from "../services/bannerService";
 import { Banner } from "../types";
 import { useLocation as useAppLocation } from "../context/LocationContext";
 
-const QUICK_CATEGORIES = [
-  { id: "hybrid", label: "Hybrid", icon: Zap, color: "text-apple-green", filter: "fuelType=Hybrid" },
-  { id: "sedan", label: "Sedan", icon: Car, color: "text-apple-blue", filter: "bodyType=Sedan" },
-  { id: "suv", label: "SUV", icon: Mountain, color: "text-apple-orange", filter: "bodyType=SUV" },
-  { id: "luxury", label: "Luxury", icon: Gem, color: "text-purple-500", filter: "priceMin=10000000" },
-];
+import villaImg from "../assets/images/pakizzle_villa_hero_1790252631072.jpg";
+import penthouseImg from "../assets/images/pakizzle_penthouse_waterfront_1790252648589.jpg";
+import mansionImg from "../assets/images/pakizzle_islamabad_mansion_1790252663307.jpg";
+import plotImg from "../assets/images/pakizzle_plot_masterplan_1790252681010.jpg";
 
 const DEFAULT_BANNERS: Banner[] = [
   {
     id: 'default-1',
-    type: 'external',
-    image: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?auto=format&fit=crop&q=80&w=2000",
-    name: "Mercedes-Benz S-Class",
+    type: 'category',
+    image: villaImg,
+    name: "Architectural Contemporary Villa · DHA Phase 6",
     status: 'active',
     displayOrder: 0,
     createdAt: new Date().toISOString()
   },
   {
     id: 'default-2',
-    type: 'external',
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=2000",
-    name: "Porsche 911 Carrera",
+    type: 'category',
+    image: penthouseImg,
+    name: "Emaar Oceanfront Panoramic Penthouse · Karachi",
     status: 'active',
     displayOrder: 1,
     createdAt: new Date().toISOString()
   },
   {
     id: 'default-3',
-    type: 'external',
-    image: "https://images.unsplash.com/photo-1605897472359-85e4b9482223?auto=format&fit=crop&q=80&w=2000",
-    name: "Range Rover Autobiography",
+    type: 'category',
+    image: mansionImg,
+    name: "Margalla Ridge Modern Sanctuary · Sector F-7 Islamabad",
     status: 'active',
     displayOrder: 2,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'default-4',
+    type: 'category',
+    image: plotImg,
+    name: "Masterplanned Possession Plots · DHA Phase 9 Prism",
+    status: 'active',
+    displayOrder: 3,
     createdAt: new Date().toISOString()
   }
 ];
@@ -154,7 +161,21 @@ export default function Hero() {
                   loading="eager"
                   fetchPriority="high"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+                
+                {/* Architectural Caption */}
+                <div className="absolute bottom-12 md:bottom-16 left-6 md:left-14 right-6 md:right-14 text-left z-20 pointer-events-none">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wide mb-2.5 border border-white/20">
+                    <Sparkles className="w-3.5 h-3.5 text-apple-blue" />
+                    <span>Pakizzle Architectural Showcase</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-3xl drop-shadow-md">
+                    {currentBanner.name}
+                  </h1>
+                  <p className="text-white/80 text-xs sm:text-sm md:text-base mt-2 font-normal max-w-2xl hidden sm:block">
+                    Verified land demarcation · 100% Non-Encumbrance Certified · Direct Licensed Agency Management
+                  </p>
+                </div>
               </motion.div>
             </AnimatePresence>
 

@@ -7,7 +7,7 @@ import { useAuth } from "./context/AuthContext";
 import { useChat } from "./context/ChatContext";
 import { useLocation as useAppLocation } from "./context/LocationContext";
 import { motion, AnimatePresence } from "motion/react";
-import { CheckCircle2, Loader2, Car, Check, Settings, Lock, Sparkles, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Loader2, Car, Check, Settings, Lock, Sparkles, ShieldCheck, Home, Building2 } from "lucide-react";
 import React, { useState, lazy, Suspense } from "react";
 import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
 import { formatPrice } from "./lib/utils";
@@ -19,7 +19,8 @@ import MobileNav from "./components/MobileNav";
 import Hero from "./components/Hero";
 import SearchBar from "./components/SearchBar";
 import CategoryShowcase from "./components/CategoryShowcase";
-import PopularVehicleStyles from "./components/PopularVehicleStyles";
+import PopularPropertyStyles from "./components/PopularPropertyStyles";
+import ZameenAdvantageSection from "./components/ZameenAdvantageSection";
 import HomeCTA from "./components/HomeCTA";
 import VehicleCard from "./components/VehicleCard";
 import FeaturedNews from "./components/FeaturedNews";
@@ -274,17 +275,17 @@ export default function App() {
               <main>
               <Hero />
               <SearchBar />
-              <PopularVehicleStyles />
+              <PopularPropertyStyles />
 
               {userLocation && userLocation.city !== "Pakistan" && (
                 <section className="max-w-7xl lg:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                   <div className="flex justify-between items-end mb-10">
                     <div>
                       <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-2">
-                        Cars near you in {userLocation.city}
+                        Properties near you in {userLocation.city}
                       </h2>
                       <p className="text-sm md:text-base text-apple-text-muted">
-                        Discover the best deals in your immediate vicinity.
+                        Discover the premier verified listings in your immediate vicinity.
                       </p>
                     </div>
                     <Link to={`/marketplace?city=${userLocation.city}`} className="text-apple-blue font-semibold hover:underline hidden md:block">
@@ -310,7 +311,7 @@ export default function App() {
                   </div>
                   {vehicles.filter(v => v.status !== 'inactive' && v.city === userLocation.city).length === 0 && (
                     <div className="bg-apple-gray/50 rounded-[32px] p-12 text-center">
-                      <p className="text-apple-text-muted font-bold">No vehicles found in {userLocation.city} yet. Try expanding your search.</p>
+                      <p className="text-apple-text-muted font-bold">No properties found in {userLocation.city} yet. Try expanding your search.</p>
                     </div>
                   )}
                 </section>
@@ -328,7 +329,7 @@ export default function App() {
                       Featured Masterpieces
                     </h2>
                     <p className="text-sm md:text-base text-apple-text-muted">
-                      Handpicked luxury vehicles from Pakistan.
+                      Handpicked luxury villas, penthouses & plots from Pakistan.
                     </p>
                   </motion.div>
                   <motion.div
@@ -365,6 +366,9 @@ export default function App() {
               {/* Bento Categories Showcase */}
               <CategoryShowcase />
 
+              {/* Zameen Competitor Advantage Section */}
+              <ZameenAdvantageSection />
+
               {/* AI Valuation Section */}
               <section className="bg-apple-gray/50 py-4 md:py-6 border-t border-apple-border/30">
                 <div className="max-w-7xl mx-auto px-6">
@@ -374,21 +378,26 @@ export default function App() {
                         AI Powered
                       </span>
                       <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-                        Know the real value <br className="hidden md:block" />
-                        of your vehicle.
+                        Know the real market value <br className="hidden md:block" />
+                        of your property.
                       </h2>
                       <p className="text-apple-text-muted mb-8 text-base md:text-lg">
-                        Our advanced AI model analyzes millions of data points across Pakistan 
-                        to give you the most accurate market valuation in seconds.
+                        Our advanced valuation model analyzes micro-location market data across Pakistan 
+                        to give you certified market valuation, rental yield forecasts, and FBR tax impact.
                       </p>
                       <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
                         <button 
                           onClick={() => setIsValuationOpen(true)}
                           className="apple-button-primary w-full sm:w-auto"
                         >
-                          Get Free Valuation
+                          Get Free Property Valuation
                         </button>
-                        <button className="apple-button-secondary w-full sm:w-auto">Learn How it Works</button>
+                        <button 
+                          onClick={() => setIsValuationOpen(true)}
+                          className="apple-button-secondary w-full sm:w-auto"
+                        >
+                          Explore Valuation Hub
+                        </button>
                       </div>
                     </div>
                     <div className="flex-1 relative">
@@ -398,19 +407,19 @@ export default function App() {
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                         className="relative z-10 glass-panel p-8 rounded-apple-lg shadow-apple-soft"
                       >
-                        <div className="text-sm font-bold text-apple-text-muted mb-4">Estimated Value</div>
-                        <div className="text-5xl font-bold text-apple-blue mb-2">{formatPrice(12500000)}</div>
+                        <div className="text-sm font-bold text-apple-text-muted mb-4">Estimated Property Value</div>
+                        <div className="text-5xl font-bold text-apple-blue mb-2">{formatPrice(48500000)}</div>
                         <div className="text-xs text-green-500 font-bold flex items-center gap-1">
-                          ↑ 2.4% vs last month
+                          ↑ 3.8% appreciation this quarter
                         </div>
                         <div className="mt-8 space-y-3">
                           <div className="h-2 w-full bg-apple-gray rounded-full overflow-hidden">
-                            <div className="h-full w-[75%] bg-apple-blue" />
+                            <div className="h-full w-[78%] bg-apple-blue" />
                           </div>
                           <div className="flex justify-between text-[10px] font-bold text-apple-text-muted uppercase tracking-wider">
-                            <span>Low</span>
+                            <span>Sector Base</span>
                             <span>Market Average</span>
-                            <span>High</span>
+                            <span>Prime Corner</span>
                           </div>
                         </div>
                       </motion.div>
@@ -422,13 +431,13 @@ export default function App() {
               <HomeCTA />
               <FeaturedNews />
 
-              {/* Sell Your Car CTA */}
+              {/* Sell Your Property CTA */}
               <section className="py-4 md:py-6 bg-apple-bg border-t border-apple-border/30 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="relative glass-panel bg-[#1D1D1F] p-10 md:p-20 rounded-apple-2xl text-white overflow-hidden border-none shadow-2xl">
-                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-20 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-15 pointer-events-none">
                       <div className="absolute inset-0 bg-gradient-to-l from-apple-blue to-transparent" />
-                      <Car className="w-full h-full scale-150 rotate-12 translate-x-1/4" />
+                      <Building2 className="w-full h-full scale-150 rotate-12 translate-x-1/4" />
                     </div>
                     
                     <div className="relative z-10 max-w-2xl text-center md:text-left">
@@ -439,17 +448,17 @@ export default function App() {
                         transition={{ duration: 0.8 }}
                       >
                         <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-                          Turn your car into <br className="hidden md:block" />
-                          instant capital.
+                          Turn your property into <br className="hidden md:block" />
+                          generational wealth.
                         </h2>
                         <p className="text-white/60 text-base md:text-lg mb-10 leading-relaxed">
-                          Join Pakistan's most trusted automotive marketplace. 
-                          Get the best price for your vehicle with our AI-powered 
-                          listing system and reach millions of buyers.
+                          Join Pakistan's premier real estate ecosystem. 
+                          Get the highest valuation for your house, plot, or commercial asset 
+                          with verified buyers, zero spam calls, and full title security.
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
                           <Link to="/sell" className="apple-button-primary !bg-white !text-[#1D1D1F] hover:!bg-apple-gray w-full sm:w-auto">
-                            Start Selling Now
+                            List Your Property
                           </Link>
                           <Link to="/dashboard" className="apple-button-secondary !border-white/20 !text-white hover:!bg-white/10 w-full sm:w-auto">
                             View Seller Dashboard

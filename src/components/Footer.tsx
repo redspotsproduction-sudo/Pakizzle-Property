@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { 
-  Car, 
+  Home, 
   Shield, 
   CreditCard, 
   Search, 
@@ -17,7 +17,10 @@ import {
   Zap,
   Globe,
   Settings,
-  ArrowUpRight
+  ArrowUpRight,
+  Building2,
+  Map,
+  Calculator
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
@@ -27,44 +30,45 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
 
   const footerSections = [
     {
-      title: "Navigation",
+      title: "Properties",
       links: [
-        { name: "Marketplace", path: "/marketplace" },
-        { name: "Used Cars", path: "/marketplace?condition=used" },
-        { name: "New Cars", path: "/marketplace?condition=new" },
-        { name: "Auction Verification", path: "/auction-verification" },
-        { name: "Valuation Hub", action: onValuationClick },
-        { name: "Dubizzle Clone Blueprint", path: "/clone" },
+        { name: "All Properties", path: "/marketplace" },
+        { name: "Luxury Villas", path: "/marketplace?make=House" },
+        { name: "Apartments & Flats", path: "/marketplace?make=Apartment" },
+        { name: "Penthouses", path: "/marketplace?make=Penthouse" },
+        { name: "Plots & Land", path: "/marketplace?make=Plot" },
+        { name: "Commercial Plazas", path: "/marketplace?make=Commercial" },
       ]
     },
     {
       title: "Solutions",
       links: [
-        { name: "Car Inspection", path: "/inspection" },
-        { name: "Insurance Center", path: "/insurance" },
-        { name: "Smart Financing", path: "/financing" },
-        { name: "Roadside Assist", path: "/services" },
-        { name: "Auto Parts Shop", path: "#" },
+        { name: "AI Property Valuation", action: onValuationClick },
+        { name: "Shanakht™ Title Verification", path: "/auction-verification" },
+        { name: "Islamic Home Financing", path: "/financing" },
+        { name: "FBR Property Tax Engine", path: "/marketplace" },
+        { name: "Sector Plot Finder", path: "/marketplace" },
+        { name: "Property Insurance", path: "/insurance" },
       ]
     },
     {
-      title: "Resources",
+      title: "Cities & Societies",
       links: [
-        { name: "Help Center", path: "#" },
-        { name: "Safety Guidelines", path: "#" },
-        { name: "Community Forum", path: "#" },
-        { name: "Pakizzle Blog", path: "#" },
-        { name: "Pricing Plans", path: "#" },
+        { name: "DHA Lahore (Phases 1-9)", path: "/marketplace?city=Lahore&q=DHA" },
+        { name: "Clifton & Defence Karachi", path: "/marketplace?city=Karachi&q=Clifton" },
+        { name: "Islamabad Sectors F-7 & E-11", path: "/marketplace?city=Islamabad" },
+        { name: "Bahria Town Karachi", path: "/marketplace?city=Karachi&q=Bahria" },
+        { name: "Gulberg Lahore", path: "/marketplace?city=Lahore&q=Gulberg" },
       ]
     },
     {
       title: "Corporate",
       links: [
         { name: "About Pakizzle", path: "#" },
-        { name: "Newsroom", path: "#" },
-        { name: "Investor Relations", path: "#" },
-        { name: "Careers", path: "#" },
-        { name: "Contact Hub", path: "#" },
+        { name: "Why We Beat Zameen", path: "#" },
+        { name: "Verified Agency Network", path: "#" },
+        { name: "Admin Portal", path: "/admin/login" },
+        { name: "Seller Dashboard", path: "/dashboard" },
       ]
     }
   ];
@@ -81,15 +85,15 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
           <div className="space-y-6 max-w-sm">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-12 h-12 bg-apple-blue rounded-2xl flex items-center justify-center shadow-lg shadow-apple-blue/20 transition-transform group-hover:scale-110 duration-[600ms] ease-[0.16,1,0.3,1]">
-                <Car className="w-7 h-7 text-white" />
+                <Home className="w-7 h-7 text-white stroke-[2.2]" />
               </div>
               <div>
                 <span className="text-2xl font-semibold tracking-tight block">Pakizzle</span>
-                <span className="text-[10px] font-medium text-apple-text-muted uppercase tracking-[0.2em] -mt-1 block">The Standard for Mobility</span>
+                <span className="text-[10px] font-medium text-apple-text-muted uppercase tracking-[0.2em] -mt-1 block">The Apple Standard for Real Estate</span>
               </div>
             </Link>
             <p className="text-base text-apple-text-muted leading-relaxed font-medium">
-              We're building the future of automotive commerce in Pakistan. Precision, transparency, and intelligence at every turn.
+              Pakistan's premier property ecosystem. Cryptographic title verification, interactive masterplan plot finders, and complete tax transparency. Zero banner spam.
             </p>
           </div>
 
