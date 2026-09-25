@@ -1,0 +1,29 @@
+version: 2
+updates:
+  # Root npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Web frontend (Next.js)
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Go gateway dependencies
+  - package-ecosystem: "gomod"
+    directory: "/apps/gateway"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Python AI microservice dependencies
+  - package-ecosystem: "pip"
+    directory: "/apps/ai"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10

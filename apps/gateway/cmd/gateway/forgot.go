@@ -13,7 +13,9 @@ import (
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/redspotsproduction-sudo/pakizzle/gateway/internal/auth"
 	gwlog "github.com/redspotsproduction-sudo/pakizzle/gateway/internal/logger"
+	"github.com/redspotsproduction-sudo/pakizzle/gateway/internal/ratelimit"
 )
 
 // ── POST /api/auth/forgot/start ─────────────────────────────────────────────
@@ -26,6 +28,12 @@ type forgotStartReq struct {
 
 func (s *server) forgotStart(w http.ResponseWriter, r *http.Request) {
 	log := gwlog.FromContext(r.Context())
+	ip := ratelimit.ClientIP(r)
+	if allowed, _, retrySec := s.limiter.Allow("forgot:start:ip:"+ip, 5, 15*time.Minute); !allowed {
+		ratelimit.WriteRateLimited(w, retrySec, "too many reset requests from this IP; please wait")
+		return
+	}
+
 	var in forgotStartReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil || !isValidEmail(in.Email) {
 		writeError(w, http.StatusBadRequest, "validation", "valid email required")
@@ -122,6 +130,12 @@ type forgotResetReq struct {
 
 func (s *server) forgotReset(w http.ResponseWriter, r *http.Request) {
 	log := gwlog.FromContext(r.Context())
+	ip := ratelimit.ClientIP(r)
+	if allowed, _, retrySec := s.limiter.Allow("forgot:reset:ip:"+ip, 5, 15*time.Minute); !allowed {
+		ratelimit.WriteRateLimited(w, retrySec, "too many reset attempts from this IP; please wait 15 minutes")
+		return
+	}
+
 	var in forgotResetReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid_body", "invalid json")
@@ -178,7 +192,7 @@ func (s *server) forgotReset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newHash, err := bcrypt.GenerateFromPassword([]byte(in.NewPassword), bcrypt.DefaultCost)
+	newHash, err := auth.BcryptHash(in.NewPassword)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "hash", "could not hash password")
 		return
@@ -191,7 +205,7 @@ func (s *server) forgotReset(w http.ResponseWriter, r *http.Request) {
 	}
 	cmd, err := tx.Exec(r.Context(),
 		`UPDATE users SET password_hash = $1, updated_at = NOW() WHERE email = $2`,
-		string(newHash), email)
+		newHash, email)
 	if err != nil {
 		log.Error("forgot.reset user update failed", "email", emailRedacted, "err", err)
 		writeError(w, http.StatusInternalServerError, "db", "reset temporarily unavailable")
@@ -216,7 +230,7 @@ func (s *server) forgotReset(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"success": true})
 		return
 	}
-	tok, _ := s.signer.Sign(u.ID, u.Email, u.Role, 7*24*time.Hour)
+	tok, _ := s.signer.Sign(u.ID, u.Email, u.Role, 24*time.Hour)
 	log.Info("forgot.reset success", "user_id", u.ID, "email", emailRedacted)
 	writeJSON(w, http.StatusOK, authResp{Token: tok, User: u.public()})
 }

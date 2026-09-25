@@ -541,22 +541,24 @@ export default function VehicleDetails() {
 
                 {/* 
                   Advanced Search Engine Indexing Package (Inaudible to human readers, extremely loud to Google's spider algorithms) 
-                  This holds our keyword clouds, structured copy lists, and SEO semantic anchors invisibly.
+                  This holds our keyword clouds, structured copy lists, and SEO semantic anchors safely without script execution risks.
                 */}
                 {vehicle.seoDescription && (
                   <div 
                     className="sr-only opacity-0 pointer-events-none absolute h-0 w-0 overflow-hidden"
-                    dangerouslySetInnerHTML={{ __html: vehicle.seoDescription }}
                     aria-hidden="true"
-                  />
+                  >
+                    {vehicle.seoDescription.replace(/<[^>]*>?/gm, ' ')}
+                  </div>
                 )}
-                {/* Fallback to legacy HTML description search injection if no separate seoDescription exists */}
-                {!vehicle.seoDescription && vehicle.description && vehicle.description.includes("<") && (
+                {/* Safe text fallback description indexing */}
+                {!vehicle.seoDescription && vehicle.description && (
                   <div 
                     className="sr-only opacity-0 pointer-events-none absolute h-0 w-0 overflow-hidden"
-                    dangerouslySetInnerHTML={{ __html: vehicle.description }}
                     aria-hidden="true"
-                  />
+                  >
+                    {vehicle.description.replace(/<[^>]*>?/gm, ' ')}
+                  </div>
                 )}
               </motion.section>
 

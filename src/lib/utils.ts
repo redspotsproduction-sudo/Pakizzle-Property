@@ -5,20 +5,36 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPrice(price: number): string {
-  try {
-    if (price >= 10000000) {
-      const crores = price / 10000000;
-      return `${crores.toFixed(2).replace(/\.00$/, "")} Crore`;
-    } else if (price >= 100000) {
-      const lacs = price / 100000;
-      return `${lacs.toFixed(2).replace(/\.00$/, "")} Lac`;
+/**
+ * Formats currency in PKR using South Asian numbering convention (e.g. Rs 4,50,000)
+ * Supports compact display (e.g. Rs 1.5 Crore or Rs 45 Lac) where space is tight.
+ */
+export function formatPKR(amount: number | null | undefined, options?: { compact?: boolean; prefix?: string }): string {
+  if (amount === null || amount === undefined || isNaN(amount)) return "Rs 0";
+  const prefix = options?.prefix ?? "Rs ";
+
+  if (options?.compact) {
+    if (Math.abs(amount) >= 10000000) {
+      const crores = amount / 10000000;
+      return `${prefix}${crores.toFixed(2).replace(/\.?0+$/, "")} Crore`;
+    } else if (Math.abs(amount) >= 100000) {
+      const lacs = amount / 100000;
+      return `${prefix}${lacs.toFixed(2).replace(/\.?0+$/, "")} Lac`;
     }
-    return `${price.toLocaleString("en-IN")}`;
-  } catch (err) {
-    console.error("formatPrice error:", err);
-    return `${price}`;
   }
+
+  try {
+    const formatted = Math.round(amount).toLocaleString("en-IN", {
+      maximumFractionDigits: 0,
+    });
+    return `${prefix}${formatted}`;
+  } catch {
+    return `${prefix}${amount}`;
+  }
+}
+
+export function formatPrice(price: number, compact = false): string {
+  return formatPKR(price, { compact });
 }
 
 export interface FirestoreErrorInfo {

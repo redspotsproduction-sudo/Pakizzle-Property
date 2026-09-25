@@ -17,10 +17,12 @@ import { useTheme } from "./context/ThemeContext";
 import Header from "./components/Header";
 import MobileNav from "./components/MobileNav";
 import Hero from "./components/Hero";
-import SearchBar from "./components/SearchBar";
+import BrowseByCity from "./components/BrowseByCity";
+import SocialProofSection from "./components/SocialProofSection";
 import CategoryShowcase from "./components/CategoryShowcase";
 import PopularPropertyStyles from "./components/PopularPropertyStyles";
 import ZameenAdvantageSection from "./components/ZameenAdvantageSection";
+import { CardGridSkeleton } from "./components/ui/LoadingSkeleton";
 import HomeCTA from "./components/HomeCTA";
 import VehicleCard from "./components/VehicleCard";
 import FeaturedNews from "./components/FeaturedNews";
@@ -191,6 +193,22 @@ export default function App() {
   const { theme } = useTheme();
   const location = useLocation();
 
+  const curatedFeatured = React.useMemo(() => {
+    if (!vehicles || vehicles.length === 0) return [];
+    return [...vehicles]
+      .filter(v => v.status !== 'inactive')
+      .sort((a, b) => {
+        const aVerified = a.agency?.isVerified || (a.verified_badge_type && a.verified_badge_type !== 'none') ? 1 : 0;
+        const bVerified = b.agency?.isVerified || (b.verified_badge_type && b.verified_badge_type !== 'none') ? 1 : 0;
+        if (bVerified !== aVerified) return bVerified - aVerified;
+        const aPhotos = a.images?.length || 0;
+        const bPhotos = b.images?.length || 0;
+        if (bPhotos !== aPhotos) return bPhotos - aPhotos;
+        return (b.price || 0) - (a.price || 0);
+      })
+      .slice(0, 4);
+  }, [vehicles]);
+
   // Pages that have a back icon and should hide the mobile footer menu
   const hideMobileNav = 
     location.pathname.startsWith('/vehicle/') || 
@@ -212,18 +230,18 @@ export default function App() {
            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
            className="flex flex-col items-center"
         >
-          <div className="w-16 h-16 bg-apple-blue rounded-[20px] shadow-[0_20px_50px_rgba(0,125,255,0.3)] flex items-center justify-center mb-8">
-            <Car className="w-8 h-8 text-white stroke-[2]" />
+          <div className="w-16 h-16 bg-[#0F766E] rounded-2xl shadow-[0_20px_50px_rgba(15,118,110,0.3)] flex items-center justify-center mb-8">
+            <Home className="w-8 h-8 text-white stroke-[2]" />
           </div>
           <div className="flex flex-col items-center gap-1.5">
-            <div className="text-sm font-semibold tracking-tight">Pakizzle</div>
+            <div className="text-sm font-semibold tracking-tight">Pakizzle Property</div>
             <div className="flex gap-1">
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
                   animate={{ opacity: [0.2, 1, 0.2] }}
                   transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
-                  className="w-1 h-1 rounded-full bg-apple-blue"
+                  className="w-1.5 h-1.5 rounded-full bg-[#0F766E]"
                 />
               ))}
             </div>
@@ -274,26 +292,26 @@ export default function App() {
               <Header />
               <main>
               <Hero />
-              <SearchBar />
+              <BrowseByCity />
               <PopularPropertyStyles />
 
               {userLocation && userLocation.city !== "Pakistan" && (
-                <section className="max-w-7xl lg:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-                  <div className="flex justify-between items-end mb-10">
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+                  <div className="flex justify-between items-end mb-8">
                     <div>
-                      <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-2">
+                      <h2 className="type-h2 font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
                         Properties near you in {userLocation.city}
                       </h2>
-                      <p className="text-sm md:text-base text-apple-text-muted">
-                        Discover the premier verified listings in your immediate vicinity.
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                        Discover verified listings in your immediate vicinity.
                       </p>
                     </div>
-                    <Link to={`/marketplace?city=${userLocation.city}`} className="text-apple-blue font-semibold hover:underline hidden md:block">
+                    <Link to={`/marketplace?city=${encodeURIComponent(userLocation.city)}`} className="text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline hidden md:block">
                       View all in {userLocation.city}
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2 lg:gap-3 xl:gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {vehicles
                       ?.filter(v => v.status !== 'inactive' && v.city === userLocation.city)
                       ?.slice(0, 4)
@@ -303,62 +321,65 @@ export default function App() {
                           initial={{ opacity: 0, scale: 0.95 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: index * 0.1 }}
+                          transition={{ duration: 0.5, delay: index * 0.08 }}
                         >
                           <VehicleCard vehicle={vehicle} />
                         </motion.div>
                       ))}
                   </div>
                   {vehicles.filter(v => v.status !== 'inactive' && v.city === userLocation.city).length === 0 && (
-                    <div className="bg-apple-gray/50 rounded-[32px] p-12 text-center">
-                      <p className="text-apple-text-muted font-bold">No properties found in {userLocation.city} yet. Try expanding your search.</p>
+                    <div className="bg-slate-100 dark:bg-slate-800/50 rounded-lg p-8 text-center border border-slate-200 dark:border-slate-800">
+                      <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+                        No properties found in {userLocation.city} yet. Try expanding your search to Islamabad or Lahore.
+                      </p>
                     </div>
                   )}
                 </section>
               )}
               
-              <section className="max-w-7xl lg:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6">
-                <div className="flex justify-between items-end mb-10 md:mb-12">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-2">
-                      Featured Masterpieces
+              {/* Curated Featured Masterpieces with Algorithmic Ranking & Loading Skeletons */}
+              <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="flex justify-between items-end mb-8">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-amber-200 dark:border-amber-800">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Algorithmic Ranking
+                    </div>
+                    <h2 className="type-h2 font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
+                      Curated Featured Masterpieces
                     </h2>
-                    <p className="text-sm md:text-base text-apple-text-muted">
-                      Handpicked luxury villas, penthouses & plots from Pakistan.
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                      Ranked by Shanakht™ title-cleared status, high-resolution documentation, and certified market valuation.
                     </p>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="hidden md:block"
-                  >
-                    <Link to="/marketplace" className="text-apple-blue font-semibold hover:underline">
-                      View All Marketplace
+                  </div>
+                  <div className="hidden md:block">
+                    <Link to="/marketplace" className="text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline">
+                      View All Marketplace →
                     </Link>
-                  </motion.div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2 lg:gap-3 xl:gap-4">
-                  {vehicles?.filter(v => v.status !== 'inactive')?.slice(0, 4)?.map((vehicle, index) => (
-                    <motion.div
-                      key={vehicle.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <VehicleCard vehicle={vehicle} />
-                    </motion.div>
-                  ))}
-                </div>
+                {vehiclesLoading ? (
+                  <CardGridSkeleton count={4} />
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {curatedFeatured.map((vehicle, index) => (
+                      <motion.div
+                        key={vehicle.id}
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.08 }}
+                      >
+                        <VehicleCard vehicle={vehicle} />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </section>
+
+              {/* Social Proof Section (Live Market Activity & Customer Reviews) */}
+              <SocialProofSection />
 
               {/* Recently Viewed Series */}
               <RecentlyViewed />

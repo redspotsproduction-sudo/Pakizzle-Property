@@ -33,7 +33,11 @@ import (
 	"github.com/redspotsproduction-sudo/pakizzle/gateway/internal/config"
 	"github.com/redspotsproduction-sudo/pakizzle/gateway/internal/db"
 	gwlog "github.com/redspotsproduction-sudo/pakizzle/gateway/internal/logger"
+	"github.com/redspotsproduction-sudo/pakizzle/gateway/internal/ratelimit"
 )
+
+// Precomputed dummy bcrypt hash (cost 12) for constant-time email enumeration defense
+var dummyBcryptHash, _ = auth.BcryptHash("dummy-timing-mitigation-hash")
 
 //go:embed migrations/*.sql
 var migrationsFS embed.FS
@@ -77,27 +81,54 @@ func main() {
 
 	mailer := newSESMailer(cfg.SESRegion, cfg.SESFromEmail, logger)
 	signer := auth.NewSigner(cfg.JWTSecret)
+	limiter := ratelimit.New()
 
 	srv := &server{
-		cfg:    cfg,
-		pool:   pool,
-		signer: signer,
-		log:    logger,
-		users:  newUserStore(pool),
-		mail:   mailer,
+		cfg:     cfg,
+		pool:    pool,
+		signer:  signer,
+		log:     logger,
+		users:   newUserStore(pool),
+		mail:    mailer,
+		limiter: limiter,
 	}
 	srv.bootstrapAdmin(ctx)
 
 	r := chi.NewRouter()
 	r.Use(middleware.RealIP)
 	r.Use(gwlog.HTTP(logger))
+	r.Use(securityHeaders)
+
+	// Strict CORS: Allow only trusted frontend origins, forbid wildcards
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
+		AllowOriginFunc: func(r *http.Request, origin string) bool {
+			if origin == "" {
+				return true
+			}
+			o := strings.ToLower(origin)
+			return strings.HasPrefix(o, "http://localhost:") ||
+				strings.HasPrefix(o, "http://127.0.0.1:") ||
+				strings.HasSuffix(o, ".amsterdamhostel.cloud") ||
+				strings.HasSuffix(o, ".pakizzle.com") ||
+				o == "https://pakizzle.com" ||
+				strings.HasSuffix(o, ".run.app")
+		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-Fb-Uid"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           300,
 	}))
+
+	// Max request body size: 10MB default
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			r.Body = http.MaxBytesReader(w, r.Body, 10<<20)
+			next.ServeHTTP(w, r)
+		})
+	})
+
+	// General rate limit: 120 req/min per IP
+	r.Use(srv.generalRateLimit)
 
 	r.Get("/healthz", srv.healthz)
 	r.Get("/api/ping", srv.ping)
@@ -226,12 +257,37 @@ func main() {
 }
 
 type server struct {
-	cfg    *config.Config
-	pool   *pgxpool.Pool
-	signer *auth.Signer
-	log    *slog.Logger
-	users  *userStore
-	mail   Mailer
+	cfg     *config.Config
+	pool    *pgxpool.Pool
+	signer  *auth.Signer
+	log     *slog.Logger
+	users   *userStore
+	mail    Mailer
+	limiter *ratelimit.Limiter
+}
+
+func securityHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("X-XSS-Protection", "1; mode=block")
+		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; frame-ancestors 'none'")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (s *server) generalRateLimit(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ip := ratelimit.ClientIP(r)
+		allowed, _, retrySec := s.limiter.Allow("api:general:"+ip, 120, time.Minute)
+		if !allowed {
+			ratelimit.WriteRateLimited(w, retrySec, "too many requests; please slow down")
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 // ── migrations ──────────────────────────────────────────────────────────────
@@ -290,14 +346,21 @@ type authResp struct {
 
 func (s *server) register(w http.ResponseWriter, r *http.Request) {
 	log := gwlog.FromContext(r.Context())
+	ip := ratelimit.ClientIP(r)
+	if allowed, _, retrySec := s.limiter.Allow("auth:register:"+ip, 5, 15*time.Minute); !allowed {
+		ratelimit.WriteRateLimited(w, retrySec, "too many registration attempts; please wait 15 minutes")
+		return
+	}
+
 	var in registerReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 		log.Warn("auth.register decode failed", "err", err)
 		writeError(w, http.StatusBadRequest, "invalid_body", "invalid json")
 		return
 	}
-	emailRedacted := redactEmail(in.Email)
-	if !isValidEmail(in.Email) || len(in.Password) < 8 {
+	emailClean := strings.ToLower(strings.TrimSpace(in.Email))
+	emailRedacted := redactEmail(emailClean)
+	if !isValidEmail(emailClean) || len(in.Password) < 8 {
 		log.Warn("auth.register validation failed",
 			"email", emailRedacted,
 			"reason", "invalid email or short password",
@@ -305,13 +368,13 @@ func (s *server) register(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "validation", "valid email + 8-char password required")
 		return
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.DefaultCost)
+	hash, err := auth.BcryptHash(in.Password)
 	if err != nil {
 		log.Error("auth.register bcrypt failed", "err", err)
 		writeError(w, http.StatusInternalServerError, "hash", "could not hash password")
 		return
 	}
-	u, err := s.users.Create(r.Context(), strings.TrimSpace(in.FullName), in.Email, string(hash))
+	u, err := s.users.Create(r.Context(), strings.TrimSpace(in.FullName), emailClean, hash)
 	if err != nil {
 		log.Warn("auth.register create_user failed", "email", emailRedacted, "err", err)
 		if errors.Is(err, ErrEmailTaken) {
@@ -321,7 +384,7 @@ func (s *server) register(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "db", "could not create user")
 		return
 	}
-	tok, _ := s.signer.Sign(u.ID, u.Email, u.Role, 7*24*time.Hour)
+	tok, _ := s.signer.Sign(u.ID, u.Email, u.Role, 24*time.Hour)
 
 	log.Info("auth.register success",
 		"user_id", u.ID,
@@ -361,35 +424,49 @@ type loginReq struct {
 
 func (s *server) login(w http.ResponseWriter, r *http.Request) {
 	log := gwlog.FromContext(r.Context())
+	ip := ratelimit.ClientIP(r)
+	if allowed, _, retrySec := s.limiter.Allow("auth:login:ip:"+ip, 10, 15*time.Minute); !allowed {
+		ratelimit.WriteRateLimited(w, retrySec, "too many login attempts from this IP; please wait 15 minutes")
+		return
+	}
+
 	var in loginReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 		log.Warn("auth.login decode failed", "err", err)
 		writeError(w, http.StatusBadRequest, "invalid_body", "invalid json")
 		return
 	}
-	emailRedacted := redactEmail(in.Email)
-	if !isValidEmail(in.Email) || in.Password == "" {
+	emailClean := strings.ToLower(strings.TrimSpace(in.Email))
+	emailRedacted := redactEmail(emailClean)
+	if allowed, _, retrySec := s.limiter.Allow("auth:login:acct:"+emailClean, 5, 15*time.Minute); !allowed {
+		ratelimit.WriteRateLimited(w, retrySec, "too many login attempts for this account; please wait 15 minutes")
+		return
+	}
+
+	if !isValidEmail(emailClean) || in.Password == "" {
 		log.Info("auth.login validation failed", "email", emailRedacted)
 		writeError(w, http.StatusUnauthorized, "auth", "invalid email or password")
 		return
 	}
-	u, err := s.users.GetByEmail(r.Context(), in.Email)
+	u, err := s.users.GetByEmail(r.Context(), emailClean)
 	if err != nil {
 		log.Error("auth.login db lookup failed", "email", emailRedacted, "err", err)
 		writeError(w, http.StatusInternalServerError, "db", "login temporarily unavailable")
 		return
 	}
+	// Constant-time mitigation against timing oracle for user enumeration
 	if u == nil {
+		_ = auth.BcryptCompare(dummyBcryptHash, in.Password)
 		log.Info("auth.login user not found", "email", emailRedacted)
 		writeError(w, http.StatusUnauthorized, "auth", "invalid email or password")
 		return
 	}
-	if bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(in.Password)) != nil {
+	if !auth.BcryptCompare(u.PasswordHash, in.Password) {
 		log.Warn("auth.login bad password", "user_id", u.ID, "email", emailRedacted)
 		writeError(w, http.StatusUnauthorized, "auth", "invalid email or password")
 		return
 	}
-	tok, _ := s.signer.Sign(u.ID, u.Email, u.Role, 7*24*time.Hour)
+	tok, _ := s.signer.Sign(u.ID, u.Email, u.Role, 24*time.Hour)
 	log.Info("auth.login success", "user_id", u.ID, "email", emailRedacted, "role", u.Role)
 	writeJSON(w, http.StatusOK, authResp{Token: tok, User: u.public()})
 }
@@ -418,6 +495,12 @@ type verifyOTPReq struct {
 
 func (s *server) sendEmailOTP(w http.ResponseWriter, r *http.Request) {
 	log := gwlog.FromContext(r.Context())
+	ip := ratelimit.ClientIP(r)
+	if allowed, _, retrySec := s.limiter.Allow("otp:email:ip:"+ip, 5, 15*time.Minute); !allowed {
+		ratelimit.WriteRateLimited(w, retrySec, "too many OTP requests from this IP; please wait")
+		return
+	}
+
 	var in sendOTPReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil || !isValidEmail(in.Email) {
 		log.Warn("otp.send_email validation failed", "email", redactEmail(in.Email), "err", err)

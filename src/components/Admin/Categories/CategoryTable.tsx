@@ -97,8 +97,8 @@ export default function CategoryTable({
               )}
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-apple-gray dark:bg-white/10 flex items-center justify-center overflow-hidden">
-                   {cat.icon ? (
-                     <div dangerouslySetInnerHTML={{ __html: cat.icon }} className="w-4 h-4" />
+                   {cat.icon && cat.icon.trim().startsWith('<svg') && !cat.icon.toLowerCase().includes('<script') ? (
+                     <div dangerouslySetInnerHTML={{ __html: cat.icon.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '').replace(/\son\w+="[^"]*"/gi, '') }} className="w-4 h-4" />
                    ) : (
                      <ImageIcon className="w-4 h-4 text-apple-text-muted opacity-40" />
                    )}

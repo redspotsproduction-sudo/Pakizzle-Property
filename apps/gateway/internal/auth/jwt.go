@@ -52,11 +52,11 @@ func (s *Signer) signWithType(userID int64, email, role, typ string, ttl time.Du
 
 func (s *Signer) Parse(raw string) (*Claims, error) {
 	parsed, err := jwt.ParseWithClaims(raw, &Claims{}, func(t *jwt.Token) (any, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("unexpected signing method")
+		if t.Method.Alg() != jwt.SigningMethodHS256.Alg() {
+			return nil, errors.New("unexpected signing algorithm: expected HS256")
 		}
 		return s.secret, nil
-	})
+	}, jwt.WithValidMethods([]string{"HS256"}))
 	if err != nil {
 		return nil, err
 	}

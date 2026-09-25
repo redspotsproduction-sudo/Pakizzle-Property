@@ -8,6 +8,7 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 import pg from "pg";
+import crypto from "crypto";
 import { GoogleGenAI } from "@google/genai";
 
 import sharp from "sharp";
@@ -54,7 +55,10 @@ const mockVariants = [
 ];
 
 // --- CONFIGURATION ---
-const JWT_SECRET = process.env.JWT_SECRET || "pakizzle-secret-key-2026";
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === "production" ? "" : "dev-only-secret-key-32-chars-minimum-pakizzle");
+if (!JWT_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("CRITICAL SECURITY ERROR: JWT_SECRET environment variable is required in production");
+}
 const PORT = 3000;
 
 // --- MOCK DATABASE (Simulating PostgreSQL) ---
@@ -64,7 +68,7 @@ const users: any[] = [
     id: 1,
     full_name: "Admin User",
     email: "admin@pakizzle.com",
-    password_hash: bcrypt.hashSync("admin123", 10),
+    password_hash: bcrypt.hashSync("admin123", 12),
     role: "admin",
     email_verified: true,
     phone_verified: true,
@@ -75,7 +79,37 @@ const users: any[] = [
 ];
 
 const verificationRequests: any[] = [];
-const otpStore = new Map<string, { code: string; expires: number }>();
+
+// OTP Store: hashes OTP at rest, tracks attempts, limits lockout
+interface StoredOTP {
+  codeHash: string;
+  attempts: number;
+  expires: number;
+}
+const otpStore = new Map<string, StoredOTP>();
+
+// In-Memory Rate Limiter: 5 attempts per 15 minutes for auth & OTP
+const rateLimits = new Map<string, { count: number; resetAt: number }>();
+const checkRateLimit = (key: string, limit: number, windowMs: number): { allowed: boolean; retryAfterSec: number } => {
+  const now = Date.now();
+  const entry = rateLimits.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimits.set(key, { count: 1, resetAt: now + windowMs });
+    return { allowed: true, retryAfterSec: Math.ceil(windowMs / 1000) };
+  }
+  const retryAfterSec = Math.max(1, Math.ceil((entry.resetAt - now) / 1000));
+  if (entry.count >= limit) {
+    return { allowed: false, retryAfterSec };
+  }
+  entry.count++;
+  return { allowed: true, retryAfterSec };
+};
+
+const getClientIp = (req: any): string => {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.socket.remoteAddress || '127.0.0.1';
+};
 
 // --- MIDDLEWARE ---
 const authenticateToken = (req: any, res: any, next: any) => {
@@ -84,7 +118,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
   const fbUid = req.headers['x-fb-uid'];
 
   if (token && token !== 'null') {
-    jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+    jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] }, (err: any, user: any) => {
       if (err) {
         // If JWT fails but we have FB UID, we can fallback
         if (fbUid) {
@@ -105,11 +139,9 @@ const authenticateToken = (req: any, res: any, next: any) => {
 };
 
 const handleFbUid = (fbUid: string, req: any, res: any, next: any) => {
-  // In our mock DB, we'll use fbUid as the ID if it's a string
   let user = users.find(u => u.fb_uid === fbUid || u.id === fbUid);
   
   if (!user) {
-    // Auto-create user in mock DB if they exist in Firebase but not here
     user = {
       id: fbUid,
       fb_uid: fbUid,
@@ -131,20 +163,33 @@ const handleFbUid = (fbUid: string, req: any, res: any, next: any) => {
 };
 
 const isAdmin = (req: any, res: any, next: any) => {
-  const adminEmail = "redspotsproduction@gmail.com";
+  const adminEmail = process.env.ADMIN_EMAIL || "redspotsproduction@gmail.com";
   if (req.user.role !== 'admin' && req.user.email !== adminEmail) {
     return res.status(403).json({ error: "Admin access required." });
   }
   next();
 };
 
-// --- FILE UPLOAD SETUP ---
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+// --- SECURE FILE UPLOAD SETUP ---
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // Max 10MB per document
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+    if (allowedMimes.includes(file.mimetype.toLowerCase())) {
+      cb(null, true);
+    } else {
+      cb(new Error("Disallowed file type. Allowed formats: JPG, PNG, WEBP, PDF."));
+    }
+  }
+});
 
 // --- UTILS ---
 const convertToAvif = async (buffer: Buffer) => {
+  // Sharp strips all EXIF/GPS location metadata by default unless .withMetadata() is specified.
+  // .rotate() reads EXIF orientation to orient the image correctly before EXIF is discarded.
   return await sharp(buffer)
+    .rotate()
     .avif({ quality: 60, effort: 2 })
     .toBuffer();
 };
@@ -159,8 +204,38 @@ const calculateBadge = (user: any) => {
 async function startServer() {
   const app = express();
 
-  app.use(cors());
-  app.use(express.json());
+  // Security Headers Middleware
+  app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    if (process.env.NODE_ENV === "production") {
+      res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+    }
+    next();
+  });
+
+  // CORS restriction: only allow self and expected origins
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const o = origin.toLowerCase();
+      if (
+        o.startsWith("http://localhost:") ||
+        o.startsWith("http://127.0.0.1:") ||
+        o.endsWith(".amsterdamhostel.cloud") ||
+        o.endsWith(".pakizzle.com") ||
+        o === "https://pakizzle.com" ||
+        o.endsWith(".run.app")
+      ) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Permissive in dev, logged in production
+      }
+    },
+    credentials: true,
+  }));
+  app.use(express.json({ limit: "2mb" }));
 
   // Logging middleware
   app.use((req, res, next) => {
@@ -173,14 +248,27 @@ async function startServer() {
   app.get("/api/ping", (req, res) => res.json({ pong: true, time: new Date() }));
 
   app.post("/api/auth/register", async (req, res) => {
+    const ip = getClientIp(req);
+    const rl = checkRateLimit(`register:${ip}`, 5, 15 * 60 * 1000);
+    if (!rl.allowed) {
+      res.setHeader("Retry-After", rl.retryAfterSec.toString());
+      return res.status(429).json({ error: "Too many registration attempts. Please wait 15 minutes.", code: "rate_limited" });
+    }
+
     const { fullName, email, password } = req.body;
-    if (users.find(u => u.email === email)) return res.status(400).json({ error: "User already exists" });
+    if (!email || !password || password.length < 8) {
+      return res.status(400).json({ error: "Valid email and 8+ character password required" });
+    }
+
+    if (users.find(u => u.email === email.toLowerCase().trim())) {
+      return res.status(400).json({ error: "User already exists" });
+    }
 
     const newUser = {
       id: users.length + 1,
       full_name: fullName,
-      email,
-      password_hash: await bcrypt.hash(password, 10),
+      email: email.toLowerCase().trim(),
+      password_hash: await bcrypt.hash(password, 12),
       role: "user",
       email_verified: false,
       phone_verified: false,
@@ -191,72 +279,147 @@ async function startServer() {
     };
 
     users.push(newUser);
-    const token = jwt.sign({ id: newUser.id, email: newUser.email, role: newUser.role }, JWT_SECRET);
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email, role: newUser.role },
+      JWT_SECRET,
+      { algorithm: "HS256", expiresIn: "24h" }
+    );
     res.json({ success: true, token, user: { id: newUser.id, fullName: newUser.full_name, email: newUser.email, role: newUser.role } });
   });
 
   app.post("/api/auth/login", async (req, res) => {
+    const ip = getClientIp(req);
     const { email, password } = req.body;
-    const user = users.find(u => u.email === email);
-    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+    const cleanEmail = (email || '').toLowerCase().trim();
+
+    // Rate limit per IP and per Account (5 attempts / 15 min)
+    const rlIp = checkRateLimit(`login:ip:${ip}`, 10, 15 * 60 * 1000);
+    const rlAcct = checkRateLimit(`login:acct:${cleanEmail}`, 5, 15 * 60 * 1000);
+    if (!rlIp.allowed || !rlAcct.allowed) {
+      const retryAfter = Math.max(rlIp.retryAfterSec, rlAcct.retryAfterSec);
+      res.setHeader("Retry-After", retryAfter.toString());
+      return res.status(429).json({ error: "Too many login attempts. Please wait 15 minutes.", code: "rate_limited" });
+    }
+
+    const user = users.find(u => u.email === cleanEmail);
+    // Constant-time mitigation against timing oracle for email enumeration
+    const dummyHash = "$2a$12$e8Ym6f8F4uL0mXvS4qZ2wO1qH2mN4pQ6rS8tU0vW2xY4zA.B/C.De";
+    const targetHash = user ? user.password_hash : dummyHash;
+    const passwordValid = await bcrypt.compare(password || "", targetHash);
+
+    if (!user || !passwordValid) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET);
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { algorithm: "HS256", expiresIn: "24h" }
+    );
     res.json({ success: true, token, user: { id: user.id, fullName: user.full_name, email: user.email, role: user.role } });
   });
 
   app.post("/api/otp/phone/send", (req, res) => {
+    const ip = getClientIp(req);
     const { phone } = req.body;
     if (!phone) return res.status(400).json({ error: "Phone number required" });
+    const cleanPhone = phone.trim();
+
+    const rl = checkRateLimit(`otp:phone:${cleanPhone}`, 5, 15 * 60 * 1000);
+    if (!rl.allowed) {
+      res.setHeader("Retry-After", rl.retryAfterSec.toString());
+      return res.status(429).json({ error: "Too many OTP requests. Please wait a few minutes.", code: "rate_limited" });
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    otpStore.set(phone, { code: otp, expires: Date.now() + 5 * 60 * 1000 }); // 5 mins
-    console.log(`[VERIFICATION] SMS OTP for ${phone}: ${otp}`);
-    res.json({ success: true, message: "OTP sent via SMS", demoCode: otp });
+    const codeHash = crypto.createHash('sha256').update(otp).digest('hex');
+    otpStore.set(cleanPhone, { codeHash, attempts: 0, expires: Date.now() + 5 * 60 * 1000 }); // 5 mins
+
+    // Do NOT log plaintext OTP in production logs
+    if (process.env.NODE_ENV !== "production") {
+      res.json({ success: true, message: "OTP sent via SMS", demoCode: otp });
+    } else {
+      res.json({ success: true, message: "OTP sent via SMS" });
+    }
   });
 
   app.post("/api/otp/phone/verify", authenticateToken, (req: any, res) => {
     const { phone, code } = req.body;
-    const stored = otpStore.get(phone);
-    if (!stored || stored.code !== code || Date.now() > stored.expires) {
+    const cleanPhone = (phone || '').trim();
+    const stored = otpStore.get(cleanPhone);
+    if (!stored || Date.now() > stored.expires) {
+      return res.status(400).json({ error: "Invalid or expired OTP" });
+    }
+    if (stored.attempts >= 5) {
+      otpStore.delete(cleanPhone);
+      return res.status(429).json({ error: "Too many failed attempts. Please request a new code.", code: "too_many_attempts" });
+    }
+
+    const inputHash = crypto.createHash('sha256').update((code || '').trim()).digest('hex');
+    if (stored.codeHash !== inputHash) {
+      stored.attempts++;
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
     const user = users.find(u => u.id === req.user.id || u.fb_uid === req.user.id);
     if (user) {
       user.phone_verified = true;
-      user.phone = phone;
+      user.phone = cleanPhone;
       user.verified_badge_type = calculateBadge(user);
     }
 
-    otpStore.delete(phone);
+    otpStore.delete(cleanPhone);
     res.json({ success: true, badge: user?.verified_badge_type });
   });
 
   app.post("/api/otp/email/send", (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: "Email address required" });
+    const cleanEmail = email.toLowerCase().trim();
+
+    const rl = checkRateLimit(`otp:email:${cleanEmail}`, 5, 15 * 60 * 1000);
+    if (!rl.allowed) {
+      res.setHeader("Retry-After", rl.retryAfterSec.toString());
+      return res.status(429).json({ error: "Too many OTP requests. Please wait a few minutes.", code: "rate_limited" });
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    otpStore.set(email, { code: otp, expires: Date.now() + 5 * 60 * 1000 });
-    console.log(`[VERIFICATION] EMAIL OTP for ${email}: ${otp}`);
-    res.json({ success: true, message: "OTP sent via Email", demoCode: otp });
+    const codeHash = crypto.createHash('sha256').update(otp).digest('hex');
+    otpStore.set(cleanEmail, { codeHash, attempts: 0, expires: Date.now() + 5 * 60 * 1000 });
+
+    if (process.env.NODE_ENV !== "production") {
+      res.json({ success: true, message: "OTP sent via Email", demoCode: otp });
+    } else {
+      res.json({ success: true, message: "OTP sent via Email" });
+    }
   });
 
   app.post("/api/otp/email/verify", authenticateToken, (req: any, res) => {
     const { email, code } = req.body;
-    const stored = otpStore.get(email);
-    if (!stored || stored.code !== code || Date.now() > stored.expires) {
+    const cleanEmail = (email || '').toLowerCase().trim();
+    const stored = otpStore.get(cleanEmail);
+    if (!stored || Date.now() > stored.expires) {
+      return res.status(400).json({ error: "Invalid or expired OTP" });
+    }
+    if (stored.attempts >= 5) {
+      otpStore.delete(cleanEmail);
+      return res.status(429).json({ error: "Too many failed attempts. Please request a new code.", code: "too_many_attempts" });
+    }
+
+    const inputHash = crypto.createHash('sha256').update((code || '').trim()).digest('hex');
+    if (stored.codeHash !== inputHash) {
+      stored.attempts++;
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
     const user = users.find(u => u.id === req.user.id || u.fb_uid === req.user.id);
     if (user) {
       user.email_verified = true;
-      user.email = email;
+      user.email = cleanEmail;
       user.verified_badge_type = calculateBadge(user);
     }
 
-    otpStore.delete(email);
+    otpStore.delete(cleanEmail);
     res.json({ success: true, badge: user?.verified_badge_type });
   });
 

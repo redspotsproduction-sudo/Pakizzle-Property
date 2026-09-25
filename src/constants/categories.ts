@@ -35,7 +35,7 @@ export const CATEGORIES: Category[] = [
     color: "text-apple-orange",
     gradient: "from-apple-orange/20 to-amber-500/10",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800",
-    filter: { key: "bodyType", value: "House" },
+    filter: { key: "make", value: "House" },
     size: "large"
   },
   {
@@ -43,10 +43,10 @@ export const CATEGORIES: Category[] = [
     title: "Apartments",
     subtitle: "Modern High-Rise Comfort",
     icon: Building2,
-    color: "text-apple-blue",
-    gradient: "from-apple-blue/20 to-indigo-500/10",
+    color: "text-[#0F766E]",
+    gradient: "from-teal-500/20 to-emerald-500/10",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800",
-    filter: { key: "bodyType", value: "Apartment" },
+    filter: { key: "make", value: "Apartment" },
     size: "medium"
   },
   {
@@ -57,7 +57,7 @@ export const CATEGORIES: Category[] = [
     color: "text-amber-600",
     gradient: "from-amber-600/20 to-yellow-600/10",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
-    filter: { key: "bodyType", value: "Commercial" },
+    filter: { key: "make", value: "Commercial" },
     size: "medium"
   },
   {
@@ -65,10 +65,10 @@ export const CATEGORIES: Category[] = [
     title: "Residential Plots",
     subtitle: "Build Your Dream Home",
     icon: Layers,
-    color: "text-apple-green",
-    gradient: "from-apple-green/20 to-emerald-500/10",
+    color: "text-emerald-600",
+    gradient: "from-emerald-500/20 to-teal-500/10",
     image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800",
-    filter: { key: "fuelType", value: "Plot" },
+    filter: { key: "make", value: "Plot" },
     size: "small"
   },
   {
@@ -79,7 +79,7 @@ export const CATEGORIES: Category[] = [
     color: "text-purple-500",
     gradient: "from-purple-500/20 to-pink-500/10",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
-    filter: { key: "bodyType", value: "Penthouse" },
+    filter: { key: "make", value: "Penthouse" },
     size: "small"
   },
   {
@@ -90,7 +90,7 @@ export const CATEGORIES: Category[] = [
     color: "text-rose-500",
     gradient: "from-rose-500/20 to-pink-500/10",
     image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=80&w=800",
-    filter: { key: "bodyType", value: "CommercialPlot" },
+    filter: { key: "make", value: "Commercial" },
     size: "small"
   }
-];;
+];

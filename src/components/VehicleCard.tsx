@@ -183,17 +183,17 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
       >
         <motion.div
           className={cn(
-            "glass-card flex flex-col h-full overflow-hidden border border-apple-border/40 hover:border-apple-blue/30 hover:shadow-apple-soft transition-all duration-[400ms] bg-white/70 dark:bg-black/40 backdrop-blur-md rounded-3xl",
-            isList ? "md:flex-row p-1.5" : ""
+            "flex flex-col h-full overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-[#0F766E]/50 hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)] transition-all duration-200 bg-white dark:bg-slate-900 rounded-lg",
+            isList ? "md:flex-row p-2" : ""
           )}
         >
           {/* 1. Image Carousel Section */}
           <div className={cn(
-            "relative shrink-0 p-1",
+            "relative shrink-0",
             isList ? "w-full md:w-[256px] lg:w-[304px]" : "w-full"
           )}>
             <div className={cn(
-              "rounded-[22px] overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2]",
+              "rounded-lg overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2] bg-slate-100 dark:bg-slate-800",
               isList ? "min-h-[176px] md:min-h-0 md:h-full" : ""
             )}>
               <motion.img 
@@ -363,45 +363,32 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
 
             {/* Accent Separator Line */}
             <div className={cn(
-              "h-[1px] bg-gradient-to-r from-apple-border/50 via-apple-border/20 to-transparent w-full",
-              isList ? "mb-2 md:mb-2.5" : "mb-1.5"
+              "h-[1px] bg-slate-100 dark:bg-slate-800 w-full",
+              isList ? "mb-2 md:mb-2.5" : "mb-2"
             )} />
 
-            {/* Key Specs Pill Badges (Grid layout on desktop, touch horizontal scroll track on mobile/tablet mimicking Sharjah Dubizzle standard) */}
+            {/* Zero-Pill Discipline: Clean Typographic Metadata with Dot Separators */}
             <div className={cn(
-              isList 
-                ? "grid grid-cols-3 gap-2 mb-3" 
-                : "flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-2 snap-x snap-mandatory scrollbar-none pb-1 md:pb-0 mb-0 -mx-1 px-1"
+              "flex items-center flex-wrap gap-1.5 text-xs text-slate-600 dark:text-slate-400 font-medium",
+              isList ? "mb-3" : "mb-2.5"
             )}>
-              {/* Area size Pill */}
-              <div className={cn(
-                "flex items-center justify-center py-1.5 px-2.5 bg-apple-gray/50 dark:bg-[#1C1C1E] rounded-full border border-apple-border/10 dark:border-white/5 transition-all duration-300 hover:border-apple-blue/30 text-center",
-                !isList && "snap-align-start min-w-[95px] xs:min-w-[105px] sm:min-w-[115px] md:min-w-0 shrink-0 md:shrink flex-1"
-              )}>
-                <span className="text-xs sm:text-[13px] font-normal text-apple-text truncate font-sans">
-                  {vehicle.mileage ? vehicle.mileage.toLocaleString() + " Sq.Ft." : "N/A"}
-                </span>
-              </div>
-              
-              {/* Rooms/Beds Pill */}
-              <div className={cn(
-                "flex items-center justify-center py-1.5 px-2.5 bg-apple-gray/50 dark:bg-[#1C1C1E] rounded-full border border-apple-border/10 dark:border-white/5 transition-all duration-300 hover:border-apple-blue/30 text-center",
-                !isList && "snap-align-start min-w-[95px] xs:min-w-[105px] sm:min-w-[115px] md:min-w-0 shrink-0 md:shrink flex-1"
-              )}>
-                <span className="text-xs sm:text-[13px] font-normal text-apple-text truncate font-sans">
-                  {vehicle.make === "Plot" || vehicle.make === "Commercial" ? vehicle.engineSize : `${vehicle.specs?.seating || 3} Bed / ${vehicle.specs?.horsepower || 3} Bath`}
-                </span>
-              </div>
-
-              {/* Furnishing Pill */}
-              <div className={cn(
-                "flex items-center justify-center py-1.5 px-2.5 bg-apple-gray/50 dark:bg-[#1C1C1E] rounded-full border border-apple-border/10 dark:border-white/5 transition-all duration-300 hover:border-apple-blue/30 text-center",
-                !isList && "snap-align-start min-w-[95px] xs:min-w-[105px] sm:min-w-[115px] md:min-w-0 shrink-0 md:shrink flex-1"
-              )}>
-                <span className="text-xs sm:text-[13px] font-normal text-apple-text truncate capitalize font-sans">
-                  {vehicle.transmission === "furnished" ? "Furnished" : vehicle.transmission === "semi-furnished" ? "Semi-Furnished" : "Unfurnished"}
-                </span>
-              </div>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">
+                {vehicle.mileage ? `${vehicle.mileage.toLocaleString()} Sq.Ft.` : "Area N/A"}
+              </span>
+              <span className="text-slate-300 dark:text-slate-700 select-none">•</span>
+              <span>
+                {vehicle.make === "Plot" || vehicle.make === "Commercial"
+                  ? vehicle.engineSize
+                  : `${vehicle.specs?.seating || 3} Bed, ${vehicle.specs?.horsepower || 3} Bath`}
+              </span>
+              <span className="text-slate-300 dark:text-slate-700 select-none">•</span>
+              <span className="capitalize">
+                {vehicle.transmission === "furnished"
+                  ? "Furnished"
+                  : vehicle.transmission === "semi-furnished"
+                  ? "Semi-Furnished"
+                  : "Unfurnished"}
+              </span>
             </div>
 
             {/* Grid View Seller Bar with Verified Badge */}

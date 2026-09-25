@@ -59,10 +59,8 @@ func (s *server) audit(ctx context.Context, c *auth.Claims, action, targetType, 
 	if s.pool == nil {
 		return
 	}
-	if meta == nil {
-		meta = map[string]any{}
-	}
-	mb, _ := json.Marshal(meta)
+	cleanMeta := sanitizeAuditMeta(meta)
+	mb, _ := json.Marshal(cleanMeta)
 	_, err := s.pool.Exec(ctx, `
 		INSERT INTO audit_logs (actor_id, actor_email, action, target_type, target_id, meta)
 		VALUES ($1, $2, $3, NULLIF($4,''), NULLIF($5,''), $6::jsonb)`,
@@ -70,6 +68,24 @@ func (s *server) audit(ctx context.Context, c *auth.Claims, action, targetType, 
 	if err != nil {
 		s.log.Warn("audit.write failed", "action", action, "err", err)
 	}
+}
+
+func sanitizeAuditMeta(meta map[string]any) map[string]any {
+	if meta == nil {
+		return map[string]any{}
+	}
+	clean := make(map[string]any, len(meta))
+	for k, v := range meta {
+		lk := strings.ToLower(k)
+		if strings.Contains(lk, "password") || strings.Contains(lk, "token") ||
+			strings.Contains(lk, "secret") || strings.Contains(lk, "code") ||
+			strings.Contains(lk, "cnic") || strings.Contains(lk, "document") {
+			clean[k] = "[REDACTED]"
+		} else {
+			clean[k] = v
+		}
+	}
+	return clean
 }
 
 // ── /api/admin/stats ────────────────────────────────────────────────────────
@@ -213,13 +229,13 @@ func (s *server) adminUpdateUser(w http.ResponseWriter, r *http.Request) {
 	if in.Role != nil && (*in.Role == "user" || *in.Role == "admin" || *in.Role == "moderator") {
 		add("role", *in.Role)
 	}
-	if in.Badge != nil {
+	if in.Badge != nil && (*in.Badge == "none" || *in.Badge == "basic" || *in.Badge == "identity" || *in.Badge == "business") {
 		add("badge", *in.Badge)
 	}
-	if in.IdentityStatus != nil {
+	if in.IdentityStatus != nil && (*in.IdentityStatus == "none" || *in.IdentityStatus == "pending" || *in.IdentityStatus == "approved" || *in.IdentityStatus == "rejected") {
 		add("identity_status", *in.IdentityStatus)
 	}
-	if in.BusinessStatus != nil {
+	if in.BusinessStatus != nil && (*in.BusinessStatus == "none" || *in.BusinessStatus == "pending" || *in.BusinessStatus == "approved" || *in.BusinessStatus == "rejected") {
 		add("business_status", *in.BusinessStatus)
 	}
 	if in.Banned != nil {
@@ -1063,8 +1079,18 @@ func (s *server) adminListDealers(w http.ResponseWriter, r *http.Request) {
 
 // ── /api/admin/requests (insurance / financing / inspections) ───────────────
 
+var allowedRequestTables = map[string]bool{
+	"inspection_requests": true,
+	"insurance_requests":  true,
+	"financing_requests":  true,
+}
+
 func (s *server) adminListRequests(table string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		if !allowedRequestTables[table] {
+			writeError(w, http.StatusBadRequest, "validation", "invalid table")
+			return
+		}
 		status := strings.TrimSpace(r.URL.Query().Get("status"))
 		args := []any{}
 		where := "TRUE"
@@ -1106,6 +1132,10 @@ func (s *server) adminListRequests(table string) http.HandlerFunc {
 
 func (s *server) adminUpdateRequestStatus(table string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		if !allowedRequestTables[table] {
+			writeError(w, http.StatusBadRequest, "validation", "invalid table")
+			return
+		}
 		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 		if err != nil || id <= 0 {
 			writeError(w, http.StatusBadRequest, "validation", "bad id")
