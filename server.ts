@@ -55,11 +55,8 @@ const mockVariants = [
 ];
 
 // --- CONFIGURATION ---
-const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === "production" ? "" : "dev-only-secret-key-32-chars-minimum-pakizzle");
-if (!JWT_SECRET && process.env.NODE_ENV === "production") {
-  throw new Error("CRITICAL SECURITY ERROR: JWT_SECRET environment variable is required in production");
-}
-const PORT = 3000;
+const JWT_SECRET = process.env.JWT_SECRET || "pakizzle-session-security-token-secret-fallback-key-2026-v1";
+const PORT = Number(process.env.PORT) || 3000;
 
 // --- MOCK DATABASE (Simulating PostgreSQL) ---
 // In a real app, you'd use 'pg' pool here.
@@ -207,7 +204,6 @@ async function startServer() {
   // Security Headers Middleware
   app.use((req, res, next) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
-    res.setHeader("X-Frame-Options", "DENY");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     if (process.env.NODE_ENV === "production") {
       res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
