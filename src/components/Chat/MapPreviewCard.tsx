@@ -22,18 +22,26 @@ export default function MapPreviewCard({ lat, lng, timestamp, isMe, status }: Ma
       className="relative block group cursor-pointer overflow-hidden rounded-[22px] bg-apple-card-bg shadow-apple-soft border border-apple-border/30 transition-all duration-500 hover:shadow-apple-hover hover:-translate-y-1"
     >
       {/* Map Preview Container */}
-      <div className="w-full aspect-[4/3] md:w-[300px] md:h-[220px] relative flex items-center justify-center overflow-hidden">
-        {/* The Map Iframe */}
-        <iframe
-          title="Location Preview"
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          style={{ border: 0 }}
-          src={`https://www.google.com/maps/embed/v1/view?key=${(import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY || ''}&center=${lat},${lng}&zoom=15&maptype=roadmap`}
-          allowFullScreen
-          className="opacity-95 group-hover:opacity-100 transition-opacity duration-700"
-        />
+      <div className="w-full aspect-[4/3] md:w-[300px] md:h-[220px] relative flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-slate-800">
+        {/* The Map Iframe or Graphic Fallback */}
+        {(import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY ? (
+          <iframe
+            title="Location Preview"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            style={{ border: 0 }}
+            src={`https://www.google.com/maps/embed/v1/view?key=${(import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY}&center=${lat},${lng}&zoom=15&maptype=roadmap`}
+            allowFullScreen
+            className="opacity-95 group-hover:opacity-100 transition-opacity duration-700"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-teal-500/10 via-slate-100 dark:via-slate-800 to-emerald-500/10">
+            <MapPin className="w-8 h-8 text-teal-600 dark:text-teal-400 mb-1" />
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">View on Google Maps</span>
+            <span className="text-[10px] text-slate-500 font-mono mt-0.5">{lat.toFixed(4)}, {lng.toFixed(4)}</span>
+          </div>
+        )}
         
         {/* Elegant Pin Overlay */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

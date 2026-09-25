@@ -387,7 +387,9 @@ export default function ReelsUpload({ onClose }: ReelsUploadProps) {
             {/* Left side preview */}
             <div className="hidden sm:flex w-2/5 border-r border-white/5 bg-black p-6 flex-col justify-between items-center relative overflow-hidden">
               <span className="absolute top-4 left-6 z-20 font-mono text-[9px] text-[#0071e3] tracking-widest font-bold uppercase">Aesthetic Preview</span>
-              <video src={videoUrl} muted autoPlay loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-60 filter blur-[1px]" />
+              {videoUrl ? (
+                <video src={videoUrl} muted autoPlay loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-60 filter blur-[1px]" />
+              ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-black/45 pointer-events-none" />
 
               {/* Simulated Overlay */}

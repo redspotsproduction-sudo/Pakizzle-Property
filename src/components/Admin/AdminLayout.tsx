@@ -189,13 +189,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div className="h-screen w-screen bg-apple-bg dark:bg-black text-apple-text flex font-sans selection:bg-apple-blue/20 overflow-hidden">
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar with Restrained Glass Styling */}
       <motion.aside
         initial={false}
         animate={{ width: isSidebarCollapsed ? 96 : 300 }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
         className={cn(
-          "hidden lg:flex flex-col bg-white/70 dark:bg-[#1D1D1F]/70 backdrop-blur-3xl border-r border-apple-border/50 h-full z-50 shrink-0",
+          "hidden lg:flex flex-col liquid-glass-restrained border-r border-slate-200/80 dark:border-white/10 h-full z-50 shrink-0",
           isSidebarCollapsed ? "items-center" : ""
         )}
       >

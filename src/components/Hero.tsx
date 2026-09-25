@@ -1,77 +1,93 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  ShieldCheck, 
-  MapPin, 
-  Search, 
-  Building2, 
-  Home, 
-  Layers, 
-  Sparkles, 
-  ChevronLeft, 
-  ChevronRight, 
-  CheckCircle2, 
-  Filter, 
-  ArrowRight,
-  ChevronDown
+import {
+  ShieldCheck,
+  MapPin,
+  Search,
+  Building2,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  Share2,
+  ChevronDown,
+  Bed,
+  Bath,
+  Maximize2,
+  CheckCircle2,
+  SlidersHorizontal,
+  Home,
+  Compass,
+  MessageSquare,
+  User,
+  Bell,
+  Sun,
+  Moon,
+  ArrowUpRight
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { bannerService } from "../services/bannerService";
 import { Banner } from "../types";
 import { useLocation as useAppLocation } from "../context/LocationContext";
+import { useTheme } from "../context/ThemeContext";
 import { PAKISTAN_LOCATIONS } from "../constants/locations";
 import ValuationModal from "./ValuationModal";
+import { GlassPanel, GlassCapsule, GlassButton, GlassCard } from "./ui/GlassPrimitives";
 
 import villaImg from "../assets/images/pakizzle_villa_hero_1790252631072.jpg";
 import penthouseImg from "../assets/images/pakizzle_penthouse_waterfront_1790252648589.jpg";
 import mansionImg from "../assets/images/pakizzle_islamabad_mansion_1790252663307.jpg";
 import plotImg from "../assets/images/pakizzle_plot_masterplan_1790252681010.jpg";
 
-const DEFAULT_BANNERS: Banner[] = [
+const HERO_HEROES = [
   {
-    id: "default-1",
-    type: "category",
+    id: "h-1",
     image: villaImg,
-    name: "Architectural Contemporary Villa · DHA Phase 6 Lahore",
-    status: "active",
-    displayOrder: 0,
-    createdAt: new Date().toISOString()
+    title: "The Glass Pavilion Villa",
+    subtitle: "Phase 6 DHA, Lahore",
+    price: "PKR 14.5 Crore",
+    specs: { beds: 5, baths: 6, area: "1 Kanal" },
+    tag: "LDA Registry Clear",
+    tagColor: "emerald"
   },
   {
-    id: "default-2",
-    type: "category",
+    id: "h-2",
     image: penthouseImg,
-    name: "Emaar Oceanfront Panoramic Penthouse · Crescent Bay Karachi",
-    status: "active",
-    displayOrder: 1,
-    createdAt: new Date().toISOString()
+    title: "Panoramic Sky Penthouse",
+    subtitle: "Crescent Bay, Karachi",
+    price: "PKR 18.2 Crore",
+    specs: { beds: 4, baths: 5, area: "5,400 sq.ft" },
+    tag: "Emaar Direct Title",
+    tagColor: "teal"
   },
   {
-    id: "default-3",
-    type: "category",
+    id: "h-3",
     image: mansionImg,
-    name: "Margalla Ridge Modern Sanctuary · Sector F-7 Islamabad",
-    status: "active",
-    displayOrder: 2,
-    createdAt: new Date().toISOString()
+    title: "Margalla Ridgeline Estate",
+    subtitle: "Sector F-7/3, Islamabad",
+    price: "PKR 28.0 Crore",
+    specs: { beds: 6, baths: 7, area: "2 Kanal" },
+    tag: "CDA Non-Encumbrance",
+    tagColor: "amber"
   },
   {
-    id: "default-4",
-    type: "category",
+    id: "h-4",
     image: plotImg,
-    name: "Masterplanned Possession Plots · DHA Phase 9 Prism Lahore",
-    status: "active",
-    displayOrder: 3,
-    createdAt: new Date().toISOString()
+    title: "Prime Commercial Corner Plot",
+    subtitle: "DHA Phase 9 Prism, Lahore",
+    price: "PKR 8.75 Crore",
+    specs: { beds: 0, baths: 0, area: "10 Marla" },
+    tag: "DHA Possession Verified",
+    tagColor: "indigo"
   }
 ];
 
 const MAJOR_CITIES = [
   "All Pakistan",
-  "Islamabad",
   "Lahore",
   "Karachi",
+  "Islamabad",
   "Rawalpindi",
   "Peshawar",
   "Multan",
@@ -79,510 +95,395 @@ const MAJOR_CITIES = [
 ];
 
 const PROPERTY_TYPES = [
-  { label: "All Property Types", value: "" },
-  { label: "Houses & Villas", value: "House" },
-  { label: "Apartments & Flats", value: "Apartment" },
-  { label: "Residential Plots", value: "Plot" },
-  { label: "Commercial Plazas & Retail", value: "Commercial" },
-  { label: "Sky Penthouses", value: "Penthouse" }
+  { label: "All Properties", value: "" },
+  { label: "Villas & Houses", value: "House" },
+  { label: "Penthouses & Flats", value: "Apartment" },
+  { label: "Possession Plots", value: "Plot" },
+  { label: "Commercial Plazas", value: "Commercial" }
 ];
 
-const BUY_BUDGET_PRESETS = [
-  { label: "Any Budget", min: null, max: null },
-  { label: "Under Rs 1.5 Crore", min: null, max: 15000000 },
-  { label: "Rs 1.5 - 3.5 Crore", min: 15000000, max: 35000000 },
-  { label: "Rs 3.5 - 7.5 Crore", min: 35000000, max: 75000000 },
-  { label: "Rs 7.5 - 15 Crore", min: 75000000, max: 150000000 },
-  { label: "Rs 15 Crore +", min: 150000000, max: null }
-];
-
-const RENT_BUDGET_PRESETS = [
-  { label: "Any Rent", min: null, max: null },
-  { label: "Under Rs 60,000 / mo", min: null, max: 60000 },
-  { label: "Rs 60,000 - 1.5 Lac / mo", min: 60000, max: 150000 },
-  { label: "Rs 1.5 - 3 Lac / mo", min: 150000, max: 300000 },
-  { label: "Rs 3 Lac + / mo", min: 300000, max: null }
+const PRICE_PRESETS = [
+  { label: "Any Price", min: null, max: null },
+  { label: "Under 2 Crore", min: null, max: 20000000 },
+  { label: "2 - 5 Crore", min: 20000000, max: 50000000 },
+  { label: "5 - 12 Crore", min: 50000000, max: 120000000 },
+  { label: "12 Crore +", min: 120000000, max: null }
 ];
 
 export default function Hero() {
-  const [banners, setBanners] = useState<Banner[]>(DEFAULT_BANNERS);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [activeTab, setActiveTab] = useState<"buy" | "rent" | "plots">("buy");
+  const [selectedCity, setSelectedCity] = useState("All Pakistan");
+  const [selectedType, setSelectedType] = useState("");
+  const [selectedPriceIdx, setSelectedPriceIdx] = useState(0);
+  const [isValuationOpen, setIsValuationOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+
   const navigate = useNavigate();
   const { location: userLocation } = useAppLocation();
+  const { theme, toggleTheme } = useTheme();
 
-  // Search Bar States
-  const [activePurpose, setActivePurpose] = useState<"buy" | "rent" | "plots" | "commercial">("buy");
-  const [selectedCity, setSelectedCity] = useState("All Pakistan");
-  const [searchLocation, setSearchLocation] = useState("");
-  const [selectedType, setSelectedType] = useState("");
-  const [selectedBudgetIndex, setSelectedBudgetIndex] = useState(0);
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [isValuationOpen, setIsValuationOpen] = useState(false);
-  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
-
-  const searchBoxRef = useRef<HTMLDivElement>(null);
-
-  // Sync with global userLocation
+  // Sync user location city if present
   useEffect(() => {
     if (userLocation?.city && userLocation.city !== "Pakistan") {
       setSelectedCity(userLocation.city);
     }
   }, [userLocation]);
 
-  // Handle outside click for location suggestions
+  // Background slow auto-advance
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchBoxRef.current && !searchBoxRef.current.contains(e.target as Node)) {
-        setShowLocationSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Fetch or filter targeted banners
-  useEffect(() => {
-    const unsubscribe = bannerService.subscribeToBanners((data) => {
-      const activeBanners = data.filter((b) => b.status === "active");
-      if (activeBanners.length > 0) {
-        setBanners(activeBanners);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  // Banner rotation interval
-  useEffect(() => {
-    if (isPaused || banners.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % banners.length);
-    }, 6000);
+      setCurrentIdx((prev) => (prev + 1) % HERO_HEROES.length);
+    }, 8000);
     return () => clearInterval(timer);
-  }, [isPaused, banners.length]);
+  }, []);
 
-  const currentBanner = banners[currentIndex] || DEFAULT_BANNERS[0];
+  const activeHero = HERO_HEROES[currentIdx];
 
-  // Location suggestions filtered by selected city and typed query
-  const suggestions = React.useMemo(() => {
-    if (!searchLocation.trim()) return [];
-    const q = searchLocation.toLowerCase();
-    const cityList = selectedCity !== "All Pakistan" ? [selectedCity] : Object.keys(PAKISTAN_LOCATIONS);
-    const matches: { area: string; city: string }[] = [];
-
-    for (const c of cityList) {
-      const areas = PAKISTAN_LOCATIONS[c] || [];
-      for (const a of areas) {
-        if (a.toLowerCase().includes(q) && !a.toLowerCase().startsWith("all over")) {
-          matches.push({ area: a, city: c });
-          if (matches.length >= 6) break;
-        }
-      }
-      if (matches.length >= 6) break;
-    }
-    return matches;
-  }, [searchLocation, selectedCity]);
-
-  // Execute Search Navigation
-  const handleSearch = () => {
+  const handleSearchSubmit = () => {
     const params = new URLSearchParams();
+    if (activeTab === "rent") params.set("purpose", "rent");
+    else if (activeTab === "plots") params.set("make", "Plot");
+    else params.set("purpose", "buy");
 
-    if (activePurpose === "rent") {
-      params.set("purpose", "rent");
-    } else if (activePurpose === "plots") {
-      params.set("make", "Plot");
-    } else if (activePurpose === "commercial") {
-      params.set("make", "Commercial");
-    } else {
-      params.set("purpose", "buy");
-    }
+    if (selectedCity && selectedCity !== "All Pakistan") params.set("city", selectedCity);
+    if (selectedType) params.set("make", selectedType);
 
-    if (selectedCity && selectedCity !== "All Pakistan") {
-      params.set("city", selectedCity);
-    }
-
-    if (searchLocation.trim()) {
-      params.set("q", searchLocation.trim());
-    }
-
-    if (selectedType) {
-      params.set("make", selectedType);
-    }
-
-    const budgetList = activePurpose === "rent" ? RENT_BUDGET_PRESETS : BUY_BUDGET_PRESETS;
-    const currentBudget = budgetList[selectedBudgetIndex];
-    if (currentBudget?.min) {
-      params.set("priceMin", currentBudget.min.toString());
-    }
-    if (currentBudget?.max) {
-      params.set("priceMax", currentBudget.max.toString());
-    }
-
-    if (verifiedOnly) {
-      params.set("verified", "true");
-    }
+    const price = PRICE_PRESETS[selectedPriceIdx];
+    if (price.min) params.set("priceMin", price.min.toString());
+    if (price.max) params.set("priceMax", price.max.toString());
 
     navigate(`/marketplace?${params.toString()}`);
   };
 
-  const budgetOptions = activePurpose === "rent" ? RENT_BUDGET_PRESETS : BUY_BUDGET_PRESETS;
-
   return (
-    <section className="relative pt-20 sm:pt-24 md:pt-28 pb-10 overflow-hidden bg-slate-50 dark:bg-slate-950">
-      {/* Background Ambience */}
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-teal-500/5 via-teal-500/0 to-transparent pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="relative w-full min-h-[92vh] flex items-center justify-center p-3 sm:p-5 md:p-8 pt-20 md:pt-24 overflow-hidden">
+      {/* 
+        DEVICE FRAME CONTAINER:
+        Large rounded container gives the entire viewport a futuristic, continuous OS-level device window feeling
+      */}
+      <div className="relative w-full max-w-[1440px] min-h-[82vh] rounded-[32px] sm:rounded-[40px] md:rounded-[48px] overflow-hidden border border-white/30 dark:border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.25)] flex flex-col justify-between p-4 sm:p-8 md:p-12">
         
-        {/* 1. Portal Headline & Value Proposition (Unmistakable & Distinctive) */}
-        <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 dark:bg-teal-950/50 border border-teal-200 dark:border-teal-800/80 text-[#0F766E] dark:text-teal-400 text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
-            <ShieldCheck className="w-4 h-4 text-[#0F766E] dark:text-teal-400" />
-            <span>Pakistan's 100% Title-Verified Property Portal</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight leading-[1.15]">
-            Pakistan's Verified <br className="hidden sm:inline" />
-            <span className="text-[#0F766E] dark:text-teal-400">Real Estate Ecosystem.</span>
-          </h1>
-
-          <p className="mt-4 text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Search 14,500+ genuine properties across Lahore, Karachi, Islamabad & beyond. 
-            Every listing verified against LDA, CDA & DHA land registries with zero broker spam.
-          </p>
+        {/* Full-bleed rich cinematic photographic layer with slow Ken Burns effect */}
+        <div className="absolute inset-0 z-0">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={activeHero.id}
+              src={activeHero.image}
+              alt={activeHero.title}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full object-cover object-center animate-ken-burns"
+            />
+          </AnimatePresence>
+          {/* Subtle gradient vignette to guarantee text legibility while preserving photographic transparency */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-slate-950/50 pointer-events-none" />
         </div>
 
-        {/* 2. Unified Functional Search Console Directly inside Hero */}
-        <div 
-          ref={searchBoxRef}
-          className="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-lg shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-slate-800 p-3 sm:p-5 mb-8 relative z-30"
-        >
-          {/* Purpose Tabs: Buy, Rent, Plots, Commercial + Valuation Hub */}
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
-            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/70 p-1 rounded-lg">
-              {[
-                { id: "buy", label: "Buy Homes" },
-                { id: "rent", label: "Rent" },
-                { id: "plots", label: "Plots & Land" },
-                { id: "commercial", label: "Commercial" }
-              ].map((tab) => (
+        {/* 
+          FLOATING GLASS RAIL (Left Vertical Stack)
+          OS-style floating circular glass controls rail 
+        */}
+        <aside className="absolute left-4 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-3 p-2.5 rounded-full liquid-glass-subtle shadow-xl">
+          <button 
+            onClick={() => navigate("/")}
+            title="Home" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+          >
+            <Home className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => navigate("/marketplace")}
+            title="Explore Properties" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+          >
+            <Compass className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => setIsValuationOpen(true)}
+            title="AI Valuation" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-amber-300 hover:text-amber-200 hover:bg-white/20 transition-all active:scale-90"
+          >
+            <Sparkles className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => navigate("/chat")}
+            title="Chat & Concierge" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+          >
+            <MessageSquare className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => navigate("/notifications")}
+            title="Notifications" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+          >
+            <Bell className="w-5 h-5" />
+          </button>
+          <div className="w-6 h-[1px] bg-white/20 my-1" />
+          <button 
+            onClick={toggleTheme}
+            title="Toggle Light / Dark" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+          >
+            {theme === "dark" ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5 text-teal-300" />}
+          </button>
+          <button 
+            onClick={() => navigate("/profile")}
+            title="Account Profile" 
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+          >
+            <User className="w-5 h-5" />
+          </button>
+        </aside>
+
+        {/* 
+          TOP ROW: FLOATING CAPSULE SEARCH COCKPIT 
+          Segmented floating glass capsule matching reference OS aesthetics
+        */}
+        <div className="relative z-20 w-full flex justify-center">
+          <div className="w-full max-w-4xl liquid-glass-mid rounded-full p-2 pl-3 sm:pl-5 pr-2 flex flex-wrap lg:flex-nowrap items-center justify-between gap-2 shadow-2xl">
+            {/* Buy / Rent / Plots Segmented Toggle */}
+            <div className="flex items-center gap-1 p-1 rounded-full bg-black/20 backdrop-blur-md border border-white/10 shrink-0">
+              {(["buy", "rent", "plots"] as const).map((tab) => (
                 <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActivePurpose(tab.id as any);
-                    setSelectedBudgetIndex(0);
-                  }}
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
                   className={cn(
-                    "px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer",
-                    activePurpose === tab.id
-                      ? "bg-[#0F766E] text-white shadow-sm"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                    "px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300",
+                    activeTab === tab
+                      ? "bg-white text-slate-900 shadow-md font-bold scale-102"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
                   )}
                 >
-                  {tab.label}
+                  {tab === "plots" ? "Plots" : tab}
                 </button>
               ))}
             </div>
 
-            {/* AI Valuation Hub Quick Trigger */}
+            {/* City Segment */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
+              <MapPin className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer pr-4"
+              >
+                {MAJOR_CITIES.map((c) => (
+                  <option key={c} value={c} className="bg-slate-900 text-white">
+                    {c}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
+            </div>
+
+            {/* Property Type Segment */}
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
+              <Building2 className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer pr-4"
+              >
+                {PROPERTY_TYPES.map((t) => (
+                  <option key={t.label} value={t.value} className="bg-slate-900 text-white">
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
+            </div>
+
+            {/* Price Range Segment */}
+            <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
+              <span className="text-[11px] font-bold text-white/60">PKR</span>
+              <select
+                value={selectedPriceIdx}
+                onChange={(e) => setSelectedPriceIdx(Number(e.target.value))}
+                className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer pr-4"
+              >
+                {PRICE_PRESETS.map((p, idx) => (
+                  <option key={idx} value={idx} className="bg-slate-900 text-white">
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
+            </div>
+
+            {/* Execute Search Capsule Button */}
             <button
-              onClick={() => setIsValuationOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition-colors"
+              onClick={handleSearchSubmit}
+              className="h-10 px-5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-950/40 border border-teal-300/40 transition-all active:scale-95 cursor-pointer glass-hover-sheen shrink-0 ml-auto"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Instant AI Valuation</span>
-            </button>
-          </div>
-
-          {/* Core Search Inputs Row: City + Location + Type + Budget */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
-            
-            {/* City Selector (3 cols) */}
-            <div className="lg:col-span-3">
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                City
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedCity}
-                  onChange={(e) => {
-                    setSelectedCity(e.target.value);
-                    setSearchLocation("");
-                  }}
-                  className="w-full h-10 px-3 py-2 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-slate-100 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0F766E] appearance-none pr-8 cursor-pointer"
-                >
-                  {MAJOR_CITIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Location / Sector Input (3 cols) */}
-            <div className="lg:col-span-3 relative">
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                Sector / Society
-              </label>
-              <div className="relative">
-                <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchLocation}
-                  onChange={(e) => {
-                    setSearchLocation(e.target.value);
-                    setShowLocationSuggestions(true);
-                  }}
-                  onFocus={() => setShowLocationSuggestions(true)}
-                  placeholder={selectedCity === "All Pakistan" ? "e.g. DHA, Clifton, F-7" : `Societies in ${selectedCity}`}
-                  className="w-full h-10 pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-slate-100 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0F766E]"
-                />
-              </div>
-
-              {/* Suggestions Dropdown */}
-              {showLocationSuggestions && suggestions.length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 py-1 z-50">
-                  {suggestions.map((s, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setSearchLocation(s.area);
-                        setSelectedCity(s.city);
-                        setShowLocationSuggestions(false);
-                      }}
-                      className="w-full px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between text-xs"
-                    >
-                      <span className="font-semibold text-slate-900 dark:text-slate-100">{s.area}</span>
-                      <span className="text-[11px] text-slate-500">{s.city}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Property Type (3 cols) */}
-            <div className="lg:col-span-3">
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                Property Type
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full h-10 px-3 py-2 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-slate-100 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0F766E] appearance-none pr-8 cursor-pointer"
-                >
-                  {PROPERTY_TYPES.map((t) => (
-                    <option key={t.label} value={t.value}>
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Budget Range (3 cols) */}
-            <div className="lg:col-span-3">
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                Budget (PKR)
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedBudgetIndex}
-                  onChange={(e) => setSelectedBudgetIndex(Number(e.target.value))}
-                  className="w-full h-10 px-3 py-2 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-slate-100 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0F766E] appearance-none pr-8 cursor-pointer"
-                >
-                  {budgetOptions.map((b, idx) => (
-                    <option key={idx} value={idx}>
-                      {b.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-          </div>
-
-          {/* Action Row: Verified Toggle + Search CTA Button */}
-          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <button
-              onClick={() => setVerifiedOnly(!verifiedOnly)}
-              className={cn(
-                "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer w-full sm:w-auto justify-center sm:justify-start",
-                verifiedOnly
-                  ? "bg-teal-50 dark:bg-teal-950/50 text-[#0F766E] dark:text-teal-400 border-teal-300 dark:border-teal-700"
-                  : "bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:text-slate-900"
-              )}
-            >
-              <ShieldCheck className={cn("w-4 h-4", verifiedOnly ? "text-[#0F766E]" : "text-slate-400")} />
-              <span>Shanakht™ Verified Only</span>
-              {verifiedOnly && <span className="text-[10px] bg-[#0F766E] text-white px-1.5 py-0.2 rounded-full">Active</span>}
-            </button>
-
-            <button
-              onClick={handleSearch}
-              className="w-full sm:w-auto h-10 px-6 rounded-lg bg-[#0F766E] hover:bg-[#0D9488] text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer"
-            >
-              <Search className="w-4 h-4" />
-              <span>Search 14,500+ Properties</span>
+              <Search className="w-3.5 h-3.5" />
+              <span>Explore Homes</span>
             </button>
           </div>
         </div>
 
-        {/* 3. Trust Signals Strip Above The Fold */}
-        <div className="max-w-5xl mx-auto mb-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              {
-                number: "14,500+",
-                label: "Verified Listings",
-                desc: "100% checked inventory",
-                icon: Building2
-              },
-              {
-                number: "18+ Cities",
-                label: "Nationwide Coverage",
-                desc: "Lahore, Karachi, Isb & more",
-                icon: MapPin
-              },
-              {
-                number: "100% Shanakht™",
-                label: "LDA, CDA & DHA Cleared",
-                desc: "Zero title disputes",
-                icon: ShieldCheck
-              },
-              {
-                number: "Rs 180+ Cr",
-                label: "Volume Facilitated",
-                desc: "Safe real estate trades",
-                icon: CheckCircle2
-              }
-            ].map((stat, idx) => (
-              <div 
-                key={idx}
-                className="p-3 sm:p-4 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3"
-              >
-                <div className="w-9 h-9 rounded-lg bg-teal-50 dark:bg-teal-950/60 text-[#0F766E] dark:text-teal-400 flex items-center justify-center shrink-0">
-                  <stat.icon className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-slate-100 font-mono leading-tight">
-                    {stat.number}
-                  </div>
-                  <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                    {stat.label}
-                  </div>
-                  <div className="text-[10px] text-slate-400 hidden sm:block">
-                    {stat.desc}
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* 
+          CENTERPIECE: OVERSIZED DISPLAY HEADLINE DIRECTLY OVER IMAGERY
+          Clean, confident typography floating on the scenery without card backing
+        */}
+        <div className="relative z-10 max-w-3xl my-auto py-8 sm:py-12 lg:pl-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-subtle text-teal-300 text-xs font-semibold tracking-wide mb-4">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>Pakistan's 100% Registry-Verified Land Portal</span>
           </div>
 
-          {/* Shanakht Guarantee Seal */}
-          <div className="mt-3 p-3 rounded-lg bg-teal-50/70 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800/60 flex items-center justify-between text-xs text-teal-900 dark:text-teal-200">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#0F766E] shrink-0" />
-              <span>
-                <strong className="font-semibold">Pakizzle Shanakht™ Guarantee:</strong> All verified properties are cross-checked against official municipal records (LDA, CDA, DHA) to eliminate title fraud.
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.05] drop-shadow-md">
+            Architectural Sanctuaries. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-teal-100 to-teal-300">
+              Title Guaranteed.
+            </span>
+          </h1>
+
+          <p className="mt-4 text-sm sm:text-base md:text-lg text-white/85 max-w-xl font-normal leading-relaxed drop-shadow">
+            Experience Pakistan's most refined residential estates. Each property is pre-vetted against LDA, CDA & DHA land deeds with zero broker manipulation.
+          </p>
+        </div>
+
+        {/* 
+          BOTTOM ROW: ASYMMETRICAL DUAL GLASS PANELS
+          Bottom-Left Value Prop Card + Bottom-Right Featured Architectural Masterpiece Card
+        */}
+        <div className="relative z-20 grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6 items-end lg:pl-16">
+          
+          {/* Bottom-Left: Value Metric & Verification Guarantee Glass Panel */}
+          <div className="md:col-span-5 lg:col-span-4 liquid-glass-foreground rounded-[28px] p-5 sm:p-6 text-white shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-white/20 mb-3">
+              <span className="text-xs uppercase tracking-wider font-semibold text-white/70">
+                Network Liquidity
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-300 bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                Live Audited
               </span>
             </div>
-            <Link to="/auction-verification" className="hidden md:inline-flex items-center gap-1 font-semibold text-[#0F766E] dark:text-teal-400 hover:underline shrink-0 text-xs ml-4">
-              Learn about Verification
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
+            
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl sm:text-4xl font-extrabold font-mono tracking-tight text-white">
+                15,200+
+              </span>
+              <span className="text-xs font-medium text-white/80">Verified Deeds</span>
+            </div>
 
-        {/* 4. Curated Architectural Showcase Carousel */}
-        <div 
-          className="max-w-5xl mx-auto relative rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md group h-56 sm:h-72 md:h-80"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentBanner.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 cursor-pointer"
-              onClick={() => {
-                if (currentBanner.type === "category" && currentBanner.targetId) {
-                  navigate(`/marketplace?categoryId=${currentBanner.targetId}`);
-                } else {
-                  navigate("/marketplace");
-                }
-              }}
-            >
-              <img
-                src={currentBanner.image}
-                alt={currentBanner.name}
-                className="w-full h-full object-cover transition-transform duration-7000 group-hover:scale-105"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
+            <p className="text-xs text-white/75 mt-2 leading-relaxed">
+              Every home undergoes 4-tier title verification including non-encumbrance certificates and biometric seller validation.
+            </p>
 
-              <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 text-white z-10">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wide mb-1.5">
-                  <Sparkles className="w-3 h-3 text-teal-300" />
-                  <span>Curated Architectural Showcase</span>
-                </div>
-                <h3 className="text-base sm:text-xl md:text-2xl font-bold tracking-tight text-white line-clamp-1">
-                  {currentBanner.name}
-                </h3>
-                <p className="text-xs text-white/80 mt-1 hidden sm:block">
-                  Verified land demarcation · 100% Non-Encumbrance Certified · Direct Agency Listing
-                </p>
+            <div className="mt-4 pt-3 border-t border-white/15 flex items-center justify-between">
+              <button 
+                onClick={() => setIsValuationOpen(true)}
+                className="text-xs font-semibold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Instant Property Valuation</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+
+              <div className="flex items-center gap-1">
+                {HERO_HEROES.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentIdx(i)}
+                    className={cn(
+                      "h-1.5 rounded-full transition-all duration-300",
+                      i === currentIdx ? "w-6 bg-teal-300" : "w-1.5 bg-white/40"
+                    )}
+                  />
+                ))}
               </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Carousel Arrows */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
-            }}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 z-20"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setCurrentIndex((prev) => (prev + 1) % banners.length);
-            }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 z-20"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-
-          {/* Indicators */}
-          <div className="absolute bottom-3 right-5 flex gap-1.5 z-20">
-            {banners.map((_, i) => (
-              <button
-                key={i}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurrentIndex(i);
-                }}
-                className={cn(
-                  "h-1 rounded-full transition-all duration-300",
-                  i === currentIndex ? "w-6 bg-teal-400" : "w-1.5 bg-white/40"
-                )}
-              />
-            ))}
+            </div>
           </div>
+
+          {/* Spacer */}
+          <div className="hidden md:block md:col-span-1 lg:col-span-3" />
+
+          {/* Bottom-Right: Single Featured Property Glass Spotlight (Matching Reference "Lunar Oasis" Card) */}
+          <div className="md:col-span-6 lg:col-span-5 liquid-glass-foreground rounded-[28px] p-4 sm:p-5 text-white shadow-2xl glass-hover-sheen group">
+            <div className="flex gap-4 items-center">
+              {/* Thumbnail with floating badge */}
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-[20px] overflow-hidden shrink-0 border border-white/40 shadow-inner">
+                <img
+                  src={activeHero.image}
+                  alt={activeHero.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[9px] font-bold text-teal-300">
+                  Featured
+                </div>
+              </div>
+
+              {/* Information Cluster */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-[11px] font-semibold text-teal-300 truncate">
+                    {activeHero.tag}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setIsLiked(!isLiked)}
+                      className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90"
+                      title="Save"
+                    >
+                      <Heart className={cn("w-3.5 h-3.5", isLiked ? "fill-rose-500 text-rose-500" : "")} />
+                    </button>
+                    <button 
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({ title: activeHero.title, url: window.location.href });
+                        }
+                      }}
+                      className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90"
+                      title="Share"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                <h4 className="text-sm sm:text-base font-bold text-white tracking-tight truncate mt-0.5">
+                  {activeHero.title}
+                </h4>
+                <p className="text-xs text-white/70 truncate flex items-center gap-1 mt-0.5">
+                  <MapPin className="w-3 h-3 text-teal-400 shrink-0" />
+                  <span>{activeHero.subtitle}</span>
+                </p>
+
+                <div className="mt-2 flex items-center justify-between pt-2 border-t border-white/15">
+                  <div className="text-sm sm:text-base font-extrabold font-mono text-emerald-300">
+                    {activeHero.price}
+                  </div>
+
+                  {activeHero.specs.beds > 0 && (
+                    <div className="flex items-center gap-2 text-[11px] text-white/80">
+                      <span className="flex items-center gap-0.5">
+                        <Bed className="w-3 h-3 text-white/60" /> {activeHero.specs.beds}
+                      </span>
+                      <span>·</span>
+                      <span className="flex items-center gap-0.5">
+                        <Bath className="w-3 h-3 text-white/60" /> {activeHero.specs.baths}
+                      </span>
+                      <span>·</span>
+                      <span className="flex items-center gap-0.5">
+                        <Maximize2 className="w-3 h-3 text-white/60" /> {activeHero.specs.area}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
 
-      {/* Instant Valuation Modal */}
+      {/* Valuation Modal Integration */}
       {isValuationOpen && (
         <ValuationModal isOpen={isValuationOpen} onClose={() => setIsValuationOpen(false)} />
       )}

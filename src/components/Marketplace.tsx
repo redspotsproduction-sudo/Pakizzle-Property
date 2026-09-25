@@ -844,14 +844,14 @@ export default function Marketplace() {
           <div className={cn(
             "transition-all duration-300 ease-in-out z-40 mb-8 md:mb-12",
             isSticky 
-              ? "sticky top-[68px] lg:top-[84px] py-4 bg-white/95 dark:bg-[#0f0f11]/95 backdrop-blur-xl border-b border-apple-border/20 shadow-apple-soft -mx-4 px-4 sm:-mx-8 sm:px-8 md:-mx-12 md:px-12 w-[calc(100%+2rem)] sm:w-[calc(100%+4rem)] md:w-[calc(100%+6rem)] rounded-none"
+              ? "sticky top-[68px] lg:top-[84px] py-4 liquid-glass-foreground shadow-2xl -mx-4 px-4 sm:-mx-8 sm:px-8 md:-mx-12 md:px-12 w-[calc(100%+2rem)] sm:w-[calc(100%+4rem)] md:w-[calc(100%+6rem)] rounded-none"
               : "relative"
           )}>
             <div className="max-w-7xl lg:max-w-[1440px] mx-auto relative">
               <div className="flex flex-col gap-4">
-                {/* The Main Dubizzle Multi-Selector Pill */}
-                <div className="w-full bg-white dark:bg-[#161618]/95 border border-apple-border/40 dark:border-white/10 shadow-2xl rounded-[28px] md:rounded-[40px] p-2 transition-all duration-500 hover:shadow-apple-soft relative">
-                  <div className="grid grid-cols-2 md:grid-cols-6 items-center divide-y md:divide-y-0 md:divide-x divide-apple-border/20 dark:divide-white/5">
+                {/* The Main Multi-Selector Glass Capsule */}
+                <div className="w-full liquid-glass-mid rounded-[32px] md:rounded-full p-2 transition-all duration-500 hover:shadow-2xl relative shadow-lg">
+                  <div className="grid grid-cols-2 md:grid-cols-6 items-center divide-y md:divide-y-0 md:divide-x divide-white/20 dark:divide-white/10">
                     
                     {/* 1. City Trigger */}
                     <button 

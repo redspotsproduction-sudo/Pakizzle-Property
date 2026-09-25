@@ -220,11 +220,17 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
                 "rounded-2xl overflow-hidden shadow-apple-soft group-hover:scale-105 transition-transform duration-500 ring-2 ring-apple-card-bg",
                 isDashboardView ? "w-8 h-8 md:w-9 md:h-9" : "w-10 h-10 md:w-12 md:h-12"
               )}>
-                <img 
-                  src={otherParticipant?.photoURL} 
-                  alt={otherParticipant?.name}
-                  className="w-full h-full object-cover"
-                />
+                {otherParticipant?.photoURL ? (
+                  <img 
+                    src={otherParticipant.photoURL} 
+                    alt={otherParticipant?.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold flex items-center justify-center text-xs md:text-sm">
+                    {otherParticipant?.name?.[0] || 'U'}
+                  </div>
+                )}
               </div>
               {otherUserStatus?.isOnline && (
                 <div className={cn(
@@ -376,11 +382,17 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
                 ? "w-12 h-12 rounded-xl ring-2 ring-black/[0.04] dark:ring-white/[0.04] mb-2" 
                 : "w-20 h-20 md:w-24 md:h-24 rounded-[32px] shadow-apple-soft ring-4 ring-apple-card-bg mb-4"
             )}>
-              <img 
-                src={otherParticipant?.photoURL} 
-                alt={otherParticipant?.name}
-                className="w-full h-full object-cover"
-              />
+              {otherParticipant?.photoURL ? (
+                <img 
+                  src={otherParticipant.photoURL} 
+                  alt={otherParticipant?.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold flex items-center justify-center text-lg md:text-2xl">
+                  {otherParticipant?.name?.[0] || 'U'}
+                </div>
+              )}
             </div>
             <h2 className={cn("font-bold text-apple-text", isDashboardView ? "text-sm mb-0.5" : "text-xl md:text-2xl mb-1")}>{otherParticipant?.name}</h2>
             <div className={cn("flex items-center gap-1 font-bold text-apple-text-muted uppercase tracking-widest", isDashboardView ? "text-[8px]" : "text-[11px]")}>
@@ -523,7 +535,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
                       </div>
                     )}
 
-                    {msg.type === 'image' && (
+                    {msg.type === 'image' && msg.fileUrl && (
                       <div className="relative group cursor-pointer overflow-hidden">
                         <img 
                           src={msg.fileUrl} 

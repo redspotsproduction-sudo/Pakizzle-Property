@@ -277,11 +277,17 @@ export default function CarInsuranceCalculator() {
                       <Card className="glass-card overflow-hidden border-none p-0">
                         <div className="flex flex-col md:flex-row">
                           <div className="p-8 border-b md:border-b-0 md:border-r border-apple-border flex flex-col items-center justify-center bg-apple-gray/50 dark:bg-white/5 w-full md:w-56 shrink-0">
-                            <img 
-                              src={company.logoUrl} 
-                              alt={company.name}
-                              className="h-16 w-32 object-contain mb-4"
-                            />
+                            {company.logoUrl ? (
+                              <img 
+                                src={company.logoUrl} 
+                                alt={company.name}
+                                className="h-16 w-32 object-contain mb-4"
+                              />
+                            ) : (
+                              <div className="h-16 w-32 flex items-center justify-center font-bold text-xl text-slate-500 mb-4 bg-white/20 rounded-xl">
+                                {company.name?.[0] || 'I'}
+                              </div>
+                            )}
                             <h3 className="font-bold text-base text-center">{company.name}</h3>
                           </div>
                           
@@ -355,8 +361,12 @@ export default function CarInsuranceCalculator() {
             <div className="flex flex-col h-full">
               <div className="p-8 bg-apple-gray dark:bg-white/5 border-b border-apple-border flex items-center justify-between">
                 <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 rounded-2xl bg-white p-3 border border-apple-border shadow-sm">
-                    <img src={selectedDetails.logoUrl} alt={selectedDetails.name} className="w-full h-full object-contain" />
+                  <div className="w-16 h-16 rounded-2xl bg-white p-3 border border-apple-border shadow-sm flex items-center justify-center">
+                    {selectedDetails.logoUrl ? (
+                      <img src={selectedDetails.logoUrl} alt={selectedDetails.name} className="w-full h-full object-contain" />
+                    ) : (
+                      <span className="font-bold text-lg text-slate-700">{selectedDetails.name?.[0] || 'I'}</span>
+                    )}
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold tracking-tight">{selectedDetails.name}</h2>

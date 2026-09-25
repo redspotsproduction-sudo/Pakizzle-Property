@@ -200,9 +200,9 @@ export default function Wishlist() {
                   "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden",
                   activeListId === list.id ? "bg-apple-card-bg/20" : "bg-apple-gray/30"
                 )}>
-                  {list.itemIds.length > 0 ? (
+                  {list.itemIds.length > 0 && MOCK_VEHICLES.find(v => v.id === list.itemIds[0])?.images?.[0] ? (
                     <img 
-                      src={MOCK_VEHICLES.find(v => v.id === list.itemIds[0])?.images[0]} 
+                      src={MOCK_VEHICLES.find(v => v.id === list.itemIds[0])!.images[0]} 
                       className="w-full h-full object-cover"
                       alt=""
                     />
@@ -251,9 +251,9 @@ export default function Wishlist() {
                       "w-12 h-12 rounded-lg flex items-center justify-center shrink-0 overflow-hidden",
                       activeListId === list.id ? "bg-apple-card-bg/20" : "bg-apple-gray/30"
                     )}>
-                      {list.itemIds.length > 0 ? (
+                      {list.itemIds.length > 0 && MOCK_VEHICLES.find(v => v.id === list.itemIds[0])?.images?.[0] ? (
                         <img 
-                          src={MOCK_VEHICLES.find(v => v.id === list.itemIds[0])?.images[0]} 
+                          src={MOCK_VEHICLES.find(v => v.id === list.itemIds[0])!.images[0]} 
                           className="w-full h-full object-cover"
                           alt=""
                         />

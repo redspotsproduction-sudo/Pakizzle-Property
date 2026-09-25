@@ -587,7 +587,11 @@ export default function InsuranceBookingFlow() {
                         <div className="flex items-center justify-between border-b border-black/[0.05] dark:border-white/5 pb-4">
                            <div className="flex items-center gap-3">
                               <div className="w-12 h-12 bg-white rounded-xl p-1.5 shadow-sm border border-black/[0.05] flex items-center justify-center">
-                                 <img src={selectedProvider.logoUrl} alt={selectedProvider.name} className="w-full h-full object-contain" />
+                                 {selectedProvider.logoUrl ? (
+                                   <img src={selectedProvider.logoUrl} alt={selectedProvider.name} className="w-full h-full object-contain" />
+                                 ) : (
+                                   <span className="font-bold text-xs text-slate-700">{selectedProvider.name?.[0] || 'I'}</span>
+                                 )}
                               </div>
                               <div>
                                  <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Underwriter Node</p>

@@ -118,14 +118,20 @@ export default function ChatList({ isDashboardView = false }: ChatListProps) {
                         "rounded-full overflow-hidden shadow-apple-soft border-2 border-apple-card-bg cursor-pointer",
                         isDashboardView ? "w-10 h-10 md:w-11 md:h-11" : "w-14 h-14 md:w-16 md:h-16"
                       )}>
-                        <img 
-                          src={otherParticipant.photoURL} 
-                          alt={otherParticipant.name}
-                          className={cn(
-                            "w-full h-full object-cover",
-                            conv.isBlocked && "grayscale-[0.5] opacity-80"
-                          )}
-                        />
+                        {otherParticipant.photoURL ? (
+                          <img 
+                            src={otherParticipant.photoURL} 
+                            alt={otherParticipant.name}
+                            className={cn(
+                              "w-full h-full object-cover",
+                              conv.isBlocked && "grayscale-[0.5] opacity-80"
+                            )}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold flex items-center justify-center text-sm md:text-base">
+                            {otherParticipant.name?.[0] || 'U'}
+                          </div>
+                        )}
                       </div>
                       {conv.unreadCount > 0 && (
                         <div className={cn(
@@ -219,15 +225,24 @@ export default function ChatList({ isDashboardView = false }: ChatListProps) {
                   )}
                 >
                   <div className="relative shrink-0">
-                    <img 
-                      src={otherParticipant.photoURL} 
-                      alt={otherParticipant.name}
-                      className={cn(
-                        "object-cover shadow-apple-soft",
-                        isDashboardView ? "w-10 h-10 rounded-xl" : "w-12 h-12 md:w-14 md:h-14 rounded-2xl",
-                        conv.isBlocked && "grayscale-[0.5] opacity-80"
-                      )}
-                    />
+                    {otherParticipant.photoURL ? (
+                      <img 
+                        src={otherParticipant.photoURL} 
+                        alt={otherParticipant.name}
+                        className={cn(
+                          "object-cover shadow-apple-soft",
+                          isDashboardView ? "w-10 h-10 rounded-xl" : "w-12 h-12 md:w-14 md:h-14 rounded-2xl",
+                          conv.isBlocked && "grayscale-[0.5] opacity-80"
+                        )}
+                      />
+                    ) : (
+                      <div className={cn(
+                        "bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold flex items-center justify-center shadow-apple-soft",
+                        isDashboardView ? "w-10 h-10 rounded-xl text-xs" : "w-12 h-12 md:w-14 md:h-14 rounded-2xl text-base"
+                      )}>
+                        {otherParticipant.name?.[0] || 'U'}
+                      </div>
+                    )}
                     {conv.unreadCount > 0 && (
                       <div className={cn(
                         "absolute -top-1.5 -right-1.5 bg-apple-blue text-white font-bold rounded-full flex items-center justify-center border-2 border-apple-card-bg shadow-sm",

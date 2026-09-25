@@ -24,7 +24,8 @@ import {
   Phone,
   Sparkles,
   Lock,
-  Award
+  Award,
+  Building2
 } from "lucide-react";
 import { db } from "../firebase";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
@@ -237,8 +238,8 @@ export default function UserProfile() {
                     className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-4 border-white dark:border-[#1C1C1E] shadow-md relative"
                   >
                     <img 
-                      src={profile?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.displayName}`} 
-                      alt={profile?.displayName}
+                      src={profile?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(profile?.displayName || 'user')}`} 
+                      alt={profile?.displayName || 'User'}
                       className="w-full h-full object-cover"
                     />
                   </motion.div>
@@ -432,13 +433,17 @@ export default function UserProfile() {
                         to={`/vehicle/${vehicle.id}`}
                         className="group flex flex-col h-full bg-white dark:bg-[#161617] rounded-3xl overflow-hidden border border-black/[0.04] dark:border-white/[0.04] shadow-sm hover:shadow-md transition-all duration-300"
                       >
-                        <div className="aspect-[16/10] overflow-hidden relative shrink-0">
-                          <img 
-                            src={vehicle.images[0]} 
-                            alt={`${vehicle.make} ${vehicle.model}`}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-                            referrerPolicy="no-referrer"
-                          />
+                        <div className="aspect-[16/10] overflow-hidden relative shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+                          {vehicle.images?.[0] ? (
+                            <img 
+                              src={vehicle.images[0]} 
+                              alt={`${vehicle.make} ${vehicle.model}`}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <Building2 className="w-10 h-10 text-slate-400" />
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
                           
                           <div className="absolute top-3 left-3">

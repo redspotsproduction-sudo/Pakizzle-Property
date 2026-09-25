@@ -200,9 +200,9 @@ export function AddToListModal() {
                     className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-apple-card-bg/50 transition-all group text-left"
                   >
                     <div className="w-12 h-12 rounded-xl bg-apple-card-bg flex items-center justify-center shrink-0 overflow-hidden border border-apple-border/50">
-                      {list.itemIds.length > 0 ? (
+                      {list.itemIds.length > 0 && vehicles.find(v => v.id === list.itemIds[0])?.images?.[0] ? (
                         <img 
-                          src={vehicles.find(v => v.id === list.itemIds[0])?.images[0]} 
+                          src={vehicles.find(v => v.id === list.itemIds[0])!.images[0]} 
                           className="w-full h-full object-cover"
                           alt=""
                         />

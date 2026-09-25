@@ -401,9 +401,9 @@ export default function VehicleDetails() {
             </div>
           </div>
 
-          {/* Right Column: Sticky Configuration Panel */}
+          {/* Right Column: Sticky Configuration Glass Panel */}
           <div className="w-full lg:w-[40%] xl:w-[35%] relative">
-            <div className="lg:sticky lg:top-28 lg:h-[calc(100vh-140px)] overflow-y-auto scrollbar-hide px-6 md:px-10 lg:px-12 py-3 md:py-5 lg:py-6 flex flex-col">
+            <div className="lg:sticky lg:top-28 lg:h-[calc(100vh-140px)] overflow-y-auto scrollbar-hide px-6 md:px-8 py-5 md:py-7 flex flex-col liquid-glass-foreground rounded-[32px] m-3 lg:m-4 shadow-2xl">
               
               {/* Header Info */}
               <motion.section

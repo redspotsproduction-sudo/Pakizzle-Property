@@ -230,46 +230,48 @@ export default function ReelVideo({ id, videoUrl, isActive, isMuted, onDoubleTap
         </div>
       )}
 
-      <video
-        ref={videoRef}
-        src={playable ? activeUrl : ""}
-        preload={isActive ? "auto" : (shouldLoad ? "auto" : "none")}
-        poster={coverImage}
-        className={playError ? "hidden" : "w-full h-full object-cover"}
-        loop
-        muted={isMuted}
-        playsInline
-        onWaiting={() => setIsBuffering(true)}
-        onPlaying={() => {
-          setIsBuffering(false);
-          setIsPlaying(true);
-        }}
-        onCanPlay={() => setIsBuffering(false)}
-        onTimeUpdate={(e) => {
-          const video = e.currentTarget;
-          const percentage = (video.currentTime / video.duration) * 100 || 0;
-          setProgress(percentage);
-        }}
-        onError={(e) => {
-          if (playable) {
-            const errorCode = e.currentTarget?.error?.code;
-            const errorMsg = e.currentTarget?.error?.message;
-            console.warn("Video element reported loading failure:", activeUrl, `Code: ${errorCode}, Message: ${errorMsg}`);
-            
-            if (!hasFallbackUsed) {
-              const fallback = getFallbackVideo(id);
-              console.warn("Attempting high-availability hot-swap fallback URL:", fallback);
-              setHasFallbackUsed(true);
-              setActiveUrl(fallback);
-              setPlayError(false);
-              setIsBuffering(true);
-            } else {
-              setIsBuffering(false);
-              setPlayError(true);
+      {playable && activeUrl ? (
+        <video
+          ref={videoRef}
+          src={activeUrl}
+          preload={isActive ? "auto" : (shouldLoad ? "auto" : "none")}
+          poster={coverImage || undefined}
+          className={playError ? "hidden" : "w-full h-full object-cover"}
+          loop
+          muted={isMuted}
+          playsInline
+          onWaiting={() => setIsBuffering(true)}
+          onPlaying={() => {
+            setIsBuffering(false);
+            setIsPlaying(true);
+          }}
+          onCanPlay={() => setIsBuffering(false)}
+          onTimeUpdate={(e) => {
+            const video = e.currentTarget;
+            const percentage = (video.currentTime / video.duration) * 100 || 0;
+            setProgress(percentage);
+          }}
+          onError={(e) => {
+            if (playable) {
+              const errorCode = e.currentTarget?.error?.code;
+              const errorMsg = e.currentTarget?.error?.message;
+              console.warn("Video element reported loading failure:", activeUrl, `Code: ${errorCode}, Message: ${errorMsg}`);
+              
+              if (!hasFallbackUsed) {
+                const fallback = getFallbackVideo(id);
+                console.warn("Attempting high-availability hot-swap fallback URL:", fallback);
+                setHasFallbackUsed(true);
+                setActiveUrl(fallback);
+                setPlayError(false);
+                setIsBuffering(true);
+              } else {
+                setIsBuffering(false);
+                setPlayError(true);
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
+      ) : null}
 
       {/* Floating Center Feedback Animations */}
       {isBuffering && !playError && (

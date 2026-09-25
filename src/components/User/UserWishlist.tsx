@@ -62,13 +62,17 @@ export default function UserWishlist() {
                 </button>
 
                 <Link to={`/vehicle/${v!.id}`} className="block">
-                  <div className="aspect-[4/3] overflow-hidden relative bg-[#1C1C1E] border-b border-black/[0.04] dark:border-white/[0.04]">
-                    <img 
-                      src={v!.images[0]} 
-                      alt={v!.model} 
-                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" 
-                      referrerPolicy="no-referrer"
-                    />
+                  <div className="aspect-[4/3] overflow-hidden relative bg-[#1C1C1E] border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-center">
+                    {v!.images?.[0] ? (
+                      <img 
+                        src={v!.images[0]} 
+                        alt={v!.model} 
+                        className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" 
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <Car className="w-10 h-10 text-white/30" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     
                     <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-end justify-between">

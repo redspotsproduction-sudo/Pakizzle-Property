@@ -87,8 +87,8 @@ export default function Header() {
       className={cn(
         "fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
         isScrolled 
-          ? "top-2 lg:top-4 w-[calc(100%-1rem)] lg:w-[calc(100%-2rem)] max-w-7xl h-14 lg:h-16 rounded-full px-4 lg:px-8 bg-apple-card-bg/85 backdrop-blur-[30px] shadow-apple-soft border border-apple-border/30" 
-          : "top-0 w-full max-w-none h-16 lg:h-20 px-6 lg:px-12 bg-white/75 dark:bg-black/75 backdrop-blur-[24px] border-b border-apple-border/20"
+          ? "top-2 lg:top-4 w-[calc(100%-1.5rem)] max-w-6xl h-14 lg:h-16 rounded-full px-4 lg:px-8 liquid-glass-foreground shadow-2xl" 
+          : "top-2 w-[calc(100%-1.5rem)] max-w-7xl h-16 lg:h-18 rounded-full px-5 lg:px-10 liquid-glass-mid shadow-lg"
       )}
     >
       <div className="h-full flex items-center justify-between">
@@ -260,14 +260,20 @@ export default function Header() {
                             )}
                           >
                             <div className="relative shrink-0">
-                              <img 
-                                src={otherParticipant.photoURL} 
-                                alt={otherParticipant.name}
-                                className={cn(
-                                  "w-12 h-12 rounded-full object-cover shadow-sm",
-                                  conv.isBlocked && "grayscale-[0.5] opacity-80"
-                                )}
-                              />
+                              {otherParticipant.photoURL ? (
+                                <img 
+                                  src={otherParticipant.photoURL} 
+                                  alt={otherParticipant.name}
+                                  className={cn(
+                                    "w-12 h-12 rounded-full object-cover shadow-sm",
+                                    conv.isBlocked && "grayscale-[0.5] opacity-80"
+                                  )}
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold flex items-center justify-center text-sm">
+                                  {otherParticipant.name?.[0] || 'U'}
+                                </div>
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex justify-between items-start mb-0.5">

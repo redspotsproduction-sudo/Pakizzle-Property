@@ -387,7 +387,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
         <div className="flex items-center gap-4 w-full md:w-auto">
           {/* Ad Image / Brand logo */}
           <div className="w-12 h-12 md:w-16 md:h-12 rounded-xl overflow-hidden shrink-0 shadow-sm border border-apple-border/20 bg-apple-gray/35 flex items-center justify-center">
-            {!imageErrorMap[selectedAd.id] ? (
+            {selectedAd.imageUrl && !imageErrorMap[selectedAd.id] ? (
               <img 
                 src={selectedAd.imageUrl} 
                 alt="ad-brand"
@@ -549,13 +549,17 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
           </div>
 
           {/* Luxury Property Photo Gallery Section */}
-          <div className="relative rounded-2xl overflow-hidden h-[210px] border border-white/10 shadow-lg group">
-            <img 
-              src={selectedAd.imageUrl} 
-              alt="Luxury Offer"
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              referrerPolicy="no-referrer"
-            />
+          <div className="relative rounded-2xl overflow-hidden h-[210px] border border-white/10 shadow-lg group bg-zinc-900 flex items-center justify-center">
+            {selectedAd.imageUrl ? (
+              <img 
+                src={selectedAd.imageUrl} 
+                alt="Luxury Offer"
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <Car className="w-12 h-12 text-white/30" />
+            )}
             {/* Dark gradient mapping over the image base */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
@@ -688,7 +692,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
           "w-full rounded-2xl overflow-hidden relative bg-apple-gray/30 border border-apple-border/10 mb-3 flex items-center justify-center",
           "h-28"
         )}>
-          {!imageErrorMap[selectedAd.id] ? (
+          {selectedAd.imageUrl && !imageErrorMap[selectedAd.id] ? (
             <img 
               src={selectedAd.imageUrl} 
               alt="Ad Banner"
@@ -800,7 +804,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
               "rounded-[22px] overflow-hidden relative shadow-sm w-full aspect-[3/2] bg-apple-gray/25 dark:bg-white/5",
               isList ? "min-h-[176px] md:min-h-0 md:h-full border border-apple-border/20" : "border border-apple-border/20"
             )}>
-              {!imageErrorMap[selectedAd.id] ? (
+              {selectedAd.imageUrl && !imageErrorMap[selectedAd.id] ? (
                 <img 
                   src={selectedAd.imageUrl} 
                   alt="Feed Ad Placement"

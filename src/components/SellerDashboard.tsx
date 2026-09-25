@@ -784,13 +784,17 @@ export default function SellerDashboard() {
                     if (!v) return null;
                     return (
                       <Link key={id} to={`/vehicle/${id}`} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-[#F5F5F7] dark:hover:bg-white/5 transition-all group border border-transparent hover:border-[#E5E5E7]/50 dark:hover:border-white/5">
-                        <div className="w-11 h-8 rounded-lg bg-[#1C1C1E] shrink-0 overflow-hidden relative border border-black/5 dark:border-white/10">
-                          <img 
-                            src={v.images[0]} 
-                            alt={v.model} 
-                            className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-300" 
-                            referrerPolicy="no-referrer" 
-                          />
+                        <div className="w-11 h-8 rounded-lg bg-[#1C1C1E] shrink-0 overflow-hidden relative border border-black/5 dark:border-white/10 flex items-center justify-center">
+                          {v.images?.[0] ? (
+                            <img 
+                              src={v.images[0]} 
+                              alt={v.model} 
+                              className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-300" 
+                              referrerPolicy="no-referrer" 
+                            />
+                          ) : (
+                            <Car className="w-4 h-4 text-white/40" />
+                          )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="text-[11px] font-semibold text-[#1D1D1F] dark:text-white truncate group-hover:text-apple-blue transition-colors">

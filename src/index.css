@@ -593,3 +593,164 @@
 .animate-ken-burns {
   animation: kenburns 20s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   LIQUID GLASS & GLASSMORPHISM CORE TOKENS & SURFACES
+   ========================================================================== */
+
+/* 1. Glass Tier 1: Foreground / Primary Focal (e.g. Featured Card, Modals) */
+.liquid-glass-foreground {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12),
+              0 1px 0 rgba(255, 255, 255, 0.8) inset,
+              0 -1px 0 rgba(0, 0, 0, 0.05) inset;
+}
+
+.dark .liquid-glass-foreground {
+  background: rgba(18, 22, 34, 0.55);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45),
+              0 1px 0 rgba(255, 255, 255, 0.2) inset,
+              0 -1px 0 rgba(0, 0, 0, 0.3) inset;
+}
+
+/* 2. Glass Tier 2: Mid-Glass (e.g. Search Capsule, Floating Bar, Nav, Grid Cards) */
+.liquid-glass-mid {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08),
+              0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+.dark .liquid-glass-mid {
+  background: rgba(20, 24, 38, 0.48);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35),
+              0 1px 0 rgba(255, 255, 255, 0.15) inset;
+}
+
+/* 3. Glass Tier 3: Subtle Sub-panels, Pill Badges, Inner Rail Buttons */
+.liquid-glass-subtle {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05),
+              0 1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+
+.dark .liquid-glass-subtle {
+  background: rgba(24, 28, 42, 0.42);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25),
+              0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+/* 4. Restrained Glass: For Data Tables & Dashboards */
+.liquid-glass-restrained {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.dark .liquid-glass-restrained {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* 5. Glass Light Sheen & Interactive Hover Glow */
+.glass-hover-sheen {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-hover-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-22deg);
+  pointer-events: none;
+  transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-hover-sheen:hover::after {
+  left: 140%;
+}
+
+.glass-hover-sheen:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12),
+              0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+.dark .glass-hover-sheen:hover {
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5),
+              0 1px 0 rgba(255, 255, 255, 0.3) inset;
+}
+
+/* Fallback & Accessibility for Unsupported or Reduced Transparency */
+@supports not (backdrop-filter: blur(10px)) {
+  .liquid-glass-foreground,
+  .liquid-glass-mid,
+  .liquid-glass-subtle {
+    background: rgba(255, 255, 255, 0.92);
+  }
+  .dark .liquid-glass-foreground,
+  .dark .liquid-glass-mid,
+  .dark .liquid-glass-subtle {
+    background: rgba(24, 28, 42, 0.94);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .liquid-glass-foreground,
+  .liquid-glass-mid,
+  .liquid-glass-subtle {
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .dark .liquid-glass-foreground,
+  .dark .liquid-glass-mid,
+  .dark .liquid-glass-subtle {
+    background: rgba(18, 22, 34, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns,
+  .animate-marquee,
+  .animate-bounce-slow,
+  .glass-hover-sheen::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

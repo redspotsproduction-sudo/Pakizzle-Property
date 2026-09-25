@@ -608,12 +608,16 @@ export default function InsuranceComparisonTable() {
                 {/* Brand Logo & Name */}
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-white border border-black/[0.04] p-2 flex items-center justify-center shrink-0 shadow-inner">
-                    <img
-                      src={company.logoUrl}
-                      alt={company.name}
-                      className="w-full h-full object-contain"
-                      referrerPolicy="no-referrer"
-                    />
+                    {company.logoUrl ? (
+                      <img
+                        src={company.logoUrl}
+                        alt={company.name}
+                        className="w-full h-full object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <span className="font-bold text-sm text-slate-700">{company.name?.[0] || 'I'}</span>
+                    )}
                   </div>
                   <div className="space-y-0.5">
                     <button
@@ -789,7 +793,11 @@ export default function InsuranceComparisonTable() {
                           <th key={pId} className="pb-4 font-black text-center w-[25%]">
                             <div className="flex flex-col items-center gap-2">
                               <div className="w-10 h-10 rounded-xl bg-white p-1.5 border border-black/[0.04] flex items-center justify-center shadow-inner">
-                                <img src={comp?.logoUrl} alt={comp?.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                                {comp?.logoUrl ? (
+                                  <img src={comp.logoUrl} alt={comp?.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                                ) : (
+                                  <span className="font-bold text-xs text-slate-700">{comp?.name?.[0] || 'I'}</span>
+                                )}
                               </div>
                               <span className="text-xs font-black text-[#1D1D1F] dark:text-white block">{comp?.name}</span>
                             </div>
@@ -958,7 +966,11 @@ export default function InsuranceComparisonTable() {
               <div className="p-6 border-b border-black/[0.05] dark:border-white/5 flex items-center justify-between bg-[#F5F5F7] dark:bg-black/35">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white rounded-xl p-2 border border-black/[0.04] flex items-center justify-center shadow-inner shrink-0">
-                    <img src={selectedDetails.logoUrl} alt={selectedDetails.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                    {selectedDetails.logoUrl ? (
+                      <img src={selectedDetails.logoUrl} alt={selectedDetails.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                    ) : (
+                      <span className="font-bold text-sm text-slate-700">{selectedDetails.name?.[0] || 'I'}</span>
+                    )}
                   </div>
                   <div>
                     <h3 className="text-base font-black tracking-tight">{selectedDetails.name}</h3>

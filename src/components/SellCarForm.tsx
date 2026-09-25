@@ -841,7 +841,7 @@ export default function SellCarForm() {
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {formData.images.map((img, i) => (
+              {formData.images.filter(Boolean).map((img, i) => (
                 <div key={i} className="w-full aspect-square bg-apple-gray rounded-apple-lg relative group overflow-hidden border border-apple-border">
                   <img src={img} alt={`Upload ${i}`} className="w-full h-full object-cover" />
                   <button 
@@ -929,7 +929,7 @@ export default function SellCarForm() {
           >
             <div className="bg-apple-card-bg rounded-apple-xl border border-apple-border overflow-hidden shadow-apple-soft">
               <div className="w-full aspect-video bg-apple-gray relative overflow-hidden">
-                {formData.images.length > 0 ? (
+                {formData.images?.[0] ? (
                   <img src={formData.images[0]} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">

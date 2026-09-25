@@ -183,8 +183,8 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
       >
         <motion.div
           className={cn(
-            "flex flex-col h-full overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-[#0F766E]/50 hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)] transition-all duration-200 bg-white dark:bg-slate-900 rounded-lg",
-            isList ? "md:flex-row p-2" : ""
+            "flex flex-col h-full overflow-hidden transition-all duration-300 rounded-[24px] liquid-glass-mid glass-hover-sheen group/card",
+            isList ? "md:flex-row p-2.5" : ""
           )}
         >
           {/* 1. Image Carousel Section */}
@@ -193,7 +193,7 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
             isList ? "w-full md:w-[256px] lg:w-[304px]" : "w-full"
           )}>
             <div className={cn(
-              "rounded-lg overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2] bg-slate-100 dark:bg-slate-800",
+              "rounded-[20px] overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2] bg-slate-100 dark:bg-slate-800",
               isList ? "min-h-[176px] md:min-h-0 md:h-full" : ""
             )}>
               <motion.img 
