@@ -1,7 +1,8 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { MapPin, ArrowRight, Building, Building2, Trees, Compass } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { RevealOnScroll, REVEAL_EASE, SPRING_SNAPPY } from "./motion";
 
 interface CityCardData {
   city: string;
@@ -92,57 +93,71 @@ export default function BrowseByCity() {
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 dark:border-slate-800">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-[#0F766E] dark:text-teal-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-teal-200 dark:border-teal-800">
-            <Compass className="w-3.5 h-3.5" />
-            Location-First Discovery
+      <RevealOnScroll direction="up" distance={30} duration={0.6}>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-[#0F766E] dark:text-teal-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-teal-200 dark:border-teal-800">
+              <Compass className="w-3.5 h-3.5" />
+              Location-First Discovery
+            </div>
+            <h2 className="type-h2 font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
+              Explore Properties by City & Prime Sectors
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-xl">
+              Real estate in Pakistan is hyperlocal. Browse masterplanned housing authorities, registered CDA/LDA sectors, and coastal high-rises.
+            </p>
           </div>
-          <h2 className="type-h2 font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
-            Explore Properties by City & Prime Sectors
-          </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-xl">
-            Real estate in Pakistan is hyperlocal. Browse masterplanned housing authorities, registered CDA/LDA sectors, and coastal high-rises.
-          </p>
-        </div>
 
-        <Link 
-          to="/marketplace" 
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline shrink-0"
-        >
-          <span>All 18+ Cities</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
+          <Link 
+            to="/marketplace" 
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline shrink-0"
+          >
+            <span>All 18+ Cities</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </RevealOnScroll>
 
       {/* Quick Society Shortcuts */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-none">
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider shrink-0 mr-1">
-          Top Sectors:
-        </span>
-        {POPULAR_AREAS.map((item, idx) => (
-          <button
-            key={idx}
-            onClick={() => handleAreaClick(item.city, item.query)}
-            className="px-3 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950/40 hover:text-[#0F766E] dark:hover:text-teal-400 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors whitespace-nowrap"
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
+      <RevealOnScroll direction="up" distance={20} delay={0.1} duration={0.5}>
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 scrollbar-none">
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider shrink-0 mr-1">
+            Top Sectors:
+          </span>
+          {POPULAR_AREAS.map((item, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleAreaClick(item.city, item.query)}
+              className="px-3 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950/40 hover:text-[#0F766E] dark:hover:text-teal-400 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors whitespace-nowrap cursor-pointer active:scale-95"
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+      </RevealOnScroll>
 
       {/* City Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {TOP_CITIES.map((c, index) => (
-          <motion.div
+          <RevealOnScroll
             key={c.city}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.08 }}
-            onClick={() => handleCityClick(c.city)}
-            className="group relative overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_24px_-4px_rgba(0,0,0,0.12)] hover:border-[#0F766E]/50 transition-all duration-300 cursor-pointer flex flex-col h-[280px]"
+            direction="up"
+            distance={45}
+            staggerIndex={index}
+            staggerInterval={0.07}
+            duration={0.6}
           >
+            <motion.div
+              whileHover={{ 
+                y: -6, 
+                scale: 1.015,
+                boxShadow: "0 20px 32px -8px rgba(0, 0, 0, 0.14)" 
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.28, ease: REVEAL_EASE }}
+              onClick={() => handleCityClick(c.city)}
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-colors duration-300 cursor-pointer flex flex-col h-[280px]"
+            >
             {/* Image Backdrop */}
             <div className="absolute inset-0 z-0">
               <img
@@ -188,6 +203,7 @@ export default function BrowseByCity() {
               </div>
             </div>
           </motion.div>
+        </RevealOnScroll>
         ))}
       </div>
     </section>

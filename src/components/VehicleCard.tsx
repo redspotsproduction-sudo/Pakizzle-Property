@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { 
   MapPin, 
   Gauge, 
@@ -27,6 +27,7 @@ import Badge from "./Badge";
 import CarBadgeSlider, { BadgeType } from "./CarBadgeSlider";
 import Nudge, { NudgeType } from "./Nudge";
 import Skeleton from "./ui/Skeleton";
+import { REVEAL_EASE, SPRING_SNAPPY } from "./motion";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -66,6 +67,7 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
 
   const isList = viewMode === "list";
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
   const { toggleWishlist, isInWishlist, setToast, lists } = useWishlist();
   const { startConversation } = useChat();
   const isSaved = isInWishlist(vehicle.id);
@@ -182,8 +184,21 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
         className="block h-full cursor-pointer"
       >
         <motion.div
+          whileHover={shouldReduceMotion ? undefined : {
+            y: -6,
+            scale: 1.012,
+            boxShadow: "0 22px 38px -12px rgba(0, 0, 0, 0.16), 0 0 1px 1px rgba(255, 255, 255, 0.15) inset",
+            transition: {
+              duration: 0.3,
+              ease: REVEAL_EASE
+            }
+          }}
+          whileTap={shouldReduceMotion ? undefined : {
+            scale: 0.985,
+            transition: SPRING_SNAPPY
+          }}
           className={cn(
-            "flex flex-col h-full overflow-hidden transition-all duration-300 rounded-[24px] liquid-glass-mid glass-hover-sheen group/card",
+            "flex flex-col h-full overflow-hidden transition-colors duration-300 rounded-[24px] liquid-glass-mid glass-hover-sheen group/card",
             isList ? "md:flex-row p-2.5" : ""
           )}
         >
@@ -197,12 +212,14 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
               isList ? "min-h-[176px] md:min-h-0 md:h-full" : ""
             )}>
               <motion.img 
+                layoutId={shouldReduceMotion ? undefined : `property-hero-image-${vehicle.id}`}
+                transition={{ duration: 0.45, ease: REVEAL_EASE }}
                 key={activeImageIndex}
-                initial={{ opacity: 0.1 }}
+                initial={{ opacity: 0.8 }}
                 animate={{ opacity: 1 }}
                 src={vehicle.images[activeImageIndex] || vehicle.images[0]} 
                 alt={`${vehicle.make} ${vehicle.model}`}
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 referrerPolicy="no-referrer"
                 loading="lazy"
               />

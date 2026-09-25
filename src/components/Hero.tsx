@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ShieldCheck,
@@ -33,6 +33,7 @@ import { useLocation as useAppLocation } from "../context/LocationContext";
 import { useTheme } from "../context/ThemeContext";
 import { PAKISTAN_LOCATIONS } from "../constants/locations";
 import ValuationModal from "./ValuationModal";
+import { AnimatedCounter, REVEAL_EASE, SPRING_TACTILE, SPRING_SNAPPY } from "./motion";
 import { GlassPanel, GlassCapsule, GlassButton, GlassCard } from "./ui/GlassPrimitives";
 
 import villaImg from "../assets/images/pakizzle_villa_hero_1790252631072.jpg";
@@ -119,9 +120,23 @@ export default function Hero() {
   const [isValuationOpen, setIsValuationOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const { location: userLocation } = useAppLocation();
   const { theme, toggleTheme } = useTheme();
+
+  // Scroll-linked cinematic parallax:
+  // Background moves at ~0.5x scroll speed, foreground content moves at ~1x speed
+  const { scrollYProgress } = useScroll({
+    target: heroSectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const fgY = useTransform(scrollYProgress, [0, 1], ["0%", "42%"]);
+  const fgOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.2]);
 
   // Sync user location city if present
   useEffect(() => {
@@ -157,15 +172,24 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full min-h-[92vh] flex items-center justify-center p-3 sm:p-5 md:p-8 pt-20 md:pt-24 overflow-hidden">
+    <section 
+      ref={heroSectionRef}
+      className="relative w-full min-h-[92vh] flex items-center justify-center p-3 sm:p-5 md:p-8 pt-20 md:pt-24 overflow-hidden"
+    >
       {/* 
         DEVICE FRAME CONTAINER:
         Large rounded container gives the entire viewport a futuristic, continuous OS-level device window feeling
       */}
       <div className="relative w-full max-w-[1440px] min-h-[82vh] rounded-[32px] sm:rounded-[40px] md:rounded-[48px] overflow-hidden border border-white/30 dark:border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.25)] flex flex-col justify-between p-4 sm:p-8 md:p-12">
         
-        {/* Full-bleed rich cinematic photographic layer with slow Ken Burns effect */}
-        <div className="absolute inset-0 z-0">
+        {/* Full-bleed rich cinematic photographic layer with scroll parallax depth */}
+        <motion.div 
+          style={{ 
+            y: shouldReduceMotion ? 0 : bgY,
+            scale: shouldReduceMotion ? 1 : bgScale
+          }}
+          className="absolute inset-0 z-0 will-change-transform"
+        >
           <AnimatePresence mode="wait">
             <motion.img
               key={activeHero.id}
@@ -174,93 +198,127 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1.2, ease: REVEAL_EASE }}
               className="w-full h-full object-cover object-center animate-ken-burns"
             />
           </AnimatePresence>
           {/* Subtle gradient vignette to guarantee text legibility while preserving photographic transparency */}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-slate-950/50 pointer-events-none" />
-        </div>
+        </motion.div>
 
         {/* 
           FLOATING GLASS RAIL (Left Vertical Stack)
           OS-style floating circular glass controls rail 
         */}
         <aside className="absolute left-4 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-3 p-2.5 rounded-full liquid-glass-subtle shadow-xl">
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={() => navigate("/")}
             title="Home" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
           >
             <Home className="w-5 h-5" />
-          </button>
-          <button 
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={() => navigate("/marketplace")}
             title="Explore Properties" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
           >
             <Compass className="w-5 h-5" />
-          </button>
-          <button 
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={() => setIsValuationOpen(true)}
             title="AI Valuation" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-amber-300 hover:text-amber-200 hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-amber-300 hover:text-amber-200 hover:bg-white/20 transition-all cursor-pointer"
           >
             <Sparkles className="w-5 h-5" />
-          </button>
-          <button 
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={() => navigate("/chat")}
             title="Chat & Concierge" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
           >
             <MessageSquare className="w-5 h-5" />
-          </button>
-          <button 
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={() => navigate("/notifications")}
             title="Notifications" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
           >
             <Bell className="w-5 h-5" />
-          </button>
+          </motion.button>
           <div className="w-6 h-[1px] bg-white/20 my-1" />
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={toggleTheme}
             title="Toggle Light / Dark" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
           >
             {theme === "dark" ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5 text-teal-300" />}
-          </button>
-          <button 
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={SPRING_SNAPPY}
             onClick={() => navigate("/profile")}
             title="Account Profile" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
           >
             <User className="w-5 h-5" />
-          </button>
+          </motion.button>
         </aside>
 
         {/* 
           TOP ROW: FLOATING CAPSULE SEARCH COCKPIT 
-          Segmented floating glass capsule matching reference OS aesthetics
+          Segmented floating glass capsule with smooth layoutId sliding toggle
         */}
-        <div className="relative z-20 w-full flex justify-center">
+        <motion.div 
+          initial={{ opacity: 0, y: -24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: REVEAL_EASE }}
+          className="relative z-20 w-full flex justify-center"
+        >
           <div className="w-full max-w-4xl liquid-glass-mid rounded-full p-2 pl-3 sm:pl-5 pr-2 flex flex-wrap lg:flex-nowrap items-center justify-between gap-2 shadow-2xl">
-            {/* Buy / Rent / Plots Segmented Toggle */}
-            <div className="flex items-center gap-1 p-1 rounded-full bg-black/20 backdrop-blur-md border border-white/10 shrink-0">
-              {(["buy", "rent", "plots"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={cn(
-                    "px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300",
-                    activeTab === tab
-                      ? "bg-white text-slate-900 shadow-md font-bold scale-102"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
-                  )}
-                >
-                  {tab === "plots" ? "Plots" : tab}
-                </button>
-              ))}
+            {/* Buy / Rent / Plots Segmented Toggle with layoutId Glide */}
+            <div className="flex items-center gap-1 p-1 rounded-full bg-black/25 backdrop-blur-md border border-white/10 shrink-0 relative">
+              {(["buy", "rent", "plots"] as const).map((tab) => {
+                const isSelected = activeTab === tab;
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={cn(
+                      "relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 z-10 cursor-pointer",
+                      isSelected ? "text-slate-900 font-bold" : "text-white/80 hover:text-white"
+                    )}
+                  >
+                    {isSelected && (
+                      <motion.div
+                        layoutId="hero-active-tab-pill"
+                        transition={SPRING_TACTILE}
+                        className="absolute inset-0 bg-white rounded-full shadow-md z-[-1]"
+                      />
+                    )}
+                    {tab === "plots" ? "Plots" : tab}
+                  </button>
+                );
+              })}
             </div>
 
             {/* City Segment */}
@@ -314,22 +372,34 @@ export default function Hero() {
               <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
             </div>
 
-            {/* Execute Search Capsule Button */}
-            <button
+            {/* Execute Search Capsule Button with Tactile Press Spring */}
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              whileHover={{ scale: 1.02 }}
+              transition={SPRING_SNAPPY}
               onClick={handleSearchSubmit}
-              className="h-10 px-5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-950/40 border border-teal-300/40 transition-all active:scale-95 cursor-pointer glass-hover-sheen shrink-0 ml-auto"
+              className="h-10 px-5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-950/40 border border-teal-300/40 transition-colors cursor-pointer glass-hover-sheen shrink-0 ml-auto"
             >
               <Search className="w-3.5 h-3.5" />
               <span>Explore Homes</span>
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
 
         {/* 
           CENTERPIECE: OVERSIZED DISPLAY HEADLINE DIRECTLY OVER IMAGERY
-          Clean, confident typography floating on the scenery without card backing
+          Clean, confident typography floating on the scenery with parallax depth
         */}
-        <div className="relative z-10 max-w-3xl my-auto py-8 sm:py-12 lg:pl-16">
+        <motion.div 
+          style={{
+            y: shouldReduceMotion ? 0 : fgY,
+            opacity: shouldReduceMotion ? 1 : fgOpacity
+          }}
+          initial={{ opacity: 0, y: 36 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: REVEAL_EASE }}
+          className="relative z-10 max-w-3xl my-auto py-8 sm:py-12 lg:pl-16 will-change-transform"
+        >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-subtle text-teal-300 text-xs font-semibold tracking-wide mb-4">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Pakistan's 100% Registry-Verified Land Portal</span>
@@ -345,13 +415,18 @@ export default function Hero() {
           <p className="mt-4 text-sm sm:text-base md:text-lg text-white/85 max-w-xl font-normal leading-relaxed drop-shadow">
             Experience Pakistan's most refined residential estates. Each property is pre-vetted against LDA, CDA & DHA land deeds with zero broker manipulation.
           </p>
-        </div>
+        </motion.div>
 
         {/* 
           BOTTOM ROW: ASYMMETRICAL DUAL GLASS PANELS
           Bottom-Left Value Prop Card + Bottom-Right Featured Architectural Masterpiece Card
         */}
-        <div className="relative z-20 grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6 items-end lg:pl-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, delay: 0.3, ease: REVEAL_EASE }}
+          className="relative z-20 grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6 items-end lg:pl-16"
+        >
           
           {/* Bottom-Left: Value Metric & Verification Guarantee Glass Panel */}
           <div className="md:col-span-5 lg:col-span-4 liquid-glass-foreground rounded-[28px] p-5 sm:p-6 text-white shadow-2xl">
@@ -366,7 +441,7 @@ export default function Hero() {
             
             <div className="flex items-baseline gap-2">
               <span className="text-3xl sm:text-4xl font-extrabold font-mono tracking-tight text-white">
-                15,200+
+                <AnimatedCounter value={15200} suffix="+" duration={1.2} />
               </span>
               <span className="text-xs font-medium text-white/80">Verified Deeds</span>
             </div>
@@ -378,7 +453,7 @@ export default function Hero() {
             <div className="mt-4 pt-3 border-t border-white/15 flex items-center justify-between">
               <button 
                 onClick={() => setIsValuationOpen(true)}
-                className="text-xs font-semibold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-colors"
+                className="text-xs font-semibold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Instant Property Valuation</span>
@@ -391,7 +466,7 @@ export default function Hero() {
                     key={i}
                     onClick={() => setCurrentIdx(i)}
                     className={cn(
-                      "h-1.5 rounded-full transition-all duration-300",
+                      "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
                       i === currentIdx ? "w-6 bg-teal-300" : "w-1.5 bg-white/40"
                     )}
                   />
@@ -427,7 +502,7 @@ export default function Hero() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => setIsLiked(!isLiked)}
-                      className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90"
+                      className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90 cursor-pointer"
                       title="Save"
                     >
                       <Heart className={cn("w-3.5 h-3.5", isLiked ? "fill-rose-500 text-rose-500" : "")} />
@@ -438,7 +513,7 @@ export default function Hero() {
                           navigator.share({ title: activeHero.title, url: window.location.href });
                         }
                       }}
-                      className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90"
+                      className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90 cursor-pointer"
                       title="Share"
                     >
                       <Share2 className="w-3.5 h-3.5" />
@@ -479,7 +554,7 @@ export default function Hero() {
             </div>
           </div>
 
-        </div>
+        </motion.div>
 
       </div>
 

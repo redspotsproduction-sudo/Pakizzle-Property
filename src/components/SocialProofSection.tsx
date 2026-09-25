@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { ShieldCheck, CheckCircle2, TrendingUp, Star, Building2, Award, Clock } from "lucide-react";
+import { RevealOnScroll, AnimatedCounter, REVEAL_EASE } from "./motion";
 
 interface ActivityItem {
   id: string;
@@ -82,7 +83,7 @@ export default function SocialProofSection() {
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 dark:border-slate-800">
       {/* 1. Live Market Activity Stream */}
-      <div className="mb-14">
+      <RevealOnScroll direction="up" distance={30} duration={0.6} className="mb-14">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
@@ -97,10 +98,12 @@ export default function SocialProofSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {RECENT_ACTIVITIES.map((act) => (
-            <div
+          {RECENT_ACTIVITIES.map((act, index) => (
+            <motion.div
               key={act.id}
-              className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between"
+              whileHover={{ y: -3, scale: 1.01 }}
+              transition={{ duration: 0.2, ease: REVEAL_EASE }}
+              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-1.5">
@@ -129,96 +132,110 @@ export default function SocialProofSection() {
                 </span>
                 <ShieldCheck className="w-3.5 h-3.5 text-[#0F766E]" />
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </RevealOnScroll>
 
-      {/* 2. Scale Credentials Banner */}
-      <div className="rounded-lg bg-slate-900 text-white p-6 md:p-8 mb-14 shadow-md">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-800">
-          <div className="pt-4 md:pt-0">
-            <div className="text-2xl md:text-3xl font-extrabold text-teal-400 font-mono">
-              Rs 180+ Cr
+      {/* 2. Scale Credentials Banner with Eased Animated Counters */}
+      <RevealOnScroll direction="up" distance={40} duration={0.65}>
+        <div className="rounded-2xl bg-slate-900 text-white p-6 md:p-8 mb-14 shadow-lg border border-white/5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-800">
+            <div className="pt-4 md:pt-0">
+              <div className="text-2xl md:text-3xl font-extrabold text-teal-400 font-mono">
+                <AnimatedCounter value={180} prefix="Rs " suffix="+ Cr" duration={1.2} />
+              </div>
+              <div className="text-xs text-slate-400 font-medium mt-1">
+                Title-Verified Volume Facilitated
+              </div>
             </div>
-            <div className="text-xs text-slate-400 font-medium mt-1">
-              Title-Verified Volume Facilitated
+            <div className="pt-4 md:pt-0">
+              <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">
+                <AnimatedCounter value={14500} suffix="+" duration={1.2} />
+              </div>
+              <div className="text-xs text-slate-400 font-medium mt-1">
+                Genuine Active Properties
+              </div>
             </div>
-          </div>
-          <div className="pt-4 md:pt-0">
-            <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">
-              14,500+
+            <div className="pt-4 md:pt-0">
+              <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">
+                <AnimatedCounter value={1450} suffix="+" duration={1.2} />
+              </div>
+              <div className="text-xs text-slate-400 font-medium mt-1">
+                Certified Owners & Licensed Agencies
+              </div>
             </div>
-            <div className="text-xs text-slate-400 font-medium mt-1">
-              Genuine Active Properties
-            </div>
-          </div>
-          <div className="pt-4 md:pt-0">
-            <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">
-              1,450+
-            </div>
-            <div className="text-xs text-slate-400 font-medium mt-1">
-              Certified Owners & Licensed Agencies
-            </div>
-          </div>
-          <div className="pt-4 md:pt-0">
-            <div className="text-2xl md:text-3xl font-extrabold text-amber-400 font-mono">
-              0%
-            </div>
-            <div className="text-xs text-slate-400 font-medium mt-1">
-              Tolerated Duplicate / Spam Listings
+            <div className="pt-4 md:pt-0">
+              <div className="text-2xl md:text-3xl font-extrabold text-amber-400 font-mono">
+                0%
+              </div>
+              <div className="text-xs text-slate-400 font-medium mt-1">
+                Tolerated Duplicate / Spam Listings
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </RevealOnScroll>
 
       {/* 3. Verified Buyer & Seller Testimonials */}
       <div>
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-amber-200 dark:border-amber-800">
-            <Award className="w-3.5 h-3.5" />
-            Verified Customer Experiences
+        <RevealOnScroll direction="up" distance={30} duration={0.6}>
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-amber-200 dark:border-amber-800">
+              <Award className="w-3.5 h-3.5" />
+              Verified Customer Experiences
+            </div>
+            <h3 className="type-h3 font-semibold text-slate-900 dark:text-slate-100">
+              Trusted by Overseas Pakistanis & Domestic Investors
+            </h3>
           </div>
-          <h3 className="type-h3 font-semibold text-slate-900 dark:text-slate-100">
-            Trusted by Overseas Pakistanis & Domestic Investors
-          </h3>
-        </div>
+        </RevealOnScroll>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {TESTIMONIALS.map((t, idx) => (
-            <div
+            <RevealOnScroll 
               key={idx}
-              className="p-6 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between"
+              direction="up" 
+              distance={40} 
+              staggerIndex={idx}
+              staggerInterval={0.08}
+              duration={0.6}
             >
-              <div>
-                <div className="flex items-center gap-1 text-amber-500 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                transition={{ duration: 0.25, ease: REVEAL_EASE }}
+                className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between h-full"
+              >
+                <div>
+                  <div className="flex items-center gap-1 text-amber-500 mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic mb-4">
+                    "{t.quote}"
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic mb-4">
-                  "{t.quote}"
-                </p>
-              </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/60 text-[#0F766E] dark:text-teal-300 flex items-center justify-center font-bold text-xs">
-                    {t.name.split(" ").map(n => n[0]).join("")}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.name}</span>
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#0F766E]" />
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/60 text-[#0F766E] dark:text-teal-300 flex items-center justify-center font-bold text-xs">
+                      {t.name.split(" ").map(n => n[0]).join("")}
                     </div>
-                    <span className="text-[11px] text-slate-500 block">{t.role}</span>
+                    <div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.name}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#0F766E]" />
+                      </div>
+                      <span className="text-[11px] text-slate-500 block">{t.role}</span>
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-2 font-medium">
+                    {t.property}
                   </div>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-2 font-medium">
-                  {t.property}
-                </div>
-              </div>
-            </div>
+              </motion.div>
+            </RevealOnScroll>
           ))}
         </div>
       </div>

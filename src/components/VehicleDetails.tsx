@@ -1,5 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence, useReducedMotion } from "motion/react";
+import { REVEAL_EASE, SPRING_SNAPPY } from "./motion";
 import SEO from "./SEO";
 import { 
   ChevronLeft, 
@@ -62,6 +63,7 @@ const FEATURE_ICONS: Record<string, any> = {
 export default function VehicleDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
   const { vehicles, addToRecentlyViewed } = useVehicles();
   const { startConversation, setNotification } = useChat();
   const vehicle = vehicles.find((v) => v.id === id);
@@ -341,7 +343,9 @@ export default function VehicleDetails() {
                     className="w-full h-full shrink-0 snap-align-center cursor-zoom-in relative"
                     onClick={() => setIsGalleryOpen(true)}
                   >
-                    <img 
+                    <motion.img 
+                      layoutId={shouldReduceMotion || idx !== 0 ? undefined : `property-hero-image-${vehicle.id}`}
+                      transition={{ duration: 0.45, ease: REVEAL_EASE }}
                       src={imgUrl} 
                       alt={`${vehicle.model} - View ${idx + 1}`} 
                       className="w-full h-full object-cover select-none pointer-events-none"
