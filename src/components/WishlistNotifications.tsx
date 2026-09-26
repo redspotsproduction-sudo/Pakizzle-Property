@@ -4,6 +4,7 @@ import { X, Check, Plus, Heart, Lock, Globe, LayoutGrid, ChevronRight } from "lu
 import { useWishlist } from "@/context/WishlistContext";
 import { useVehicles } from "@/context/VehicleContext";
 import { cn } from "@/lib/utils";
+import { SPRING_SNAPPY, SPRING_BOUNCY } from "./motion";
 
 export function WishlistToast() {
   const { toast, setToast, setIsAddToListModalOpen, setModalVehicleId } = useWishlist();
@@ -18,52 +19,61 @@ export function WishlistToast() {
     }
   }, [toast, setToast]);
 
-  if (!toast || !toast.show) return null;
-
-  const vehicle = vehicles.find(v => v.id === toast.vehicleId);
-  if (!vehicle) return null;
+  const vehicle = toast?.vehicleId ? vehicles.find(v => v.id === toast.vehicleId) : null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -40, y: 20 }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
-      exit={{ opacity: 0, x: -40, y: 20 }}
-      className="fixed bottom-6 left-4 right-4 md:left-8 md:right-auto z-[200] flex items-center gap-3 md:gap-4 p-2.5 md:p-3 pr-4 md:pr-6 bg-apple-card-bg text-apple-text rounded-2xl shadow-2xl border border-apple-border/50 md:min-w-[300px]"
-    >
-      <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0">
-        <img src={vehicle.images[0]} alt="" className="w-full h-full object-cover" />
-      </div>
-      
-      <div className="flex-1">
-        <p className="text-sm font-medium">
-          {toast.type === 'added' ? (
-            <>Added to <span className="font-bold">{toast.listName}</span> lists</>
-          ) : (
-            <>Removed from <span className="font-bold">{toast.listName}</span></>
-          )}
-        </p>
-      </div>
-
-      {toast.type === 'added' && (
-        <button 
-          onClick={() => {
-            setModalVehicleId(toast.vehicleId);
-            setIsAddToListModalOpen(true);
-            setToast(null);
-          }}
-          className="text-sm font-bold text-apple-blue hover:text-apple-blue/80 transition-colors ml-4"
+    <AnimatePresence>
+      {toast?.show && vehicle && (
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 30, scale: 0.94 }}
+          transition={{ type: "spring", damping: 25, stiffness: 350 }}
+          className="fixed bottom-6 left-4 right-4 md:left-8 md:right-auto z-[200] flex items-center gap-3 md:gap-4 p-2.5 md:p-3 pr-4 md:pr-6 bg-white/90 dark:bg-[#1C1C1E]/95 backdrop-blur-2xl text-apple-text dark:text-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] border border-black/10 dark:border-white/10 md:min-w-[320px]"
         >
-          Change
-        </button>
+          <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-apple-gray shadow-xs">
+            <img src={vehicle.images[0]} alt="" className="w-full h-full object-cover" />
+          </div>
+          
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm font-medium truncate">
+              {toast.type === 'added' ? (
+                <>Added to <span className="font-bold text-apple-blue">{toast.listName}</span></>
+              ) : (
+                <>Removed from <span className="font-bold">{toast.listName}</span></>
+              )}
+            </p>
+          </div>
+
+          {toast.type === 'added' && (
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.92 }}
+              transition={SPRING_SNAPPY}
+              onClick={() => {
+                setModalVehicleId(toast.vehicleId);
+                setIsAddToListModalOpen(true);
+                setToast(null);
+              }}
+              className="text-xs font-bold text-apple-blue hover:underline transition-colors ml-2 cursor-pointer shrink-0"
+            >
+              Change
+            </motion.button>
+          )}
+          
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.88 }}
+            transition={SPRING_SNAPPY}
+            onClick={() => setToast(null)}
+            className="p-1 hover:bg-apple-gray/60 dark:hover:bg-white/10 rounded-full transition-colors cursor-pointer shrink-0"
+            title="Dismiss notification"
+          >
+            <X className="w-4 h-4 text-apple-text-muted" />
+          </motion.button>
+        </motion.div>
       )}
-      
-      <button 
-        onClick={() => setToast(null)}
-        className="ml-2 p-1 hover:bg-apple-gray/50 rounded-full transition-colors"
-      >
-        <X className="w-4 h-4 text-apple-text-muted" />
-      </button>
-    </motion.div>
+    </AnimatePresence>
   );
 }
 

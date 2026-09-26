@@ -1,7 +1,8 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform, AnimatePresence, useReducedMotion } from "motion/react";
-import { REVEAL_EASE, SPRING_SNAPPY } from "./motion";
+import { REVEAL_EASE, SPRING_SNAPPY, AnimatedCounter } from "./motion";
 import SEO from "./SEO";
+import ImageLightbox from "./ImageLightbox";
 import { 
   ChevronLeft, 
   MapPin, 
@@ -332,6 +333,19 @@ export default function VehicleDetails() {
           {/* Left Column: Immersive Carousel Gallery */}
           <div className="w-full lg:w-[60%] xl:w-[65%] bg-apple-gray relative group/gallery">
             <div className="sticky top-22 lg:top-28 h-[50vh] md:h-[70vh] lg:h-[calc(100vh-140px)] w-full overflow-hidden">
+              {/* Floating Back Navigation Button */}
+              <motion.button
+                whileHover={{ scale: 1.05, x: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={SPRING_SNAPPY}
+                onClick={() => navigate(-1)}
+                className="absolute top-4 left-4 z-30 flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-black/50 hover:bg-black/75 text-white backdrop-blur-md border border-white/20 text-xs font-semibold shadow-lg transition-colors cursor-pointer"
+                title="Back to previous page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Back</span>
+              </motion.button>
+
               <div 
                 ref={scrollRef}
                 onScroll={handleGalleryScroll}
@@ -358,35 +372,52 @@ export default function VehicleDetails() {
               </div>
 
               {/* Navigation Arrows */}
-              <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <button 
+              <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+                <motion.button 
+                  whileHover={{ scale: 1.1, x: -2 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={SPRING_SNAPPY}
                   onClick={(e) => {
                     e.stopPropagation();
                     const newIndex = activeImageIndex === 0 ? vehicle.images.length - 1 : activeImageIndex - 1;
                     scrollToImage(newIndex);
                   }}
-                  className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-white/40 transition-all pointer-events-auto shadow-lg"
+                  className="w-12 h-12 rounded-full bg-black/40 hover:bg-black/65 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-colors pointer-events-auto shadow-xl cursor-pointer"
+                  title="Previous image"
                 >
                   <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button 
+                </motion.button>
+                <motion.button 
+                  whileHover={{ scale: 1.1, x: 2 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={SPRING_SNAPPY}
                   onClick={(e) => {
                     e.stopPropagation();
                     const newIndex = activeImageIndex === vehicle.images.length - 1 ? 0 : activeImageIndex + 1;
                     scrollToImage(newIndex);
                   }}
-                  className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-white/40 transition-all pointer-events-auto shadow-lg"
+                  className="w-12 h-12 rounded-full bg-black/40 hover:bg-black/65 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-colors pointer-events-auto shadow-xl cursor-pointer"
+                  title="Next image"
                 >
                   <ChevronRight className="w-6 h-6" />
-                </button>
+                </motion.button>
               </div>
 
-              {/* Image Counter & Indicators */}
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
-                <div className="px-4 py-2 bg-black/20 backdrop-blur-xl rounded-full border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest shadow-2xl">
-                  {activeImageIndex + 1} / {vehicle.images.length}
-                </div>
-                <div className="flex gap-1.5">
+              {/* Image Counter & Full Gallery Action Pill */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 z-20">
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={SPRING_SNAPPY}
+                  onClick={() => setIsGalleryOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/75 backdrop-blur-xl rounded-full border border-white/20 text-white text-[11px] font-bold tracking-wide shadow-2xl cursor-pointer transition-colors"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>{activeImageIndex + 1} / {vehicle.images.length} • View Gallery</span>
+                </motion.button>
+                
+                {/* Indicator Micro Dots */}
+                <div className="flex gap-1.5 p-1 rounded-full bg-black/30 backdrop-blur-md">
                   {vehicle.images.map((_, idx) => (
                     <button
                       key={idx}
@@ -395,8 +426,8 @@ export default function VehicleDetails() {
                         scrollToImage(idx);
                       }}
                       className={cn(
-                        "h-1 rounded-full transition-all duration-500",
-                        activeImageIndex === idx ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/60"
+                        "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
+                        activeImageIndex === idx ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"
                       )}
                     />
                   ))}
@@ -421,21 +452,34 @@ export default function VehicleDetails() {
                     Neural Certified
                   </div>
                   <div className="flex items-center gap-2">
-                    <button 
+                    <motion.button 
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.85 }}
+                      transition={SPRING_SNAPPY}
                       onClick={handleShare}
-                      className="w-8 h-8 rounded-full flex items-center justify-center border border-apple-border text-apple-text hover:bg-apple-gray transition-all"
+                      className="w-8 h-8 rounded-full flex items-center justify-center border border-apple-border text-apple-text hover:bg-apple-gray transition-colors cursor-pointer"
+                      title="Share property"
                     >
                       <Share2 className="w-4 h-4" />
-                    </button>
-                    <button 
+                    </motion.button>
+                    <motion.button 
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.85 }}
+                      transition={SPRING_SNAPPY}
                       onClick={() => toggleWishlist(vehicle.id)}
                       className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center border transition-all",
+                        "w-8 h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer",
                         isSaved ? "bg-apple-red text-white border-apple-red" : "border-apple-border text-apple-text hover:bg-apple-gray"
                       )}
+                      title={isSaved ? "Remove from wishlist" : "Save to wishlist"}
                     >
-                      <Heart className={cn("w-4 h-4", isSaved && "fill-current")} />
-                    </button>
+                      <motion.div
+                        animate={isSaved ? { scale: [1, 1.35, 0.9, 1] } : { scale: 1 }}
+                        transition={SPRING_SNAPPY}
+                      >
+                        <Heart className={cn("w-4 h-4", isSaved && "fill-current text-white")} />
+                      </motion.div>
+                    </motion.button>
                   </div>
                 </div>
 
@@ -463,11 +507,17 @@ export default function VehicleDetails() {
                 {/* Key Specs Row (Tesla Style) */}
                 <div className="grid grid-cols-3 gap-4 mb-5 py-3 border-y border-apple-border/30">
                   <div className="text-center group cursor-default">
-                    <div className="text-2xl md:text-3xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors">{vehicle.year}</div>
+                    <div className="text-2xl md:text-3xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors">
+                      <AnimatedCounter value={vehicle.year || 2024} formatThousands={false} duration={1} />
+                    </div>
                     <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Year Built</div>
                   </div>
                   <div className="text-center group cursor-default">
-                    <div className="text-xl md:text-2xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors truncate">{vehicle.mileage ? vehicle.mileage.toLocaleString() : "0"}</div>
+                    <div className="text-xl md:text-2xl font-bold text-apple-text tracking-tighter group-hover:text-apple-blue transition-colors truncate">
+                      {vehicle.mileage ? (
+                        <AnimatedCounter value={vehicle.mileage} formatThousands={true} duration={1.2} />
+                      ) : "0"}
+                    </div>
                     <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-widest mt-2">Sq. Ft.</div>
                   </div>
                   <div className="text-center group cursor-default">
@@ -500,25 +550,36 @@ export default function VehicleDetails() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3">
-                  <button 
+                  <motion.button 
+                    whileHover={{ scale: 1.015, y: -1 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={SPRING_SNAPPY}
                     onClick={handleChatWithSeller}
-                    className="apple-button-primary w-full h-16 text-lg flex items-center justify-center gap-3 shadow-2xl shadow-apple-blue/20 group"
+                    className="apple-button-primary w-full h-16 text-lg flex items-center justify-center gap-3 shadow-2xl shadow-apple-blue/20 group cursor-pointer"
                   >
                     <MessageSquare className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    Secure Chat
-                  </button>
+                    <span>Secure Chat</span>
+                  </motion.button>
                   <div className="grid grid-cols-2 gap-3">
-                    <a 
+                    <motion.a 
+                      whileHover={{ scale: 1.02, y: -1 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={SPRING_SNAPPY}
                       href="tel:+923001234567"
-                      className="apple-button-secondary h-16 text-sm flex items-center justify-center gap-2 border-apple-border hover:bg-apple-gray group"
+                      className="apple-button-secondary h-16 text-sm flex items-center justify-center gap-2 border-apple-border hover:bg-apple-gray group cursor-pointer"
                     >
                       <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                      Call Seller
-                    </a>
-                    <button className="apple-button-secondary h-16 text-sm flex items-center justify-center gap-2 border-apple-green/20 text-apple-green hover:bg-apple-green/5 group">
+                      <span>Call Seller</span>
+                    </motion.a>
+                    <motion.button 
+                      whileHover={{ scale: 1.02, y: -1 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={SPRING_SNAPPY}
+                      className="apple-button-secondary h-16 text-sm flex items-center justify-center gap-2 border-apple-green/20 text-apple-green hover:bg-apple-green/5 group cursor-pointer"
+                    >
                       <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                      WhatsApp
-                    </button>
+                      <span>WhatsApp</span>
+                    </motion.button>
                   </div>
                 </div>
               </motion.section>
@@ -729,66 +790,16 @@ export default function VehicleDetails() {
         </div>
       </main>
 
-      {/* Full Screen Gallery Modal */}
-      <AnimatePresence>
-        {isGalleryOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black flex flex-col"
-          >
-            <div className="flex items-center justify-between p-6 text-white">
-              <div className="font-bold text-lg">{vehicle.make} {vehicle.model}</div>
-              <button 
-                onClick={() => setIsGalleryOpen(false)}
-                className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="flex-1 relative flex items-center justify-center p-4">
-              <button 
-                onClick={() => setActiveImageIndex((prev) => (prev === 0 ? vehicle.images.length - 1 : prev - 1))}
-                className="absolute left-6 w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
-              >
-                <ChevronLeft className="w-8 h-8" />
-              </button>
-              
-              <motion.img 
-                key={activeImageIndex}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                src={vehicle.images[activeImageIndex]} 
-                className="max-w-full max-h-full object-contain rounded-2xl"
-              />
-
-              <button 
-                onClick={() => setActiveImageIndex((prev) => (prev === vehicle.images.length - 1 ? 0 : prev + 1))}
-                className="absolute right-6 w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
-              >
-                <ChevronRight className="w-8 h-8" />
-              </button>
-            </div>
-
-            <div className="p-8 flex justify-center gap-3 overflow-x-auto">
-              {vehicle?.images?.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveImageIndex(idx)}
-                  className={cn(
-                    "relative shrink-0 w-24 aspect-square rounded-xl overflow-hidden border-2 transition-all",
-                    activeImageIndex === idx ? "border-apple-blue scale-110" : "border-transparent opacity-40"
-                  )}
-                >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Full Screen Apple Gestural Lightbox */}
+      <ImageLightbox
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        images={vehicle.images || []}
+        initialIndex={activeImageIndex}
+        title={`${vehicle.make} ${vehicle.model}`}
+        subtitle={vehicle.location ? `${vehicle.location}, ${vehicle.city}` : vehicle.city}
+        isVerified={vehicle.isVerified}
+      />
 
       {/* 4. Mobile Bottom Action Bar (Apple Style) - Hidden when sticky is active */}
       {!isStickyHeaderVisible && (

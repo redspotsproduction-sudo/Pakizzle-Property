@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { formatPrice } from "../lib/utils";
 import { toast } from "sonner";
+import { AnimatedCounter, SPRING_SNAPPY } from "./motion";
 
 interface HomeFinancingStudioModalProps {
   isOpen: boolean;
@@ -231,8 +232,9 @@ export default function HomeFinancingStudioModal({ isOpen, onClose, defaultPrice
                     <span className="text-xs font-bold text-apple-text-muted uppercase tracking-wider font-mono">
                       Estimated Monthly Installment
                     </span>
-                    <div className="text-3xl font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-1">
-                      PKR {monthlyInstallment.toLocaleString()}
+                    <div className="text-3xl font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-1 flex items-baseline gap-1.5">
+                      <span>PKR</span>
+                      <AnimatedCounter value={monthlyInstallment} duration={0.5} once={false} />
                       <span className="text-xs font-normal text-apple-text-muted"> / mo</span>
                     </div>
                   </div>

@@ -197,12 +197,14 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
 
             {/* Absolute close button */}
             <div className="absolute top-4 right-4 z-[10010]">
-              <button 
+              <motion.button 
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-800/60 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-700/80 transition-colors border border-gray-200/50 dark:border-zinc-700/50 text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-200"
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-800/60 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-700/80 transition-colors border border-gray-200/50 dark:border-zinc-700/50 text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-200 cursor-pointer"
               >
                 <X className="w-4 h-4" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Scrollable Layout Context */}

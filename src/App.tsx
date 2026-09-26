@@ -1,5 +1,6 @@
 import ScrollToTop from "./components/ScrollToTop";
 // Deployment Trigger: 2026-04-29-18-05
+import { SkipToContentLink, RouteProgressBar, PageTransition } from "./components/RouteTransitionCoordinator";
 import { WishlistToast, AddToListModal } from "./components/WishlistNotifications";
 import LocationSlider from "./components/LocationSlider";
 import { useVehicles } from "./context/VehicleContext";
@@ -257,6 +258,8 @@ export default function App() {
 
   return (
     <>
+      <SkipToContentLink />
+      <RouteProgressBar />
       <ScrollToTop />
       <Suspense fallback={<LoadingScreen />}>
         {/* Notification Toast */}
@@ -288,10 +291,11 @@ export default function App() {
           userLocation === null ? (
             <CityPortal />
           ) : (
-            <div className="min-h-screen overflow-x-hidden pb-20 md:pb-0">
-              <Header />
-              <main>
-              <Hero />
+            <PageTransition>
+              <div className="min-h-screen overflow-x-hidden pb-20 md:pb-0">
+                <Header />
+                <main id="main-content">
+                <Hero />
               <BrowseByCity />
               <PopularPropertyStyles />
 
@@ -499,9 +503,10 @@ export default function App() {
 
             <Footer onValuationClick={() => setIsValuationOpen(true)} />
           </div>
+          </PageTransition>
           )
         } />
-        <Route path="/vehicle/:id" element={<VehicleDetails />} />
+        <Route path="/vehicle/:id" element={<PageTransition><VehicleDetails /></PageTransition>} />
         
         {/* User Dashboard Routes */}
         <Route path="/dashboard" element={
@@ -596,14 +601,16 @@ export default function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/marketplace" element={<Marketplace />} />
-        <Route path="/reels" element={<ReelsFeed />} />
-        <Route path="/clone" element={<CloneAnalysis />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/marketplace" element={<PageTransition><Marketplace /></PageTransition>} />
+        <Route path="/reels" element={<PageTransition><ReelsFeed /></PageTransition>} />
+        <Route path="/clone" element={<PageTransition><CloneAnalysis /></PageTransition>} />
+        <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
+        <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />
         <Route path="/sell" element={
           <ProtectedRoute>
-            <SellCarForm />
+            <PageTransition>
+              <SellCarForm />
+            </PageTransition>
           </ProtectedRoute>
         } />
         <Route path="/chat" element={
@@ -613,10 +620,12 @@ export default function App() {
         } />
         <Route path="/edit/:id" element={
           <ProtectedRoute>
-            <SellCarForm />
+            <PageTransition>
+              <SellCarForm />
+            </PageTransition>
           </ProtectedRoute>
         } />
-        <Route path="/auction-verification" element={<AuctionVerification />} />
+        <Route path="/auction-verification" element={<PageTransition><AuctionVerification /></PageTransition>} />
         <Route path="/profile" element={
           <ProtectedRoute>
             <ProfileRedirect />

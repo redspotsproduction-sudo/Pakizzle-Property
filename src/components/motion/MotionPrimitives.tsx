@@ -3,6 +3,10 @@ import {
   motion, 
   useInView, 
   useReducedMotion, 
+  useScroll,
+  useTransform,
+  useSpring,
+  type MotionValue,
   type HTMLMotionProps,
   type Transition
 } from "motion/react";
@@ -42,6 +46,16 @@ export const SPRING_SNAPPY: Transition = {
   stiffness: 550,
   damping: 26,
   duration: 0.12
+};
+
+/**
+ * Bouncy spring for drawers, sheets, modals, notifications
+ */
+export const SPRING_BOUNCY: Transition = {
+  type: "spring",
+  stiffness: 350,
+  damping: 22,
+  mass: 1
 };
 
 /**
@@ -329,15 +343,19 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const isInView = useInView(ref, { once, margin: "-30px" });
   const shouldReduceMotion = useReducedMotion();
   const [displayValue, setDisplayValue] = useState<number>(shouldReduceMotion ? value : from);
+  const prevValueRef = useRef<number>(from);
 
   useEffect(() => {
     if (shouldReduceMotion) {
       setDisplayValue(value);
+      prevValueRef.current = value;
       return;
     }
 
     if (!isInView) return;
 
+    const startVal = prevValueRef.current;
+    const targetVal = value;
     let startTimestamp: number | null = null;
     let animationFrameId: number;
 
@@ -348,14 +366,15 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
       // Fast start, soft finish (cubic-bezier out approximation)
       const easeProgress = 1 - Math.pow(1 - progress, 3.2);
-      const current = from + (value - from) * easeProgress;
+      const current = startVal + (targetVal - startVal) * easeProgress;
 
       setDisplayValue(current);
 
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(step);
       } else {
-        setDisplayValue(value);
+        setDisplayValue(targetVal);
+        prevValueRef.current = targetVal;
       }
     };
 
@@ -364,7 +383,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isInView, value, from, duration, shouldReduceMotion]);
+  }, [isInView, value, duration, shouldReduceMotion]);
 
   const formattedNumber = () => {
     let numStr = displayValue.toFixed(decimals);
@@ -607,35 +626,358 @@ export const SuccessCheckmark: React.FC<SuccessCheckmarkProps> = ({
 };
 
 // ============================================================================
-// 9. Seamless Route / Page Transition Container
+// 10. 3D Perspective Tilt Card with Specular Sheen (CardHoverTilt)
 // ============================================================================
 
-export interface PageTransitionProps {
+export interface CardHoverTiltProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;
+  className?: string;
+  maxTilt?: number;
+  scaleAmount?: number;
+  liftAmount?: number;
+  enableGlare?: boolean;
+}
+
+export const CardHoverTilt: React.FC<CardHoverTiltProps> = ({
+  children,
+  className,
+  maxTilt = 7,
+  scaleAmount = 1.015,
+  liftAmount = -6,
+  enableGlare = true,
+  ...props
+}) => {
+  const shouldReduceMotion = useReducedMotion();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const [glarePosition, setGlarePosition] = useState({ x: 50, y: 50, opacity: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotX = ((y - centerY) / centerY) * -maxTilt;
+    const rotY = ((x - centerX) / centerX) * maxTilt;
+
+    setRotateX(rotX);
+    setRotateY(rotY);
+
+    if (enableGlare) {
+      setGlarePosition({
+        x: (x / rect.width) * 100,
+        y: (y / rect.height) * 100,
+        opacity: 0.18,
+      });
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotateX(0);
+    setRotateY(0);
+    setGlarePosition((prev) => ({ ...prev, opacity: 0 }));
+  };
+
+  if (shouldReduceMotion) {
+    return (
+      <div className={className} {...(props as any)}>
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ perspective: 1000 }} className="relative">
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        animate={{
+          rotateX: isHovered ? rotateX : 0,
+          rotateY: isHovered ? rotateY : 0,
+          y: isHovered ? liftAmount : 0,
+          scale: isHovered ? scaleAmount : 1,
+        }}
+        whileTap={{ scale: 0.985 }}
+        transition={{
+          type: "spring",
+          stiffness: 380,
+          damping: 28,
+          mass: 0.8,
+        }}
+        className={cn(
+          "relative overflow-hidden transition-shadow duration-300",
+          isHovered
+            ? "shadow-[0_20px_45px_-12px_rgba(0,0,0,0.18),0_0_1px_1px_rgba(255,255,255,0.2)_inset]"
+            : "shadow-sm",
+          className
+        )}
+        {...props}
+      >
+        {children}
+
+        {/* Specular Glare Overlay */}
+        {enableGlare && (
+          <div
+            className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300 rounded-[inherit]"
+            style={{
+              opacity: glarePosition.opacity,
+              background: `radial-gradient(circle 320px at ${glarePosition.x}% ${glarePosition.y}%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 80%)`,
+            }}
+          />
+        )}
+      </motion.div>
+    </div>
+  );
+};
+
+// ============================================================================
+// 11. Skeleton Shimmer Loader (Subtle Gradient Pulse)
+// ============================================================================
+
+export interface SkeletonShimmerProps {
+  className?: string;
+  rounded?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+}
+
+export const SkeletonShimmer: React.FC<SkeletonShimmerProps> = ({
+  className,
+  rounded = "2xl",
+}) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  const roundedClasses = {
+    sm: "rounded-sm",
+    md: "rounded-md",
+    lg: "rounded-lg",
+    xl: "rounded-xl",
+    "2xl": "rounded-2xl",
+    full: "rounded-full",
+  }[rounded];
+
+  if (shouldReduceMotion) {
+    return (
+      <div
+        className={cn("bg-slate-200 dark:bg-slate-800", roundedClasses, className)}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden bg-slate-200/80 dark:bg-slate-800/80",
+        roundedClasses,
+        className
+      )}
+    >
+      <motion.div
+        className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 dark:via-white/10 to-transparent"
+        animate={{
+          transform: ["translateX(-100%)", "translateX(100%)"],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 1.6,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+};
+
+// ============================================================================
+// 12. Scroll Parallax Hook & Container
+// ============================================================================
+
+export function useParallax(value: MotionValue<number>, distance: number) {
+  return useTransform(value, [0, 1], [-distance, distance]);
+}
+
+export interface ParallaxContainerProps {
+  children: React.ReactNode;
+  speed?: number; // e.g. 0.5 for background parallax (slower than foreground)
   className?: string;
 }
 
-/**
- * Cross-fades routes with soft spring momentum:
- * Outgoing page fades out over 200ms while incoming page fades & glides in over 280ms
- */
-export const PageTransition: React.FC<PageTransitionProps> = ({ children, className }) => {
+export const ParallaxContainer: React.FC<ParallaxContainerProps> = ({
+  children,
+  speed = 0.5,
+  className,
+}) => {
   const shouldReduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [-100 * speed, 100 * speed]);
+  const smoothY = useSpring(y, { stiffness: 300, damping: 30 });
 
   if (shouldReduceMotion) {
     return <div className={className}>{children}</div>;
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.28, ease: REVEAL_EASE }}
-      className={cn("w-full", className)}
+    <div ref={ref} className={cn("overflow-hidden", className)}>
+      <motion.div style={{ y: smoothY }}>{children}</motion.div>
+    </div>
+  );
+};
+
+// ============================================================================
+// 13. Pin-and-Reveal Feature Section
+// ============================================================================
+
+export interface PinItem {
+  id: string | number;
+  badge?: string;
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+  visual?: React.ReactNode;
+}
+
+export interface PinRevealSectionProps {
+  items: PinItem[];
+  title?: string;
+  subtitle?: string;
+  className?: string;
+}
+
+export const PinRevealSection: React.FC<PinRevealSectionProps> = ({
+  items,
+  title,
+  subtitle,
+  className,
+}) => {
+  const shouldReduceMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      const step = 1 / items.length;
+      const index = Math.min(Math.floor(latest / step), items.length - 1);
+      setActiveIndex(index);
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, items.length, shouldReduceMotion]);
+
+  if (shouldReduceMotion) {
+    return (
+      <div className={cn("py-16 px-4 max-w-6xl mx-auto space-y-12", className)}>
+        {title && <h2 className="text-3xl font-bold tracking-tight">{title}</h2>}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {items.map((item) => (
+            <div key={item.id} className="p-6 rounded-2xl border border-slate-200 dark:border-white/10">
+              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+              <p className="text-slate-600 dark:text-slate-400">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ height: `${items.length * 100}vh` }}
+      className={cn("relative", className)}
     >
-      {children}
-    </motion.div>
+      <div className="sticky top-0 h-screen flex flex-col justify-center px-4 md:px-8 max-w-6xl mx-auto overflow-hidden">
+        {title && (
+          <div className="mb-8">
+            {subtitle && (
+              <span className="text-xs uppercase font-mono tracking-widest text-emerald-600 dark:text-emerald-400">
+                {subtitle}
+              </span>
+            )}
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mt-1 text-slate-900 dark:text-white">
+              {title}
+            </h2>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Points List */}
+          <div className="space-y-6">
+            {items.map((item, idx) => {
+              const isActive = activeIndex === idx;
+              return (
+                <motion.div
+                  key={item.id}
+                  animate={{
+                    opacity: isActive ? 1 : 0.35,
+                    x: isActive ? 12 : 0,
+                  }}
+                  transition={{ duration: 0.35, ease: REVEAL_EASE }}
+                  className="p-6 rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    {item.icon && (
+                      <span className={cn("p-2 rounded-xl text-white", isActive ? "bg-emerald-600" : "bg-slate-400")}>
+                        {item.icon}
+                      </span>
+                    )}
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">
+                    {item.description}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Cross-fading Active Visual */}
+          <div className="relative h-80 lg:h-[420px] rounded-3xl overflow-hidden border border-slate-200/80 dark:border-white/10 bg-slate-900 shadow-2xl flex items-center justify-center">
+            {items.map((item, idx) => (
+              <motion.div
+                key={item.id}
+                initial={false}
+                animate={{
+                  opacity: activeIndex === idx ? 1 : 0,
+                  scale: activeIndex === idx ? 1 : 0.94,
+                }}
+                transition={{ duration: 0.45, ease: REVEAL_EASE }}
+                className="absolute inset-0 flex items-center justify-center p-8 text-center"
+              >
+                {item.visual ? (
+                  item.visual
+                ) : (
+                  <div className="text-white">
+                    <div className="text-6xl font-black mb-4 opacity-20">0{idx + 1}</div>
+                    <div className="text-2xl font-bold">{item.title}</div>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

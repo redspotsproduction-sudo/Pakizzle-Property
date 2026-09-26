@@ -11,6 +11,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useNotifications } from "../context/NotificationContext";
 import NotificationCenter from "./NotificationCenter";
 import LocationModal from "./LocationModal";
+import SearchModal from "./SearchModal";
 
 import AuthModal from "./AuthModal";
 
@@ -21,6 +22,7 @@ export default function Header() {
   const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const { wishlist } = useWishlist();
   const { user, profile, logout, isAdmin } = useAuth();
   const { conversations, setActiveConversationId } = useChat();
@@ -28,6 +30,18 @@ export default function Header() {
   const { location } = useLocation();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
+  // Global Cmd+K / Ctrl+K shortcut listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setShowSearchModal((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     if (user && profile?.isPendingOnboarding) {
@@ -117,16 +131,16 @@ export default function Header() {
         <div className="flex items-center gap-2">
           {/* Main Navigation or Sticky Search */}
           {isScrolled ? (
-            <div 
-              onClick={() => navigate("/marketplace")}
-              className="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer transition-all hover:border-[#0F766E] shadow-sm"
+            <button 
+              onClick={() => setShowSearchModal(true)}
+              className="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer transition-all hover:border-[#0F766E] shadow-sm group"
             >
-              <Search className="w-3.5 h-3.5 text-[#0F766E]" />
+              <Search className="w-3.5 h-3.5 text-[#0F766E] group-hover:scale-110 transition-transform" />
               <span className="font-medium">Search DHA, Clifton, Sector F-7...</span>
-              <span className="text-[10px] text-teal-600 dark:text-teal-400 font-semibold uppercase tracking-wider bg-teal-50 dark:bg-teal-950/60 px-1.5 py-0.5 rounded border border-teal-200 dark:border-teal-800">
-                14.5k Listings
-              </span>
-            </div>
+              <kbd className="hidden sm:inline-block ml-1 text-[10px] bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-1.5 py-0.5 rounded font-bold text-slate-500 dark:text-slate-300 shadow-xs">
+                ⌘K
+              </kbd>
+            </button>
           ) : (
             <nav className="hidden lg:flex items-center gap-1 bg-slate-100/70 dark:bg-slate-800/50 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
               <Link
@@ -165,6 +179,16 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-1 lg:gap-2">
+          {/* Spotlight Search Trigger Button */}
+          <button
+            onClick={() => setShowSearchModal(true)}
+            className="p-2.5 hover:bg-apple-card-bg rounded-full transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group flex flex-col items-center text-apple-text-muted hover:text-apple-blue cursor-pointer"
+            title="Search Properties (⌘K)"
+          >
+            <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-bold mt-0.5 hidden lg:block">Search</span>
+          </button>
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -477,6 +501,7 @@ export default function Header() {
 
       <LocationModal isOpen={showLocationModal} onClose={() => setShowLocationModal(false)} />
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <SearchModal isOpen={showSearchModal} onClose={() => setShowSearchModal(false)} />
     </motion.header>
   );
 }

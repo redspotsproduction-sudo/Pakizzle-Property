@@ -46,7 +46,7 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
     const isList = viewMode === "list";
     return (
       <div className={cn(
-        "glass-card overflow-hidden h-full flex flex-col",
+        "glass-card overflow-hidden h-full flex flex-col cq-card-root",
         isList && "sm:flex-row gap-4 p-2.5 md:p-4"
       )}>
         <Skeleton className={cn(
@@ -178,7 +178,7 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
   };
 
   return (
-    <div className="relative group h-full w-full">
+    <div className="relative group h-full w-full cq-card-root">
       <div 
         onClick={handleCardClick}
         className="block h-full cursor-pointer"
@@ -228,28 +228,36 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
               {/* Quick Carousel Controls */}
               {vehicle.images && vehicle.images.length > 1 && (
                 <>
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.88 }}
+                    transition={SPRING_SNAPPY}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       setActiveImageIndex((prev) => (prev === 0 ? vehicle.images.length - 1 : prev - 1));
                     }}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 hover:bg-black/70 active:scale-90 z-20"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-85 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-200 hover:bg-black/85 z-20 cursor-pointer shadow-md touch-target min-w-[36px] min-h-[36px]"
                     type="button"
+                    title="Previous photo"
                   >
                     <ChevronLeft className="w-4.5 h-4.5" />
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.88 }}
+                    transition={SPRING_SNAPPY}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       setActiveImageIndex((prev) => (prev === vehicle.images.length - 1 ? 0 : prev + 1));
                     }}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 hover:bg-black/70 active:scale-90 z-20"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-85 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-200 hover:bg-black/85 z-20 cursor-pointer shadow-md touch-target min-w-[36px] min-h-[36px]"
                     type="button"
+                    title="Next photo"
                   >
                     <ChevronRight className="w-4.5 h-4.5" />
-                  </button>
+                  </motion.button>
                   
                   {/* Indicator Micro Dots */}
                   <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 bg-black/25 backdrop-blur-md px-2 py-1 rounded-full z-20">
@@ -534,8 +542,9 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
         isList ? "top-5 right-5" : "top-5 right-5"
       )}>
         <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.12 }}
+          whileTap={{ scale: 0.85 }}
+          transition={SPRING_SNAPPY}
           onClick={handleToggleWishlist}
           className={cn(
             "w-8 h-8 flex items-center justify-center rounded-full backdrop-blur-xl transition-all duration-[400ms] shadow-apple-soft border border-apple-border/20 cursor-pointer",
@@ -544,8 +553,14 @@ export default React.memo(function VehicleCard({ vehicle, viewMode = "grid", onC
               : "bg-white/80 dark:bg-black/80 text-apple-text hover:bg-white dark:hover:bg-white/15 opacity-0 group-hover:opacity-100",
             isList && !isSaved && "opacity-100 bg-white dark:bg-black" // Keep on in list
           )}
+          title={isSaved ? "Remove from wishlist" : "Save property"}
         >
-          <Heart className={cn("w-4.5 h-4.5", isSaved && "fill-current")} />
+          <motion.div
+            animate={isSaved ? { scale: [1, 1.4, 0.9, 1] } : { scale: 1 }}
+            transition={SPRING_SNAPPY}
+          >
+            <Heart className={cn("w-4.5 h-4.5", isSaved && "fill-current text-white")} />
+          </motion.div>
         </motion.button>
         {onCompare && (
           <motion.button

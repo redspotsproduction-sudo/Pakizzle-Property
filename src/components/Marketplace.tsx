@@ -37,6 +37,7 @@ import ComparisonDrawer from "./Marketplace/ComparisonDrawer";
 import SaveSearchModal from "./Marketplace/SaveSearchModal";
 import { GoogleAdSenseSlot } from "./GoogleAdSenseSlot";
 import SEO from "./SEO";
+import { AnimatedCounter, SPRING_SNAPPY } from "./motion";
 
 export default function Marketplace() {
   const [searchParams] = useSearchParams();
@@ -809,6 +810,259 @@ export default function Marketplace() {
     }
   };
 
+  const renderFilterSections = () => (
+    <div className="space-y-10">
+      <section>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Identify Vehicle</h3>
+        <CarSelector 
+          onSelect={(data) => {
+            setSelectedMake(data.make?.name || "");
+            setSelectedModel(data.model?.name || "");
+            setSelectedVariant(data.variant?.name || "");
+            setViewMode("list");
+          }}
+        />
+      </section>
+
+      <section>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">City</h3>
+        <div className="space-y-4 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+          {Object.keys(PAKISTAN_LOCATIONS).map((city) => (
+            <label key={city} className="flex items-center gap-4 cursor-pointer group">
+              <div className="relative flex items-center justify-center">
+                <input 
+                  type="checkbox" 
+                  className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                  checked={selectedCities.includes(city)}
+                  onChange={(e) => {
+                    if (e.target.checked) setSelectedCities([...selectedCities, city]);
+                    else setSelectedCities(selectedCities.filter(x => x !== city));
+                    setViewMode("list");
+                  }}
+                />
+                <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+              </div>
+              <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{city}</span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Condition</h3>
+        <div className="space-y-4">
+          {["new", "used", "certified"].map((c) => (
+            <label key={`condition-${c}`} className="flex items-center gap-4 cursor-pointer group">
+              <div className="relative flex items-center justify-center">
+                <input 
+                  type="checkbox" 
+                  className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                  checked={selectedCondition.includes(c)}
+                  onChange={(e) => {
+                    if (e.target.checked) setSelectedCondition([...selectedCondition, c]);
+                    else setSelectedCondition(selectedCondition.filter(x => x !== c));
+                    setViewMode("list");
+                  }}
+                />
+                <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+              </div>
+              <span className="text-sm font-medium capitalize text-apple-text/80 group-hover:text-apple-blue transition-colors">{c}</span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      {filterableFields.map((field) => (
+        <section key={field.id}>
+          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">{field.name}</h3>
+          <div className="space-y-4">
+            {field.type === 'dropdown' || field.type === 'multi-select' || field.type === 'radio' ? (
+              field.options?.map((option) => (
+                <label key={`field-opt-${field.id || field.key}-${option.value}`} className="flex items-center gap-4 cursor-pointer group">
+                  <div className="relative flex items-center justify-center">
+                    <input 
+                      type="checkbox" 
+                      className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                      checked={(customFilters[field.key] || []).includes(option.value)}
+                      onChange={(e) => {
+                        const current = customFilters[field.key] || [];
+                        let updated;
+                        if (e.target.checked) updated = [...current, option.value];
+                        else updated = current.filter((v: any) => v !== option.value);
+                        
+                        setCustomFilters({
+                          ...customFilters,
+                          [field.key]: updated
+                        });
+                        setViewMode("list");
+                      }}
+                    />
+                    <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+                  </div>
+                  <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{option.label}</span>
+                </label>
+              ))
+            ) : field.type === 'toggle' ? (
+              <label className="flex items-center gap-4 cursor-pointer group">
+                <div className="relative flex items-center justify-center">
+                  <input 
+                    type="checkbox" 
+                    className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                    checked={!!customFilters[field.key]}
+                    onChange={(e) => {
+                      setCustomFilters({
+                        ...customFilters,
+                        [field.key]: e.target.checked
+                      });
+                      setViewMode("list");
+                    }}
+                  />
+                  <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                  <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+                </div>
+                <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{field.name}</span>
+              </label>
+            ) : null}
+          </div>
+        </section>
+      ))}
+
+      <section className="border-t border-apple-border/20 pt-6">
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Vehicle Style</h3>
+        <div className="space-y-4 max-h-52 overflow-y-auto pr-1">
+          {["SUV", "Sedan", "Truck", "Hatchback", "Coupe", "Convertible", "Minivan", "Wagon", "Crossover", "Van"].map((styleOpt) => (
+            <label key={`bodytype-side-${styleOpt}`} className="flex items-center gap-4 cursor-pointer group">
+              <div className="relative flex items-center justify-center">
+                <input 
+                  type="checkbox" 
+                  className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                  checked={selectedBodyType.includes(styleOpt)}
+                  onChange={(e) => {
+                    if (e.target.checked) setSelectedBodyType([...selectedBodyType, styleOpt]);
+                    else setSelectedBodyType(selectedBodyType.filter(x => x !== styleOpt));
+                    setViewMode("list");
+                  }}
+                />
+                <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+              </div>
+              <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{styleOpt}</span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-apple-border/20 pt-6">
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Fuel Type</h3>
+        <div className="space-y-4">
+          {["petrol", "diesel", "hybrid", "electric"].map((f) => (
+            <label key={`fuel-side-${f}`} className="flex items-center gap-4 cursor-pointer group">
+              <div className="relative flex items-center justify-center">
+                <input 
+                  type="checkbox" 
+                  className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                  checked={selectedFuel.includes(f)}
+                  onChange={(e) => {
+                    if (e.target.checked) setSelectedFuel([...selectedFuel, f]);
+                    else setSelectedFuel(selectedFuel.filter(x => x !== f));
+                    setViewMode("list");
+                  }}
+                />
+                <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+              </div>
+              <span className="text-sm font-medium capitalize text-apple-text/80 group-hover:text-apple-blue transition-colors">{f}</span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Sellers</h3>
+        <div className="space-y-4">
+          <label className="flex items-center gap-4 cursor-pointer group">
+            <div className="relative flex items-center justify-center">
+              <input 
+                type="checkbox" 
+                className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
+                checked={onlyVerified}
+                onChange={(e) => {
+                  setOnlyVerified(e.target.checked);
+                  setViewMode("list");
+                }}
+              />
+              <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
+              <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
+            </div>
+            <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">Verified Sellers Only</span>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-4">Price Range (PKR)</h3>
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <div>
+            <label className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1">Min Price</label>
+            <input 
+              type="number" 
+              placeholder="Min"
+              className="w-full px-3 py-2 text-xs bg-apple-gray dark:bg-white/5 rounded-xl border border-apple-border/20 focus:border-apple-blue outline-none font-medium"
+              value={minPrice || ""}
+              onChange={(e) => {
+                const val = e.target.value ? parseInt(e.target.value) : null;
+                setMinPrice(val);
+              }}
+            />
+          </div>
+          <div>
+            <label className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1">Max Price</label>
+            <input 
+              type="number" 
+              placeholder="Max"
+              className="w-full px-3 py-2 text-xs bg-apple-gray dark:bg-white/5 rounded-xl border border-apple-border/20 focus:border-apple-blue outline-none font-medium"
+              value={maxPrice || ""}
+              onChange={(e) => {
+                const val = e.target.value ? parseInt(e.target.value) : null;
+                setMaxPrice(val);
+              }}
+            />
+          </div>
+        </div>
+        
+        {/* Price Presets */}
+        <div className="grid grid-cols-2 gap-1.5 mt-2">
+          {[
+            { label: "< 25 Lac", min: null, max: 2500000 },
+            { label: "25 - 50 Lac", min: 2500000, max: 5000000 },
+            { label: "50 Lac - 1 Cr", min: 5000000, max: 10000000 },
+            { label: "1 Crore +", min: 10000000, max: null }
+          ].map((preset, i) => (
+            <button
+              key={`preset-${i}`}
+              onClick={() => {
+                setMinPrice(preset.min);
+                setMaxPrice(preset.max);
+                setViewMode("list");
+              }}
+              className={cn(
+                "px-2 py-1 rounded-lg text-[10px] font-semibold border transition-all cursor-pointer whitespace-nowrap text-center",
+                ((preset.min === null ? !minPrice : minPrice === preset.min) && (preset.max === null ? !maxPrice : maxPrice === preset.max))
+                  ? "bg-apple-blue border-apple-blue text-white font-bold"
+                  : "bg-apple-gray dark:bg-white/5 border-apple-border/20 text-apple-text hover:bg-apple-border/15"
+              )}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-apple-bg">
       <SEO 
@@ -1083,295 +1337,126 @@ export default function Marketplace() {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            {/* Filter Sidebar & Mobile Drawer */}
+          <div className="flex gap-6 items-start">
+            {/* 1. PERSISTENT FILTER SIDEBAR FOR DESKTOP (1280px+) */}
+            <aside className="hidden xl:block w-[280px] shrink-0 sticky top-28 self-start max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar pr-1">
+              <div className="glass-card p-5 bg-apple-card-bg backdrop-blur-md rounded-2xl border border-apple-border/30">
+                <div className="flex items-center justify-between pb-3.5 border-b border-apple-border/20 mb-4">
+                  <div className="flex items-center gap-2">
+                    <SlidersHorizontal className="w-4 h-4 text-apple-blue" />
+                    <h3 className="font-bold text-sm text-apple-text">Refine Properties</h3>
+                  </div>
+                  {activeFiltersCount > 0 && (
+                    <button
+                      onClick={() => {
+                        setSelectedCities([]);
+                        setSelectedMake("");
+                        setSelectedModel("");
+                        setSelectedVariant("");
+                        setSelectedCondition([]);
+                        setSelectedBodyType([]);
+                        setSelectedFuel([]);
+                        setMinPrice(null);
+                        setMaxPrice(null);
+                        setSearchQuery("");
+                        setOnlyVerified(false);
+                        setCustomFilters({});
+                      }}
+                      className="text-[11px] font-bold text-apple-red hover:underline cursor-pointer"
+                    >
+                      Reset ({activeFiltersCount})
+                    </button>
+                  )}
+                </div>
+                {renderFilterSections()}
+              </div>
+            </aside>
+
+            {/* 2. TABLET & MOBILE DRAWER / SHEET (<1280px) */}
             <AnimatePresence>
               {isFilterOpen && (
                 <>
-                  {/* Mobile Backdrop */}
+                  {/* Backdrop */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => setIsFilterOpen(false)}
-                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[80] lg:hidden"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80] xl:hidden"
                   />
                   
-                  {/* Filter Content */}
-                  <motion.aside
-                    initial={{ opacity: 0, x: -300 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -300 }}
-                    transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                    className="fixed inset-y-0 left-0 w-[300px] bg-apple-bg z-[90] lg:relative lg:inset-auto lg:w-[260px] lg:bg-transparent lg:z-0 overflow-y-auto lg:overflow-visible"
+                  {/* Mobile Apple Bottom Sheet & Tablet Modal with Swipe-down Dismiss */}
+                  <motion.div
+                    drag="y"
+                    dragConstraints={{ top: 0 }}
+                    dragElastic={0.2}
+                    onDragEnd={(_e, info) => {
+                      if (info.offset.y > 100 || info.velocity.y > 350) {
+                        setIsFilterOpen(false);
+                      }
+                    }}
+                    initial={{ opacity: 0, y: "100%" }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: "100%" }}
+                    transition={{ type: "spring", damping: 28, stiffness: 300 }}
+                    className="fixed inset-x-0 bottom-0 max-h-[88vh] bg-white dark:bg-[#1C1C1E] rounded-t-[32px] md:max-w-xl md:mx-auto md:bottom-6 md:rounded-[32px] shadow-[0_-25px_60px_rgba(0,0,0,0.35)] z-[90] flex flex-col overflow-hidden border border-black/10 dark:border-white/10 xl:hidden"
+                    style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}
                   >
-                    <div className="p-6 lg:p-0 space-y-10">
-                      <div className="flex items-center justify-between lg:hidden mb-8">
-                        <h2 className="text-xl font-semibold">Filters</h2>
-                        <button onClick={() => setIsFilterOpen(false)} className="p-2 hover:bg-apple-gray rounded-full">
-                          <X className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      <div className="glass-card p-6 space-y-10 lg:bg-apple-card-bg lg:backdrop-blur-md">
-                        <section>
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Identify Vehicle</h3>
-                          <CarSelector 
-                            onSelect={(data) => {
-                              setSelectedMake(data.make?.name || "");
-                              setSelectedModel(data.model?.name || "");
-                              setSelectedVariant(data.variant?.name || "");
-                              setViewMode("list");
-                            }}
-                          />
-                        </section>
-
-                        <section>
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">City</h3>
-                          <div className="space-y-4 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
-                            {Object.keys(PAKISTAN_LOCATIONS).map((city) => (
-                              <label key={city} className="flex items-center gap-4 cursor-pointer group">
-                                <div className="relative flex items-center justify-center">
-                                  <input 
-                                    type="checkbox" 
-                                    className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                    checked={selectedCities.includes(city)}
-                                    onChange={(e) => {
-                                      if (e.target.checked) setSelectedCities([...selectedCities, city]);
-                                      else setSelectedCities(selectedCities.filter(x => x !== city));
-                                      setViewMode("list");
-                                    }}
-                                  />
-                                  <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                  <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                                </div>
-                                <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{city}</span>
-                              </label>
-                            ))}
-                          </div>
-                        </section>
-
-                        <section>
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Condition</h3>
-                          <div className="space-y-4">
-                            {["new", "used", "certified"].map((c) => (
-                              <label key={`condition-${c}`} className="flex items-center gap-4 cursor-pointer group">
-                                <div className="relative flex items-center justify-center">
-                                  <input 
-                                    type="checkbox" 
-                                    className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                    checked={selectedCondition.includes(c)}
-                                    onChange={(e) => {
-                                      if (e.target.checked) setSelectedCondition([...selectedCondition, c]);
-                                      else setSelectedCondition(selectedCondition.filter(x => x !== c));
-                                      setViewMode("list");
-                                    }}
-                                  />
-                                  <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                  <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                                </div>
-                                <span className="text-sm font-medium capitalize text-apple-text/80 group-hover:text-apple-blue transition-colors">{c}</span>
-                              </label>
-                            ))}
-                          </div>
-                        </section>
-
-                        {filterableFields.map((field) => (
-                          <section key={field.id}>
-                            <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">{field.name}</h3>
-                            <div className="space-y-4">
-                              {field.type === 'dropdown' || field.type === 'multi-select' || field.type === 'radio' ? (
-                                field.options?.map((option) => (
-                                  <label key={`field-opt-${field.id || field.key}-${option.value}`} className="flex items-center gap-4 cursor-pointer group">
-                                    <div className="relative flex items-center justify-center">
-                                      <input 
-                                        type="checkbox" 
-                                        className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                        checked={(customFilters[field.key] || []).includes(option.value)}
-                                        onChange={(e) => {
-                                          const current = customFilters[field.key] || [];
-                                          let updated;
-                                          if (e.target.checked) updated = [...current, option.value];
-                                          else updated = current.filter((v: any) => v !== option.value);
-                                          
-                                          setCustomFilters({
-                                            ...customFilters,
-                                            [field.key]: updated
-                                          });
-                                          setViewMode("list");
-                                        }}
-                                      />
-                                      <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                      <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                                    </div>
-                                    <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{option.label}</span>
-                                  </label>
-                                ))
-                              ) : field.type === 'toggle' ? (
-                                <label className="flex items-center gap-4 cursor-pointer group">
-                                  <div className="relative flex items-center justify-center">
-                                    <input 
-                                      type="checkbox" 
-                                      className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                      checked={!!customFilters[field.key]}
-                                      onChange={(e) => {
-                                        setCustomFilters({
-                                          ...customFilters,
-                                          [field.key]: e.target.checked
-                                        });
-                                        setViewMode("list");
-                                      }}
-                                    />
-                                    <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                    <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                                  </div>
-                                  <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{field.name}</span>
-                                </label>
-                              ) : null}
-                            </div>
-                          </section>
-                        ))}
-
-                        <section className="border-t border-apple-border/20 pt-6">
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Vehicle Style</h3>
-                          <div className="space-y-4 max-h-52 overflow-y-auto pr-1">
-                            {["SUV", "Sedan", "Truck", "Hatchback", "Coupe", "Convertible", "Minivan", "Wagon", "Crossover", "Van"].map((styleOpt) => (
-                              <label key={`bodytype-side-${styleOpt}`} className="flex items-center gap-4 cursor-pointer group">
-                                <div className="relative flex items-center justify-center">
-                                  <input 
-                                    type="checkbox" 
-                                    className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                    checked={selectedBodyType.includes(styleOpt)}
-                                    onChange={(e) => {
-                                      if (e.target.checked) setSelectedBodyType([...selectedBodyType, styleOpt]);
-                                      else setSelectedBodyType(selectedBodyType.filter(x => x !== styleOpt));
-                                      setViewMode("list");
-                                    }}
-                                  />
-                                  <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                  <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                                </div>
-                                <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">{styleOpt}</span>
-                              </label>
-                            ))}
-                          </div>
-                        </section>
-
-                        <section className="border-t border-apple-border/20 pt-6">
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Fuel Type</h3>
-                          <div className="space-y-4">
-                            {["petrol", "diesel", "hybrid", "electric"].map((f) => (
-                              <label key={`fuel-side-${f}`} className="flex items-center gap-4 cursor-pointer group">
-                                <div className="relative flex items-center justify-center">
-                                  <input 
-                                    type="checkbox" 
-                                    className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                    checked={selectedFuel.includes(f)}
-                                    onChange={(e) => {
-                                      if (e.target.checked) setSelectedFuel([...selectedFuel, f]);
-                                      else setSelectedFuel(selectedFuel.filter(x => x !== f));
-                                      setViewMode("list");
-                                    }}
-                                  />
-                                  <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                  <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                                </div>
-                                <span className="text-sm font-medium capitalize text-apple-text/80 group-hover:text-apple-blue transition-colors">{f}</span>
-                              </label>
-                            ))}
-                          </div>
-                        </section>
-
-                        <section>
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Sellers</h3>
-                          <div className="space-y-4">
-                            <label className="flex items-center gap-4 cursor-pointer group">
-                              <div className="relative flex items-center justify-center">
-                                <input 
-                                  type="checkbox" 
-                                  className="peer w-6 h-6 rounded-lg border-apple-border text-apple-blue focus:ring-apple-blue/10 transition-all cursor-pointer appearance-none bg-apple-gray"
-                                  checked={onlyVerified}
-                                  onChange={(e) => {
-                                    setOnlyVerified(e.target.checked);
-                                    setViewMode("list");
-                                  }}
-                                />
-                                <CheckCircle2 className="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
-                                <div className="absolute inset-0 rounded-lg peer-checked:bg-apple-blue -z-10 transition-colors" />
-                              </div>
-                              <span className="text-sm font-medium text-apple-text/80 group-hover:text-apple-blue transition-colors">Verified Sellers Only</span>
-                            </label>
-                          </div>
-                        </section>
-
-                        <section>
-                          <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-4">Price Range (PKR)</h3>
-                          <div className="grid grid-cols-2 gap-2 mb-4">
-                            <div>
-                              <label className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1">Min Price</label>
-                              <input 
-                                type="number" 
-                                placeholder="Min"
-                                className="w-full px-3 py-2 text-xs bg-apple-gray dark:bg-white/5 rounded-xl border border-apple-border/20 focus:border-apple-blue outline-none font-medium"
-                                value={minPrice || ""}
-                                onChange={(e) => {
-                                  const val = e.target.value ? parseInt(e.target.value) : null;
-                                  setMinPrice(val);
-                                }}
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1">Max Price</label>
-                              <input 
-                                type="number" 
-                                placeholder="Max"
-                                className="w-full px-3 py-2 text-xs bg-apple-gray dark:bg-white/5 rounded-xl border border-apple-border/20 focus:border-apple-blue outline-none font-medium"
-                                value={maxPrice || ""}
-                                onChange={(e) => {
-                                  const val = e.target.value ? parseInt(e.target.value) : null;
-                                  setMaxPrice(val);
-                                }}
-                              />
-                            </div>
-                          </div>
-                          
-                          {/* Price Presets */}
-                          <div className="grid grid-cols-2 gap-1.5 mt-2">
-                            {[
-                              { label: "< 25 Lac", min: null, max: 2500000 },
-                              { label: "25 - 50 Lac", min: 2500000, max: 5000000 },
-                              { label: "50 Lac - 1 Cr", min: 5000000, max: 10000000 },
-                              { label: "1 Crore +", min: 10000000, max: null }
-                            ].map((preset, i) => (
-                              <button
-                                key={`preset-${i}`}
-                                onClick={() => {
-                                  setMinPrice(preset.min);
-                                  setMaxPrice(preset.max);
-                                  setViewMode("list");
-                                }}
-                                className={cn(
-                                  "px-2 py-1 rounded-lg text-[10px] font-semibold border transition-all cursor-pointer whitespace-nowrap text-center",
-                                  ((preset.min === null ? !minPrice : minPrice === preset.min) && (preset.max === null ? !maxPrice : maxPrice === preset.max))
-                                    ? "bg-apple-blue border-apple-blue text-white font-bold"
-                                    : "bg-apple-gray dark:bg-white/5 border-apple-border/20 text-apple-text hover:bg-apple-border/15"
-                                )}
-                              >
-                                {preset.label}
-                              </button>
-                            ))}
-                          </div>
-                        </section>
-                        
-                        <button 
-                          onClick={() => setIsFilterOpen(false)}
-                          className="w-full lg:hidden apple-button-primary !h-12 text-sm"
-                        >
-                          Apply Filters
-                        </button>
-                      </div>
+                    {/* Grab handle indicator */}
+                    <div className="pt-3 pb-1 cursor-grab active:cursor-grabbing flex justify-center shrink-0">
+                      <div className="w-12 h-1.5 rounded-full bg-slate-300 dark:bg-zinc-600" />
                     </div>
-                  </motion.aside>
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-6 py-3 border-b border-apple-border/20 dark:border-white/10 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-lg font-bold text-apple-text dark:text-white">Filters</h2>
+                        {activeFiltersCount > 0 && (
+                          <span className="px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue text-xs font-bold">
+                            {activeFiltersCount} active
+                          </span>
+                        )}
+                      </div>
+                      <button 
+                        onClick={() => setIsFilterOpen(false)} 
+                        className="p-2 hover:bg-apple-gray dark:hover:bg-white/10 rounded-full transition-colors cursor-pointer touch-target min-w-[36px] min-h-[36px]"
+                        title="Close filters"
+                      >
+                        <X className="w-5 h-5 text-apple-text dark:text-white" />
+                      </button>
+                    </div>
+
+                    {/* Scrollable Filters Content */}
+                    <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                      {renderFilterSections()}
+                    </div>
+
+                    {/* Sticky Bottom Actions Bar */}
+                    <div className="p-4 bg-white/90 dark:bg-[#1C1C1E]/90 backdrop-blur-xl border-t border-apple-border/20 dark:border-white/10 flex items-center gap-3 shrink-0">
+                      <button
+                        onClick={() => {
+                          setSelectedCities([]);
+                          setSelectedMake("");
+                          setSelectedModel("");
+                          setSelectedVariant("");
+                          setSelectedCondition([]);
+                          setSelectedBodyType([]);
+                          setSelectedFuel([]);
+                          setMinPrice(null);
+                          setMaxPrice(null);
+                        }}
+                        className="px-4 py-3 rounded-2xl text-xs font-bold text-apple-text-muted hover:text-apple-red hover:bg-apple-red/10 transition-colors cursor-pointer min-h-[44px]"
+                      >
+                        Reset All
+                      </button>
+                      <button
+                        onClick={() => setIsFilterOpen(false)}
+                        className="flex-1 apple-button-primary !h-12 text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-apple-blue/20 cursor-pointer active:scale-98 transition-transform min-h-[48px]"
+                      >
+                        Apply Filters ({filteredVehicles.length})
+                      </button>
+                    </div>
+                  </motion.div>
                 </>
               )}
             </AnimatePresence>
@@ -1523,17 +1608,41 @@ export default function Marketplace() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-10">
                 <div className="flex items-center gap-3">
                   <div className="text-[12px] md:text-[13px] font-medium text-apple-text-muted">
-                    Showing <span className="text-apple-text font-bold">{filteredVehicles.length}</span> Results
+                    Showing <span className="text-apple-text font-bold"><AnimatedCounter value={filteredVehicles.length} duration={0.6} once={false} /></span> Results
                   </div>
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.94 }}
+                    transition={SPRING_SNAPPY}
                     onClick={() => setIsSaveSearchOpen(true)}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-apple-blue/10 hover:bg-apple-blue/15 text-[11px] font-black text-apple-blue transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-apple-blue/10 hover:bg-apple-blue/15 text-[11px] font-black text-apple-blue transition-colors cursor-pointer shadow-xs"
                   >
                     <Bell className="w-3.5 h-3.5" />
-                    Save Search
-                  </button>
+                    <span>Save Search</span>
+                  </motion.button>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Tablet & Mobile Expandable Filter Pill (Hidden on Desktop 1280px+ where sidebar is persistent) */}
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    transition={SPRING_SNAPPY}
+                    onClick={() => setIsFilterOpen(true)}
+                    className={cn(
+                      "flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full border text-xs font-bold transition-all shadow-sm cursor-pointer h-[38px] xl:hidden touch-target",
+                      activeFiltersCount > 0
+                        ? "bg-apple-blue text-white border-apple-blue shadow-apple-blue/20"
+                        : "bg-white dark:bg-[#161618]/95 border-apple-border/40 text-apple-text hover:bg-apple-gray/50"
+                    )}
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5" />
+                    <span>Filters</span>
+                    {activeFiltersCount > 0 && (
+                      <span className="min-w-[18px] h-4.5 px-1.5 rounded-full bg-white text-apple-blue text-[10px] font-black flex items-center justify-center">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </motion.button>
+
                   <div className="relative" ref={sortRef}>
                     <button
                       onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
@@ -1637,9 +1746,9 @@ export default function Marketplace() {
               )}
 
               <div className={cn(
-                "grid gap-1 sm:gap-2 lg:gap-3 xl:gap-4",
+                "grid gap-3 sm:gap-4 lg:gap-5",
                 viewMode === "grid" 
-                  ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" 
+                  ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" 
                   : "grid-cols-1"
               )}>
                 {!isDataLoaded ? (
@@ -1729,16 +1838,27 @@ export default function Marketplace() {
         onOpenModal={handleOpenCompareModal} 
       />
 
-      {/* Floating Filter Button for Mobile */}
-      <motion.button
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setIsFilterOpen(true)}
-        className="md:hidden fixed bottom-24 right-6 z-40 w-14 h-14 bg-apple-text text-apple-bg rounded-full shadow-2xl flex items-center justify-center border border-apple-border/30"
+      {/* Centered Sticky Floating Filter Pill for Mobile (<768px) */}
+      <div 
+        className="md:hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-40 pointer-events-auto"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
-        <SlidersHorizontal className="w-6 h-6" />
-      </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.94 }}
+          transition={SPRING_SNAPPY}
+          onClick={() => setIsFilterOpen(true)}
+          className="h-11 px-5 rounded-full bg-apple-blue text-white shadow-[0_8px_25px_rgba(15,118,110,0.45)] border border-teal-300/40 flex items-center gap-2 font-bold text-xs cursor-pointer backdrop-blur-md min-h-[44px] touch-target"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span>Filters</span>
+          {activeFiltersCount > 0 && (
+            <span className="min-w-[18px] h-4.5 px-1.5 rounded-full bg-white text-apple-blue text-[10px] font-black flex items-center justify-center">
+              {activeFiltersCount}
+            </span>
+          )}
+        </motion.button>
+      </div>
 
       <SaveSearchModal 
         isOpen={isSaveSearchOpen} 
