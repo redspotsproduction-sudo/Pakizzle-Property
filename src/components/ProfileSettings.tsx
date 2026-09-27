@@ -43,12 +43,16 @@ import { cn } from '../lib/utils';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import VerificationModal from './VerificationModal';
 import { Address, PaymentMethod, UserProfile } from '../types';
+import { toast } from 'sonner';
 
 import UserInspections from './UserInspections';
 import UserInsurance from './UserInsurance';
 import UserFinancing from './UserFinancing';
+import { SessionManager } from './Auth/SessionManager';
+import { PasskeyManagementCard } from './Auth/PasskeyManagementCard';
+import { StepUpVerificationModal, SensitiveActionType } from './Auth/StepUpVerificationModal';
 
-type SettingsSection = 'profile' | 'addresses' | 'account' | 'security' | 'notifications' | 'billing' | 'inspections' | 'insurance' | 'financing';
+type SettingsSection = 'profile' | 'addresses' | 'account' | 'security' | 'sessions' | 'notifications' | 'billing' | 'inspections' | 'insurance' | 'financing';
 
 import { optimizeImage } from '../lib/imageOptimizer';
 
@@ -101,10 +105,19 @@ export default function ProfileSettings() {
   const [selectedDevice, setSelectedDevice] = useState<any>(null);
   const [isRefreshingDevices, setIsRefreshingDevices] = useState(false);
 
+  // Step-Up Verification state for sensitive account actions
+  const [stepUpAction, setStepUpAction] = useState<SensitiveActionType | null>(null);
+  const [pendingActionCallback, setPendingActionCallback] = useState<(() => void) | null>(null);
+
+  const executeWithStepUp = (action: SensitiveActionType, callback: () => void) => {
+    setPendingActionCallback(() => callback);
+    setStepUpAction(action);
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const section = params.get('section') as SettingsSection;
-    if (section && ['profile', 'addresses', 'account', 'security', 'notifications', 'billing', 'inspections', 'insurance', 'financing'].includes(section)) {
+    if (section && ['profile', 'addresses', 'account', 'security', 'sessions', 'notifications', 'billing', 'inspections', 'insurance', 'financing'].includes(section)) {
       setActiveSection(section);
     }
   }, [location.search]);
@@ -535,6 +548,7 @@ export default function ProfileSettings() {
     { id: 'account', label: 'Account Details', icon: UserCircle, category: 'Account' },
     { id: 'notifications', label: 'Notifications', icon: Bell, category: 'Account' },
     { id: 'security', label: 'Security', icon: Lock, category: 'Security' },
+    { id: 'sessions', label: 'Active Sessions', icon: Smartphone, category: 'Security' },
     { id: 'billing', label: 'Billing & Payments', icon: CreditCard, category: 'Security' },
     { id: 'inspections', label: 'My Inspections', icon: History, category: 'Account' },
     { id: 'insurance', label: 'My Insurance', icon: Shield, category: 'Account' },
@@ -1034,6 +1048,22 @@ export default function ProfileSettings() {
                   </div>
                 )}
 
+                {activeSection === 'sessions' && (
+                  <div className="space-y-8">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                      <div>
+                        <h1 className="text-2xl md:text-4xl font-bold tracking-tight mb-2">Device Sessions</h1>
+                        <p className="text-sm md:text-base text-apple-text-muted font-medium">
+                          Review, manage, and remotely revoke active devices authorized to access your account.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-apple-card-bg rounded-[32px] md:rounded-[40px] p-6 md:p-8 shadow-apple-soft border border-apple-border/50">
+                      <SessionManager />
+                    </div>
+                  </div>
+                )}
+
                 {activeSection === 'financing' && (
                   <UserFinancing />
                 )}
@@ -1061,7 +1091,7 @@ export default function ProfileSettings() {
                         <div className="flex items-center justify-between mb-8">
                           <h3 className="text-lg font-bold">Payment Methods</h3>
                           <button 
-                            onClick={() => setIsAddCardModalOpen(true)}
+                            onClick={() => executeWithStepUp('payout_update', () => setIsAddCardModalOpen(true))}
                             className="flex items-center gap-2 px-4 py-2 bg-apple-blue/10 text-apple-blue rounded-xl font-bold text-sm hover:bg-apple-blue hover:text-white transition-all"
                           >
                             <Plus className="w-4 h-4" />
@@ -1244,8 +1274,10 @@ export default function ProfileSettings() {
                                 )}
                                 <button 
                                   onClick={() => {
-                                    setNewPhone(profile?.phone || '');
-                                    setIsEditPhoneModalOpen(true);
+                                    executeWithStepUp('phone_change', () => {
+                                      setNewPhone(profile?.phone || '');
+                                      setIsEditPhoneModalOpen(true);
+                                    });
                                   }}
                                   className="p-2 hover:bg-apple-border rounded-full transition-colors"
                                 >
@@ -1257,46 +1289,11 @@ export default function ProfileSettings() {
                         </div>
 
                         <div className="mt-10 pt-10 border-t border-apple-border/50">
-                          <div className="flex items-center justify-between mb-6">
-                            <div>
-                              <h4 className="text-lg font-bold">Pakizzle Platform Sessions</h4>
-                              <p className="text-xs text-apple-text-muted font-medium">Devices currently signed in to your Pakizzle account.</p>
-                            </div>
-                            <button 
-                              onClick={handleRefreshDevices}
-                              disabled={isRefreshingDevices}
-                              className="flex items-center gap-2 text-xs text-apple-blue font-bold hover:underline disabled:opacity-50"
-                            >
-                              <RefreshCw className={cn("w-3 h-3", isRefreshingDevices && "animate-spin")} />
-                              Refresh
-                            </button>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {trustedDevices.map((device) => (
-                              <button 
-                                key={device.id} 
-                                onClick={() => {
-                                  setSelectedDevice(device);
-                                  setIsDeviceModalOpen(true);
-                                }}
-                                className="p-6 bg-apple-gray/30 rounded-[28px] border border-transparent hover:border-apple-blue/20 transition-all group text-left"
-                              >
-                                <div className="flex items-start justify-between mb-4">
-                                  <div className="w-10 h-10 bg-apple-card-bg rounded-xl shadow-sm flex items-center justify-center">
-                                    {device.type === 'mobile' ? <Smartphone className="w-5 h-5 text-apple-text" /> : 
-                                     device.type === 'laptop' ? <Settings2 className="w-5 h-5 text-apple-text" /> : 
-                                     <Map className="w-5 h-5 text-apple-text" />}
-                                  </div>
-                                  {device.isCurrent && (
-                                    <span className="text-[10px] font-bold text-apple-blue bg-apple-blue/10 px-2 py-1 rounded-md uppercase">This Device</span>
-                                  )}
-                                </div>
-                                <h5 className="font-bold text-sm mb-1">{device.name}</h5>
-                                <p className="text-xs text-apple-text-muted font-medium mb-1">{device.location}</p>
-                                <p className="text-[10px] text-apple-text-muted uppercase tracking-wider font-bold">{device.lastActive}</p>
-                              </button>
-                            ))}
-                          </div>
+                          <PasskeyManagementCard />
+                        </div>
+
+                        <div className="mt-10 pt-10 border-t border-apple-border/50">
+                          <SessionManager />
                         </div>
                       </div>
 
@@ -1310,7 +1307,11 @@ export default function ProfileSettings() {
                           Once you delete your account, all of your listings, messages, and personal data will be permanently removed. This action cannot be undone.
                         </p>
                         <button 
-                          onClick={() => setNotification?.('Account deletion requested. Please check your email.')}
+                          onClick={() => {
+                            executeWithStepUp('account_deletion', () => {
+                              toast.success('Identity verified. Account deletion request submitted.');
+                            });
+                          }}
                           className="px-8 py-4 bg-apple-red text-white rounded-2xl text-sm font-bold shadow-lg shadow-apple-red/20 hover:bg-red-600 transition-all active:scale-95"
                         >
                           Delete My Account
@@ -1432,59 +1433,9 @@ export default function ProfileSettings() {
                         </div>
                       </div>
 
-                      {/* Login Activity Card */}
+                      {/* Session Management & Login Activity Console */}
                       <div className="bg-apple-card-bg rounded-[32px] md:rounded-[40px] p-6 md:p-10 shadow-apple-soft border border-apple-border/50">
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 md:mb-10 text-center sm:text-left">
-                          <div className="flex flex-col sm:flex-row items-center gap-4">
-                            <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center">
-                              <History className="w-6 h-6 text-purple-600" />
-                            </div>
-                            <div>
-                              <h3 className="text-lg md:text-xl font-bold">Login Activity</h3>
-                              <p className="text-xs md:text-sm text-apple-text-muted font-medium">Recent sign-ins to your account.</p>
-                            </div>
-                          </div>
-                          <button 
-                            onClick={handleSignOutAllDevices}
-                            className="w-full sm:w-auto text-[10px] md:text-xs font-bold text-apple-red bg-red-50 px-4 py-2.5 rounded-full hover:bg-red-100 transition-colors"
-                          >
-                            Sign Out All Devices
-                          </button>
-                        </div>
-                        
-                        <div className="space-y-3 md:space-y-4">
-                          {trustedDevices.map((session) => (
-                            <div key={session.id} className="flex items-center justify-between p-4 md:p-5 bg-apple-gray/30 rounded-[20px] md:rounded-[28px] group hover:bg-apple-gray/50 transition-all border border-transparent hover:border-apple-blue/10">
-                              <div className="flex items-center gap-3 md:gap-4">
-                                <div className={cn(
-                                  "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shadow-sm shrink-0",
-                                  session.isCurrent ? "bg-apple-blue text-white" : "bg-apple-card-bg text-apple-text-muted"
-                                )}>
-                                  {session.type === 'mobile' ? <Smartphone className="w-5 h-5 md:w-6 md:h-6" /> : 
-                                   session.type === 'laptop' ? <Settings2 className="w-5 h-5 md:w-6 md:h-6" /> : 
-                                   <Map className="w-5 h-5 md:w-6 md:h-6" />}
-                                </div>
-                                <div className="min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <h5 className="text-sm md:text-base font-bold truncate">{session.name}</h5>
-                                    {session.isCurrent && (
-                                      <span className="text-[8px] md:text-[10px] font-bold text-apple-blue bg-apple-blue/10 px-1.5 py-0.5 rounded-md uppercase shrink-0">Current</span>
-                                    )}
-                                  </div>
-                                  <p className="text-[10px] md:text-xs text-apple-text-muted font-medium truncate">{session.location} • {session.lastActive}</p>
-                                </div>
-                              </div>
-                              {!session.isCurrent && (
-                                <button 
-                                  onClick={() => handleSignOutDevice(session.id)}
-                                  className="p-2 hover:bg-red-50 rounded-full transition-colors group/btn shrink-0"
-                                >
-                                  <LogOut className="w-4 h-4 md:w-5 md:h-5 text-apple-text-muted group-hover/btn:text-apple-red transition-colors" />
-                                </button>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                        <SessionManager />
                       </div>
                     </div>
                   </div>
@@ -2128,6 +2079,23 @@ export default function ProfileSettings() {
           setNotification?.('Verification process started!');
         }}
       />
+
+      {stepUpAction && (
+        <StepUpVerificationModal
+          isOpen={!!stepUpAction}
+          action={stepUpAction}
+          onSuccess={() => {
+            const cb = pendingActionCallback;
+            setStepUpAction(null);
+            setPendingActionCallback(null);
+            if (cb) cb();
+          }}
+          onClose={() => {
+            setStepUpAction(null);
+            setPendingActionCallback(null);
+          }}
+        />
+      )}
     </div>
   );
 }

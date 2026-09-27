@@ -840,7 +840,7 @@ export default function SellCarForm() {
               <button className="apple-button-secondary">Select Photos</button>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
               {formData.images.filter(Boolean).map((img, i) => (
                 <div key={i} className="w-full aspect-square bg-apple-gray rounded-apple-lg relative group overflow-hidden border border-apple-border">
                   <img src={img} alt={`Upload ${i}`} className="w-full h-full object-cover" />
@@ -849,7 +849,8 @@ export default function SellCarForm() {
                       e.stopPropagation();
                       removeImage(i);
                     }}
-                    className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1.5 right-1.5 w-7 h-7 bg-red-500/90 text-white rounded-full flex items-center justify-center opacity-90 md:opacity-0 md:group-hover:opacity-100 transition-opacity touch-target cursor-pointer shadow-md font-bold text-sm"
+                    title="Remove image"
                   >
                     ×
                   </button>
@@ -858,7 +859,7 @@ export default function SellCarForm() {
               {formData.images.length < 10 && (
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full aspect-square bg-apple-gray rounded-apple-lg flex items-center justify-center border border-apple-border border-dashed hover:border-apple-blue transition-colors"
+                  className="w-full aspect-square bg-apple-gray rounded-apple-lg flex items-center justify-center border border-apple-border border-dashed hover:border-apple-blue transition-colors cursor-pointer min-h-[44px]"
                 >
                   <Plus className="w-6 h-6 text-apple-border" />
                 </button>
@@ -1106,53 +1107,77 @@ export default function SellCarForm() {
     <div className="min-h-screen bg-apple-bg">
       <Header />
       
-      <main className="pt-24 pb-6 max-w-4xl mx-auto px-6">
+      <main className="pt-20 sm:pt-24 pb-12 max-w-4xl mx-auto px-4 sm:px-6">
         {/* Back Link */}
-        <Link to="/dashboard" className="flex items-center gap-3 text-sm font-bold text-apple-text-muted hover:text-apple-text transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group mb-3 w-fit">
+        <Link to="/dashboard" className="flex items-center gap-3 text-sm font-bold text-apple-text-muted hover:text-apple-text transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group mb-4 w-fit touch-target min-h-[36px]">
           <div className="w-8 h-8 rounded-full bg-apple-card-bg backdrop-blur-md flex items-center justify-center shadow-apple-soft border border-apple-border group-hover:scale-110 transition-transform">
             <ChevronLeft className="w-5 h-5" />
           </div>
-          Back to Dashboard
+          <span>Back to Dashboard</span>
         </Link>
 
-        {/* Progress Stepper */}
-        <div className="mb-4">
-          <div className="flex justify-between relative">
-            <div className="absolute top-1/2 left-0 w-full h-0.5 bg-apple-border -translate-y-1/2 -z-10" />
-            <div 
-              className="absolute top-1/2 left-0 h-0.5 bg-apple-blue -translate-y-1/2 -z-10 transition-all duration-500" 
-              style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
-            />
-            {STEPS.map((step, index) => (
-              <div key={step.id} className="flex flex-col items-center gap-3">
-                <div 
-                  className={cn(
-                    "w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-4",
-                    index < currentStep ? "bg-apple-blue border-apple-blue text-white" :
-                    index === currentStep ? "bg-apple-card-bg border-apple-blue text-apple-blue shadow-lg scale-110" :
-                    "bg-apple-card-bg border-apple-border text-apple-text-muted"
-                  )}
-                >
-                  {index < currentStep ? <CheckCircle2 className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
+        {/* Progress Stepper: Responsive Conversion */}
+        <div className="mb-6">
+          {/* Mobile Step Indicator (<640px): Compact "Step X of Y" + slim progress bar */}
+          <div className="sm:hidden flex flex-col gap-2.5 p-4 bg-apple-card-bg rounded-2xl border border-apple-border shadow-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-apple-text-muted">
+                Step <span className="text-apple-blue font-extrabold">{currentStep + 1}</span> of {STEPS.length}
+              </span>
+              <span className="text-xs font-extrabold text-apple-text flex items-center gap-1.5">
+                {React.createElement(STEPS[currentStep].icon, { className: "w-3.5 h-3.5 text-apple-blue" })}
+                <span>{STEPS[currentStep].title}</span>
+              </span>
+            </div>
+            <div className="w-full h-2 bg-apple-gray dark:bg-white/10 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-apple-blue rounded-full"
+                initial={false}
+                animate={{ width: `${((currentStep + 1) / STEPS.length) * 100}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          </div>
+
+          {/* Desktop & Tablet Progress Stepper (>=640px) */}
+          <div className="hidden sm:block">
+            <div className="flex justify-between relative">
+              <div className="absolute top-1/2 left-0 w-full h-0.5 bg-apple-border -translate-y-1/2 -z-10" />
+              <div 
+                className="absolute top-1/2 left-0 h-0.5 bg-apple-blue -translate-y-1/2 -z-10 transition-all duration-500" 
+                style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
+              />
+              {STEPS.map((step, index) => (
+                <div key={step.id} className="flex flex-col items-center gap-2.5">
+                  <div 
+                    className={cn(
+                      "w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-500 border-4",
+                      index < currentStep ? "bg-apple-blue border-apple-blue text-white" :
+                      index === currentStep ? "bg-apple-card-bg border-apple-blue text-apple-blue shadow-lg scale-110" :
+                      "bg-apple-card-bg border-apple-border text-apple-text-muted"
+                    )}
+                  >
+                    {index < currentStep ? <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6" /> : <step.icon className="w-4 h-4 md:w-5 md:h-5" />}
+                  </div>
+                  <span className={cn(
+                    "text-[10px] font-bold uppercase tracking-wider transition-colors",
+                    index === currentStep ? "text-apple-blue" : "text-apple-text-muted"
+                  )}>
+                    {step.title}
+                  </span>
                 </div>
-                <span className={cn(
-                  "text-[10px] font-bold uppercase tracking-widest transition-colors",
-                  index === currentStep ? "text-apple-blue" : "text-apple-text-muted"
-                )}>
-                  {step.title}
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Form Content */}
-        <div className="bg-apple-card-bg rounded-apple-2xl shadow-apple-soft border border-apple-border p-8 md:p-12">
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold tracking-tight mb-2">
+        <div className="bg-apple-card-bg rounded-2xl sm:rounded-apple-2xl shadow-apple-soft border border-apple-border p-5 sm:p-8 md:p-12">
+          <div className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
               {id ? "Edit Listing" : STEPS[currentStep].title}
             </h2>
-            <p className="text-apple-text-muted">
+            <p className="text-xs sm:text-sm text-apple-text-muted">
               {id ? `Updating your ${formData.year} ${formData.make} ${formData.model}` : "Please provide the necessary details to list your vehicle."}
             </p>
           </div>
@@ -1161,38 +1186,38 @@ export default function SellCarForm() {
             {renderStep()}
           </AnimatePresence>
 
-          <div className="mt-16 pt-8 border-t border-apple-border flex justify-between items-center">
+          <div className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-apple-border flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-4">
             <button 
               onClick={currentStep === 0 ? () => navigate("/dashboard") : handleBack}
-              className="flex items-center gap-2 font-bold text-sm transition-all text-apple-text-muted hover:text-apple-text"
+              className="flex items-center justify-center gap-2 font-bold text-sm transition-all text-apple-text-muted hover:text-apple-text cursor-pointer min-h-[44px] touch-target py-2 px-4 rounded-xl hover:bg-apple-gray"
             >
               <ChevronLeft className="w-5 h-5" />
-              {currentStep === 0 ? "Cancel" : "Back"}
+              <span>{currentStep === 0 ? "Cancel" : "Back"}</span>
             </button>
             
-            <div className="flex flex-col items-end gap-2">
+            <div className="flex flex-col items-stretch sm:items-end gap-2">
               <div className="flex gap-4">
                 {currentStep === STEPS.length - 1 ? (
                   <button 
                     onClick={handlePublish}
-                    className="apple-button-primary !px-12 flex items-center gap-2 group"
+                    className="apple-button-primary w-full sm:w-auto !px-8 sm:!px-12 !h-12 min-h-[44px] flex items-center justify-center gap-2 group cursor-pointer"
                   >
-                    {id ? "Save Changes" : "Publish Listing"}
+                    <span>{id ? "Save Changes" : "Publish Listing"}</span>
                     <Zap className="w-4 h-4 group-hover:fill-current" />
                   </button>
                 ) : (
                   <button 
                     onClick={handleNext}
                     disabled={currentStep === 2 && formData.images.length === 0}
-                    className="apple-button-primary !px-12 flex items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="apple-button-primary w-full sm:w-auto !px-8 sm:!px-12 !h-12 min-h-[44px] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    Continue
+                    <span>Continue</span>
                     <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 )}
               </div>
               {currentStep === 2 && formData.images.length === 0 && (
-                <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest animate-pulse">
+                <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest text-center sm:text-right animate-pulse">
                   Upload at least one photo to continue
                 </p>
               )}

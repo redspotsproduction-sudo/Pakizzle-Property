@@ -100,3 +100,78 @@ CREATE TABLE car_variants (
 CREATE INDEX idx_car_models_make ON car_models(make_id);
 CREATE INDEX idx_car_variants_model ON car_variants(model_id);
 CREATE INDEX idx_car_makes_active ON car_makes(is_active) WHERE is_active = TRUE;
+
+-- ============================================================================
+-- Modern Layered Auth Architecture (OAuth, Sessions, Passkeys, Security Logs)
+-- ============================================================================
+
+-- OAuth & Passkey additions to users
+ALTER TABLE users 
+    ADD COLUMN IF NOT EXISTS oauth_provider VARCHAR(50) DEFAULT 'local',
+    ADD COLUMN IF NOT EXISTS oauth_id VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS secondary_email VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS secondary_phone VARCHAR(20),
+    ADD COLUMN IF NOT EXISTS passkey_registered BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS avatar_url TEXT,
+    ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_oauth_unique 
+    ON users(oauth_provider, oauth_id) 
+    WHERE oauth_provider != 'local' AND oauth_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_users_phone_number ON users(phone_number);
+CREATE INDEX IF NOT EXISTS idx_users_secondary_email ON users(secondary_email);
+
+-- User Sessions Table (Short-lived Access Token + HttpOnly Refresh Token)
+CREATE TABLE IF NOT EXISTS user_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(255) NOT NULL,
+    device_info VARCHAR(255) NOT NULL,
+    device_type VARCHAR(50) DEFAULT 'desktop',
+    ip_address VARCHAR(45) NOT NULL,
+    approx_location VARCHAR(120) DEFAULT 'Lahore, Pakistan',
+    is_current BOOLEAN DEFAULT FALSE,
+    is_revoked BOOLEAN DEFAULT FALSE,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_active_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON user_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_token_hash ON user_sessions(token_hash);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires_revoked ON user_sessions(expires_at, is_revoked);
+
+-- Passkey Credentials Table (WebAuthn FIDO2 / Face ID / Touch ID)
+CREATE TABLE IF NOT EXISTS passkey_credentials (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    credential_id VARCHAR(512) UNIQUE NOT NULL,
+    public_key TEXT NOT NULL,
+    counter BIGINT NOT NULL DEFAULT 0,
+    device_name VARCHAR(120) NOT NULL,
+    transports TEXT[] DEFAULT ARRAY['internal']::TEXT[],
+    aaguid VARCHAR(64),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_used_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_passkeys_user_id ON passkey_credentials(user_id);
+CREATE INDEX IF NOT EXISTS idx_passkeys_credential_id ON passkey_credentials(credential_id);
+
+-- Auth Security & Step-Up Verification Logs Table
+CREATE TABLE IF NOT EXISTS auth_security_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    event_type VARCHAR(60) NOT NULL,
+    auth_method VARCHAR(40) NOT NULL,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    device_summary VARCHAR(150),
+    is_suspicious BOOLEAN DEFAULT FALSE,
+    details JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_logs_user_id ON auth_security_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_auth_logs_created_at ON auth_security_logs(created_at);

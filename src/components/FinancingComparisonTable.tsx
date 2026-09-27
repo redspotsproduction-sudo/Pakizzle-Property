@@ -174,7 +174,8 @@ export default function FinancingComparisonTable() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] shadow-[0_4px_30px_rgba(0,0,0,0.01)] transition-colors duration-300">
+      {/* 1. Desktop & Tablet Full Table (>=768px) */}
+      <div className="hidden md:block overflow-x-auto rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] shadow-[0_4px_30px_rgba(0,0,0,0.01)] transition-colors duration-300">
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr className="border-b border-black/[0.03] dark:border-white/[0.02] bg-[#F5F5F7]/50 dark:bg-black/20 text-[10px] font-black uppercase text-[#86868B] tracking-wider">
@@ -288,6 +289,110 @@ export default function FinancingComparisonTable() {
             })}
           </tbody>
         </table>
+      </div>
+
+      {/* 2. Mobile Touch Cards (<768px, NEVER raw horizontal scroll) */}
+      <div className="md:hidden space-y-3">
+        {filteredProducts.map((prod) => {
+          const isSelected = selectedProductId === prod.id;
+          return (
+            <motion.div
+              key={`mobile-${prod.id}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={cn(
+                "rounded-2xl border p-4 bg-white dark:bg-[#161617] shadow-xs transition-all",
+                prod.isFeatured ? "border-amber-500/30 bg-amber-500/[0.015]" : "border-black/[0.06] dark:border-white/[0.06]"
+              )}
+            >
+              {/* Card Header */}
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/5 dark:border-white/10 shrink-0 flex items-center justify-center font-bold text-[#86868B]">
+                    <Building2 className="w-5 h-5 text-[#86868B]" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="font-bold text-sm text-[#1D1D1F] dark:text-white truncate">{prod.bankName}</h4>
+                      {prod.isFeatured && (
+                        <span className="bg-amber-500/10 text-amber-500 text-[8px] font-extrabold uppercase px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
+                          <Star className="w-2 h-2 fill-current" />
+                          Best Value
+                        </span>
+                      )}
+                    </div>
+                    <span className={cn(
+                      "text-[9px] font-bold uppercase tracking-wider inline-block mt-0.5",
+                      prod.type === 'islamic' ? "text-emerald-500" : "text-apple-blue"
+                    )}>
+                      {prod.type === 'islamic' ? 'Islamic (Ijarah)' : 'Conventional'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3-Column Key Spec Matrix */}
+              <div className="grid grid-cols-3 gap-2 py-2.5 px-3 rounded-xl bg-[#F5F5F7]/70 dark:bg-white/[0.02] border border-black/[0.03] dark:border-white/[0.03] mb-3">
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] block">Markup</span>
+                  <span className="font-extrabold font-mono text-xs text-[#1D1D1F] dark:text-white mt-0.5 block truncate">{prod.apr}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] block">Processing</span>
+                  <span className="font-bold text-xs text-[#1D1D1F] dark:text-white mt-0.5 block truncate">{prod.processingFee}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] block">Speed</span>
+                  <span className="font-semibold text-xs text-[#1D1D1F] dark:text-white mt-0.5 block truncate">{prod.approvalSpeed}</span>
+                </div>
+              </div>
+
+              {/* Tap to expand details */}
+              <div className="space-y-2.5">
+                <button
+                  type="button"
+                  onClick={() => setSelectedProductId(isSelected ? null : prod.id)}
+                  className="w-full text-left text-[11px] font-medium text-apple-text-muted hover:text-apple-blue flex items-center justify-between py-1 cursor-pointer touch-target min-h-[36px]"
+                >
+                  <span>{isSelected ? "Hide details" : "View documentation & details"}</span>
+                  <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", isSelected ? "rotate-90" : "")} />
+                </button>
+
+                {isSelected && (
+                  <div className="pt-2 pb-1 border-t border-black/[0.04] dark:border-white/[0.04] space-y-2 text-xs">
+                    <p className="text-[11px] text-[#86868B] leading-relaxed">{prod.usp}</p>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-[#86868B]">Documentation:</span>
+                      <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.documentsLevel}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-[#86868B]">Down Payment:</span>
+                      <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.minDownPayment}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-[#86868B]">Insurance/Takaful:</span>
+                      <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.insuranceRequired}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Primary Touch Action Button */}
+                <button
+                  onClick={() => handleApplyNow(prod)}
+                  className={cn(
+                    "w-full h-11 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer touch-target min-h-[44px] shadow-sm",
+                    prod.id === 'pakizzle_capital'
+                      ? "bg-apple-blue text-white shadow-apple-blue/20"
+                      : "bg-[#F5F5F7] dark:bg-white/10 text-[#1D1D1F] dark:text-white border border-apple-border/50"
+                  )}
+                >
+                  <span>Apply Now</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Accordion Note / Expansion */}

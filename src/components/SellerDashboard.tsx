@@ -565,10 +565,10 @@ export default function SellerDashboard() {
                           
                           {/* Compact actions rail */}
                           <div className="flex sm:flex-col justify-end items-center gap-1.5 shrink-0 pt-2 sm:pt-0">
-                            <div className="flex items-center gap-1 bg-[#F5F5F7]/80 dark:bg-white/5 p-1 rounded-xl border border-[#E5E5E7]/40 dark:border-white/5">
+                            <div className="flex items-center gap-1 bg-[#F5F5F7]/80 dark:bg-white/5 p-1 rounded-xl border border-[#E5E5E7]/40 dark:border-white/5 w-full sm:w-auto justify-around sm:justify-start">
                               <button
                                 onClick={() => triggerToast(`Campaign metrics expanded for ${vehicle.model}!`)}
-                                className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-blue transition-all"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="Boost Ads"
                               >
                                 <Sparkles className="w-3.5 h-3.5" />
@@ -576,7 +576,7 @@ export default function SellerDashboard() {
 
                               <Link 
                                 to={`/edit/${vehicle.id}`}
-                                className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-[#86868B] hover:text-apple-blue transition-all"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-[#86868B] hover:text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="Edit listing"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -585,7 +585,7 @@ export default function SellerDashboard() {
                               <button
                                 onClick={() => updateVehicle(vehicle.id, { status: vehicle.status === 'inactive' ? 'active' : 'inactive' })}
                                 className={cn(
-                                  "p-1.5 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm transition-all",
+                                  "w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm transition-all flex items-center justify-center cursor-pointer touch-target",
                                   vehicle.status === 'inactive' ? "text-apple-green" : "text-apple-red"
                                 )}
                                 title={vehicle.status === 'inactive' ? "Activate" : "Deactivate"}
@@ -595,7 +595,7 @@ export default function SellerDashboard() {
 
                               <button
                                 onClick={() => setVehicleToDelete(vehicle.id)}
-                                className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-red transition-all"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-red transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="Remove"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />

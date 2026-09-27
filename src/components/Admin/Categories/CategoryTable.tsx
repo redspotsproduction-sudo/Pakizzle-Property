@@ -211,9 +211,118 @@ export default function CategoryTable({
     });
   };
 
+  // Render Mobile Cards (<768px, Never horizontal-scroll desktop table)
+  const renderMobileCards = (parentId: string | null = null, level = 0): React.ReactNode[] => {
+    const children = categories
+      .filter(c => c.parentId === parentId)
+      .sort((a, b) => a.order - b.order);
+
+    return children.flatMap((cat) => {
+      const isExpanded = expandedIds.has(cat.id);
+      const subCats = categories.filter(c => c.parentId === cat.id);
+      const hasChildren = subCats.length > 0;
+
+      const card = (
+        <div 
+          key={`mobile-card-${cat.id}-${level}`}
+          className={cn(
+            "p-4 rounded-2xl bg-white dark:bg-white/5 border border-apple-border/50 shadow-xs space-y-3",
+            level > 0 && "ml-3.5 border-l-2 border-l-apple-blue/50"
+          )}
+        >
+          {/* Header: Icon, Name & Status */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-apple-gray dark:bg-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+                {cat.icon && cat.icon.trim().startsWith('<svg') && !cat.icon.toLowerCase().includes('<script') ? (
+                  <div dangerouslySetInnerHTML={{ __html: cat.icon.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '').replace(/\son\w+="[^"]*"/gi, '') }} className="w-4 h-4" />
+                ) : (
+                  <ImageIcon className="w-4 h-4 text-apple-text-muted opacity-40" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-bold text-sm tracking-tight text-[#1D1D1F] dark:text-white truncate">{cat.name}</h4>
+                <span className="font-mono text-[9px] text-apple-text-muted block opacity-70 truncate">{cat.id}</span>
+              </div>
+            </div>
+            
+            <button
+              onClick={() => onToggleStatus(cat)}
+              className={cn(
+                "px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer touch-target min-h-[32px] flex items-center gap-1 shrink-0",
+                cat.status === 'active' 
+                  ? "bg-apple-green/10 text-apple-green border border-apple-green/20" 
+                  : "bg-apple-red/10 text-apple-red border border-apple-red/20"
+              )}
+            >
+              {cat.status === 'active' ? (
+                <>
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Active</span>
+                </>
+              ) : (
+                <>
+                  <XCircle className="w-3 h-3" />
+                  <span>Disabled</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Details Row: Subcategories & Fields */}
+          <div className="flex items-center gap-2 flex-wrap text-xs">
+            {hasChildren && (
+              <button
+                onClick={(e) => toggleExpand(cat.id, e)}
+                className="px-3 py-1.5 rounded-xl bg-apple-blue/10 text-apple-blue font-bold text-[11px] flex items-center gap-1.5 touch-target min-h-[36px] cursor-pointer"
+              >
+                <span>{subCats.length} Subcategories</span>
+                <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", isExpanded ? "rotate-180" : "")} />
+              </button>
+            )}
+            <button
+              onClick={() => navigate(`/admin/custom-fields?categoryId=${cat.id}`)}
+              className="px-3 py-1.5 rounded-xl bg-apple-orange/10 text-apple-orange font-bold text-[11px] flex items-center gap-1 touch-target min-h-[36px] cursor-pointer"
+            >
+              <span>Manage Fields</span>
+            </button>
+          </div>
+
+          {/* Action Row */}
+          <div className="pt-2 border-t border-apple-border/40 flex items-center justify-end gap-2">
+            <button
+              onClick={() => onEdit(cat)}
+              className="px-3 py-1.5 rounded-xl bg-apple-gray dark:bg-white/10 text-apple-text hover:text-apple-blue font-bold text-xs flex items-center gap-1 touch-target min-h-[40px] cursor-pointer"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Edit</span>
+            </button>
+            <button
+              onClick={() => onDelete(cat)}
+              className="px-3 py-1.5 rounded-xl bg-apple-red/10 text-apple-red hover:bg-apple-red/20 font-bold text-xs flex items-center gap-1 touch-target min-h-[40px] cursor-pointer"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete</span>
+            </button>
+          </div>
+
+          {/* Expanded Nested Subcategories */}
+          {isExpanded && (
+            <div className="space-y-2 pt-2 border-t border-dashed border-apple-border/50">
+              {renderMobileCards(cat.id, level + 1)}
+            </div>
+          )}
+        </div>
+      );
+
+      return [card];
+    });
+  };
+
   return (
     <div className="bg-white dark:bg-white/5 rounded-3xl border border-apple-border/50 overflow-hidden shadow-sm">
-      <div className="overflow-x-auto">
+      {/* 1. Desktop & Tablet Full Table (>=768px) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full border-collapse text-left">
           <thead className="bg-apple-gray/50 dark:bg-white/5 border-b border-apple-border/50">
             <tr>
@@ -252,6 +361,25 @@ export default function CategoryTable({
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* 2. Mobile Card Conversion (<768px, Never Horizontal Scroll) */}
+      <div className="md:hidden p-4 space-y-3">
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-4 rounded-2xl bg-apple-gray/40 dark:bg-white/5 border border-apple-border/50 animate-pulse space-y-3">
+              <div className="h-5 bg-apple-border/60 rounded-full w-1/2" />
+              <div className="h-4 bg-apple-border/40 rounded-full w-3/4" />
+            </div>
+          ))
+        ) : categories.length === 0 ? (
+          <div className="p-12 text-center">
+            <AlertTriangle className="w-10 h-10 mb-3 mx-auto text-apple-text-muted opacity-40" />
+            <p className="text-xs font-bold text-apple-text-muted">No taxonomy data found in this matrix.</p>
+          </div>
+        ) : (
+          renderMobileCards()
+        )}
       </div>
       
       <div className="p-6 border-t border-apple-border/50 flex flex-col md:flex-row items-center justify-between gap-4 bg-apple-gray/20 dark:bg-white/[0.02]">

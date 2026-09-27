@@ -36,6 +36,8 @@ import { useAuth } from '../context/AuthContext';
 import { signInWithPhoneNumber } from '../firebase';
 import { getAuth, RecaptchaVerifier as FirebaseRecaptchaVerifier } from 'firebase/auth';
 import { toast } from 'sonner';
+import { SignUpCard } from './Auth/SignUpCard';
+import { SignInCard } from './Auth/SignInCard';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -2181,8 +2183,50 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   transition={{ duration: 0.22, ease: "easeInOut" }}
                 >
                   {view === 'selection' && renderSelection()}
-                  {view === 'email-login' && renderEmailLogin()}
-                  {view === 'email-signup' && renderEmailSignup()}
+                  {view === 'email-login' && (
+                    <div className="pt-1">
+                      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+                        <button 
+                          type="button" 
+                          onClick={() => setView('selection')} 
+                          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
+                        >
+                          <ChevronLeft className="w-4.5 h-4.5" />
+                        </button>
+                        <div>
+                          <h2 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white">Sign In</h2>
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Access verified listings & portfolios.</p>
+                        </div>
+                      </div>
+                      <SignInCard 
+                        className="!p-0 !bg-transparent !border-0 !shadow-none !max-w-none"
+                        onSuccess={onClose}
+                        onSwitchToSignUp={() => setView('email-signup')}
+                      />
+                    </div>
+                  )}
+                  {view === 'email-signup' && (
+                    <div className="pt-1">
+                      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+                        <button 
+                          type="button" 
+                          onClick={() => setView('selection')} 
+                          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
+                        >
+                          <ChevronLeft className="w-4.5 h-4.5" />
+                        </button>
+                        <div>
+                          <h2 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white">Create Account</h2>
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Single secure identity for Pakizzle.</p>
+                        </div>
+                      </div>
+                      <SignUpCard 
+                        className="!p-0 !bg-transparent !border-0 !shadow-none !max-w-none"
+                        onSuccess={onClose}
+                        onSwitchToSignIn={() => setView('email-login')}
+                      />
+                    </div>
+                  )}
                   {view === 'phone-entry' && renderPhoneEntry()}
                   {view === 'otp-verify' && renderOtpVerify()}
                   {view === 'forgot-password' && renderForgotPassword()}

@@ -84,6 +84,8 @@ const ProfileRedirect = () => {
 
 import AuctionVerification from "./components/AuctionVerification";
 import VerificationPage from "./components/VerificationPage";
+import SignUpPage from "./pages/SignUpPage";
+import SignInPage from "./pages/SignInPage";
 import UploadIdentityForm from "./components/UploadIdentityForm";
 import UploadBusinessForm from "./components/UploadBusinessForm";
 import InsuranceLanding from "./components/InsuranceLanding";
@@ -602,6 +604,9 @@ export default function App() {
         } />
 
         <Route path="/marketplace" element={<PageTransition><Marketplace /></PageTransition>} />
+        <Route path="/signup" element={<PageTransition><SignUpPage /></PageTransition>} />
+        <Route path="/login" element={<PageTransition><SignInPage /></PageTransition>} />
+        <Route path="/signin" element={<PageTransition><SignInPage /></PageTransition>} />
         <Route path="/reels" element={<PageTransition><ReelsFeed /></PageTransition>} />
         <Route path="/clone" element={<PageTransition><CloneAnalysis /></PageTransition>} />
         <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />

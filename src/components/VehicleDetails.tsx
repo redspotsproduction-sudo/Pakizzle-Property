@@ -274,12 +274,45 @@ export default function VehicleDetails() {
       />
       <Header />
 
-      {/* 1. Sticky Bottom-Header (Apple Style) */}
+      {/* 1. Mobile Fixed Sticky Bottom CTA Bar (<768px, Always Reachable) */}
+      <div 
+        className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 dark:bg-[#141824]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 px-4 py-2.5 flex items-center justify-between gap-3 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]"
+        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
+      >
+        <div className="flex flex-col min-w-0">
+          <span className="text-[10px] font-bold text-apple-text-muted dark:text-slate-400 uppercase tracking-wider truncate">
+            {vehicle.make}
+          </span>
+          <span className="text-base font-extrabold font-mono text-apple-blue dark:text-teal-400 truncate">
+            {formatPrice(vehicle.price)}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <a 
+            href="tel:+923001234567"
+            className="w-11 h-11 rounded-full border border-apple-border dark:border-white/10 bg-apple-gray dark:bg-white/5 flex items-center justify-center text-apple-text dark:text-white cursor-pointer touch-target shrink-0"
+            title="Call seller"
+          >
+            <Phone className="w-4.5 h-4.5" />
+          </a>
+          <motion.button 
+            whileTap={{ scale: 0.96 }}
+            transition={SPRING_SNAPPY}
+            onClick={handleChatWithSeller}
+            className="h-11 px-5 rounded-full bg-apple-blue text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-apple-blue/25 cursor-pointer touch-target shrink-0 min-h-[44px]"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span>Contact Seller</span>
+          </motion.button>
+        </div>
+      </div>
+
+      {/* 2. Tablet & Desktop Sticky Quick Bar (Scroll-triggered, >=768px) */}
       <motion.div 
         initial={{ y: 100 }}
         animate={{ y: isStickyHeaderVisible ? 0 : 100 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed bottom-0 left-0 right-0 z-50 bg-apple-card-bg backdrop-blur-2xl border-t border-apple-border/50 h-16 md:h-20 flex items-center shadow-[0_-10px_40px_rgba(0,0,0,0.05)]"
+        className="hidden md:flex fixed bottom-0 left-0 right-0 z-50 bg-apple-card-bg backdrop-blur-2xl border-t border-apple-border/50 h-16 md:h-20 items-center shadow-[0_-10px_40px_rgba(0,0,0,0.05)]"
       >
         <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -295,14 +328,14 @@ export default function VehicleDetails() {
           <div className="flex items-center gap-2 md:gap-3">
             <button 
               onClick={handleShare}
-              className="w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border border-apple-border bg-apple-card-bg text-apple-text hover:bg-apple-gray transition-all shadow-sm"
+              className="w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border border-apple-border bg-apple-card-bg text-apple-text hover:bg-apple-gray transition-all shadow-sm cursor-pointer touch-target"
               title="Share Vehicle"
             >
               <Share2 className="w-4 h-4 md:w-5 md:h-5" />
             </button>
             <button 
               onClick={handleChatWithSeller}
-              className="w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border border-apple-border bg-apple-card-bg text-apple-text hover:bg-apple-gray transition-all shadow-sm"
+              className="w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border border-apple-border bg-apple-card-bg text-apple-text hover:bg-apple-gray transition-all shadow-sm cursor-pointer touch-target"
               title="Chat with Seller"
             >
               <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
@@ -317,7 +350,7 @@ export default function VehicleDetails() {
             <button 
               onClick={() => toggleWishlist(vehicle.id)}
               className={cn(
-                "w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border transition-all shadow-sm",
+                "w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border transition-all shadow-sm cursor-pointer touch-target",
                 isSaved ? "bg-apple-red text-white border-apple-red" : "bg-apple-gray text-apple-text border-apple-border"
               )}
             >
@@ -327,12 +360,12 @@ export default function VehicleDetails() {
         </div>
       </motion.div>
       
-      <main className="pt-22 lg:pt-28 pb-8">
+      <main className="pt-20 sm:pt-22 lg:pt-28 pb-24 md:pb-8">
         <div className="flex flex-col lg:flex-row min-h-[calc(100-80px)]">
           
           {/* Left Column: Immersive Carousel Gallery */}
           <div className="w-full lg:w-[60%] xl:w-[65%] bg-apple-gray relative group/gallery">
-            <div className="sticky top-22 lg:top-28 h-[50vh] md:h-[70vh] lg:h-[calc(100vh-140px)] w-full overflow-hidden">
+            <div className="lg:sticky lg:top-28 h-[44vh] sm:h-[55vh] md:h-[65vh] lg:h-[calc(100vh-140px)] w-full overflow-hidden">
               {/* Floating Back Navigation Button */}
               <motion.button
                 whileHover={{ scale: 1.05, x: -2 }}
@@ -483,11 +516,11 @@ export default function VehicleDetails() {
                   </div>
                 </div>
 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-apple-text mb-2 leading-[1.0]">
+                <h1 className="fluid-h1 font-bold tracking-tight text-apple-text mb-2 leading-[1.1] text-balance">
                   {vehicle.model}
                 </h1>
-                <div className="text-lg md:text-xl font-medium text-apple-blue mb-10 tracking-tight uppercase tracking-widest font-semibold flex items-center gap-1.5">
-                  <Home className="w-5 h-5 shrink-0" />
+                <div className="text-sm sm:text-base md:text-lg font-medium text-apple-blue mb-6 sm:mb-8 md:mb-10 tracking-tight font-semibold flex items-center gap-1.5">
+                  <Home className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                   <span>{vehicle.make} • Verified Listing</span>
                 </div>
 
@@ -536,8 +569,8 @@ export default function VehicleDetails() {
               >
                 <div className="flex items-end justify-between mb-3">
                   <div>
-                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.2em] mb-2">Market Valuation</div>
-                    <div className="text-5xl font-bold text-apple-text tracking-tighter">
+                    <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.2em] mb-1.5">Market Valuation</div>
+                    <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-mono text-apple-text tracking-tight">
                       {formatPrice(vehicle.price)}
                     </div>
                   </div>

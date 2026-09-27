@@ -781,164 +781,237 @@ export default function InsuranceComparisonTable() {
                 </button>
               </div>
 
-              {/* Table Body */}
-              <div className="flex-1 overflow-auto p-6 custom-scrollbar">
-                <table className="w-full border-collapse text-left text-xs min-w-[650px]">
-                  <thead>
-                    <tr className="border-b border-black/[0.06] dark:border-white/5 text-[9px] font-black uppercase text-[#86868B] tracking-wider">
-                      <th className="pb-4 font-bold w-[25%]">Policy Attributes</th>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId);
-                        return (
-                          <th key={pId} className="pb-4 font-black text-center w-[25%]">
-                            <div className="flex flex-col items-center gap-2">
-                              <div className="w-10 h-10 rounded-xl bg-white p-1.5 border border-black/[0.04] flex items-center justify-center shadow-inner">
-                                {comp?.logoUrl ? (
-                                  <img src={comp.logoUrl} alt={comp?.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
-                                ) : (
-                                  <span className="font-bold text-xs text-slate-700">{comp?.name?.[0] || 'I'}</span>
-                                )}
+              {/* Table Body & Mobile Cards */}
+              <div className="flex-1 overflow-auto p-4 sm:p-6 custom-scrollbar">
+                {/* 1. Desktop Comparison Table (>=768px) */}
+                <div className="hidden md:block">
+                  <table className="w-full border-collapse text-left text-xs min-w-[650px]">
+                    <thead>
+                      <tr className="border-b border-black/[0.06] dark:border-white/5 text-[9px] font-black uppercase text-[#86868B] tracking-wider">
+                        <th className="pb-4 font-bold w-[25%]">Policy Attributes</th>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId);
+                          return (
+                            <th key={pId} className="pb-4 font-black text-center w-[25%]">
+                              <div className="flex flex-col items-center gap-2">
+                                <div className="w-10 h-10 rounded-xl bg-white p-1.5 border border-black/[0.04] flex items-center justify-center shadow-inner">
+                                  {comp?.logoUrl ? (
+                                    <img src={comp.logoUrl} alt={comp?.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                                  ) : (
+                                    <span className="font-bold text-xs text-slate-700">{comp?.name?.[0] || 'I'}</span>
+                                  )}
+                                </div>
+                                <span className="text-xs font-black text-[#1D1D1F] dark:text-white block">{comp?.name}</span>
                               </div>
-                              <span className="text-xs font-black text-[#1D1D1F] dark:text-white block">{comp?.name}</span>
-                            </div>
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-black/[0.04] dark:divide-white/5 text-[11px] font-medium text-[#1D1D1F] dark:text-white/90">
-                    {/* Attribute: Premium */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Annual Premium</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        const stats = calculateCompanyPremium(comp);
-                        return (
-                          <td key={pId} className="py-4 text-center">
-                            <p className="text-sm font-black text-apple-blue font-mono">
-                              PKR {Math.round(stats.premium).toLocaleString()}
-                            </p>
-                            <span className="text-[9px] text-[#86868B]">({stats.rate.toFixed(2)}% Flat Rate)</span>
-                          </td>
-                        );
-                      })}
-                    </tr>
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-black/[0.04] dark:divide-white/5 text-[11px] font-medium text-[#1D1D1F] dark:text-white/90">
+                      {/* Attribute: Premium */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Annual Premium</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          const stats = calculateCompanyPremium(comp);
+                          return (
+                            <td key={pId} className="py-4 text-center">
+                              <p className="text-sm font-black text-apple-blue font-mono">
+                                PKR {Math.round(stats.premium).toLocaleString()}
+                              </p>
+                              <span className="text-[9px] text-[#86868B]">({stats.rate.toFixed(2)}% Flat Rate)</span>
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: Installments */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Monthly Installment</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        const stats = calculateCompanyPremium(comp);
-                        return (
-                          <td key={pId} className="py-4 text-center font-bold text-emerald-500 font-mono text-xs">
-                            PKR {Math.round(stats.monthly).toLocaleString()} /mo (12x)
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: Installments */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Monthly Installment</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          const stats = calculateCompanyPremium(comp);
+                          return (
+                            <td key={pId} className="py-4 text-center font-bold text-emerald-500 font-mono text-xs">
+                              PKR {Math.round(stats.monthly).toLocaleString()} /mo (12x)
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: Claim Ratio */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Claim Approval Ratio</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        return (
-                          <td key={pId} className="py-4 text-center font-bold font-mono text-apple-blue">
-                            {comp.claimRatio}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: Claim Ratio */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Claim Approval Ratio</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          return (
+                            <td key={pId} className="py-4 text-center font-bold font-mono text-apple-blue">
+                              {comp.claimRatio}
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: Workshop network */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Repair Workshops Network</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        return (
-                          <td key={pId} className="py-4 text-center text-[#86868B] text-[10px]">
-                            {comp.workshopNetwork}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: Workshop network */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Repair Workshops Network</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          return (
+                            <td key={pId} className="py-4 text-center text-[#86868B] text-[10px]">
+                              {comp.workshopNetwork}
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: Tracker fee */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">GPS Satellite Tracker Unit</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        const isFree = comp.trackerFee.toLowerCase().includes('free') || comp.trackerFee === '-';
-                        return (
-                          <td key={pId} className="py-4 text-center font-bold text-emerald-500">
-                            {isFree ? 'Complimentary (0 PKR)' : `PKR ${comp.trackerFee}`}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: Tracker fee */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">GPS Satellite Tracker Unit</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          const isFree = comp.trackerFee.toLowerCase().includes('free') || comp.trackerFee === '-';
+                          return (
+                            <td key={pId} className="py-4 text-center font-bold text-emerald-500">
+                              {isFree ? 'Complimentary (0 PKR)' : `PKR ${comp.trackerFee}`}
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: Deductible */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Policy Deductible / Excess</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        return (
-                          <td key={pId} className="py-4 text-center text-[#86868B] text-[10px]">
-                            {comp.deductible}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: Deductible */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Policy Deductible / Excess</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          return (
+                            <td key={pId} className="py-4 text-center text-[#86868B] text-[10px]">
+                              {comp.deductible}
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: Theft Recovery Rate */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Theft Recovery Success</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        return (
-                          <td key={pId} className="py-4 text-center text-apple-orange font-bold">
-                            {comp.recoveryRate}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: Theft Recovery Rate */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Theft Recovery Success</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          return (
+                            <td key={pId} className="py-4 text-center text-apple-orange font-bold">
+                              {comp.recoveryRate}
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Attribute: USP */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Primary USP Benefit</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        return (
-                          <td key={pId} className="py-4 text-center font-bold text-emerald-500">
-                            {comp.usp}
-                          </td>
-                        );
-                      })}
-                    </tr>
+                      {/* Attribute: USP */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Primary USP Benefit</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          return (
+                            <td key={pId} className="py-4 text-center font-bold text-emerald-500">
+                              {comp.usp}
+                            </td>
+                          );
+                        })}
+                      </tr>
 
-                    {/* Actions row */}
-                    <tr>
-                      <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Actions</td>
-                      {comparedPlanIds.map(pId => {
-                        const comp = companies.find(c => c.id === pId)!;
-                        return (
-                          <td key={pId} className="py-4 text-center">
-                            <button
-                              onClick={() => {
-                                setShowCompareModal(false);
-                                handleRequestQuote(comp);
-                              }}
-                              className="px-4 py-2 bg-apple-blue hover:bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-colors shadow-sm"
-                            >
-                              Request Quote
-                            </button>
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  </tbody>
-                </table>
+                      {/* Actions row */}
+                      <tr>
+                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Actions</td>
+                        {comparedPlanIds.map(pId => {
+                          const comp = companies.find(c => c.id === pId)!;
+                          return (
+                            <td key={pId} className="py-4 text-center">
+                              <button
+                                onClick={() => {
+                                  setShowCompareModal(false);
+                                  handleRequestQuote(comp);
+                                }}
+                                className="px-4 py-2 bg-apple-blue hover:bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-colors shadow-sm"
+                              >
+                                Request Quote
+                              </button>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* 2. Mobile Comparison Cards (<768px, Never raw horizontal scroll) */}
+                <div className="md:hidden space-y-4">
+                  {comparedPlanIds.map(pId => {
+                    const comp = companies.find(c => c.id === pId);
+                    if (!comp) return null;
+                    const stats = calculateCompanyPremium(comp);
+                    const isFreeTracker = comp.trackerFee.toLowerCase().includes('free') || comp.trackerFee === '-';
+
+                    return (
+                      <div key={`compare-mobile-${pId}`} className="p-4 rounded-2xl border border-black/10 dark:border-white/10 bg-[#F5F5F7]/40 dark:bg-white/5 space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-white p-1 border border-black/[0.06] flex items-center justify-center shrink-0">
+                            {comp.logoUrl ? (
+                              <img src={comp.logoUrl} alt={comp.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                            ) : (
+                              <span className="font-bold text-xs text-slate-700">{comp.name[0]}</span>
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-sm text-[#1D1D1F] dark:text-white">{comp.name}</h4>
+                            <p className="text-[10px] text-emerald-500 font-semibold">{comp.usp}</p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-white dark:bg-black/20 border border-black/5 dark:border-white/5">
+                          <div>
+                            <span className="text-[9px] uppercase tracking-wider text-[#86868B] font-bold block">Annual Premium</span>
+                            <span className="text-sm font-extrabold text-apple-blue font-mono">PKR {Math.round(stats.premium).toLocaleString()}</span>
+                            <span className="text-[9px] text-[#86868B] block">({stats.rate.toFixed(2)}%)</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] uppercase tracking-wider text-[#86868B] font-bold block">Monthly (12x)</span>
+                            <span className="text-sm font-bold text-emerald-500 font-mono">PKR {Math.round(stats.monthly).toLocaleString()}</span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5 text-xs">
+                          <div className="flex justify-between py-1 border-b border-black/5 dark:border-white/5">
+                            <span className="text-[#86868B]">Approval Ratio:</span>
+                            <span className="font-bold text-apple-blue font-mono">{comp.claimRatio}</span>
+                          </div>
+                          <div className="flex justify-between py-1 border-b border-black/5 dark:border-white/5">
+                            <span className="text-[#86868B]">Satellite Tracker:</span>
+                            <span className="font-bold text-emerald-500">{isFreeTracker ? 'Complimentary' : `PKR ${comp.trackerFee}`}</span>
+                          </div>
+                          <div className="flex justify-between py-1 border-b border-black/5 dark:border-white/5">
+                            <span className="text-[#86868B]">Deductible:</span>
+                            <span className="font-medium text-[#1D1D1F] dark:text-white">{comp.deductible}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="text-[#86868B]">Theft Recovery:</span>
+                            <span className="font-bold text-apple-orange">{comp.recoveryRate}</span>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            setShowCompareModal(false);
+                            handleRequestQuote(comp);
+                          }}
+                          className="w-full h-11 rounded-xl bg-apple-blue text-white font-bold text-xs flex items-center justify-center gap-1.5 touch-target min-h-[44px] cursor-pointer shadow-md shadow-apple-blue/20"
+                        >
+                          <span>Select Policy</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </motion.div>
           </div>

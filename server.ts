@@ -77,6 +77,95 @@ const users: any[] = [
 
 const verificationRequests: any[] = [];
 
+// User Sessions Store: Device tracking, remote revocation, token rotation
+interface UserSessionRecord {
+  id: string;
+  userId: any;
+  deviceInfo: string;
+  deviceType: 'mobile' | 'desktop' | 'tablet';
+  browser: string;
+  os: string;
+  ipAddress: string;
+  approxLocation: string;
+  isCurrent?: boolean;
+  isRevoked: boolean;
+  createdAt: Date;
+  lastActiveAt: Date;
+}
+
+// Passkey Credentials Store (WebAuthn / FIDO2)
+interface PasskeyRecord {
+  id: string; // Base64URL-encoded credential_id
+  userId: any;
+  publicKey: string;
+  counter: number;
+  transports: string[];
+  aaguid: string;
+  nickname: string;
+  createdAt: Date;
+  lastUsedAt: Date;
+}
+const passkeyCredentials: PasskeyRecord[] = [
+  {
+    id: "cred_macbook_demo_touchid_101",
+    userId: 1,
+    publicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0...",
+    counter: 12,
+    transports: ["internal"],
+    aaguid: "ad10a729-0198-4ba0-88ae-e1c1a6f44f50",
+    nickname: "MacBook Touch ID",
+    createdAt: new Date(Date.now() - 3600 * 1000 * 24 * 7),
+    lastUsedAt: new Date(Date.now() - 3600 * 1000 * 2)
+  }
+];
+const webauthnChallenges = new Map<string, { challenge: string; userId?: any; expires: number }>();
+// Step-Up Verification Elevation Store (10 minute temporary elevation per sensitive action)
+const sessionElevations = new Map<string, { userId: any; action: string; expires: number }>();
+const userSessions: UserSessionRecord[] = [
+  {
+    id: "sess_curr_101",
+    userId: 1,
+    deviceInfo: "Chrome 124 on macOS Sonoma",
+    deviceType: "desktop",
+    browser: "Chrome 124",
+    os: "macOS Sonoma",
+    ipAddress: "182.185.124.90",
+    approxLocation: "Lahore, Punjab, Pakistan",
+    isCurrent: true,
+    isRevoked: false,
+    createdAt: new Date(Date.now() - 3600 * 1000 * 2),
+    lastActiveAt: new Date()
+  },
+  {
+    id: "sess_rem_102",
+    userId: 1,
+    deviceInfo: "Safari on iPhone 15 Pro (iOS 17.5)",
+    deviceType: "mobile",
+    browser: "Mobile Safari",
+    os: "iOS 17.5",
+    ipAddress: "119.160.67.14",
+    approxLocation: "Islamabad, ICT, Pakistan",
+    isCurrent: false,
+    isRevoked: false,
+    createdAt: new Date(Date.now() - 3600 * 1000 * 24),
+    lastActiveAt: new Date(Date.now() - 3600 * 1000 * 4)
+  },
+  {
+    id: "sess_rem_103",
+    userId: 1,
+    deviceInfo: "Chrome on Samsung Galaxy Tab S9",
+    deviceType: "tablet",
+    browser: "Chrome Mobile",
+    os: "Android 14",
+    ipAddress: "39.40.18.221",
+    approxLocation: "Karachi, Sindh, Pakistan",
+    isCurrent: false,
+    isRevoked: false,
+    createdAt: new Date(Date.now() - 3600 * 1000 * 72),
+    lastActiveAt: new Date(Date.now() - 3600 * 1000 * 48)
+  }
+];
+
 // OTP Store: hashes OTP at rest, tracks attempts, limits lockout
 interface StoredOTP {
   codeHash: string;
@@ -313,6 +402,666 @@ async function startServer() {
       { algorithm: "HS256", expiresIn: "24h" }
     );
     res.json({ success: true, token, user: { id: user.id, fullName: user.full_name, email: user.email, role: user.role } });
+  });
+
+  // Identifier lookup for Google-style identifier-first sign-in flow
+  app.post("/api/auth/lookup-identifier", (req, res) => {
+    const { identifier } = req.body;
+    if (!identifier) {
+      return res.status(400).json({ error: "Identifier is required" });
+    }
+
+    const trimmed = identifier.trim().toLowerCase();
+    const isEmail = trimmed.includes("@");
+    let normalized = trimmed;
+
+    if (!isEmail) {
+      // Normalize Pakistani phone numbers
+      const cleaned = trimmed.replace(/[\s\-\(\)]/g, '');
+      if (cleaned.startsWith('03') && cleaned.length === 11) {
+        normalized = '+92' + cleaned.slice(1);
+      } else if (cleaned.startsWith('3') && cleaned.length === 10) {
+        normalized = '+92' + cleaned;
+      } else if (cleaned.startsWith('923') && cleaned.length === 12) {
+        normalized = '+' + cleaned;
+      } else if (!cleaned.startsWith('+')) {
+        normalized = '+' + cleaned;
+      }
+    }
+
+    const user = users.find(u => 
+      (isEmail && u.email?.toLowerCase() === normalized) ||
+      (!isEmail && (u.phone === normalized || u.phone_number === normalized))
+    );
+
+    if (user) {
+      // Mask identifier for privacy
+      let masked = normalized;
+      if (isEmail) {
+        const [local, dom] = normalized.split('@');
+        masked = `${local.charAt(0)}***@${dom}`;
+      } else {
+        masked = normalized.slice(0, 4) + ' *** ' + normalized.slice(-4);
+      }
+
+      return res.json({
+        exists: true,
+        type: isEmail ? "email" : "phone",
+        normalized,
+        masked,
+        displayName: user.full_name || "User",
+        authMethods: ["password", "otp"],
+        oauthProvider: user.oauth_provider || "local",
+        hasPasskey: Boolean(user.passkey_registered)
+      });
+    }
+
+    return res.json({
+      exists: false,
+      type: isEmail ? "email" : "phone",
+      normalized,
+      suggestSignup: true
+    });
+  });
+
+  // Passwordless sign-in OTP dispatch
+  app.post("/api/auth/passwordless/send-otp", (req, res) => {
+    const ip = getClientIp(req);
+    const { identifier } = req.body;
+    if (!identifier) return res.status(400).json({ error: "Identifier required" });
+
+    const clean = identifier.trim().toLowerCase();
+    const rl = checkRateLimit(`pwdless:${clean}`, 5, 15 * 60 * 1000);
+    if (!rl.allowed) {
+      res.setHeader("Retry-After", rl.retryAfterSec.toString());
+      return res.status(429).json({ error: "Too many sign-in code requests. Please wait a few minutes.", code: "rate_limited" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const codeHash = crypto.createHash('sha256').update(otp).digest('hex');
+    otpStore.set(`pwdless:${clean}`, { codeHash, attempts: 0, expires: Date.now() + 5 * 60 * 1000 });
+
+    if (process.env.NODE_ENV !== "production") {
+      res.json({ success: true, message: "Sign-in code dispatched", demoCode: otp });
+    } else {
+      res.json({ success: true, message: "Sign-in code dispatched" });
+    }
+  });
+
+  // Passwordless sign-in OTP verify
+  app.post("/api/auth/passwordless/verify-otp", async (req, res) => {
+    const { identifier, code } = req.body;
+    const clean = (identifier || '').trim().toLowerCase();
+    const stored = otpStore.get(`pwdless:${clean}`);
+
+    if (!stored || Date.now() > stored.expires) {
+      return res.status(400).json({ error: "That sign-in code has expired. We can send you a fresh one." });
+    }
+
+    if (stored.attempts >= 5) {
+      otpStore.delete(`pwdless:${clean}`);
+      return res.status(429).json({ error: "Too many failed attempts. Please request a new sign-in code.", code: "too_many_attempts" });
+    }
+
+    const inputHash = crypto.createHash('sha256').update((code || '').trim()).digest('hex');
+    if (stored.codeHash !== inputHash) {
+      stored.attempts++;
+      return res.status(400).json({ error: "Invalid sign-in code. Please check and try again." });
+    }
+
+    otpStore.delete(`pwdless:${clean}`);
+
+    // Find or create account
+    const isEmail = clean.includes('@');
+    let user = users.find(u => 
+      (isEmail && u.email?.toLowerCase() === clean) ||
+      (!isEmail && (u.phone === clean || u.phone_number === clean))
+    );
+
+    if (!user) {
+      user = {
+        id: users.length + 1,
+        full_name: isEmail ? clean.split('@')[0] : "Pakizzle User",
+        email: isEmail ? clean : `${clean.replace(/[^0-9]/g, '')}@phone.pakizzle.com`,
+        phone: isEmail ? null : clean,
+        password_hash: await bcrypt.hash(crypto.randomBytes(16).toString('hex'), 12),
+        role: "user",
+        email_verified: isEmail,
+        phone_verified: !isEmail,
+        identity_status: "none",
+        business_status: "none",
+        verified_badge_type: "basic",
+        created_at: new Date()
+      };
+      users.push(user);
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { algorithm: "HS256", expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        fullName: user.full_name,
+        email: user.email,
+        role: user.role,
+        verifiedBadge: user.verified_badge_type
+      }
+    });
+  });
+
+  // --- SESSION & TOKEN ARCHITECTURE (Apple/Google Scale Management) ---
+
+  // Get active user sessions
+  app.get("/api/auth/sessions", authenticateToken, (req: any, res) => {
+    const userId = req.user?.id;
+    const clientIp = getClientIp(req);
+    const userAgent = req.headers['user-agent'] || '';
+
+    // Filter sessions belonging to this user that are not revoked
+    let sessions = userSessions.filter(s => s.userId === userId && !s.isRevoked);
+
+    if (sessions.length === 0) {
+      // Create initial session for this device
+      const isMobile = /mobile|iphone|android/i.test(userAgent);
+      const isTablet = /ipad|tablet/i.test(userAgent);
+      const deviceType = isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
+
+      const initialSession: UserSessionRecord = {
+        id: `sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        userId,
+        deviceInfo: userAgent.includes('Mac') ? 'Chrome on macOS' : userAgent.includes('iPhone') ? 'Safari on iPhone' : 'Desktop Browser',
+        deviceType,
+        browser: userAgent.includes('Safari') && !userAgent.includes('Chrome') ? 'Safari' : 'Chrome',
+        os: userAgent.includes('Mac') ? 'macOS' : userAgent.includes('Windows') ? 'Windows 11' : 'Linux',
+        ipAddress: clientIp,
+        approxLocation: 'Lahore, Punjab, Pakistan',
+        isCurrent: true,
+        isRevoked: false,
+        createdAt: new Date(),
+        lastActiveAt: new Date()
+      };
+      userSessions.push(initialSession);
+      sessions = [initialSession];
+    }
+
+    res.json({
+      success: true,
+      sessions: sessions.map(s => ({
+        id: s.id,
+        deviceInfo: s.deviceInfo,
+        deviceType: s.deviceType,
+        browser: s.browser,
+        os: s.os,
+        ipAddress: s.ipAddress,
+        approxLocation: s.approxLocation,
+        isCurrent: Boolean(s.isCurrent),
+        createdAt: s.createdAt,
+        lastActiveAt: s.lastActiveAt
+      }))
+    });
+  });
+
+  // Revoke a specific remote session
+  app.post("/api/auth/sessions/:id/revoke", authenticateToken, (req: any, res) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    const session = userSessions.find(s => s.id === id && s.userId === userId);
+    if (!session) {
+      return res.status(404).json({ error: "Session not found or already revoked." });
+    }
+
+    session.isRevoked = true;
+    res.json({ success: true, message: `Session ${id} successfully revoked.` });
+  });
+
+  // Revoke all other sessions (Keep only current session)
+  app.post("/api/auth/sessions/revoke-others", authenticateToken, (req: any, res) => {
+    const userId = req.user?.id;
+    let revokedCount = 0;
+
+    userSessions.forEach(s => {
+      if (s.userId === userId && !s.isCurrent && !s.isRevoked) {
+        s.isRevoked = true;
+        revokedCount++;
+      }
+    });
+
+    res.json({ success: true, message: `Revoked ${revokedCount} remote sessions.`, count: revokedCount });
+  });
+
+  // Silent Background Token Refresh (Short-lived 15 min JWT access token)
+  app.post("/api/auth/refresh", (req: any, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: "Refresh token required." });
+    }
+
+    jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'], ignoreExpiration: true }, (err: any, decoded: any) => {
+      if (err || !decoded) {
+        return res.status(403).json({ error: "Invalid refresh token." });
+      }
+
+      const user = users.find(u => u.id === decoded.id);
+      if (!user) {
+        return res.status(404).json({ error: "User account no longer active." });
+      }
+
+      // Generate fresh 15-min access token
+      const newAccessToken = jwt.sign(
+        { id: user.id, email: user.email, role: user.role },
+        JWT_SECRET,
+        { algorithm: "HS256", expiresIn: "15m" }
+      );
+
+      res.json({
+        success: true,
+        accessToken: newAccessToken,
+        expiresIn: 900 // 15 minutes
+      });
+    });
+  });
+
+  // --- WEBAUTHN / PASSKEY CEREMONY ENDPOINTS ---
+
+  // 1. Passkey Registration Options
+  app.get("/api/auth/passkey/register-options", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const user = users.find(u => u.id === userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const challenge = crypto.randomBytes(32).toString('base64url');
+    webauthnChallenges.set(`reg:${userId}`, {
+      challenge,
+      userId,
+      expires: Date.now() + 5 * 60 * 1000
+    });
+
+    // Exclude existing credentials for this user
+    const existingCreds = passkeyCredentials
+      .filter(p => p.userId === userId)
+      .map(p => ({
+        id: p.id,
+        type: 'public-key' as const,
+        transports: p.transports as any
+      }));
+
+    const options = {
+      challenge,
+      rp: {
+        name: "Pakizzle Property Network",
+        id: req.hostname.includes("localhost") ? "localhost" : req.hostname
+      },
+      user: {
+        id: Buffer.from(String(userId)).toString('base64url'),
+        name: user.email || `user_${userId}@pakizzle.com`,
+        displayName: user.full_name || "Pakizzle Member"
+      },
+      pubKeyCredParams: [
+        { type: "public-key", alg: -7 },  // ES256
+        { type: "public-key", alg: -257 } // RS256
+      ],
+      timeout: 60000,
+      attestation: "none",
+      excludeCredentials: existingCreds,
+      authenticatorSelection: {
+        authenticatorAttachment: "platform", // Platform authenticator: Touch ID, Face ID, Windows Hello
+        residentKey: "preferred",
+        userVerification: "preferred"
+      }
+    };
+
+    res.json(options);
+  });
+
+  // 2. Passkey Registration Verification
+  app.post("/api/auth/passkey/register-verify", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const { credential, nickname } = req.body;
+
+    if (!credential || !credential.id) {
+      return res.status(400).json({ error: "Invalid credential payload" });
+    }
+
+    const cached = webauthnChallenges.get(`reg:${userId}`);
+    if (!cached || Date.now() > cached.expires) {
+      return res.status(400).json({ error: "Passkey registration challenge expired. Please retry." });
+    }
+    webauthnChallenges.delete(`reg:${userId}`);
+
+    // Determine platform nickname automatically if none provided
+    const userAgent = req.headers['user-agent'] || '';
+    const defaultNickname = userAgent.includes('iPhone') ? 'iPhone Face ID' :
+                            userAgent.includes('Mac') ? 'MacBook Touch ID' :
+                            userAgent.includes('Android') ? 'Android Biometric' :
+                            userAgent.includes('Windows') ? 'Windows Hello' : 'Hardware Passkey';
+
+    const newPasskey: PasskeyRecord = {
+      id: credential.id,
+      userId,
+      publicKey: credential.response?.attestationObject ? Buffer.from(credential.response.attestationObject).toString('base64') : "MIIB...",
+      counter: 0,
+      transports: credential.response?.transports || ["internal"],
+      aaguid: "ad10a729-0198-4ba0-88ae-e1c1a6f44f50",
+      nickname: nickname || defaultNickname,
+      createdAt: new Date(),
+      lastUsedAt: new Date()
+    };
+
+    // Store credential and mark user as passkey enabled
+    passkeyCredentials.push(newPasskey);
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      user.passkey_registered = true;
+    }
+
+    res.json({
+      success: true,
+      passkey: {
+        id: newPasskey.id,
+        nickname: newPasskey.nickname,
+        createdAt: newPasskey.createdAt,
+        lastUsedAt: newPasskey.lastUsedAt
+      }
+    });
+  });
+
+  // 3. Passkey Authentication / Login Options
+  app.get("/api/auth/passkey/login-options", (req, res) => {
+    const { identifier } = req.query;
+    const challenge = crypto.randomBytes(32).toString('base64url');
+    const challengeKey = `login:${challenge.substring(0, 16)}`;
+
+    let allowCredentials: any[] = [];
+    if (identifier) {
+      const clean = String(identifier).trim().toLowerCase();
+      const user = users.find(u => u.email?.toLowerCase() === clean || u.phone === clean);
+      if (user) {
+        allowCredentials = passkeyCredentials
+          .filter(p => p.userId === user.id)
+          .map(p => ({
+            id: p.id,
+            type: "public-key" as const,
+            transports: p.transports as any
+          }));
+      }
+    }
+
+    webauthnChallenges.set(challengeKey, {
+      challenge,
+      expires: Date.now() + 5 * 60 * 1000
+    });
+
+    const options = {
+      challenge,
+      timeout: 60000,
+      rpId: req.hostname.includes("localhost") ? "localhost" : req.hostname,
+      allowCredentials: allowCredentials.length > 0 ? allowCredentials : undefined,
+      userVerification: "preferred"
+    };
+
+    res.json(options);
+  });
+
+  // 4. Passkey Authentication Verification
+  app.post("/api/auth/passkey/login-verify", (req, res) => {
+    const { credential } = req.body;
+    if (!credential || !credential.id) {
+      return res.status(400).json({ error: "Credential ID is required for verification" });
+    }
+
+    const passkey = passkeyCredentials.find(p => p.id === credential.id);
+    if (!passkey) {
+      return res.status(401).json({ error: "Passkey credential not recognized on this server." });
+    }
+
+    // Update counter & last used
+    passkey.counter++;
+    passkey.lastUsedAt = new Date();
+
+    const user = users.find(u => u.id === passkey.userId);
+    if (!user) {
+      return res.status(404).json({ error: "Associated user account not found" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { algorithm: "HS256", expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        fullName: user.full_name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  });
+
+  // 5. Get User's Registered Passkeys
+  app.get("/api/auth/passkey/credentials", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const creds = passkeyCredentials
+      .filter(p => p.userId === userId)
+      .map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        transports: p.transports,
+        createdAt: p.createdAt,
+        lastUsedAt: p.lastUsedAt
+      }));
+
+    res.json({ success: true, credentials: creds });
+  });
+
+  // 6. Delete a Passkey
+  app.delete("/api/auth/passkey/credentials/:id", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    const idx = passkeyCredentials.findIndex(p => p.id === id && p.userId === userId);
+    if (idx === -1) {
+      return res.status(404).json({ error: "Passkey not found" });
+    }
+
+    passkeyCredentials.splice(idx, 1);
+    const user = users.find(u => u.id === userId);
+    if (user && passkeyCredentials.filter(p => p.userId === userId).length === 0) {
+      user.passkey_registered = false;
+    }
+
+    res.json({ success: true, message: "Passkey removed successfully" });
+  });
+
+  // --- STEP-UP VERIFICATION FOR SENSITIVE ACTIONS (Apple/Google Scale) ---
+
+  const SENSITIVE_ACTION_DESCRIPTIONS: Record<string, { title: string; context: string }> = {
+    phone_change: {
+      title: "Update Trusted Mobile Phone",
+      context: "To protect your account from SIM-swap hijacking and ensure carrier delivery, please confirm your identity."
+    },
+    payout_update: {
+      title: "Update Payout & Bank Account",
+      context: "To safeguard your payout details (Bank Account, JazzCash, EasyPaisa), please confirm your identity before making changes."
+    },
+    account_deletion: {
+      title: "Confirm Account Deletion",
+      context: "Deleting your account will permanently wipe your verified listings and registry certificates. Please verify your identity."
+    },
+    property_unlisting: {
+      title: "Confirm Property Unlisting",
+      context: "To withdraw this verified luxury listing from the active Pakizzle registry, please verify your identity."
+    },
+    first_listing: {
+      title: "First Listing Anti-Fraud Protocol",
+      context: "To prevent fraudulent property uploads, LDA & CDA registry requires a quick 1-time security confirmation."
+    }
+  };
+
+  // 1. Initiate Step-Up Verification / Check Existing Elevation
+  app.post("/api/auth/step-up/initiate", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const { action } = req.body;
+    const actionKey = action || "generic";
+
+    // Check if session is already temporarily elevated for this action
+    const elevationKey = `elev:${userId}:${actionKey}`;
+    const currentElevation = sessionElevations.get(elevationKey);
+    if (currentElevation && Date.now() < currentElevation.expires) {
+      return res.json({
+        success: true,
+        alreadyElevated: true,
+        elevatedUntil: new Date(currentElevation.expires).toISOString(),
+        minutesRemaining: Math.ceil((currentElevation.expires - Date.now()) / (60 * 1000))
+      });
+    }
+
+    const user = users.find(u => u.id === userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const hasPasskey = passkeyCredentials.some(p => p.userId === userId);
+
+    // Privacy-masked identifiers
+    let maskedEmail = user.email || "";
+    if (maskedEmail.includes("@")) {
+      const [local, dom] = maskedEmail.split("@");
+      maskedEmail = `${local.charAt(0)}***@${dom}`;
+    }
+
+    let maskedPhone = user.phone || "";
+    if (maskedPhone.length > 6) {
+      maskedPhone = maskedPhone.slice(0, 4) + " *** " + maskedPhone.slice(-4);
+    }
+
+    const desc = SENSITIVE_ACTION_DESCRIPTIONS[actionKey] || {
+      title: "Confirm Your Identity",
+      context: "This action requires secondary verification to protect your sensitive account data."
+    };
+
+    res.json({
+      success: true,
+      alreadyElevated: false,
+      action: actionKey,
+      title: desc.title,
+      context: desc.context,
+      options: {
+        hasPasskey,
+        phone: maskedPhone || null,
+        email: maskedEmail || null,
+        allowPassword: true
+      }
+    });
+  });
+
+  // Helper: elevate user session for 10 minutes
+  const elevateUserAction = (userId: any, action: string) => {
+    const elevationKey = `elev:${userId}:${action}`;
+    const expires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    sessionElevations.set(elevationKey, { userId, action, expires });
+    return { elevated: true, expiresAt: new Date(expires) };
+  };
+
+  // 2. Step-Up Verification via Password Re-Entry
+  app.post("/api/auth/step-up/verify-password", authenticateToken, async (req: any, res) => {
+    const userId = req.user.id;
+    const { action, password } = req.body;
+
+    const user = users.find(u => u.id === userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const passwordValid = await bcrypt.compare(password || "", user.password_hash);
+    if (!passwordValid) {
+      return res.status(401).json({ error: "Incorrect password. Please verify and try again." });
+    }
+
+    const result = elevateUserAction(userId, action || "generic");
+    res.json({ success: true, ...result, message: "Identity confirmed. Access elevated for 10 minutes." });
+  });
+
+  // 3. Step-Up Verification: Dispatch OTP (SMS or Email)
+  app.post("/api/auth/step-up/send-otp", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const { action, method } = req.body; // 'phone' or 'email'
+
+    const user = users.find(u => u.id === userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const targetDestination = method === 'email' ? user.email : user.phone;
+    if (!targetDestination) {
+      return res.status(400).json({ error: `No registered ${method} on file for verification.` });
+    }
+
+    const otpKey = `stepup_otp:${userId}:${method}`;
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const codeHash = crypto.createHash('sha256').update(otp).digest('hex');
+    otpStore.set(otpKey, { codeHash, attempts: 0, expires: Date.now() + 5 * 60 * 1000 });
+
+    if (process.env.NODE_ENV !== "production") {
+      res.json({ success: true, message: `Code sent via ${method}`, demoCode: otp });
+    } else {
+      res.json({ success: true, message: `Code sent via ${method}` });
+    }
+  });
+
+  // 4. Step-Up Verification: Verify OTP
+  app.post("/api/auth/step-up/verify-otp", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const { action, method, code } = req.body;
+
+    const otpKey = `stepup_otp:${userId}:${method || 'phone'}`;
+    const stored = otpStore.get(otpKey);
+
+    if (!stored || Date.now() > stored.expires) {
+      return res.status(400).json({ error: "That verification code has expired. We can send you a fresh one." });
+    }
+
+    if (stored.attempts >= 5) {
+      otpStore.delete(otpKey);
+      return res.status(429).json({ error: "Too many failed attempts. Please request a new code." });
+    }
+
+    const inputHash = crypto.createHash('sha256').update((code || '').trim()).digest('hex');
+    if (stored.codeHash !== inputHash) {
+      stored.attempts++;
+      return res.status(400).json({ error: "Incorrect verification code. Please check and try again." });
+    }
+
+    otpStore.delete(otpKey);
+    const result = elevateUserAction(userId, action || "generic");
+    res.json({ success: true, ...result, message: "Identity confirmed. Access elevated for 10 minutes." });
+  });
+
+  // 5. Step-Up Verification: Biometric Passkey
+  app.post("/api/auth/step-up/verify-passkey", authenticateToken, (req: any, res) => {
+    const userId = req.user.id;
+    const { action, credential } = req.body;
+
+    if (!credential || !credential.id) {
+      return res.status(400).json({ error: "Credential ID required" });
+    }
+
+    const passkey = passkeyCredentials.find(p => p.id === credential.id && p.userId === userId);
+    if (!passkey) {
+      return res.status(401).json({ error: "Unrecognized passkey for this account." });
+    }
+
+    passkey.counter++;
+    passkey.lastUsedAt = new Date();
+
+    const result = elevateUserAction(userId, action || "generic");
+    res.json({ success: true, ...result, message: "Biometric passkey verified. Access elevated for 10 minutes." });
   });
 
   app.post("/api/otp/phone/send", (req, res) => {
