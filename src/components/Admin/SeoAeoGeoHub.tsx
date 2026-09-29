@@ -30,7 +30,7 @@ import {
   FileText,
   AlertTriangle
 } from "lucide-react";
-import { useVehicles } from "@/context/VehicleContext";
+import { useProperties } from "@/context/PropertyContext";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
@@ -74,7 +74,7 @@ interface SeoAeoGeoData {
 }
 
 export default function SeoAeoGeoHub() {
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const [selectedVehicleId, setSelectedVehicleId] = useState<string>("");
   const [isOptimizing, setIsOptimizing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"dashboard" | "explorer" | "optimizer" | "sandbox">("dashboard");

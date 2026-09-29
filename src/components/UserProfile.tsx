@@ -36,7 +36,7 @@ import Footer from "./Footer";
 import Badge from "./Badge";
 import { toast } from "sonner";
 
-import { useVehicles } from "../context/VehicleContext";
+import { useProperties } from "../context/PropertyContext";
 import { useChat } from "../context/ChatContext";
 
 type Tab = "Ads" | "Ratings" | "Security";
@@ -45,7 +45,7 @@ type RatingFilter = "All" | "Buyer" | "Seller";
 export default function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  const { vehicles: allVehicles } = useVehicles();
+  const { properties: allVehicles } = useProperties();
   const { startConversation } = useChat();
   const [profile, setProfile] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<Tab>("Ads");

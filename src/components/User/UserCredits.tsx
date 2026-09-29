@@ -21,7 +21,7 @@ import {
   Car
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { useVehicles } from "../../context/VehicleContext";
+import { useProperties } from "../../context/PropertyContext";
 import { db } from "../../firebase";
 import { doc, updateDoc, collection, addDoc } from "firebase/firestore";
 import { toast } from "sonner";
@@ -91,7 +91,7 @@ const CREDIT_PACKAGES = [
 
 export default function UserCredits() {
   const { user, profile } = useAuth();
-  const { vehicles, updateVehicle } = useVehicles();
+  const { properties: vehicles, updateProperty: updateVehicle } = useProperties();
   
   const [selectedPackage, setSelectedPackage] = useState<any>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);

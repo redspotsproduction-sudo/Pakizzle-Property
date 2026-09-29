@@ -287,5 +287,11 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow write: if false;
     }
+
+    // Health / Connection verification
+    match /test/{testId} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }

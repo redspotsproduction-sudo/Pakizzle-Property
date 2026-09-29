@@ -1,10 +1,10 @@
-export interface Vehicle {
+export interface Property {
   id: string;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  mileage: number;
+  make: string; // Property type/category: "House", "Apartment", "Plot", "Commercial", "Penthouse"
+  model: string; // Title / Model name: "Luxury Contemporary Villa", "Executive Flat", etc.
+  year: number; // Year built / established
+  price: number; // Price in PKR
+  mileage: number; // Total covered area in Sq. Ft.
   location: string;
   city: string;
   area?: string;
@@ -18,7 +18,11 @@ export interface Vehicle {
   condition: 'ready' | 'under_construction' | 'off_plan' | 'new' | 'used' | 'certified';
   transmission: 'furnished' | 'unfurnished' | 'semi-furnished' | 'automatic' | 'manual';
   fuelType: 'house' | 'apartment' | 'penthouse' | 'plot' | 'commercial' | 'petrol' | 'diesel' | 'hybrid' | 'electric';
-  engineSize: string; // E.g., "5 Beds", "3 Beds", "10 Marla"
+  engineSize: string; // E.g., "5 Beds", "3 Beds", "10 Marla", "1 Kanal"
+  bedrooms?: number;
+  bathrooms?: number;
+  areaUnit?: 'marla' | 'kanal' | 'sqft' | 'sqyd';
+  areaSize?: number;
   seller: {
     uid?: string;
     name: string;
@@ -30,7 +34,13 @@ export interface Vehicle {
   };
   createdAt: string;
   specs?: {
-    acceleration?: string; // 0-100 km/h
+    bedrooms?: number;
+    bathrooms?: number;
+    floors?: number;
+    parkingSpaces?: number;
+    furnishedStatus?: string;
+    facing?: string; // "East", "Corner", "Park Facing", "Main Boulevard"
+    acceleration?: string;
     topSpeed?: string;
     range?: string;
     horsepower?: number;
@@ -52,6 +62,8 @@ export interface Vehicle {
   customFields?: Record<string, any>;
   bodyType?: string;
 }
+
+export type Vehicle = Property;
 
 export type UserRole = 'user' | 'admin' | 'moderator' | 'finance' | 'support';
 export type UserStatus = 'active' | 'suspended' | 'banned' | 'pending';

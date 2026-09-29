@@ -38,11 +38,12 @@ import { getAuth, RecaptchaVerifier as FirebaseRecaptchaVerifier } from 'firebas
 import { toast } from 'sonner';
 import { SignUpCard } from './Auth/SignUpCard';
 import { SignInCard } from './Auth/SignInCard';
+import { ForgotPasswordCard } from './Auth/ForgotPasswordCard';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialView?: 'login' | 'signup';
+  initialView?: 'login' | 'signup' | 'forgot-password';
 }
 
 type AuthView = 
@@ -234,12 +235,18 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           // Profile is still loading. Do NOT reset the view, as it would cause flickering.
         }
       } else {
-        // User is logged out. Set view to 'selection' only if they are not in a subview.
-        if (view !== 'email-login' && 
-            view !== 'email-signup' && 
-            view !== 'phone-entry' && 
-            view !== 'otp-verify' && 
-            view !== 'forgot-password') {
+        // User is logged out. Respect initialView if opening fresh
+        if (initialView === 'signup') {
+          setView('email-signup');
+        } else if (initialView === 'forgot-password') {
+          setView('forgot-password');
+        } else if (
+          view !== 'email-login' && 
+          view !== 'email-signup' && 
+          view !== 'phone-entry' && 
+          view !== 'otp-verify' && 
+          view !== 'forgot-password'
+        ) {
           setView('selection');
         }
       }
@@ -635,13 +642,23 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
         </button>
       </div>
 
-      <div className="pt-6 border-t border-neutral-100 dark:border-zinc-800/80">
+      <div className="pt-5 border-t border-neutral-100 dark:border-zinc-800/80 space-y-2 text-center">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          Forgot your password?{' '}
+          <button
+            type="button"
+            onClick={() => setView('forgot-password')}
+            className="text-apple-blue font-bold hover:underline cursor-pointer"
+          >
+            Reset Password
+          </button>
+        </p>
         <p className="text-xs text-neutral-500 dark:text-neutral-400">
           New to Pakizzle?{' '}
           <button
             type="button"
             onClick={() => setView('email-signup')}
-            className="text-apple-blue font-bold hover:underline"
+            className="text-apple-blue font-bold hover:underline cursor-pointer"
           >
             Create Your Account
           </button>
@@ -1093,66 +1110,27 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   );
 
   const renderForgotPassword = () => (
-    <form onSubmit={async (e) => {
-      e.preventDefault();
-      setLoading(true);
-      setError(null);
-      try {
-        await resetPassword(email);
-        setForgotPasswordEmailSent(true);
-        toast.success("Security reset link dispatched to your inbox!");
-      } catch (err: any) {
-        setError(err.message || "Failed to dispatch reset link.");
-      } finally {
-        setLoading(false);
-      }
-    }} className="space-y-4 pt-1">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
-        <button type="button" onClick={() => setView('email-login')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
+    <div className="pt-1">
+      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+        <button 
+          type="button" 
+          onClick={() => setView('selection')} 
+          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
+        >
           <ChevronLeft className="w-4.5 h-4.5" />
         </button>
         <div>
-          <h2 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white">Recover Password</h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Let's reset your digital vault lock.</p>
+          <h2 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white">Reset Password</h2>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Recover access to your account securely.</p>
         </div>
       </div>
-
-      {forgotPasswordEmailSent ? (
-        <div className="p-5 rounded-2xl bg-apple-green/10 border border-apple-green/20 text-center space-y-3">
-          <CheckCircle2 className="w-10 h-10 text-apple-green mx-auto" />
-          <h3 className="font-bold text-sm text-neutral-800 dark:text-zinc-200">Reset Dispatch Successful</h3>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-            We have routed a secure cryptographical link to <strong>{email}</strong>. Please check your inbox (and spam folder) to reset your pass.
-          </p>
-          <button type="button" onClick={() => setView('email-login')} className="text-xs font-bold text-apple-blue hover:underline">Return to login</button>
-        </div>
-      ) : (
-        <>
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Registered Email Address</label>
-            <div className="relative">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm text-stone-900 dark:text-white"
-                placeholder="john@example.com"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-apple-blue hover:bg-apple-blue/90 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:shadow-lg disabled:opacity-50 transition-all uppercase tracking-widest text-xs h-12"
-          >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Dispatch Reset Vault Link <ArrowRight className="w-4 h-4" /></>}
-          </button>
-        </>
-      )}
-    </form>
+      <ForgotPasswordCard
+        initialIdentifier={email || ''}
+        onSuccess={onClose}
+        onBackToSignIn={() => setView('selection')}
+        className="!p-0 !border-0 !shadow-none !bg-transparent !max-w-none"
+      />
+    </div>
   );
 
   // 1. CHOOSE ACCOUNT TYPE
@@ -2202,6 +2180,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                         className="!p-0 !bg-transparent !border-0 !shadow-none !max-w-none"
                         onSuccess={onClose}
                         onSwitchToSignUp={() => setView('email-signup')}
+                        onForgotPassword={() => setView('forgot-password')}
                       />
                     </div>
                   )}

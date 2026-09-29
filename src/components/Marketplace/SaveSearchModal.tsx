@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { savedSearchService } from "../../services/savedSearchService";
-import { useVehicles } from "../../context/VehicleContext";
+import { useProperties } from "../../context/PropertyContext";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 
@@ -46,7 +46,7 @@ interface SaveSearchModalProps {
 
 export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearchModalProps) {
   const { user } = useAuth();
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const [watcherName, setWatcherName] = useState("");
   const [frequency, setFrequency] = useState<"instant" | "daily">("instant");
   const [alertMethods, setAlertMethods] = useState({

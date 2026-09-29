@@ -2,7 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { WishlistProvider } from './context/WishlistContext.tsx';
-import { VehicleProvider } from './context/VehicleContext.tsx';
+import { PropertyProvider } from './context/PropertyContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { ChatProvider } from './context/ChatContext.tsx';
 import { LocationProvider } from './context/LocationContext.tsx';
@@ -18,13 +18,13 @@ createRoot(document.getElementById('root')!).render(
         <AuthProvider>
           <NotificationProvider>
             <LocationProvider>
-              <VehicleProvider>
+              <PropertyProvider>
                 <WishlistProvider>
                   <ChatProvider>
                     <App />
                   </ChatProvider>
                 </WishlistProvider>
-              </VehicleProvider>
+              </PropertyProvider>
             </LocationProvider>
           </NotificationProvider>
         </AuthProvider>

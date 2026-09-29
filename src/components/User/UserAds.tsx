@@ -22,7 +22,7 @@ import {
   BarChart3,
   ExternalLink
 } from "lucide-react";
-import { useVehicles } from "../../context/VehicleContext";
+import { useProperties } from "../../context/PropertyContext";
 import { useAuth } from "../../context/AuthContext";
 import { formatPrice, cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
@@ -31,7 +31,7 @@ import ConfirmationModal from "../ConfirmationModal";
 const ITEMS_PER_PAGE = 6;
 
 export default function UserAds() {
-  const { vehicles, updateVehicle, deleteVehicle } = useVehicles();
+  const { properties: vehicles, updateProperty: updateVehicle, deleteProperty: deleteVehicle } = useProperties();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'all' | 'active' | 'inactive' | 'draft' | 'under_review'>('all');
   const [searchQuery, setSearchQuery] = useState("");

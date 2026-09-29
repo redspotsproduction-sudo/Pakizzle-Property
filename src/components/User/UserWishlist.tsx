@@ -1,13 +1,13 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Heart, Search, ShoppingBag, ArrowRight, Trash2, Zap, Car } from "lucide-react";
-import { useVehicles } from "../../context/VehicleContext";
+import { Heart, Search, ShoppingBag, ArrowRight, Trash2, Zap, Building2, Home } from "lucide-react";
+import { useProperties } from "../../context/PropertyContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { formatPrice, cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
 
 export default function UserWishlist() {
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const { wishlist, removeFromWishlist } = useWishlist();
 
   const wishlistedItems = wishlist.map(id => vehicles.find(v => v.id === id)).filter(Boolean);
@@ -61,7 +61,7 @@ export default function UserWishlist() {
                   <Trash2 className="w-4 h-4" />
                 </button>
 
-                <Link to={`/vehicle/${v!.id}`} className="block">
+                <Link to={`/property/${v!.id}`} className="block">
                   <div className="aspect-[4/3] overflow-hidden relative bg-[#1C1C1E] border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-center">
                     {v!.images?.[0] ? (
                       <img 
@@ -71,13 +71,13 @@ export default function UserWishlist() {
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <Car className="w-10 h-10 text-white/30" />
+                      <Building2 className="w-10 h-10 text-white/30" />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     
                     <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-end justify-between">
                        <div className="min-w-0 pr-2">
-                         <div className="text-[8px] font-bold text-white/60 uppercase tracking-wider mb-0.5">{v!.year} Release</div>
+                         <div className="text-[8px] font-bold text-white/60 uppercase tracking-wider mb-0.5">{v!.year} Built</div>
                          <h3 className="text-sm font-semibold text-white tracking-tight leading-none group-hover:text-apple-red transition-colors truncate">{v!.make} {v!.model}</h3>
                        </div>
                        <Zap className="w-4 h-4 text-apple-blue shrink-0" />
@@ -94,8 +94,8 @@ export default function UserWishlist() {
 
                     <div className="grid grid-cols-2 gap-2 pb-3.5 border-b border-black/[0.04] dark:border-white/[0.04]">
                        <div className="space-y-0.5">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Mileage</p>
-                          <p className="text-xs font-semibold text-[#1D1D1F] dark:text-white font-mono">{v!.mileage.toLocaleString()} km</p>
+                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Area</p>
+                          <p className="text-xs font-semibold text-[#1D1D1F] dark:text-white font-mono">{v!.mileage.toLocaleString()} Sq.Ft.</p>
                        </div>
                        <div className="space-y-0.5">
                           <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Location</p>
@@ -104,7 +104,7 @@ export default function UserWishlist() {
                     </div>
 
                     <div className="flex items-center justify-between text-apple-blue font-bold uppercase tracking-wider text-[10px]">
-                       <span>Access Technical Data</span>
+                       <span>View Property Details</span>
                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
                     </div>
                   </div>

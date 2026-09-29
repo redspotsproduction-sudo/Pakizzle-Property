@@ -23,6 +23,7 @@ import { InlineOtpVerification } from './InlineOtpVerification';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'sonner';
 import { authenticateWithPasskey } from '../../lib/passkey';
+import { ForgotPasswordCard } from './ForgotPasswordCard';
 
 // High-contrast Google SSO Icon
 const GoogleIcon = () => (
@@ -55,12 +56,14 @@ const AppleIcon = () => (
 interface SignInCardProps {
   onSuccess?: () => void;
   onSwitchToSignUp?: () => void;
+  onForgotPassword?: () => void;
   className?: string;
 }
 
 export const SignInCard: React.FC<SignInCardProps> = ({
   onSuccess,
   onSwitchToSignUp,
+  onForgotPassword,
   className,
 }) => {
   const { 
@@ -74,8 +77,8 @@ export const SignInCard: React.FC<SignInCardProps> = ({
   const [identifier, setIdentifier] = useState('');
   const [parsedIdentifier, setParsedIdentifier] = useState(parseAndValidateIdentifier(''));
   
-  // Step: 'identifier' -> 'credential' -> 'otp'
-  const [step, setStep] = useState<'identifier' | 'credential' | 'otp'>('identifier');
+  // Step: 'identifier' -> 'credential' -> 'otp' -> 'forgot'
+  const [step, setStep] = useState<'identifier' | 'credential' | 'otp' | 'forgot'>('identifier');
 
   // Credential states
   const [password, setPassword] = useState('');
@@ -273,19 +276,12 @@ export const SignInCard: React.FC<SignInCardProps> = ({
     }
   };
 
-  // 6. Forgot Password
-  const handleForgotPassword = async () => {
-    if (parsedIdentifier.type !== 'email') {
-      // Trigger OTP flow for phone users
-      await handleRequestPasswordless();
-      return;
-    }
-
-    try {
-      await resetPassword(parsedIdentifier.normalized);
-      toast.success(`Password reset instructions sent to ${parsedIdentifier.normalized}`);
-    } catch (err: any) {
-      setErrorMessage(err?.message || 'Unable to send reset instructions. Please try signing in with a code.');
+  // 6. Forgot Password (In-Place Transition or Delegated)
+  const handleForgotPassword = () => {
+    if (onForgotPassword) {
+      onForgotPassword();
+    } else {
+      setStep('forgot');
     }
   };
 
@@ -444,14 +440,25 @@ export const SignInCard: React.FC<SignInCardProps> = ({
               </motion.button>
             </form>
 
-            {/* Switch to Sign Up */}
-            <div className="text-center pt-2 border-t border-black/5 dark:border-white/5">
+            {/* Switch to Sign Up and Forgot Password */}
+            <div className="text-center pt-3 border-t border-black/5 dark:border-white/5 space-y-2">
+              <div className="flex items-center justify-center gap-1.5 text-xs text-apple-text-muted">
+                <span>Forgot your password?</span>
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="font-bold text-apple-blue hover:underline cursor-pointer touch-target min-h-[32px] inline-flex items-center"
+                >
+                  Reset here
+                </button>
+              </div>
+
               <p className="text-xs text-apple-text-muted">
                 New to Pakizzle Property?{' '}
                 <button
                   type="button"
                   onClick={onSwitchToSignUp}
-                  className="font-bold text-apple-blue hover:underline cursor-pointer touch-target min-h-[36px]"
+                  className="font-bold text-apple-blue hover:underline cursor-pointer touch-target min-h-[32px]"
                 >
                   Create Account
                 </button>
@@ -660,6 +667,26 @@ export const SignInCard: React.FC<SignInCardProps> = ({
               onResend={handleRequestPasswordless}
               onBackToEdit={() => setStep('credential')}
               isLoading={isSubmitting}
+            />
+          </motion.div>
+        )}
+
+        {/* STEP 4: HARDENED FORGOT PASSWORD IN-PLACE FLOW */}
+        {step === 'forgot' && (
+          <motion.div
+            key="step-forgot"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={SPRING_SNAPPY}
+          >
+            <ForgotPasswordCard
+              initialIdentifier={parsedIdentifier.normalized}
+              onSuccess={() => {
+                if (onSuccess) onSuccess();
+              }}
+              onBackToSignIn={() => setStep('credential')}
+              className="p-0 border-0 shadow-none bg-transparent"
             />
           </motion.div>
         )}

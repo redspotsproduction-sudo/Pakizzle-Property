@@ -45,9 +45,9 @@ const app = initializeApp(firebaseConfig);
 const databaseId = firebaseConfig.firestoreDatabaseId || "(default)";
 console.log(`[Firebase] Initializing Firestore with Database ID: ${databaseId}`);
 
-// Use initializeFirestore to enable better stability in proxied environments
+// Use initializeFirestore with auto-detect long-polling for resilient connectivity
 export const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true,
+  experimentalAutoDetectLongPolling: true,
   ignoreUndefinedProperties: true
 }, databaseId);
 
@@ -127,36 +127,23 @@ export function handleFirestoreError(error: any, operationType: OperationType, p
     });
   }
 
+  if (isOffline) {
+    console.warn(`[Firebase] Firestore operating in offline/cache mode for ${operationType} on ${path || 'unknown'}`);
+    return null as never;
+  }
+
   throw new Error(JSON.stringify(errInfo));
 }
 
-// Test connection silently with retry
-async function checkConnection(retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      // Attempt a simple get request to the connection path
-      await getDocFromServer(doc(db, 'test', 'connection'));
-      console.log("[Firebase] Successfully connected to Firestore.");
-      return;
-    } catch (error: any) {
-      const msg = error.message || '';
-      const isUnavailable = msg.includes('offline') || msg.includes('unavailable') || msg.includes('10 seconds') || error?.code === 'unavailable';
-      
-      if (isUnavailable && i === retries - 1) {
-        console.warn("[Firebase] Firestore connectivity check persistent failure:", msg);
-        toast.error('Matrix Link Unstable', {
-          description: 'The connection to the data center is being interrupted. Please check your internet connection or ad-blocker.',
-          duration: 10000
-        });
-      } else if (isUnavailable) {
-        // Wait a bit before retry
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      } else {
-        // Other error (like permission denied on the test path, which is expected/fine)
-        console.log("[Firebase] Connection test received response (active):", msg);
-        return;
-      }
+// Validate Connection to Firestore per Skill specification
+async function testConnection() {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+    console.log("[Firebase] Successfully connected to Firestore backend.");
+  } catch (error) {
+    if (error instanceof Error && (error.message.includes('the client is offline') || (error as any)?.code === 'unavailable')) {
+      console.warn("[Firebase] Client is operating in offline mode. Local cache active.");
     }
   }
 }
-checkConnection();
+testConnection();

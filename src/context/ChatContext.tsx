@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Message, Conversation } from '../types';
 import { useAuth } from './AuthContext';
-import { useVehicles } from './VehicleContext';
+import { useProperties } from './PropertyContext';
 import { db, handleFirestoreError, OperationType, isFirestoreQuotaExceeded } from '../firebase';
 import { 
   collection, 
@@ -39,7 +39,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const conversationsRef = useRef<Conversation[]>([]);
   

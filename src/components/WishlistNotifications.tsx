@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Check, Plus, Heart, Lock, Globe, LayoutGrid, ChevronRight } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
-import { useVehicles } from "@/context/VehicleContext";
+import { useProperties } from "@/context/PropertyContext";
 import { cn } from "@/lib/utils";
 import { SPRING_SNAPPY, SPRING_BOUNCY } from "./motion";
 
 export function WishlistToast() {
   const { toast, setToast, setIsAddToListModalOpen, setModalVehicleId } = useWishlist();
-  const { vehicles } = useVehicles();
+  const { properties, vehicles } = useProperties();
 
   React.useEffect(() => {
     if (toast?.show) {
@@ -86,7 +86,7 @@ export function AddToListModal() {
     toggleWishlist,
     createList
   } = useWishlist();
-  const { vehicles } = useVehicles();
+  const { properties, vehicles } = useProperties();
   const [newListName, setNewListName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 

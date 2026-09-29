@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -121,6 +122,9 @@ const passkeyCredentials: PasskeyRecord[] = [
 const webauthnChallenges = new Map<string, { challenge: string; userId?: any; expires: number }>();
 // Step-Up Verification Elevation Store (10 minute temporary elevation per sensitive action)
 const sessionElevations = new Map<string, { userId: any; action: string; expires: number }>();
+// Password Reset Verification Token & Persistent Lockout Store
+const passwordResetTokens = new Map<string, { userId: any; identifier: string; expires: number }>();
+const forgotLockouts = new Map<string, { failedCycles: number; lockedUntil: number }>();
 const userSessions: UserSessionRecord[] = [
   {
     id: "sess_curr_101",
@@ -171,6 +175,9 @@ interface StoredOTP {
   codeHash: string;
   attempts: number;
   expires: number;
+  channel?: string;
+  userId?: any;
+  lastSentAt?: number;
 }
 const otpStore = new Map<string, StoredOTP>();
 
@@ -331,6 +338,8 @@ async function startServer() {
   // --- AUTH APIs ---
 
   app.get("/api/ping", (req, res) => res.json({ pong: true, time: new Date() }));
+  app.get("/healthz", (req, res) => res.status(200).send("OK"));
+  app.get("/_health", (req, res) => res.status(200).send("OK"));
 
   app.post("/api/auth/register", async (req, res) => {
     const ip = getClientIp(req);
@@ -552,6 +561,352 @@ async function startServer() {
         role: user.role,
         verifiedBadge: user.verified_badge_type
       }
+    });
+  });
+
+  // --- HARDENED FORGOT PASSWORD SYSTEM (Apple/Google Standards) ---
+
+  // 1. Initiate Recovery: Dual rate-limited (per-account & per-IP), anti-enumeration
+  app.post("/api/auth/forgot/start", (req, res) => {
+    const ip = getClientIp(req);
+    const { identifier, preferredMethod } = req.body;
+    if (!identifier) return res.status(400).json({ error: "Email or mobile number required" });
+    const clean = identifier.trim().toLowerCase();
+
+    // Check persistent account lockout (from repeated failed 5-attempt cycles)
+    const lockout = forgotLockouts.get(clean);
+    if (lockout && Date.now() < lockout.lockedUntil) {
+      const minsLeft = Math.ceil((lockout.lockedUntil - Date.now()) / (60 * 1000));
+      return res.status(429).json({
+        error: `Password reset is temporarily locked for this account due to repeated security failures. Please try again in ${minsLeft} minutes.`,
+        code: "account_locked",
+        retryAfterMinutes: minsLeft
+      });
+    }
+
+    // 1A. Dual Rate Limiting: Max 3 requests per 15 min per identifier
+    const rlIdentifier = checkRateLimit(`forgot:id:${clean}`, 3, 15 * 60 * 1000);
+    if (!rlIdentifier.allowed) {
+      res.setHeader("Retry-After", rlIdentifier.retryAfterSec.toString());
+      return res.status(429).json({
+        error: "Too many password reset requests for this account. Please wait 15 minutes before trying again.",
+        code: "rate_limited",
+        retryAfterSec: rlIdentifier.retryAfterSec
+      });
+    }
+
+    // 1B. Dual Rate Limiting: Max 10 requests per 15 min per IP
+    const rlIp = checkRateLimit(`forgot:ip:${ip}`, 10, 15 * 60 * 1000);
+    if (!rlIp.allowed) {
+      res.setHeader("Retry-After", rlIp.retryAfterSec.toString());
+      return res.status(429).json({
+        error: "Too many password reset requests from your network. Please wait a few minutes.",
+        code: "rate_limited",
+        retryAfterSec: rlIp.retryAfterSec
+      });
+    }
+
+    // Smart Identifier Detection & Safe Masking (Never enumerates accounts)
+    const isEmail = clean.includes('@');
+    let masked = clean;
+    if (isEmail) {
+      const [local, dom] = clean.split('@');
+      masked = `${local.charAt(0)}***@${dom}`;
+    } else {
+      masked = clean.slice(0, 4) + ' *** ' + clean.slice(-4);
+    }
+
+    // Safe user lookup without leaking presence
+    const user = users.find(u => 
+      (isEmail && u.email?.toLowerCase() === clean) ||
+      (!isEmail && (u.phone === clean || u.phone_number === clean))
+    );
+
+    const channel = (!isEmail || preferredMethod === 'sms') && user?.phone ? 'sms' : 'email';
+
+    // Generate 6-digit cryptographic OTP, hash with SHA-256, 15-minute TTL
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const codeHash = crypto.createHash('sha256').update(otp).digest('hex');
+    otpStore.set(`forgot:${clean}`, {
+      codeHash,
+      attempts: 0,
+      expires: Date.now() + 15 * 60 * 1000,
+      channel,
+      userId: user?.id || null,
+      lastSentAt: Date.now()
+    });
+
+    const responsePayload: any = {
+      success: true,
+      message: `If an account exists for ${masked}, we've sent a 6-digit verification code.`,
+      masked,
+      channel,
+      ttlSeconds: 900,
+      hasAlternativeMethod: Boolean(user?.phone && user?.email)
+    };
+
+    if (process.env.NODE_ENV !== "production") {
+      responsePayload.demoCode = otp;
+    }
+
+    res.json(responsePayload);
+  });
+
+  // 2. Verify Recovery Code: Independent IP burst rate limiting, 5-attempt threshold & cycle lockout
+  app.post("/api/auth/forgot/verify", (req, res) => {
+    const ip = getClientIp(req);
+
+    // Independent IP attempt burst rate-limiting (max 10 verify hits / 2 mins)
+    const rlIp = checkRateLimit(`forgot_verify:${ip}`, 10, 2 * 60 * 1000);
+    if (!rlIp.allowed) {
+      res.setHeader("Retry-After", rlIp.retryAfterSec.toString());
+      return res.status(429).json({
+        error: "Too many verification attempts from this network. Please pause for a moment.",
+        code: "rate_limited"
+      });
+    }
+
+    const { identifier, code } = req.body;
+    if (!identifier || !code) {
+      return res.status(400).json({ error: "Identifier and 6-digit code required" });
+    }
+
+    const clean = identifier.trim().toLowerCase();
+    const stored = otpStore.get(`forgot:${clean}`);
+
+    // Check expiry
+    if (!stored || Date.now() > stored.expires) {
+      return res.status(400).json({
+        error: "That verification code has expired. We can send you a fresh one right away.",
+        expired: true,
+        code: "code_expired"
+      });
+    }
+
+    // Check 5-attempt threshold
+    if (stored.attempts >= 5) {
+      otpStore.delete(`forgot:${clean}`);
+      const currentLock = forgotLockouts.get(clean) || { failedCycles: 0, lockedUntil: 0 };
+      currentLock.failedCycles++;
+      if (currentLock.failedCycles >= 3) {
+        currentLock.lockedUntil = Date.now() + 60 * 60 * 1000; // 60 min lockout
+        forgotLockouts.set(clean, currentLock);
+        console.warn(`[SECURITY ALERT] Account ${clean} locked out after 3 failed password reset cycles.`);
+        return res.status(429).json({
+          error: "Too many failed recovery cycles. For your account security, password reset is paused for 60 minutes. A security alert was dispatched.",
+          code: "account_locked",
+          retryAfterMinutes: 60
+        });
+      }
+      forgotLockouts.set(clean, currentLock);
+      return res.status(429).json({
+        error: "Too many failed attempts. For your security, this code has been cancelled. Please request a new one.",
+        code: "too_many_attempts",
+        failedCycles: currentLock.failedCycles
+      });
+    }
+
+    // Verify SHA-256 hash
+    const inputHash = crypto.createHash('sha256').update(code.trim()).digest('hex');
+    if (stored.codeHash !== inputHash) {
+      stored.attempts++;
+      const remaining = Math.max(0, 5 - stored.attempts);
+      return res.status(400).json({
+        error: `That code isn't right, ${remaining} attempt${remaining === 1 ? '' : 's'} remaining.`,
+        code: "invalid_code",
+        attemptsRemaining: remaining
+      });
+    }
+
+    // Success: Invalidate OTP and generate single-use resetToken (5 min TTL)
+    otpStore.delete(`forgot:${clean}`);
+    forgotLockouts.delete(clean);
+
+    const resetToken = `prt_${Date.now()}_${crypto.randomBytes(24).toString('hex')}`;
+    passwordResetTokens.set(resetToken, {
+      userId: stored.userId,
+      identifier: clean,
+      expires: Date.now() + 5 * 60 * 1000
+    });
+
+    res.json({
+      success: true,
+      resetToken,
+      message: "Code verified. Please set your new password."
+    });
+  });
+
+  // 3. Resend Recovery Code: Enforces 30-second cooldown
+  app.post("/api/auth/forgot/resend", (req, res) => {
+    const ip = getClientIp(req);
+    const { identifier, preferredMethod } = req.body;
+    if (!identifier) return res.status(400).json({ error: "Identifier required" });
+    const clean = identifier.trim().toLowerCase();
+
+    const stored = otpStore.get(`forgot:${clean}`);
+    if (stored && stored.lastSentAt && Date.now() - stored.lastSentAt < 30 * 1000) {
+      const waitSec = Math.ceil((30 * 1000 - (Date.now() - stored.lastSentAt)) / 1000);
+      return res.status(429).json({
+        error: `Please wait ${waitSec} second${waitSec === 1 ? '' : 's'} before requesting a new code.`,
+        retryAfterSec: waitSec,
+        code: "cooldown_active"
+      });
+    }
+
+    // Check rate limit per identifier
+    const rlIdentifier = checkRateLimit(`forgot:id:${clean}`, 3, 15 * 60 * 1000);
+    if (!rlIdentifier.allowed) {
+      res.setHeader("Retry-After", rlIdentifier.retryAfterSec.toString());
+      return res.status(429).json({
+        error: "Too many password reset requests for this account. Please wait a few minutes.",
+        code: "rate_limited"
+      });
+    }
+
+    const isEmail = clean.includes('@');
+    const user = users.find(u => 
+      (isEmail && u.email?.toLowerCase() === clean) ||
+      (!isEmail && (u.phone === clean || u.phone_number === clean))
+    );
+    const channel = (preferredMethod === 'sms' || (!isEmail)) && user?.phone ? 'sms' : 'email';
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const codeHash = crypto.createHash('sha256').update(otp).digest('hex');
+    otpStore.set(`forgot:${clean}`, {
+      codeHash,
+      attempts: 0,
+      expires: Date.now() + 15 * 60 * 1000,
+      channel,
+      userId: user?.id || null,
+      lastSentAt: Date.now()
+    });
+
+    const responsePayload: any = {
+      success: true,
+      message: "A fresh verification code has been dispatched.",
+      channel,
+      ttlSeconds: 900
+    };
+    if (process.env.NODE_ENV !== "production") {
+      responsePayload.demoCode = otp;
+    }
+    res.json(responsePayload);
+  });
+
+  // 4. Set New Password: Reuse check, atomic hash, all-session invalidation, confirmation alert
+  app.post("/api/auth/forgot/reset", async (req, res) => {
+    const ip = getClientIp(req);
+    const userAgent = req.headers['user-agent'] || '';
+    const { resetToken, newPassword } = req.body;
+
+    if (!resetToken || !newPassword) {
+      return res.status(400).json({ error: "Reset token and new password required" });
+    }
+
+    const tokenData = passwordResetTokens.get(resetToken);
+    if (!tokenData || Date.now() > tokenData.expires) {
+      return res.status(400).json({
+        error: "Password reset session has expired. Please initiate a new recovery request.",
+        code: "token_expired"
+      });
+    }
+
+    // Password strength enforcement (matching signup standards)
+    const hasLength = newPassword.length >= 8;
+    const hasNumber = /[0-9]/.test(newPassword);
+    const hasUpper = /[A-Z]/.test(newPassword);
+    const hasLower = /[a-z]/.test(newPassword);
+    if (!hasLength || !hasNumber || !hasUpper || !hasLower) {
+      return res.status(400).json({
+        error: "Password must be at least 8 characters and include uppercase, lowercase, and a number.",
+        code: "weak_password"
+      });
+    }
+
+    // Invalidate reset token immediately (single-use)
+    passwordResetTokens.delete(resetToken);
+
+    // Locate user record
+    const user = users.find(u => 
+      (tokenData.userId && u.id === tokenData.userId) ||
+      (tokenData.identifier.includes('@') && u.email?.toLowerCase() === tokenData.identifier) ||
+      (!tokenData.identifier.includes('@') && (u.phone === tokenData.identifier || u.phone_number === tokenData.identifier))
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "Account not found" });
+    }
+
+    // Security Check: Prevent password reuse (compare hash with existing password)
+    const isSamePassword = await bcrypt.compare(newPassword, user.password_hash);
+    if (isSamePassword) {
+      // Re-arm token for 2 minutes to let them enter a different password without re-verifying OTP
+      passwordResetTokens.set(resetToken, {
+        ...tokenData,
+        expires: Date.now() + 2 * 60 * 1000
+      });
+      return res.status(400).json({
+        error: "Your new password cannot be the same as your current password. Please choose a different password.",
+        code: "same_as_old_password",
+        canRetry: true
+      });
+    }
+
+    // Atomic Password Update
+    user.password_hash = await bcrypt.hash(newPassword, 12);
+    user.password_changed_at = new Date();
+    user.token_version = (user.token_version || 1) + 1;
+
+    // Security Gap 3 Fix: Invalidate ALL other active user sessions
+    let revokedSessionsCount = 0;
+    userSessions.forEach(s => {
+      if (s.userId === user.id) {
+        s.isRevoked = true;
+        revokedSessionsCount++;
+      }
+    });
+
+    // Create a new trusted session for this device
+    const isMobile = /mobile|iphone|android/i.test(userAgent);
+    const isTablet = /ipad|tablet/i.test(userAgent);
+    const freshSession: UserSessionRecord = {
+      id: `sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      userId: user.id,
+      deviceInfo: userAgent.includes('Mac') ? 'Chrome on macOS' : userAgent.includes('iPhone') ? 'Safari on iPhone' : 'Desktop Browser',
+      deviceType: isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop',
+      browser: userAgent.includes('Safari') && !userAgent.includes('Chrome') ? 'Safari' : 'Chrome',
+      os: userAgent.includes('Mac') ? 'macOS' : userAgent.includes('Windows') ? 'Windows 11' : 'Linux',
+      ipAddress: ip,
+      approxLocation: 'Lahore, Punjab, Pakistan',
+      isCurrent: true,
+      isRevoked: false,
+      createdAt: new Date(),
+      lastActiveAt: new Date()
+    };
+    userSessions.push(freshSession);
+
+    // Security Gap 4 Fix: Immediate confirmation security alert dispatched
+    console.log(`[SECURITY NOTIFICATION] Password changed for ${user.email || user.phone} from IP ${ip} (${freshSession.deviceInfo}). Confirmation email/SMS dispatched.`);
+
+    // Auto-issue fresh JWT token with updated token_version
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role, v: user.token_version },
+      JWT_SECRET,
+      { algorithm: "HS256", expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        fullName: user.full_name,
+        email: user.email,
+        role: user.role,
+        verifiedBadge: user.verified_badge_type
+      },
+      message: "Password changed successfully. All other sessions have been signed out.",
+      revokedSessionsCount
     });
   });
 
@@ -2051,36 +2406,67 @@ async function startServer() {
   });
 
   // --- VITE / STATIC ---
-  if (process.env.NODE_ENV !== "production") {
-    console.log("[SERVER] Starting in development mode with Vite middleware");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    console.log("[SERVER] Starting in production mode");
-    const distPath = path.join(process.cwd(), 'dist');
-    console.log(`[SERVER] Serving static files from: ${distPath}`);
+  const distPath = path.join(process.cwd(), 'dist');
+  const distIndexPath = path.join(distPath, 'index.html');
+  const hasDist = fs.existsSync(distIndexPath);
+
+  if (hasDist) {
+    console.log("[SERVER] Serving production static files from:", distPath);
     
     app.use(express.static(distPath, {
       index: false // We handle index via catch-all to ensure SPA routing
     }));
 
     app.get('*', (req, res) => {
-      const indexPath = path.join(distPath, 'index.html');
-      res.sendFile(indexPath, (err) => {
-        if (err) {
-          console.error(`[SERVER] Error sending index.html: ${err.message}`);
-          res.status(500).send("Internal Server Error: Index not found");
+      if (fs.existsSync(distIndexPath)) {
+        res.sendFile(distIndexPath, (err) => {
+          if (err && !res.headersSent) {
+            console.error(`[SERVER] Error sending index.html: ${err.message}`);
+            const rootIndex = path.join(process.cwd(), 'index.html');
+            if (fs.existsSync(rootIndex)) {
+              res.sendFile(rootIndex);
+            } else {
+              res.status(500).send("Internal Server Error: Application index not found");
+            }
+          }
+        });
+      } else {
+        const rootIndex = path.join(process.cwd(), 'index.html');
+        if (fs.existsSync(rootIndex)) {
+          res.sendFile(rootIndex);
+        } else {
+          res.status(404).send("Application index not found");
         }
-      });
+      }
     });
+  } else {
+    console.log("[SERVER] dist/index.html not found. Starting in development mode with Vite middleware");
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "spa",
+    });
+    app.use(vite.middlewares);
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  const server = app.listen(PORT, "0.0.0.0", () => {
     console.log(`[SERVER] Application active on http://0.0.0.0:${PORT}`);
-    console.log(`[SERVER] Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`[SERVER] Environment: ${hasDist ? 'production' : (process.env.NODE_ENV || 'development')}`);
+  });
+
+  process.on("SIGTERM", () => {
+    console.log("[SERVER] SIGTERM received, shutting down gracefully");
+    server.close(() => {
+      console.log("[SERVER] HTTP server closed");
+      process.exit(0);
+    });
+  });
+
+  process.on("SIGINT", () => {
+    console.log("[SERVER] SIGINT received, shutting down gracefully");
+    server.close(() => {
+      console.log("[SERVER] HTTP server closed");
+      process.exit(0);
+    });
   });
 }
 

@@ -19,11 +19,11 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
-import { useVehicles } from "@/context/VehicleContext";
+import { useProperties } from "@/context/PropertyContext";
 import { useLocation } from "@/context/LocationContext";
-import { Vehicle, CategoryField } from "@/types";
+import { Property, Vehicle, CategoryField } from "@/types";
 import { PAKISTAN_LOCATIONS } from "../constants/locations";
-import VehicleCard from "./VehicleCard";
+import PropertyCard, { VehicleCard } from "./PropertyCard";
 import Header from "./Header";
 import { cn, formatPrice } from "@/lib/utils";
 import { useIntelligence } from "@/hooks/useIntelligence";
@@ -41,7 +41,7 @@ import { AnimatedCounter, SPRING_SNAPPY } from "./motion";
 
 export default function Marketplace() {
   const [searchParams] = useSearchParams();
-  const { vehicles } = useVehicles();
+  const { properties, vehicles } = useProperties();
   const { location: userLocation } = useLocation();
   const { trackSearch } = useIntelligence();
   const initialQuery = searchParams.get("q") || "";
@@ -813,7 +813,7 @@ export default function Marketplace() {
   const renderFilterSections = () => (
     <div className="space-y-10">
       <section>
-        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Identify Vehicle</h3>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Property Category & Type</h3>
         <CarSelector 
           onSelect={(data) => {
             setSelectedMake(data.make?.name || "");
@@ -931,9 +931,9 @@ export default function Marketplace() {
       ))}
 
       <section className="border-t border-apple-border/20 pt-6">
-        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Vehicle Style</h3>
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Property Style</h3>
         <div className="space-y-4 max-h-52 overflow-y-auto pr-1">
-          {["SUV", "Sedan", "Truck", "Hatchback", "Coupe", "Convertible", "Minivan", "Wagon", "Crossover", "Van"].map((styleOpt) => (
+          {["House", "Apartment", "Plot", "Commercial", "Penthouse", "Villa", "Bungalow", "Upper Portion", "Lower Portion"].map((styleOpt) => (
             <label key={`bodytype-side-${styleOpt}`} className="flex items-center gap-4 cursor-pointer group">
               <div className="relative flex items-center justify-center">
                 <input 
@@ -1066,21 +1066,21 @@ export default function Marketplace() {
   return (
     <div className="min-h-screen bg-apple-bg">
       <SEO 
-        title={selectedMake ? `Buy & Sell ${selectedMake} ${selectedModel || ""} Cars` : "Verified Luxury Sports & Super Cars Marketplace"}
+        title={selectedMake ? `Buy & Sell ${selectedMake} ${selectedModel || ""} in Pakistan` : "Verified Real Estate & Property Marketplace | Pakizzle"}
         description={selectedMake 
-          ? `Discover premium and certified pre-owned ${selectedMake} ${selectedModel || ""} cars on Pakizzle. Compare prices, inspect vehicle scores, and purchase safely with active ledger credentials.` 
-          : "Discover the elite collection of luxury sports cars, imports, and premium supercars on Pakizzle. Filter by city, price range, body type, fuel engine, and check certified history instantly."}
+          ? `Discover premium and certified ${selectedMake} ${selectedModel || ""} properties on Pakizzle. Compare prices, inspect title scores, and connect directly with verified agencies.` 
+          : "Discover the elite collection of luxury houses, apartments, plots, and commercial spaces on Pakizzle. Filter by city, price range, property style, and check verified LDA/CDA legal status."}
         keywords={[
-          selectedMake ? selectedMake.toLowerCase() : "luxury cars",
-          selectedModel ? `${selectedMake?.toLowerCase()} ${selectedModel.toLowerCase()}` : "supercars",
-          "pakizzle marketplace", "cars for sale Pakistan", "verified car listings", "dubizzle import cars"
+          selectedMake ? selectedMake.toLowerCase() : "luxury properties",
+          selectedModel ? `${selectedMake?.toLowerCase()} ${selectedModel.toLowerCase()}` : "real estate",
+          "pakizzle property", "properties for sale Pakistan", "verified property listings", "zameen luxury homes"
         ]}
         canonicalPath="/marketplace"
         ogType="website"
         schema={{
           "@type": "SearchResultsPage",
-          "name": selectedMake ? `Verified ${selectedMake} Listings on Pakizzle` : "Elite Cars Marketplace - Pakizzle",
-          "description": "Live directory of luxury, hyper, and supercar models with verified scores.",
+          "name": selectedMake ? `Verified ${selectedMake} Properties on Pakizzle` : "Elite Property Marketplace - Pakizzle",
+          "description": "Live directory of luxury villas, apartments, plots, and commercial spaces with verified legal records.",
           "url": window.location.href
         }}
       />
@@ -1809,9 +1809,9 @@ export default function Marketplace() {
                     <div className="w-20 h-20 bg-apple-gray rounded-full flex items-center justify-center mb-6">
                       <Search className="w-8 h-8 text-apple-text-muted" />
                     </div>
-                    <h3 className="text-xl font-bold text-apple-text mb-2">No vehicles found</h3>
+                    <h3 className="text-xl font-bold text-apple-text mb-2">No properties found</h3>
                     <p className="text-apple-text-muted max-w-xs mx-auto">
-                      Try adjusting your filters or search terms to find what you're looking for.
+                      Try adjusting your filters or location search to find the ideal property.
                     </p>
                   </div>
                 )}

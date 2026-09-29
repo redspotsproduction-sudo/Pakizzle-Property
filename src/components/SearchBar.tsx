@@ -23,13 +23,13 @@ import {
 } from "lucide-react";
 import { cn, formatPrice } from "../lib/utils";
 import { PAKISTAN_LOCATIONS } from "../constants/locations";
-import { useVehicles } from "../context/VehicleContext";
+import { useProperties } from "../context/PropertyContext";
 import { useLocation } from "../context/LocationContext";
 import ValuationModal from "./ValuationModal";
 
 export default function SearchBar() {
   const navigate = useNavigate();
-  const { vehicles } = useVehicles();
+  const { properties, vehicles } = useProperties();
   const { location: globalLocation } = useLocation();
 
   // Primary Tabs Mode

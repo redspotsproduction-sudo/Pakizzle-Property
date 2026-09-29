@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useVehicles } from '../context/VehicleContext';
+import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
 
@@ -31,7 +31,7 @@ type QuoteStep = 'vehicle' | 'usage' | 'driver' | 'coverage' | 'result';
 export default function InsuranceQuoteFlow() {
   const { type } = useParams<{ type: string }>();
   const navigate = useNavigate();
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const { user, profile } = useAuth();
   const { setNotification } = useChat();
   

@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from '../../context/AuthContext';
-import { useVehicles } from '../../context/VehicleContext';
+import { useProperties } from '../../context/PropertyContext';
 import { cn } from '../../lib/utils';
 import { db } from '../../firebase';
 import Badge from '../Badge';
@@ -40,7 +40,7 @@ interface ChatWindowProps {
 export default function ChatWindow({ isDashboardView = false }: ChatWindowProps) {
   const { activeConversationId, conversations, messages, sendMessage, setActiveConversationId, markAsRead, toggleBlock, togglePin, rateUser, loading } = useChat();
   const { user } = useAuth();
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const navigate = useNavigate();
   const [inputText, setInputText] = useState('');
   const [locationError, setLocationError] = useState<string | null>(null);

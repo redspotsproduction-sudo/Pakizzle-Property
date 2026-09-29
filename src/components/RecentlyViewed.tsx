@@ -1,20 +1,20 @@
 import React from "react";
-import { useVehicles } from "../context/VehicleContext";
-import VehicleCard from "./VehicleCard";
+import { useProperties } from "../context/PropertyContext";
+import PropertyCard from "./PropertyCard";
 import { motion } from "motion/react";
 import { History, Trash2, ArrowRight } from "lucide-react";
 
 export default function RecentlyViewed() {
-  const { recentlyViewed, vehicles, clearRecentlyViewed } = useVehicles();
+  const { recentlyViewed, properties, clearRecentlyViewed } = useProperties();
 
-  // Find actual vehicle objects corresponding to viewed IDs
-  const viewedVehicles = React.useMemo(() => {
+  // Find actual property objects corresponding to viewed IDs
+  const viewedProperties = React.useMemo(() => {
     return recentlyViewed
-      .map(id => vehicles.find(v => v.id === id))
-      .filter((v): v is typeof vehicles[0] => v !== undefined && v.status !== "inactive");
-  }, [recentlyViewed, vehicles]);
+      .map(id => properties.find(v => v.id === id))
+      .filter((v): v is typeof properties[0] => v !== undefined && v.status !== "inactive");
+  }, [recentlyViewed, properties]);
 
-  if (viewedVehicles.length === 0) return null;
+  if (viewedProperties.length === 0) return null;
 
   return (
     <section className="py-12 md:py-16 max-w-7xl lg:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 border-t border-apple-border/20 overflow-hidden">
@@ -57,21 +57,21 @@ export default function RecentlyViewed() {
           className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory -mx-6 px-6 scroll-pl-6"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {viewedVehicles.map((vehicle, index) => (
+          {viewedProperties.map((property, index) => (
             <motion.div
-              key={`rv-${vehicle.id}`}
+              key={`rv-${property.id}`}
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="flex-shrink-0 w-[270px] sm:w-[320px] snap-start"
             >
-              <VehicleCard vehicle={vehicle} />
+              <PropertyCard property={property} />
             </motion.div>
           ))}
           
           {/* Explore More Card at the end of scroll */}
-          {viewedVehicles.length >= 3 && (
+          {viewedProperties.length >= 3 && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}

@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useVehicles } from '../context/VehicleContext';
+import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
 

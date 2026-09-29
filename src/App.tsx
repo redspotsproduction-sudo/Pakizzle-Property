@@ -3,7 +3,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import { SkipToContentLink, RouteProgressBar, PageTransition } from "./components/RouteTransitionCoordinator";
 import { WishlistToast, AddToListModal } from "./components/WishlistNotifications";
 import LocationSlider from "./components/LocationSlider";
-import { useVehicles } from "./context/VehicleContext";
+import { useProperties } from "./context/PropertyContext";
 import { useAuth } from "./context/AuthContext";
 import { useChat } from "./context/ChatContext";
 import { useLocation as useAppLocation } from "./context/LocationContext";
@@ -25,15 +25,15 @@ import PopularPropertyStyles from "./components/PopularPropertyStyles";
 import ZameenAdvantageSection from "./components/ZameenAdvantageSection";
 import { CardGridSkeleton } from "./components/ui/LoadingSkeleton";
 import HomeCTA from "./components/HomeCTA";
-import VehicleCard from "./components/VehicleCard";
+import PropertyCard, { VehicleCard } from "./components/PropertyCard";
 import FeaturedNews from "./components/FeaturedNews";
 import RecentlyViewed from "./components/RecentlyViewed";
 const ValuationModal = lazy(() => import("./components/ValuationModal"));
-import VehicleDetails from "./components/VehicleDetails";
+import PropertyDetails from "./components/PropertyDetails";
 import SellerDashboard from "./components/SellerDashboard";
 import Marketplace from "./components/Marketplace";
 import Wishlist from "./components/Wishlist";
-import SellCarForm from "./components/SellCarForm";
+import SellPropertyForm from "./components/SellPropertyForm";
 import UserProfile from "./components/UserProfile";
 import ProfileSettings from "./components/ProfileSettings";
 import OtpVerification from "./components/OtpVerification";
@@ -53,6 +53,7 @@ const UserReels = lazy(() => import('./components/User/UserReels'));
 const UserInspections = lazy(() => import('./components/UserInspections'));
 const UserInsurance = lazy(() => import('./components/UserInsurance'));
 const UserFinancing = lazy(() => import('./components/UserFinancing'));
+const ForgotPasswordPage = lazy(() => import('./components/Auth/ForgotPasswordPage'));
 
 const DashboardPlaceholder = ({ title }: { title: string }) => (
   <div className="flex flex-col items-center justify-center h-[60vh] text-center">
@@ -189,7 +190,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const [isValuationOpen, setIsValuationOpen] = useState(false);
-  const { vehicles, loading: vehiclesLoading } = useVehicles();
+  const { properties, loading: propertiesLoading, loading: vehiclesLoading } = useProperties();
   const { location: userLocation } = useAppLocation();
   const { loading: authLoading } = useAuth();
   const { notification, activeConversationId } = useChat();
@@ -197,12 +198,12 @@ export default function App() {
   const location = useLocation();
 
   const curatedFeatured = React.useMemo(() => {
-    if (!vehicles || vehicles.length === 0) return [];
-    return [...vehicles]
+    if (!properties || properties.length === 0) return [];
+    return [...properties]
       .filter(v => v.status !== 'inactive')
       .sort((a, b) => {
-        const aVerified = a.agency?.isVerified || (a.verified_badge_type && a.verified_badge_type !== 'none') ? 1 : 0;
-        const bVerified = b.agency?.isVerified || (b.verified_badge_type && b.verified_badge_type !== 'none') ? 1 : 0;
+        const aVerified = a.seller?.isVerified || (a.seller?.verified_badge_type && a.seller?.verified_badge_type !== 'none') ? 1 : 0;
+        const bVerified = b.seller?.isVerified || (b.seller?.verified_badge_type && b.seller?.verified_badge_type !== 'none') ? 1 : 0;
         if (bVerified !== aVerified) return bVerified - aVerified;
         const aPhotos = a.images?.length || 0;
         const bPhotos = b.images?.length || 0;
@@ -210,10 +211,11 @@ export default function App() {
         return (b.price || 0) - (a.price || 0);
       })
       .slice(0, 4);
-  }, [vehicles]);
+  }, [properties]);
 
   // Pages that have a back icon and should hide the mobile footer menu
   const hideMobileNav = 
+    location.pathname.startsWith('/property/') ||
     location.pathname.startsWith('/vehicle/') || 
     location.pathname.startsWith('/edit/') ||
     location.pathname.startsWith('/profile/') ||
@@ -318,22 +320,22 @@ export default function App() {
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {vehicles
+                    {properties
                       ?.filter(v => v.status !== 'inactive' && v.city === userLocation.city)
                       ?.slice(0, 4)
-                      ?.map((vehicle, index) => (
+                      ?.map((property, index) => (
                         <motion.div
-                          key={vehicle.id}
+                          key={property.id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.5, delay: index * 0.08 }}
                         >
-                          <VehicleCard vehicle={vehicle} />
+                          <PropertyCard property={property} />
                         </motion.div>
                       ))}
                   </div>
-                  {vehicles.filter(v => v.status !== 'inactive' && v.city === userLocation.city).length === 0 && (
+                  {properties.filter(v => v.status !== 'inactive' && v.city === userLocation.city).length === 0 && (
                     <div className="bg-slate-100 dark:bg-slate-800/50 rounded-lg p-8 text-center border border-slate-200 dark:border-slate-800">
                       <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">
                         No properties found in {userLocation.city} yet. Try expanding your search to Islamabad or Lahore.
@@ -508,7 +510,8 @@ export default function App() {
           </PageTransition>
           )
         } />
-        <Route path="/vehicle/:id" element={<PageTransition><VehicleDetails /></PageTransition>} />
+        <Route path="/property/:id" element={<PageTransition><PropertyDetails /></PageTransition>} />
+        <Route path="/vehicle/:id" element={<PageTransition><PropertyDetails /></PageTransition>} />
         
         {/* User Dashboard Routes */}
         <Route path="/dashboard" element={
@@ -614,7 +617,7 @@ export default function App() {
         <Route path="/sell" element={
           <ProtectedRoute>
             <PageTransition>
-              <SellCarForm />
+              <SellPropertyForm />
             </PageTransition>
           </ProtectedRoute>
         } />
@@ -626,7 +629,7 @@ export default function App() {
         <Route path="/edit/:id" element={
           <ProtectedRoute>
             <PageTransition>
-              <SellCarForm />
+              <SellPropertyForm />
             </PageTransition>
           </ProtectedRoute>
         } />
@@ -680,6 +683,21 @@ export default function App() {
           <ProtectedRoute>
             <FinancingBookingFlow />
           </ProtectedRoute>
+        } />
+
+        <Route path="/forgot" element={
+          <Suspense fallback={<div className="min-h-screen bg-[#F5F5F7] dark:bg-black" />}>
+            <PageTransition>
+              <ForgotPasswordPage />
+            </PageTransition>
+          </Suspense>
+        } />
+        <Route path="/reset-password" element={
+          <Suspense fallback={<div className="min-h-screen bg-[#F5F5F7] dark:bg-black" />}>
+            <PageTransition>
+              <ForgotPasswordPage />
+            </PageTransition>
+          </Suspense>
         } />
 
         {/* Admin Routes */}

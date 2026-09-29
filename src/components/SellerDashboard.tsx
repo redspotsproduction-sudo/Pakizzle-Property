@@ -27,7 +27,7 @@ import {
   Compass,
   ArrowRight
 } from "lucide-react";
-import { useVehicles } from "../context/VehicleContext";
+import { useProperties } from "../context/PropertyContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { useChat } from "../context/ChatContext";
@@ -45,7 +45,7 @@ const ITEMS_PER_PAGE = 8;
 export default function SellerDashboard() {
   const { pathname } = useLocation();
   const isNestedInDashboard = pathname.startsWith('/dashboard');
-  const { vehicles, updateVehicle, deleteVehicle } = useVehicles();
+  const { properties: vehicles, updateProperty: updateVehicle, deleteProperty: deleteVehicle } = useProperties();
   const { wishlist } = useWishlist();
   const { user } = useAuth();
   const { conversations } = useChat();

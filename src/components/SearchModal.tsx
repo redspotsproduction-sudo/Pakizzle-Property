@@ -19,7 +19,7 @@ import {
   Layers,
   ChevronRight
 } from "lucide-react";
-import { useVehicles } from "../context/VehicleContext";
+import { useProperties } from "../context/PropertyContext";
 import { formatPrice, cn } from "../lib/utils";
 import { REVEAL_EASE, SPRING_SNAPPY, SPRING_BOUNCY } from "./motion";
 
@@ -38,7 +38,7 @@ const CATEGORY_CHIPS = [
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const navigate = useNavigate();
-  const { vehicles } = useVehicles();
+  const { properties, vehicles } = useProperties();
   const shouldReduceMotion = useReducedMotion();
 
   const [query, setQuery] = useState("");
@@ -126,7 +126,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       saveRecentSearch(searchTerm);
     }
     onClose();
-    navigate(`/vehicle/${id}`);
+    navigate(`/property/${id}`);
   };
 
   const handleApplyQuickSearch = (term: string) => {

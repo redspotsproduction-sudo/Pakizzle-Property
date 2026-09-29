@@ -18,7 +18,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { useVehicles } from "../../context/VehicleContext";
+import { useProperties } from "../../context/PropertyContext";
 import { savedSearchService } from "../../services/savedSearchService";
 import { SavedSearch } from "../../types";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ import { toast } from "sonner";
 
 export default function UserWatchers() {
   const { user } = useAuth();
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const [watchers, setWatchers] = useState<SavedSearch[]>([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);

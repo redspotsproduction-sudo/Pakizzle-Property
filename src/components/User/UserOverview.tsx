@@ -18,7 +18,7 @@ import {
   Award,
   Flame
 } from "lucide-react";
-import { useVehicles } from "../../context/VehicleContext";
+import { useProperties } from "../../context/PropertyContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
 import { useChat } from "../../context/ChatContext";
@@ -30,7 +30,7 @@ import { Review } from "../../types";
 
 export default function UserOverview() {
   const navigate = useNavigate();
-  const { vehicles } = useVehicles();
+  const { properties: vehicles } = useProperties();
   const { wishlist } = useWishlist();
   const { user, profile } = useAuth();
   const { conversations } = useChat();
