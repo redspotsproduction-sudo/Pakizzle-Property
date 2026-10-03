@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import Header from "./Header";
 import { cn, formatPrice } from "@/lib/utils";
+import { formatPropertyUrl } from "@/lib/referenceId";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProperties } from "../context/PropertyContext";
 import { useAuth } from "../context/AuthContext";
@@ -50,7 +51,7 @@ const CITIES = Object.keys(PAKISTAN_LOCATIONS);
 export default function SellPropertyForm() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { addProperty, updateProperty, properties } = useProperties();
+  const { addProperty, updateProperty, properties, generateUniqueReferenceId } = useProperties();
   const { user, profile } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -132,8 +133,13 @@ export default function SellPropertyForm() {
     setIsSubmitting(true);
     try {
       const propertyId = id || `prop-${Date.now()}`;
+      const existing = properties.find(p => p.id === id);
+      const refId = existing?.reference_id || generateUniqueReferenceId();
+
       const payload: Property = {
         id: propertyId,
+        reference_id: refId,
+        purpose: "for-sale",
         make: formData.make,
         model: formData.model || `${formData.areaSize} ${formData.areaUnit} ${formData.make}`,
         type: formData.make === "Commercial" ? "commercial" : (formData.make === "Plot" ? "plot" : "residential"),
@@ -179,7 +185,7 @@ export default function SellPropertyForm() {
         toast.success("Property listing published successfully! 🚀");
       }
 
-      navigate(`/property/${propertyId}`);
+      navigate(formatPropertyUrl(payload));
     } catch (err: any) {
       console.error("Listing submission error:", err);
       toast.error(err.message || "Failed to submit property listing");

@@ -29,16 +29,17 @@ import PropertyCard, { VehicleCard } from "./components/PropertyCard";
 import FeaturedNews from "./components/FeaturedNews";
 import RecentlyViewed from "./components/RecentlyViewed";
 const ValuationModal = lazy(() => import("./components/ValuationModal"));
-import PropertyDetails from "./components/PropertyDetails";
-import SellerDashboard from "./components/SellerDashboard";
-import Marketplace from "./components/Marketplace";
-import Wishlist from "./components/Wishlist";
-import SellPropertyForm from "./components/SellPropertyForm";
-import UserProfile from "./components/UserProfile";
-import ProfileSettings from "./components/ProfileSettings";
-import OtpVerification from "./components/OtpVerification";
-import CloneAnalysis from "./components/CloneAnalysis";
-import CityPortal from "./components/CityPortal";
+const PropertyDetails = lazy(() => import("./components/PropertyDetails"));
+const SellerDashboard = lazy(() => import("./components/SellerDashboard"));
+const Marketplace = lazy(() => import("./components/Marketplace"));
+const Wishlist = lazy(() => import("./components/Wishlist"));
+const SellPropertyForm = lazy(() => import("./components/SellPropertyForm"));
+const ListingWizard = lazy(() => import("./components/ListingWizard"));
+const UserProfile = lazy(() => import("./components/UserProfile"));
+const ProfileSettings = lazy(() => import("./components/ProfileSettings"));
+const OtpVerification = lazy(() => import("./components/OtpVerification"));
+const CloneAnalysis = lazy(() => import("./components/CloneAnalysis"));
+const CityPortal = lazy(() => import("./components/CityPortal"));
 
 // User Dashboard Components
 const UserLayout = lazy(() => import('./components/User/UserLayout'));
@@ -83,22 +84,22 @@ const ProfileRedirect = () => {
   return <Navigate to="/" replace />;
 };
 
-import AuctionVerification from "./components/AuctionVerification";
-import VerificationPage from "./components/VerificationPage";
-import SignUpPage from "./pages/SignUpPage";
-import SignInPage from "./pages/SignInPage";
-import UploadIdentityForm from "./components/UploadIdentityForm";
-import UploadBusinessForm from "./components/UploadBusinessForm";
-import InsuranceLanding from "./components/InsuranceLanding";
-import CarInsurancePage from "./components/CarInsurancePage";
-import InsuranceBookingFlow from "./components/InsuranceBookingFlow";
-import InsuranceQuoteFlow from "./components/InsuranceQuoteFlow";
-import InspectionLanding from "./components/InspectionLanding";
-import InspectionBookingFlow from "./components/InspectionBookingFlow";
-import FinancingLanding from "./components/FinancingLanding";
-import FinancingBookingFlow from "./components/FinancingBookingFlow";
+const AuctionVerification = lazy(() => import("./components/AuctionVerification"));
+const VerificationPage = lazy(() => import("./components/VerificationPage"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const SignInPage = lazy(() => import("./pages/SignInPage"));
+const UploadIdentityForm = lazy(() => import("./components/UploadIdentityForm"));
+const UploadBusinessForm = lazy(() => import("./components/UploadBusinessForm"));
+const InsuranceLanding = lazy(() => import("./components/InsuranceLanding"));
+const CarInsurancePage = lazy(() => import("./components/CarInsurancePage"));
+const InsuranceBookingFlow = lazy(() => import("./components/InsuranceBookingFlow"));
+const InsuranceQuoteFlow = lazy(() => import("./components/InsuranceQuoteFlow"));
+const InspectionLanding = lazy(() => import("./components/InspectionLanding"));
+const InspectionBookingFlow = lazy(() => import("./components/InspectionBookingFlow"));
+const FinancingLanding = lazy(() => import("./components/FinancingLanding"));
+const FinancingBookingFlow = lazy(() => import("./components/FinancingBookingFlow"));
 import Footer from "./components/Footer";
-import Pricing from "./components/Pricing";
+const Pricing = lazy(() => import("./components/Pricing"));
 import AuthModal from "./components/AuthModal";
 
 // Chat Container still lazy as it's separate
@@ -235,18 +236,18 @@ export default function App() {
            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
            className="flex flex-col items-center"
         >
-          <div className="w-16 h-16 bg-[#0F766E] rounded-2xl shadow-[0_20px_50px_rgba(15,118,110,0.3)] flex items-center justify-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-[#5B2A86] to-[#1A1526] rounded-2xl shadow-[0_20px_50px_rgba(91,42,134,0.3)] flex items-center justify-center mb-8 border border-[#C9A227]/30">
             <Home className="w-8 h-8 text-white stroke-[2]" />
           </div>
           <div className="flex flex-col items-center gap-1.5">
-            <div className="text-sm font-semibold tracking-tight">Pakizzle Property</div>
+            <div className="text-sm font-semibold tracking-tight text-apple-text">Pakizzle Property</div>
             <div className="flex gap-1">
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
                   animate={{ opacity: [0.2, 1, 0.2] }}
                   transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
-                  className="w-1.5 h-1.5 rounded-full bg-[#0F766E]"
+                  className="w-1.5 h-1.5 rounded-full bg-[#F0A830]"
                 />
               ))}
             </div>
@@ -314,7 +315,7 @@ export default function App() {
                         Discover verified listings in your immediate vicinity.
                       </p>
                     </div>
-                    <Link to={`/marketplace?city=${encodeURIComponent(userLocation.city)}`} className="text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline hidden md:block">
+                    <Link to={`/marketplace?city=${encodeURIComponent(userLocation.city)}`} className="text-sm font-semibold text-[#5B2A86] dark:text-[#F0A830] hover:underline hidden md:block">
                       View all in {userLocation.city}
                     </Link>
                   </div>
@@ -349,7 +350,7 @@ export default function App() {
               <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="flex justify-between items-end mb-8">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-amber-200 dark:border-amber-800">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0A830]/10 text-[#F0A830] text-xs font-semibold uppercase tracking-wider mb-2 border border-[#C9A227]/30">
                       <Sparkles className="w-3.5 h-3.5" />
                       Algorithmic Ranking
                     </div>
@@ -361,7 +362,7 @@ export default function App() {
                     </p>
                   </div>
                   <div className="hidden md:block">
-                    <Link to="/marketplace" className="text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline">
+                    <Link to="/marketplace" className="text-sm font-semibold text-[#5B2A86] dark:text-[#F0A830] hover:underline">
                       View All Marketplace →
                     </Link>
                   </div>
@@ -617,7 +618,14 @@ export default function App() {
         <Route path="/sell" element={
           <ProtectedRoute>
             <PageTransition>
-              <SellPropertyForm />
+              <ListingWizard />
+            </PageTransition>
+          </ProtectedRoute>
+        } />
+        <Route path="/post-ad" element={
+          <ProtectedRoute>
+            <PageTransition>
+              <ListingWizard />
             </PageTransition>
           </ProtectedRoute>
         } />

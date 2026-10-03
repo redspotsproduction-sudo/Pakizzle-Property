@@ -96,7 +96,7 @@ export default function BrowseByCity() {
       <RevealOnScroll direction="up" distance={30} duration={0.6}>
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-[#0F766E] dark:text-teal-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-teal-200 dark:border-teal-800">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#F0A830] text-xs font-semibold uppercase tracking-wider mb-2 border border-[#5B2A86]/20 dark:border-[#C9A227]/30">
               <Compass className="w-3.5 h-3.5" />
               Location-First Discovery
             </div>
@@ -110,7 +110,7 @@ export default function BrowseByCity() {
 
           <Link 
             to="/marketplace" 
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0F766E] dark:text-teal-400 hover:underline shrink-0"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5B2A86] dark:text-[#F0A830] hover:underline shrink-0"
           >
             <span>All 18+ Cities</span>
             <ArrowRight className="w-4 h-4" />
@@ -128,7 +128,7 @@ export default function BrowseByCity() {
             <button
               key={idx}
               onClick={() => handleAreaClick(item.city, item.query)}
-              className="px-3 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950/40 hover:text-[#0F766E] dark:hover:text-teal-400 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors whitespace-nowrap cursor-pointer active:scale-95"
+              className="px-3 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-[#5B2A86]/10 hover:text-[#5B2A86] dark:hover:text-[#F0A830] text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors whitespace-nowrap cursor-pointer active:scale-95"
             >
               {item.name}
             </button>

@@ -12,18 +12,19 @@ import {
   Phone, 
   Instagram, 
   Twitter, 
-  Facebook,
-  ChevronRight,
-  Zap,
-  Globe,
-  Settings,
-  ArrowUpRight,
-  Building2,
-  Map,
-  Calculator
+  Facebook, 
+  ChevronRight, 
+  Zap, 
+  Globe, 
+  Settings, 
+  ArrowUpRight, 
+  Building2, 
+  Map, 
+  Calculator 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import PakizzleLogo from './PakizzleLogo';
 
 export default function Footer({ onValuationClick }: { onValuationClick: () => void }) {
   const currentYear = new Date().getFullYear();
@@ -74,46 +75,40 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
   ];
 
   return (
-    <footer className="relative bg-apple-bg pt-24 pb-12 overflow-hidden border-t border-apple-border">
-      {/* Background Decorative Element */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-apple-blue/50 to-transparent" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-apple-blue/5 blur-[120px] rounded-full pointer-events-none" />
+    <footer className="relative bg-[#0A0A0A] text-[#F5F5F7] pt-24 pb-12 overflow-hidden border-t border-white/10">
+      {/* Background Decorative Gold Accent Hairline */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-[#C9A227]/40 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#5B2A86]/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Top Section: Brand & Newsletter */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10 mb-20">
           <div className="space-y-6 max-w-sm">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-12 h-12 bg-apple-blue rounded-2xl flex items-center justify-center shadow-lg shadow-apple-blue/20 transition-transform group-hover:scale-110 duration-[600ms] ease-[0.16,1,0.3,1]">
-                <Home className="w-7 h-7 text-white stroke-[2.2]" />
-              </div>
-              <div>
-                <span className="text-2xl font-semibold tracking-tight block">Pakizzle</span>
-                <span className="text-[10px] font-medium text-apple-text-muted uppercase tracking-[0.2em] -mt-1 block">The Apple Standard for Real Estate</span>
-              </div>
+            <Link to="/" className="inline-block group" title="Pakizzle - Elite Real Estate Portal">
+              <PakizzleLogo variant="white" size="lg" />
             </Link>
-            <p className="text-base text-apple-text-muted leading-relaxed font-medium">
+            <p className="text-sm text-[#8E8E93] leading-relaxed font-normal">
               Pakistan's premier property ecosystem. Cryptographic title verification, interactive masterplan plot finders, and complete tax transparency. Zero banner spam.
             </p>
           </div>
 
           <div className="w-full lg:w-auto">
-            <div className="glass-panel p-2 rounded-[28px] flex items-center gap-2 max-w-md w-full focus-within:ring-4 focus-within:ring-apple-blue/10 transition-all duration-500">
+            <div className="p-2 rounded-[28px] bg-white/5 border border-white/10 flex items-center gap-2 max-w-md w-full focus-within:ring-4 focus-within:ring-[#5B2A86]/20 transition-all duration-500 backdrop-blur-md">
               <div className="pl-4">
-                <Mail className="w-5 h-5 text-apple-text-muted" />
+                <Mail className="w-5 h-5 text-[#B8ACC7]" />
               </div>
               <input 
                 type="email" 
-                placeholder="Stay ahead with our newsletter" 
-                className="flex-1 bg-transparent border-none outline-none text-sm font-medium h-12 placeholder:text-apple-text-muted/50"
+                placeholder="Stay ahead with verified listings" 
+                className="flex-1 bg-transparent border-none outline-none text-sm font-medium h-12 text-[#FAF3E6] placeholder:text-[#B8ACC7]/60"
               />
-              <button className="h-12 px-6 rounded-2xl bg-apple-text text-apple-bg font-semibold text-[11px] uppercase tracking-widest hover:bg-apple-blue hover:text-white transition-all duration-500 active:scale-95 shrink-0">
-                Join Us
+              <button className="h-12 px-6 rounded-full pakizzle-button-primary text-xs font-bold shrink-0">
+                Join
               </button>
             </div>
-            <div className="flex items-center gap-4 mt-4 px-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
-              <p className="text-[10px] font-medium text-apple-text-muted uppercase tracking-widest leading-none">Intelligence Engine: Operational 24/7</p>
+            <div className="flex items-center gap-3 mt-4 px-2">
+              <span className="w-2 h-2 rounded-full bg-[#5FA84C] animate-pulse" />
+              <p className="text-[10px] font-semibold text-[#B8ACC7] uppercase tracking-wider leading-none">Verified Property Engine: Operational 24/7</p>
             </div>
           </div>
         </div>
@@ -122,25 +117,25 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-8 gap-y-12 mb-24">
           {footerSections.map((section, idx) => (
             <div key={idx} className="space-y-6">
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-apple-text">{section.title}</h4>
-              <ul className="space-y-4">
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#C9A227]">{section.title}</h4>
+              <ul className="space-y-3.5">
                 {section.links.map((link, lIdx) => (
                   <li key={lIdx}>
                     {link.action ? (
                       <button 
                         onClick={link.action}
-                        className="group flex items-center gap-1.5 text-sm font-medium text-apple-text-muted hover:text-apple-blue transition-all duration-300"
+                        className="group flex items-center gap-1.5 text-sm font-normal text-[#B8ACC7] hover:text-[#FAF3E6] transition-all duration-300 text-left"
                       >
-                        {link.name}
-                        <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
+                        <span>{link.name}</span>
+                        <ArrowUpRight className="w-3 h-3 text-[#C9A227] opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
                       </button>
                     ) : (
                       <Link 
                         to={link.path || "#"}
-                        className="group flex items-center gap-1.5 text-sm font-medium text-apple-text-muted hover:text-apple-blue transition-all duration-300"
+                        className="group flex items-center gap-1.5 text-sm font-normal text-[#B8ACC7] hover:text-[#FAF3E6] transition-all duration-300"
                       >
-                        {link.name}
-                        <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
+                        <span>{link.name}</span>
+                        <ArrowUpRight className="w-3 h-3 text-[#C9A227] opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
                       </Link>
                     )}
                   </li>
@@ -151,38 +146,38 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
         </div>
 
         {/* Bottom Section: Legal & Social */}
-        <div className="pt-12 border-t border-apple-border flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
-            <p className="text-[11px] font-medium text-apple-text-muted uppercase tracking-widest">
-              © {currentYear} Pakizzle Pakistan. Engineering Excellence.
+            <p className="text-[11px] font-medium text-[#B8ACC7] uppercase tracking-widest">
+              © {currentYear} Pakizzle Pakistan. Elite Real Estate Portal.
             </p>
             <div className="flex items-center gap-6">
-              <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-apple-text-muted hover:text-apple-text transition-colors">Privacy</Link>
-              <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-apple-text-muted hover:text-apple-text transition-colors">Terms</Link>
-              <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-apple-text-muted hover:text-apple-text transition-colors">Cookies</Link>
-              <Link to="/admin/login" className="text-[10px] font-semibold uppercase tracking-widest text-apple-blue hover:underline transition-colors flex items-center gap-1">Admin Portal</Link>
+              <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-[#B8ACC7] hover:text-[#FAF3E6] transition-colors">Privacy</Link>
+              <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-[#B8ACC7] hover:text-[#FAF3E6] transition-colors">Terms</Link>
+              <Link to="#" className="text-[10px] font-semibold uppercase tracking-widest text-[#B8ACC7] hover:text-[#FAF3E6] transition-colors">Cookies</Link>
+              <Link to="/admin/login" className="text-[10px] font-semibold uppercase tracking-widest text-[#C9A227] hover:underline transition-colors flex items-center gap-1">Admin Portal</Link>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             {[
-              { icon: Twitter, color: 'hover:bg-sky-500' },
-              { icon: Instagram, color: 'hover:bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-600' },
-              { icon: Facebook, color: 'hover:bg-blue-600' }
+              { icon: Twitter, color: 'hover:bg-[#4A90D2]' },
+              { icon: Instagram, color: 'hover:bg-[#7A1E5E]' },
+              { icon: Facebook, color: 'hover:bg-[#4B2C82]' }
             ].map((social, sIdx) => (
               <Link 
                 key={sIdx} 
                 to="#" 
                 className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center bg-apple-gray dark:bg-white/5 text-apple-text-muted hover:text-white transition-all duration-500 active:scale-90 shadow-sm hover:shadow-lg",
+                  "w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-[#B8ACC7] hover:text-white transition-all duration-500 active:scale-90 shadow-sm border border-white/10",
                   social.color
                 )}
               >
                 <social.icon className="w-4 h-4" />
               </Link>
             ))}
-            <div className="h-6 w-px bg-apple-border mx-2" />
-            <button className="p-2.5 rounded-full bg-apple-gray dark:bg-white/5 text-apple-text-muted hover:text-apple-text transition-all group">
+            <div className="h-6 w-px bg-white/10 mx-2" />
+            <button className="p-2.5 rounded-full bg-white/5 text-[#B8ACC7] hover:text-white border border-white/10 transition-all group">
               <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
             </button>
           </div>
@@ -191,14 +186,11 @@ export default function Footer({ onValuationClick }: { onValuationClick: () => v
         {/* Native Floating Dock Hint (Mobile View) */}
         <div className="lg:hidden mt-16 text-center">
             <div className="inline-flex flex-col items-center gap-2">
-                <p className="text-[9px] font-semibold text-apple-text-muted/40 uppercase tracking-[0.4em]">Designed & Engineered in Lahore</p>
-                <div className="w-12 h-1.5 bg-apple-border/20 rounded-full" />
+                <p className="text-[9px] font-semibold text-[#B8ACC7]/60 uppercase tracking-[0.4em]">Designed & Engineered for Pakistan</p>
+                <div className="w-12 h-1.5 bg-[#C9A227]/30 rounded-full" />
             </div>
         </div>
       </div>
-
-      {/* Extreme Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-apple-blue/[0.03] to-transparent pointer-events-none" />
     </footer>
   );
 }

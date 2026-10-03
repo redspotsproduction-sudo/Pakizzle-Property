@@ -37,10 +37,10 @@ import ValuationModal from "./ValuationModal";
 import { AnimatedCounter, REVEAL_EASE, SPRING_TACTILE, SPRING_SNAPPY } from "./motion";
 import { GlassPanel, GlassCapsule, GlassButton, GlassCard } from "./ui/GlassPrimitives";
 
-import villaImg from "../assets/images/pakizzle_villa_hero_1790252631072.jpg";
-import penthouseImg from "../assets/images/pakizzle_penthouse_waterfront_1790252648589.jpg";
-import mansionImg from "../assets/images/pakizzle_islamabad_mansion_1790252663307.jpg";
-import plotImg from "../assets/images/pakizzle_plot_masterplan_1790252681010.jpg";
+import villaImg from "../assets/images/pakizzle_villa_hero_1790252631072.webp";
+import penthouseImg from "../assets/images/pakizzle_penthouse_waterfront_1790252648589.webp";
+import mansionImg from "../assets/images/pakizzle_islamabad_mansion_1790252663307.webp";
+import plotImg from "../assets/images/pakizzle_plot_masterplan_1790252681010.webp";
 
 const HERO_HEROES = [
   {
@@ -197,6 +197,9 @@ export default function Hero() {
               key={activeHero.id}
               src={activeHero.image}
               alt={activeHero.title}
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
@@ -307,8 +310,8 @@ export default function Hero() {
               className="w-full max-w-md h-13 px-4 rounded-full liquid-glass-mid flex items-center justify-between text-white shadow-xl border border-white/25 cursor-pointer touch-target"
             >
               <div className="flex items-center gap-2.5 truncate">
-                <div className="w-8 h-8 rounded-full bg-teal-500/25 flex items-center justify-center shrink-0 border border-teal-300/30">
-                  <Search className="w-4 h-4 text-teal-300" />
+                <div className="w-8 h-8 rounded-full bg-[#5B2A86]/40 flex items-center justify-center shrink-0 border border-white/20">
+                  <Search className="w-4 h-4 text-[#F0A830]" />
                 </div>
                 <div className="flex flex-col text-left truncate">
                   <span className="text-xs font-bold text-white truncate">
@@ -320,7 +323,7 @@ export default function Hero() {
                 </div>
               </div>
               <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 ml-2">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-teal-300" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#F0A830]" />
               </div>
             </motion.button>
           </div>
@@ -360,9 +363,9 @@ export default function Hero() {
                 whileHover={{ scale: 1.02 }}
                 transition={SPRING_SNAPPY}
                 onClick={handleSearchSubmit}
-                className="h-10 px-5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 text-white text-xs font-bold flex items-center gap-2 shadow-lg border border-teal-300/40 cursor-pointer"
+                className="h-10 px-5 rounded-full pakizzle-button-primary !text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0"
               >
-                <Search className="w-3.5 h-3.5" />
+                <Search className="w-3.5 h-3.5 text-[#F0A830]" />
                 <span>Explore Homes</span>
               </motion.button>
             </div>
@@ -370,7 +373,7 @@ export default function Hero() {
             {/* Row 2: Selectors */}
             <div className="grid grid-cols-3 gap-2 pt-1 border-t border-white/15">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/20 border border-white/10">
-                <MapPin className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
@@ -385,7 +388,7 @@ export default function Hero() {
               </div>
 
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/20 border border-white/10">
-                <Building2 className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+                <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
@@ -446,7 +449,7 @@ export default function Hero() {
 
             {/* City Segment */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
-              <MapPin className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
@@ -463,7 +466,7 @@ export default function Hero() {
 
             {/* Property Type Segment */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
-              <Building2 className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+              <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
@@ -501,9 +504,9 @@ export default function Hero() {
               whileHover={{ scale: 1.02 }}
               transition={SPRING_SNAPPY}
               onClick={handleSearchSubmit}
-              className="h-10 px-5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-teal-950/40 border border-teal-300/40 transition-colors cursor-pointer glass-hover-sheen shrink-0 ml-auto"
+              className="h-10 px-6 rounded-full pakizzle-button-primary !text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0 ml-auto"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-3.5 h-3.5 text-[#F0A830]" />
               <span>Explore Homes</span>
             </motion.button>
           </div>
@@ -523,14 +526,14 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.15, ease: REVEAL_EASE }}
           className="relative z-10 max-w-3xl my-auto py-6 sm:py-10 lg:pl-16 will-change-transform"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full liquid-glass-subtle text-teal-300 text-[11px] sm:text-xs font-semibold tracking-wide mb-3 sm:mb-4">
-            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full liquid-glass-subtle text-[#FAF3E6] text-[11px] sm:text-xs font-semibold tracking-wide mb-3 sm:mb-4">
+            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5FA84C] shrink-0" />
             <span className="truncate">Pakistan's 100% Registry-Verified Land Portal</span>
           </div>
 
           <h1 className="fluid-hero font-extrabold text-white tracking-tight leading-[1.05] drop-shadow-md text-balance">
             Architectural Sanctuaries. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-teal-100 to-teal-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FAF3E6] to-[#F0A830]">
               Title Guaranteed.
             </span>
           </h1>
@@ -553,12 +556,12 @@ export default function Hero() {
           className="relative z-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 lg:gap-6 items-end lg:pl-16 w-full"
         >
           {/* Bottom-Left: Value Metric & Verification Guarantee Glass Panel */}
-          <div className="order-2 md:order-1 md:col-span-1 lg:col-span-4 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-4 sm:p-5 text-white shadow-2xl">
+          <div className="order-2 md:order-1 md:col-span-1 lg:col-span-4 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-4 sm:p-5 text-white shadow-2xl border border-white/20">
             <div className="flex items-center justify-between pb-2.5 border-b border-white/20 mb-2.5">
               <span className="text-[11px] sm:text-xs uppercase tracking-wider font-semibold text-white/70">
                 Network Liquidity
               </span>
-              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-emerald-300 bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-500/30">
+              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-[#5FA84C] bg-[#5FA84C]/15 px-2 py-0.5 rounded-full border border-[#5FA84C]/30">
                 Live Audited
               </span>
             </div>
@@ -577,7 +580,7 @@ export default function Hero() {
             <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/15 flex items-center justify-between">
               <button 
                 onClick={() => setIsValuationOpen(true)}
-                className="text-xs font-semibold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                className="text-xs font-semibold text-[#F0A830] hover:text-[#C9A227] flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Instant Property Valuation</span>
@@ -592,7 +595,7 @@ export default function Hero() {
                     aria-label={`Slide ${i + 1}`}
                     className={cn(
                       "h-1.5 rounded-full transition-all duration-300 cursor-pointer min-w-[6px]",
-                      i === currentIdx ? "w-5 sm:w-6 bg-teal-300" : "w-1.5 bg-white/40"
+                      i === currentIdx ? "w-5 sm:w-6 bg-[#F0A830]" : "w-1.5 bg-white/40"
                     )}
                   />
                 ))}
@@ -603,8 +606,8 @@ export default function Hero() {
           {/* Desktop Spacer */}
           <div className="hidden lg:block lg:col-span-3" />
 
-          {/* Bottom-Right (or Mobile Stack Top): Featured Property Glass Card */}
-          <div className="order-1 md:order-2 md:col-span-1 lg:col-span-5 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-3.5 sm:p-5 text-white shadow-2xl glass-hover-sheen group w-full">
+          {/* Bottom-Right (or Mobile Stack Top): Featured Property Glass Card with signature hairline gold border */}
+          <div className="order-1 md:order-2 md:col-span-1 lg:col-span-5 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-3.5 sm:p-5 text-white shadow-2xl glass-hover-sheen group w-full border border-[#C9A227]/50">
             <div className="flex gap-3 sm:gap-4 items-center">
               {/* Thumbnail with floating badge */}
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl sm:rounded-[20px] overflow-hidden shrink-0 border border-white/40 shadow-inner">
@@ -613,7 +616,7 @@ export default function Hero() {
                   alt={activeHero.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 px-1.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[8px] sm:text-[9px] font-bold text-teal-300">
+                <div className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[8px] sm:text-[9px] font-bold text-[#F0A830] border border-[#C9A227]/40">
                   Featured
                 </div>
               </div>
@@ -621,7 +624,7 @@ export default function Hero() {
               {/* Information Cluster */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1">
-                  <span className="text-[10px] sm:text-[11px] font-semibold text-teal-300 truncate">
+                  <span className="text-[10px] sm:text-[11px] font-semibold text-[#FAF3E6] truncate">
                     {activeHero.tag}
                   </span>
                   <div className="flex items-center gap-1">
@@ -630,7 +633,7 @@ export default function Hero() {
                       className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90 cursor-pointer touch-target min-w-[36px] min-h-[36px]"
                       title="Save property"
                     >
-                      <Heart className={cn("w-3.5 h-3.5", isLiked ? "fill-rose-500 text-rose-500" : "")} />
+                      <Heart className={cn("w-3.5 h-3.5", isLiked ? "fill-[#D93A45] text-[#D93A45]" : "")} />
                     </button>
                     <button 
                       onClick={() => {
@@ -649,13 +652,13 @@ export default function Hero() {
                 <h4 className="text-xs sm:text-sm md:text-base font-bold text-white tracking-tight truncate mt-0.5">
                   {activeHero.title}
                 </h4>
-                <p className="text-[11px] sm:text-xs text-white/70 truncate flex items-center gap-1 mt-0.5">
-                  <MapPin className="w-3 h-3 text-teal-400 shrink-0" />
+                <p className="text-[11px] sm:text-xs text-white/80 truncate flex items-center gap-1 mt-0.5">
+                  <MapPin className="w-3 h-3 text-[#F0A830] shrink-0" />
                   <span>{activeHero.subtitle}</span>
                 </p>
 
                 <div className="mt-1.5 sm:mt-2 flex items-center justify-between pt-1.5 sm:pt-2 border-t border-white/15">
-                  <div className="text-xs sm:text-sm md:text-base font-extrabold font-mono text-emerald-300">
+                  <div className="text-xs sm:text-sm md:text-base font-extrabold font-mono text-[#FAF3E6]">
                     {activeHero.price}
                   </div>
 

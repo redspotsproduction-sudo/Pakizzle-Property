@@ -19,6 +19,7 @@ import {
   Flame
 } from "lucide-react";
 import { useProperties } from "../../context/PropertyContext";
+import { formatPropertyUrl } from "../../lib/referenceId";
 import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
 import { useChat } from "../../context/ChatContext";
@@ -316,7 +317,7 @@ export default function UserOverview() {
                         transition={{ delay: index * 0.03 }}
                         className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 py-4 first:pt-0 last:pb-0 group relative"
                       >
-                        <Link to={`/vehicle/${v.id}`} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[#1C1C1E] flex items-center justify-center border border-black/5 dark:border-white/10">
+                        <Link to={formatPropertyUrl(v)} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[#1C1C1E] flex items-center justify-center border border-black/5 dark:border-white/10">
                           {v.images?.[0] ? (
                             <img 
                               src={v.images[0]} 
@@ -331,7 +332,7 @@ export default function UserOverview() {
                         
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                           <div className="flex items-start justify-between gap-3">
-                            <Link to={`/vehicle/${v.id}`} className="text-sm font-semibold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors truncate block">
+                            <Link to={formatPropertyUrl(v)} className="text-sm font-semibold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors truncate block">
                               {v.year} {v.make} {v.model}
                             </Link>
                             <span className="text-xs font-semibold font-mono text-apple-blue shrink-0">

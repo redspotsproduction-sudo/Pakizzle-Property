@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Property, Vehicle } from '../types';
 import { MOCK_PROPERTIES } from '../data/mockProperties';
 import { db, handleFirestoreError, OperationType } from '../firebase';
-import { collection, onSnapshot, setDoc, doc, query, orderBy, deleteDoc } from 'firebase/firestore';
+import { collection, onSnapshot, setDoc, doc, query, orderBy, deleteDoc, getDocs } from 'firebase/firestore';
 import { notificationService } from '../services/notificationService';
+import { generateReferenceId, extractReferenceIdFromInput } from '../lib/referenceId';
 
 export interface PropertyContextType {
   properties: Property[];
@@ -14,6 +15,9 @@ export interface PropertyContextType {
   updateVehicle: (id: string, updates: Partial<Property>) => Promise<void>; // Backward-compatibility alias
   deleteProperty: (id: string) => Promise<void>;
   deleteVehicle: (id: string) => Promise<void>; // Backward-compatibility alias
+  getPropertyByReferenceId: (refId: string) => Property | undefined;
+  searchByReferenceId: (query: string) => Property | undefined;
+  generateUniqueReferenceId: () => string;
   loading: boolean;
   recentlyViewed: string[]; // Stores property IDs
   addToRecentlyViewed: (propertyId: string) => void;
@@ -26,6 +30,39 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
   const [properties, setProperties] = useState<Property[]>(MOCK_PROPERTIES);
   const [loading, setLoading] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
+  const reservedReferenceIdsRef = useRef<Set<string>>(new Set());
+
+  // Helper to generate an immutable, unique 7-digit reference ID
+  const generateUniqueReferenceId = useCallback(() => {
+    const existing = new Set<string>();
+    properties.forEach(p => {
+      if (p.reference_id) existing.add(p.reference_id);
+    });
+    reservedReferenceIdsRef.current.forEach(id => existing.add(id));
+    const newId = generateReferenceId(existing);
+    reservedReferenceIdsRef.current.add(newId);
+    return newId;
+  }, [properties]);
+
+  // Direct lookup by public reference_id (supports legacy ID fallback)
+  const getPropertyByReferenceId = useCallback((refId: string): Property | undefined => {
+    if (!refId) return undefined;
+    const cleanId = refId.trim().replace(/^#/, "");
+    return properties.find(p => p.reference_id === cleanId || p.id === cleanId);
+  }, [properties]);
+
+  // Intelligent resolver: accepts raw reference ID, formatted input ("ID: 3421789"), or full URL
+  const searchByReferenceId = useCallback((queryStr: string): Property | undefined => {
+    if (!queryStr) return undefined;
+    const extractedId = extractReferenceIdFromInput(queryStr);
+    if (extractedId) {
+      const match = properties.find(p => p.reference_id === extractedId || p.id === extractedId);
+      if (match) return match;
+    }
+    // Fallback: check if query matches internal id directly
+    const directMatch = properties.find(p => p.id === queryStr.trim());
+    return directMatch;
+  }, [properties]);
 
   // Safely migrate or load recently viewed items
   useEffect(() => {
@@ -38,14 +75,14 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
         if (Array.isArray(parsed)) {
           const processedIds = parsed.map(item => {
             if (typeof item !== 'string') return null;
-            const existsDirectly = properties.some(p => p.id === item);
+            const existsDirectly = properties.some(p => p.id === item || p.reference_id === item);
             if (existsDirectly) return item;
             
             const foundProp = properties.find(p => {
               const fullName = `${p.year} ${p.make} ${p.model}`.toLowerCase();
               return fullName === item.toLowerCase() || item.toLowerCase().includes(p.model.toLowerCase());
             });
-            return foundProp ? foundProp.id : null;
+            return foundProp ? (foundProp.reference_id || foundProp.id) : null;
           }).filter((id): id is string => id !== null);
 
           setRecentlyViewed(processedIds);
@@ -88,7 +125,26 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
         }
       });
       
-      setProperties(merged);
+      // Auto-backfill reference_id if missing from legacy records
+      const knownIds = new Set<string>();
+      merged.forEach(p => {
+        if (p.reference_id) {
+          knownIds.add(p.reference_id);
+          reservedReferenceIdsRef.current.add(p.reference_id);
+        }
+      });
+
+      const normalized = merged.map(p => {
+        if (!p.reference_id) {
+          const generated = generateReferenceId(knownIds);
+          knownIds.add(generated);
+          reservedReferenceIdsRef.current.add(generated);
+          return { ...p, reference_id: generated };
+        }
+        return p;
+      });
+
+      setProperties(normalized);
       setLoading(false);
     }, (error) => {
       if (error?.code === 'unavailable' || error?.message?.includes('offline')) {
@@ -104,7 +160,21 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
               merged.push(mock);
             }
           });
-          setProperties(merged);
+
+          const knownIds = new Set<string>();
+          merged.forEach(p => {
+            if (p.reference_id) knownIds.add(p.reference_id);
+          });
+          const normalized = merged.map(p => {
+            if (!p.reference_id) {
+              const generated = generateReferenceId(knownIds);
+              knownIds.add(generated);
+              return { ...p, reference_id: generated };
+            }
+            return p;
+          });
+
+          setProperties(normalized);
           setLoading(false);
         }, (err) => {
           console.warn('[PropertyContext] Legacy snapshot error:', err.message);
@@ -120,26 +190,54 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
 
   const addProperty = useCallback(async (property: Property) => {
     try {
-      await setDoc(doc(db, 'properties', property.id), property);
-      // Dual-sync to legacy collection for backwards-compat queries
+      // Ensure unique, non-enumerable 7-digit reference_id is assigned
+      const refId = property.reference_id || generateUniqueReferenceId();
+      const listingWithRef: Property = {
+        ...property,
+        reference_id: refId,
+        purpose: property.purpose || 'for-sale'
+      };
+
+      await setDoc(doc(db, 'properties', property.id), listingWithRef);
+      
+      // Permanently reserve reference_id so it can never be reused
       try {
-        await setDoc(doc(db, 'vehicles', property.id), property);
+        await setDoc(doc(db, 'reserved_reference_ids', refId), {
+          reference_id: refId,
+          listing_id: property.id,
+          assigned_at: new Date().toISOString(),
+          is_deleted: false
+        });
       } catch (_) {}
 
-      if (property.status === 'active' || !property.status) {
+      // Dual-sync to legacy collection for backwards-compat queries
+      try {
+        await setDoc(doc(db, 'vehicles', property.id), listingWithRef);
+      } catch (_) {}
+
+      if (listingWithRef.status === 'active' || !listingWithRef.status) {
         import('../services/savedSearchService').then(({ savedSearchService }) => {
-          savedSearchService.checkAllSavedSearchesAgainstVehicle(property);
+          savedSearchService.checkAllSavedSearchesAgainstVehicle(listingWithRef);
         }).catch(err => console.error("Error checking saved searches against property:", err));
       }
     } catch (error) {
       handleFirestoreError(error, OperationType.CREATE, `properties/${property.id}`);
     }
-  }, []);
+  }, [generateUniqueReferenceId]);
 
   const updateProperty = useCallback(async (id: string, updates: Partial<Property>) => {
     try {
       const currentProperty = properties.find(p => p.id === id);
       if (currentProperty) {
+        // Enforce immutability: reference_id cannot be overwritten once assigned
+        const safeUpdates = { ...updates };
+        if (currentProperty.reference_id) {
+          delete safeUpdates.reference_id;
+        } else if (safeUpdates.status === 'active' && !safeUpdates.reference_id) {
+          // Assign reference_id upon approval if not yet assigned
+          safeUpdates.reference_id = generateUniqueReferenceId();
+        }
+
         if (updates.status && updates.status !== currentProperty.status && currentProperty.seller.uid) {
           let title = '';
           let message = '';
@@ -147,7 +245,7 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
 
           if (updates.status === 'active') {
             title = 'Property Listing Approved! 🏡✨';
-            message = `Your ${currentProperty.make} "${currentProperty.model}" is now live and visible to buyers.`;
+            message = `Your ${currentProperty.make} "${currentProperty.model}" (Property ID: ${currentProperty.reference_id || safeUpdates.reference_id}) is now live.`;
             type = 'listing';
           } else if (updates.status === 'rejected') {
             title = 'Property Listing Action Required';
@@ -161,20 +259,20 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
               title,
               message,
               type,
-              link: `/property/${id}`,
-              metadata: { propertyId: id, oldStatus: currentProperty.status, newStatus: updates.status }
+              link: `/property/${currentProperty.reference_id || id}`,
+              metadata: { propertyId: id, referenceId: currentProperty.reference_id, oldStatus: currentProperty.status, newStatus: updates.status }
             });
           }
 
           if (updates.status === 'active') {
-            const mergedProperty = { ...currentProperty, ...updates };
+            const mergedProperty = { ...currentProperty, ...safeUpdates };
             import('../services/savedSearchService').then(({ savedSearchService }) => {
               savedSearchService.checkAllSavedSearchesAgainstVehicle(mergedProperty);
             }).catch(err => console.error("Error checking saved searches against property:", err));
           }
         }
 
-        const merged = { ...currentProperty, ...updates };
+        const merged = { ...currentProperty, ...safeUpdates };
         await setDoc(doc(db, 'properties', id), merged);
         try {
           await setDoc(doc(db, 'vehicles', id), merged);
@@ -188,10 +286,23 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       handleFirestoreError(error, OperationType.UPDATE, `properties/${id}`);
     }
-  }, [properties]);
+  }, [properties, generateUniqueReferenceId]);
 
   const deleteProperty = useCallback(async (id: string) => {
     try {
+      const target = properties.find(p => p.id === id);
+      if (target?.reference_id) {
+        // Mark as retired/deleted in registry to ensure it is NEVER reused
+        try {
+          await setDoc(doc(db, 'reserved_reference_ids', target.reference_id), {
+            reference_id: target.reference_id,
+            listing_id: id,
+            is_deleted: true,
+            archived_at: new Date().toISOString()
+          }, { merge: true });
+        } catch (_) {}
+      }
+
       setProperties(prev => prev.filter(p => p.id !== id));
       await deleteDoc(doc(db, 'properties', id));
       try {
@@ -200,7 +311,7 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       handleFirestoreError(error, OperationType.DELETE, `properties/${id}`);
     }
-  }, []);
+  }, [properties]);
 
   const value = useMemo<PropertyContextType>(() => ({
     properties,
@@ -211,11 +322,26 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     updateVehicle: updateProperty, // Backward compatibility alias
     deleteProperty,
     deleteVehicle: deleteProperty, // Backward compatibility alias
+    getPropertyByReferenceId,
+    searchByReferenceId,
+    generateUniqueReferenceId,
     loading,
     recentlyViewed,
     addToRecentlyViewed,
     clearRecentlyViewed
-  }), [properties, addProperty, updateProperty, deleteProperty, loading, recentlyViewed, addToRecentlyViewed, clearRecentlyViewed]);
+  }), [
+    properties,
+    addProperty,
+    updateProperty,
+    deleteProperty,
+    getPropertyByReferenceId,
+    searchByReferenceId,
+    generateUniqueReferenceId,
+    loading,
+    recentlyViewed,
+    addToRecentlyViewed,
+    clearRecentlyViewed
+  ]);
 
   return (
     <PropertyContext.Provider value={value}>

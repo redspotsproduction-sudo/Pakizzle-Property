@@ -330,7 +330,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
     return (
       <div 
         className={cn(
-          "w-full bg-apple-gray/20 dark:bg-white/5 rounded-2xl border border-apple-border/20 overflow-hidden relative transition-all duration-300 hover:border-apple-blue/20 shadow-sm p-3 flex md:flex-row flex-col items-center justify-between gap-4 max-w-[1440px] mx-auto mb-6",
+          "w-full bg-apple-gray/20 dark:bg-white/5 rounded-2xl border border-apple-border/20 overflow-hidden relative transition-all duration-300 hover:border-apple-blue/20 shadow-sm p-3 flex md:flex-row flex-col items-center justify-between gap-4 max-w-[1440px] mx-auto mb-6 min-h-[90px]",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}

@@ -61,8 +61,19 @@ const generateProperties = (count: number): Property[] => {
     // Construct real-estate-specific descriptions
     const description = `This pristine ${base.make} located in ${area}, ${city} is a premier offering. Exclusively managed by ${agency.name}. Featuring high-quality architectural finishes, spacious master suites, imported marble flooring, designer open-concept kitchen, and robust utility infrastructure (water filtration, solar back-up readiness, 24/7 security). Perfect for discerning families and institutional property investors. Built in ${yearBuilt} with complete legal title deeds.`;
     
+    // Construct authentic non-sequential 7-digit Property Reference ID (Zameen style)
+    // First items have iconic reference IDs including 3421789 requested in the specification
+    const KNOWN_REF_IDS = ["3421789", "5829104", "7192843", "4839201", "8391024", "9201845", "6482019", "7291840"];
+    const referenceId = i <= KNOWN_REF_IDS.length 
+      ? KNOWN_REF_IDS[i - 1] 
+      : String(1000000 + ((i * 3829471) % 8999999));
+
+    const purpose: "for-sale" | "for-rent" = i % 4 === 0 ? "for-rent" : "for-sale";
+
     properties.push({
       id: `prop-${i}`,
+      reference_id: referenceId,
+      purpose: purpose,
       make: base.make, // E.g., "House", "Apartment", "Plot", "Commercial"
       model: base.model, // E.g., "Luxury Contemporary Villa"
       year: yearBuilt,

@@ -4,6 +4,7 @@ import { Heart, Search, ShoppingBag, ArrowRight, Trash2, Zap, Building2, Home } 
 import { useProperties } from "../../context/PropertyContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { formatPrice, cn } from "../../lib/utils";
+import { formatPropertyUrl } from "../../lib/referenceId";
 import { Link } from "react-router-dom";
 
 export default function UserWishlist() {
@@ -61,7 +62,7 @@ export default function UserWishlist() {
                   <Trash2 className="w-4 h-4" />
                 </button>
 
-                <Link to={`/property/${v!.id}`} className="block">
+                <Link to={formatPropertyUrl(v!)} className="block">
                   <div className="aspect-[4/3] overflow-hidden relative bg-[#1C1C1E] border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-center">
                     {v!.images?.[0] ? (
                       <img 

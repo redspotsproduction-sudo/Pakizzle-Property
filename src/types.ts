@@ -1,5 +1,7 @@
 export interface Property {
-  id: string;
+  id: string; // Internal database ID (never exposed to end users)
+  reference_id?: string; // 6-8 digit public shareable ID (e.g. "3421789")
+  purpose?: 'for-sale' | 'for-rent' | 'rent' | 'sale'; // Purpose for SEO slug and filtering
   make: string; // Property type/category: "House", "Apartment", "Plot", "Commercial", "Penthouse"
   model: string; // Title / Model name: "Luxury Contemporary Villa", "Executive Flat", etc.
   year: number; // Year built / established

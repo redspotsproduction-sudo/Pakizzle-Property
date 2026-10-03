@@ -23,6 +23,7 @@ import {
   Car
 } from 'lucide-react';
 import { useChat } from '../../context/ChatContext';
+import { formatPropertyUrl } from '../../lib/referenceId';
 import { useAuth } from '../../context/AuthContext';
 import { useProperties } from '../../context/PropertyContext';
 import { cn } from '../../lib/utils';
@@ -348,7 +349,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
                   </div>
                 </div>
                 <Link 
-                  to={`/vehicle/${activeConv.vehicleId}`}
+                  to={vehicle ? formatPropertyUrl(vehicle) : `/property/${activeConv.vehicleId}`}
                   className={cn(
                     "bg-apple-blue text-white rounded-full font-bold hover:bg-blue-600 transition-colors shadow-sm shadow-apple-blue/20",
                     isDashboardView ? "px-2.5 py-1 text-[10px]" : "px-4 py-1.5 text-[11px] md:text-xs"
@@ -523,7 +524,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
                             {msg.metadata?.listingPrice ? `AED ${msg.metadata.listingPrice.toLocaleString()}` : 'Price on request'}
                           </div>
                           <Link 
-                            to={`/vehicle/${msg.metadata?.listingId}`}
+                            to={`/property/${msg.metadata?.listingId}`}
                             className={cn(
                               "w-full bg-apple-blue/5 text-apple-blue rounded-xl font-bold hover:bg-apple-blue/10 transition-colors flex items-center justify-center",
                               isDashboardView ? "mt-2 py-1.5 text-[10px]" : "mt-3 py-2 text-xs"

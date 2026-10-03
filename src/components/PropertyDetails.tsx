@@ -25,9 +25,13 @@ import {
   Bed,
   Bath,
   Compass,
-  FileCheck
+  FileCheck,
+  Copy,
+  Check
 } from "lucide-react";
+import { toast } from "sonner";
 import { useProperties } from "@/context/PropertyContext";
+import { parsePropertyUrlParam, formatPropertyUrl } from "@/lib/referenceId";
 import RecentlyViewed from "./RecentlyViewed";
 import { useChat } from "@/context/ChatContext";
 import { cn, formatPrice } from "@/lib/utils";
@@ -54,12 +58,37 @@ const FEATURE_ICONS: Record<string, any> = {
 };
 
 export default function PropertyDetails() {
-  const { id } = useParams();
+  const { id: routeParam } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const shouldReduceMotion = useReducedMotion();
   const { properties, addToRecentlyViewed } = useProperties();
   const { startConversation, setNotification } = useChat();
-  const property = properties.find((p) => p.id === id);
+
+  // Extract reference_id and cosmetic slug from the route parameter
+  const { reference_id: extractedRefId } = parsePropertyUrlParam(routeParam || "");
+
+  // Resolve primarily off the reference_id, treating the slug portion as cosmetic/SEO only
+  const property = React.useMemo(() => {
+    if (!properties || properties.length === 0) return undefined;
+    return properties.find((p) => {
+      if (extractedRefId && p.reference_id === extractedRefId) return true;
+      if (p.reference_id === routeParam) return true;
+      if (p.id === routeParam) return true;
+      if (extractedRefId && p.id === extractedRefId) return true;
+      return false;
+    });
+  }, [properties, extractedRefId, routeParam]);
+
+  // Synchronize browser address bar to canonical [slug]-[reference_id] without page reload
+  useEffect(() => {
+    if (property && property.reference_id) {
+      const canonicalUrl = formatPropertyUrl(property);
+      if (window.location.pathname !== canonicalUrl && !window.location.pathname.startsWith("/vehicle/")) {
+        window.history.replaceState(null, "", canonicalUrl);
+      }
+    }
+  }, [property]);
+
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { trackView, getInsights } = useIntelligence();
   const [isStickyHeaderVisible, setIsStickyHeaderVisible] = useState(false);
@@ -105,9 +134,10 @@ export default function PropertyDetails() {
 
   useEffect(() => {
     if (property) {
+      addToRecentlyViewed(property.reference_id || property.id);
       trackView(property);
     }
-  }, [property, trackView]);
+  }, [property, addToRecentlyViewed, trackView]);
 
   const nudges = React.useMemo(() => {
     if (!property) return [];
@@ -177,6 +207,23 @@ export default function PropertyDetails() {
     }
   };
 
+  const [copiedId, setCopiedId] = useState(false);
+
+  const handleCopyId = async (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!property) return;
+    const refId = property.reference_id || property.id;
+    try {
+      await navigator.clipboard.writeText(refId);
+      setCopiedId(true);
+      toast.success(`Property ID ${refId} copied! Ready to share via WhatsApp or call.`);
+      setTimeout(() => setCopiedId(false), 2500);
+    } catch {
+      setCopiedId(true);
+      setTimeout(() => setCopiedId(false), 2500);
+    }
+  };
+
   const [isDataLoaded, setIsDataLoaded] = useState(!!property);
 
   useEffect(() => {
@@ -217,12 +264,21 @@ export default function PropertyDetails() {
 
   if (!property) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-apple-bg">
-        <div className="text-center p-8 bg-apple-card-bg rounded-apple-2xl shadow-xl max-w-md">
+      <div className="min-h-screen flex items-center justify-center bg-apple-bg px-4">
+        <div className="text-center p-8 bg-apple-card-bg rounded-apple-2xl shadow-xl max-w-md border border-apple-border/40">
           <Building2 className="w-16 h-16 text-apple-blue mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Property Not Found</h2>
-          <p className="text-apple-text-muted mb-6">The listing you are searching for might have been sold or removed.</p>
-          <Link to="/marketplace" className="apple-button-primary">Browse Available Properties</Link>
+          <h2 className="text-2xl font-bold mb-2 text-apple-text">Property Not Found</h2>
+          {extractedRefId ? (
+            <p className="text-apple-text-muted text-sm mb-6">
+              No active listing was found matching Property Reference ID <span className="font-mono font-bold text-apple-blue">#{extractedRefId}</span>. The listing may have been sold, archived, or the ID was mistyped.
+            </p>
+          ) : (
+            <p className="text-apple-text-muted text-sm mb-6">The listing you are searching for might have been sold or removed.</p>
+          )}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link to="/marketplace" className="apple-button-primary w-full sm:w-auto">Browse Available Properties</Link>
+            <Link to="/" className="apple-button-secondary w-full sm:w-auto">Return Home</Link>
+          </div>
         </div>
       </div>
     );
@@ -238,7 +294,7 @@ export default function PropertyDetails() {
         keywords={[property.make, property.model, `${property.make} in ${property.city}`, "real estate pakistan", "luxury house for sale", "commercial property"]}
         ogImage={property.images[0] || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80"}
         ogType="website"
-        canonicalPath={`/property/${property.id}`}
+        canonicalPath={formatPropertyUrl(property)}
       />
       <Header />
 
@@ -248,9 +304,19 @@ export default function PropertyDetails() {
         style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
       >
         <div className="flex flex-col min-w-0">
-          <span className="text-[10px] font-bold text-apple-text-muted dark:text-slate-400 uppercase tracking-wider truncate">
-            {property.make} • {property.city}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-apple-text-muted dark:text-slate-400 uppercase tracking-wider truncate">
+              {property.make} • {property.city}
+            </span>
+            <button 
+              onClick={handleCopyId} 
+              className="text-[9px] font-mono font-bold text-apple-blue bg-apple-blue/10 dark:bg-white/10 px-1.5 py-0.5 rounded flex items-center gap-0.5 cursor-pointer"
+              title="Copy Property ID"
+            >
+              #{property.reference_id || property.id}
+              {copiedId ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
+            </button>
+          </div>
           <span className="text-base font-extrabold font-mono text-apple-blue dark:text-teal-400 truncate">
             {formatPrice(property.price)}
           </span>
@@ -285,9 +351,17 @@ export default function PropertyDetails() {
         <div className="max-w-[1440px] mx-auto w-full px-4 md:px-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex flex-col">
-              <h2 className="text-xs md:text-base font-bold text-apple-text tracking-tight truncate max-w-md">
-                {property.model}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xs md:text-base font-bold text-apple-text tracking-tight truncate max-w-md">
+                  {property.model}
+                </h2>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-apple-gray dark:bg-white/10 text-[10px] font-mono font-bold text-apple-blue shrink-0">
+                  ID: {property.reference_id || property.id}
+                  <button onClick={handleCopyId} className="hover:text-apple-text text-apple-text-muted transition-colors cursor-pointer" title="Copy Property ID">
+                    {copiedId ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
+                  </button>
+                </span>
+              </div>
               <p className="text-[9px] md:text-xs font-bold text-apple-blue uppercase tracking-widest">
                 {formatPrice(property.price)} • {property.location}
               </p>
@@ -445,11 +519,53 @@ export default function PropertyDetails() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    Verified Title Deed
+                {/* Trust Signal Header: Property Reference ID & Verified Badge Paired Together */}
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-apple-border/40">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* Property ID Pill with 1-Tap Copy */}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-apple-gray/80 dark:bg-white/10 border border-apple-border/60 text-apple-text text-xs font-semibold backdrop-blur-md shadow-xs transition-all hover:border-apple-blue/50">
+                      <span className="text-[11px] font-medium text-apple-text-muted">Property ID:</span>
+                      <span className="font-mono font-bold tracking-wider text-apple-blue dark:text-teal-400">
+                        {property.reference_id || property.id}
+                      </span>
+                      <motion.button
+                        whileHover={{ scale: 1.15 }}
+                        whileTap={{ scale: 0.85 }}
+                        onClick={handleCopyId}
+                        className="p-1 -mr-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-apple-text-muted hover:text-apple-blue transition-colors cursor-pointer touch-target"
+                        title="Copy Property ID for WhatsApp / Call sharing"
+                        aria-label="Copy Property ID"
+                      >
+                        {copiedId ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-500 animate-in zoom-in-50 duration-200" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </motion.button>
+                      {copiedId && (
+                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-200">
+                          Copied!
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Verified Trust Badge Directly Adjacent */}
+                    <div className="inline-flex items-center">
+                      {property.seller?.badgeType && property.seller.badgeType !== "none" ? (
+                        <Badge 
+                          type={property.seller.badgeType} 
+                          size="sm" 
+                          showText={true} 
+                        />
+                      ) : (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <span>Verified Title Deed</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
+
                   <div className="flex items-center gap-2">
                     <motion.button 
                       whileHover={{ scale: 1.1 }}

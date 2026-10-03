@@ -17,10 +17,13 @@ import {
   Bed,
   Bath,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Hash,
+  AlertCircle
 } from "lucide-react";
 import { useProperties } from "../context/PropertyContext";
 import { formatPrice, cn } from "../lib/utils";
+import { formatPropertyUrl, extractReferenceId } from "../lib/referenceId";
 import { REVEAL_EASE, SPRING_SNAPPY, SPRING_BOUNCY } from "./motion";
 
 interface SearchModalProps {
@@ -30,6 +33,7 @@ interface SearchModalProps {
 
 const CATEGORY_CHIPS = [
   { id: "all", label: "All Properties" },
+  { id: "id_search", label: "# Property ID Search" },
   { id: "House", label: "Houses" },
   { id: "Flat / Apartment", label: "Apartments" },
   { id: "Plot", label: "Plots" },
@@ -48,6 +52,25 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-extract Property Reference ID from text or full pasted URL
+  const extractedId = useMemo(() => {
+    return extractReferenceId(query);
+  }, [query]);
+
+  // Direct hit match against catalog
+  const directHitProperty = useMemo(() => {
+    if (!extractedId) return null;
+    return vehicles.find(
+      (v) => (v.reference_id && v.reference_id === extractedId) || v.id === extractedId
+    ) || null;
+  }, [vehicles, extractedId]);
+
+  // Check if an ID pattern was entered/pasted but doesn't exist
+  const isFailedIdSearch = useMemo(() => {
+    if (!extractedId) return false;
+    return !directHitProperty;
+  }, [extractedId, directHitProperty]);
 
   // Load recent searches from localStorage
   useEffect(() => {
@@ -73,42 +96,40 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   }, [isOpen]);
 
-  // Handle ESC and Arrow key navigation
-  useEffect(() => {
-    if (!isOpen) return;
+  // Filter listings based on query and category
+  const filteredResults = useMemo(() => {
+    // If it's an invalid/unmatched reference ID search, return empty array to show dedicated error state
+    if (isFailedIdSearch) {
+      return [];
+    }
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-      } else if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (filteredResults.length === 0 ? 0 : (prev + 1) % filteredResults.length));
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (filteredResults.length === 0 ? 0 : (prev - 1 + filteredResults.length) % filteredResults.length));
-      } else if (e.key === "Enter" && filteredResults.length > 0) {
-        e.preventDefault();
-        const selected = filteredResults[selectedIndex];
-        if (selected) {
-          handleSelectVehicle(selected.id, query);
+    // If direct hit match is found, prioritize it
+    if (directHitProperty) {
+      return [directHitProperty];
+    }
+
+    const q = query.toLowerCase().trim();
+
+    return vehicles.filter((v) => {
+      // Category filter
+      if (selectedCategory === "id_search") {
+        if (!q) return true;
+        const ref = (v.reference_id || "").toLowerCase();
+        const idStr = (v.id || "").toLowerCase();
+        return ref.includes(q) || idStr.includes(q);
+      } else if (selectedCategory !== "all") {
+        const type = (v.bodyType || v.make || "").toLowerCase();
+        if (!type.includes(selectedCategory.toLowerCase())) {
+          return false;
         }
       }
-    };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, selectedIndex, vehicles, query, selectedCategory]);
+      if (!q) return true;
 
-  // Keep highlighted item in view
-  useEffect(() => {
-    if (resultsContainerRef.current) {
-      const activeElement = resultsContainerRef.current.querySelector(`[data-index="${selectedIndex}"]`);
-      if (activeElement) {
-        activeElement.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      }
-    }
-  }, [selectedIndex]);
+      const searchableText = `${v.reference_id || ""} ${v.make} ${v.model} ${v.variant || ""} ${v.city} ${v.location || ""} ${v.bodyType || ""} ${v.description || ""}`.toLowerCase();
+      return searchableText.includes(q);
+    }).slice(0, 8); // Top 8 matches
+  }, [vehicles, query, selectedCategory, directHitProperty, isFailedIdSearch]);
 
   const saveRecentSearch = (term: string) => {
     if (!term.trim()) return;
@@ -126,7 +147,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       saveRecentSearch(searchTerm);
     }
     onClose();
-    navigate(`/property/${id}`);
+    const prop = vehicles.find(v => v.id === id || v.reference_id === id);
+    if (prop) {
+      navigate(formatPropertyUrl(prop));
+    } else {
+      navigate(`/property/${id}`);
+    }
   };
 
   const handleApplyQuickSearch = (term: string) => {
@@ -144,25 +170,50 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   };
 
-  // Filter listings based on query and category
-  const filteredResults = useMemo(() => {
-    const q = query.toLowerCase().trim();
+  // Handle ESC and Arrow key navigation
+  useEffect(() => {
+    if (!isOpen) return;
 
-    return vehicles.filter((v) => {
-      // Category filter
-      if (selectedCategory !== "all") {
-        const type = (v.bodyType || v.make || "").toLowerCase();
-        if (!type.includes(selectedCategory.toLowerCase())) {
-          return false;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (filteredResults.length === 0 ? 0 : (prev + 1) % filteredResults.length));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (filteredResults.length === 0 ? 0 : (prev - 1 + filteredResults.length) % filteredResults.length));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (directHitProperty) {
+          saveRecentSearch(`Property ID #${directHitProperty.reference_id}`);
+          onClose();
+          navigate(formatPropertyUrl(directHitProperty));
+          return;
+        }
+        if (filteredResults.length > 0) {
+          const selected = filteredResults[selectedIndex];
+          if (selected) {
+            handleSelectVehicle(selected.id, query);
+          }
         }
       }
+    };
 
-      if (!q) return true;
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, selectedIndex, vehicles, query, selectedCategory, directHitProperty, filteredResults]);
 
-      const searchableText = `${v.make} ${v.model} ${v.variant || ""} ${v.city} ${v.location || ""} ${v.bodyType || ""} ${v.description || ""}`.toLowerCase();
-      return searchableText.includes(q);
-    }).slice(0, 8); // Top 8 matches
-  }, [vehicles, query, selectedCategory]);
+  // Keep highlighted item in view
+  useEffect(() => {
+    if (resultsContainerRef.current) {
+      const activeElement = resultsContainerRef.current.querySelector(`[data-index="${selectedIndex}"]`);
+      if (activeElement) {
+        activeElement.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    }
+  }, [selectedIndex]);
 
   if (typeof document === "undefined") return null;
 
@@ -199,7 +250,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   setQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
-                placeholder="Search properties, DHA, Clifton, Bahria, 3 Bed..."
+                placeholder={
+                  selectedCategory === "id_search"
+                    ? "Enter 7-digit ID (e.g. 3421789) or paste WhatsApp link..."
+                    : "Search properties, DHA, Clifton, Bahria, 3 Bed, or #ID..."
+                }
                 className="w-full bg-transparent text-sm sm:text-base font-medium text-apple-text dark:text-white placeholder:text-apple-text-muted outline-none"
               />
 
@@ -288,6 +343,90 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     ))}
                   </div>
                 </div>
+              )}
+
+              {/* Direct Hit Match Banner (Priority 1: Direct-Hit on Reference ID or URL paste) */}
+              {directHitProperty && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={SPRING_SNAPPY}
+                  className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-apple-blue/15 via-teal-500/10 to-transparent border border-apple-blue/40 shadow-lg mb-3"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-12 h-12 rounded-xl bg-apple-blue text-white flex flex-col items-center justify-center font-mono shrink-0 shadow-md">
+                        <span className="text-[9px] uppercase font-bold text-white/80">Ref ID</span>
+                        <span className="text-xs font-black tracking-tight">{directHitProperty.reference_id}</span>
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-apple-blue text-white">
+                            Direct Property ID Match
+                          </span>
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                        </div>
+                        <h4 className="text-sm font-bold text-apple-text dark:text-white truncate">
+                          {directHitProperty.model}
+                        </h4>
+                        <p className="text-xs text-apple-text-muted truncate">
+                          {directHitProperty.location} • <span className="font-bold text-apple-blue font-mono">{formatPrice(directHitProperty.price)}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        saveRecentSearch(`Property ID #${directHitProperty.reference_id}`);
+                        onClose();
+                        navigate(formatPropertyUrl(directHitProperty));
+                      }}
+                      className="apple-button-primary !py-2.5 !px-4 !text-xs flex items-center gap-1.5 shadow-md shadow-apple-blue/20 shrink-0 cursor-pointer"
+                    >
+                      <span>Jump to Listing</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Property ID Not Found Error State */}
+              {isFailedIdSearch && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-8 text-center bg-apple-red/5 dark:bg-apple-red/10 border border-apple-red/20 rounded-2xl mb-3"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-apple-red/10 text-apple-red flex items-center justify-center mx-auto mb-3">
+                    <AlertCircle className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-base font-bold text-apple-text dark:text-white mb-1">
+                    Property ID #{extractedId} Not Found
+                  </h3>
+                  <p className="text-xs text-apple-text-muted max-w-sm mx-auto mb-5 leading-relaxed">
+                    We couldn't locate any active property with Reference ID <span className="font-mono font-bold text-apple-text dark:text-white">#{extractedId}</span>. The listing may have been sold, archived, or the link/ID was mistyped.
+                  </p>
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      onClick={() => {
+                        setQuery("");
+                        inputRef.current?.focus();
+                      }}
+                      className="apple-button-secondary !py-2 !px-4 !text-xs cursor-pointer"
+                    >
+                      Clear & Re-check ID
+                    </button>
+                    <button
+                      onClick={() => {
+                        onClose();
+                        navigate("/marketplace");
+                      }}
+                      className="apple-button-primary !py-2 !px-4 !text-xs cursor-pointer"
+                    >
+                      Browse Available Properties
+                    </button>
+                  </div>
+                </motion.div>
               )}
 
               {/* Matching Listings Count Header */}

@@ -69,6 +69,7 @@
       "type": "object",
       "properties": {
         "id": { "type": "string" },
+        "reference_id": { "type": "string" },
         "make": { "type": "string" },
         "model": { "type": "string" },
         "price": { "type": "number" },

@@ -7,12 +7,12 @@ interface MarketPulseTickerProps {
 
 const MarketPulseTicker = React.memo(({ locationCity }: MarketPulseTickerProps) => {
   const tickerItems = [
-    "Audi e-tron GT demand ↑ 12%",
-    `Average price in ${locationCity || 'Lahore'}: Rs 14.2M`,
-    "New listing: Porsche 911 in Karachi",
-    "EV imports tax update: 0% duty extended",
-    "Trending: Hybrid SUVs in Islamabad",
-    "Japanese Auction volume ↑ 18% this week"
+    `Average price in DHA Phase 6, ${locationCity || 'Lahore'}: ↑ 6% this month`,
+    "Searches for 10-Marla plots in Bahria Town ↑ 18% this week",
+    `New listing: 1 Kanal Luxury House in Clifton, ${locationCity === 'Karachi' ? 'Karachi' : 'Lahore'}`,
+    "State Bank of Pakistan Home Finance policy update: Fixed rates certified",
+    "Trending: Commercial Plaza in Blue Area, Islamabad",
+    "32 new LDA/CDA verified properties added today"
   ];
 
   return (

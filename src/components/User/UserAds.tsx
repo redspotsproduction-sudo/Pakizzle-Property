@@ -23,6 +23,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { useProperties } from "../../context/PropertyContext";
+import { formatPropertyUrl } from "../../lib/referenceId";
 import { useAuth } from "../../context/AuthContext";
 import { formatPrice, cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
@@ -253,7 +254,7 @@ export default function UserAds() {
                     </button>
 
                     <Link 
-                      to={`/vehicle/${vehicle.id}`}
+                      to={formatPropertyUrl(vehicle)}
                       className="w-8.5 h-8.5 rounded-lg bg-apple-blue text-white flex items-center justify-center hover:bg-blue-600 transition-colors"
                       title="View Live"
                     >

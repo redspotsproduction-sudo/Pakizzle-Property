@@ -28,6 +28,7 @@ import {
   Building2
 } from "lucide-react";
 import { db } from "../firebase";
+import { formatPropertyUrl } from "../lib/referenceId";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { Vehicle, Review } from "../types";
 import { cn, formatPrice } from "../lib/utils";
@@ -430,7 +431,7 @@ export default function UserProfile() {
                       transition={{ duration: 0.3 }}
                     >
                       <Link 
-                        to={`/vehicle/${vehicle.id}`}
+                        to={formatPropertyUrl(vehicle)}
                         className="group flex flex-col h-full bg-white dark:bg-[#161617] rounded-3xl overflow-hidden border border-black/[0.04] dark:border-white/[0.04] shadow-sm hover:shadow-md transition-all duration-300"
                       >
                         <div className="aspect-[16/10] overflow-hidden relative shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-800">

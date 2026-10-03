@@ -28,6 +28,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useProperties } from "../context/PropertyContext";
+import { formatPropertyUrl } from "../lib/referenceId";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { useChat } from "../context/ChatContext";
@@ -520,7 +521,7 @@ export default function SellerDashboard() {
                           transition={{ delay: index * 0.03 }}
                           className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 py-4 first:pt-0 last:pb-0 group relative"
                         >
-                          <Link to={`/vehicle/${vehicle.id}`} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[#1C1C1E] flex items-center justify-center border border-black/5 dark:border-white/10">
+                          <Link to={formatPropertyUrl(vehicle)} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[#1C1C1E] flex items-center justify-center border border-black/5 dark:border-white/10">
                             {vehicle.images?.[0] ? (
                               <img 
                                 src={vehicle.images[0]} 
@@ -535,7 +536,7 @@ export default function SellerDashboard() {
                           
                           <div className="flex-1 min-w-0 flex flex-col justify-between">
                             <div className="flex items-start justify-between gap-3">
-                              <Link to={`/vehicle/${vehicle.id}`} className="text-sm font-semibold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors truncate block">
+                              <Link to={formatPropertyUrl(vehicle)} className="text-sm font-semibold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors truncate block">
                                 {vehicle.year} {vehicle.make} {vehicle.model}
                               </Link>
                               <span className="text-xs font-semibold font-mono text-apple-blue shrink-0">
@@ -783,7 +784,7 @@ export default function SellerDashboard() {
                     const v = vehicles.find(veh => veh.id === id);
                     if (!v) return null;
                     return (
-                      <Link key={id} to={`/vehicle/${id}`} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-[#F5F5F7] dark:hover:bg-white/5 transition-all group border border-transparent hover:border-[#E5E5E7]/50 dark:hover:border-white/5">
+                      <Link key={id} to={formatPropertyUrl(v)} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-[#F5F5F7] dark:hover:bg-white/5 transition-all group border border-transparent hover:border-[#E5E5E7]/50 dark:hover:border-white/5">
                         <div className="w-11 h-8 rounded-lg bg-[#1C1C1E] shrink-0 overflow-hidden relative border border-black/5 dark:border-white/10 flex items-center justify-center">
                           {v.images?.[0] ? (
                             <img 

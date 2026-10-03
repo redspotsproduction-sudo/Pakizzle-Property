@@ -14,6 +14,7 @@ import LocationModal from "./LocationModal";
 import SearchModal from "./SearchModal";
 
 import AuthModal from "./AuthModal";
+import PakizzleLogo from "./PakizzleLogo";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -107,21 +108,18 @@ export default function Header() {
     >
       <div className="h-full flex items-center justify-between">
         <div className="flex items-center gap-2 lg:gap-8">
-          <Link to="/" className="flex items-center gap-1.5 lg:gap-2 group">
-            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-apple-blue to-blue-600 rounded-lg lg:rounded-[12px] flex items-center justify-center shadow-[0_8px_16px_rgba(0,125,255,0.2)] group-hover:scale-105 group-hover:shadow-[0_12px_24px_rgba(0,125,255,0.3)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
-              <Home className="w-5 h-5 lg:w-6 lg:h-6 text-white stroke-[2.2]" />
-            </div>
-            <span className="text-lg lg:text-xl font-semibold tracking-tight text-apple-text group-hover:text-apple-blue transition-colors duration-500">Pakizzle</span>
+          <Link to="/" className="flex items-center gap-2 group shrink-0" title="Pakizzle Home">
+            <PakizzleLogo variant="auto" size="md" />
           </Link>
 
           <button 
             onClick={() => setShowLocationModal(true)}
-            className="group flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full hover:bg-apple-gray/50 transition-all duration-500"
+            className="group flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-500"
           >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-apple-blue/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-apple-blue stroke-[2.2]" />
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#5B2A86]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#5B2A86] dark:text-[#FAF3E6] stroke-[2.2]" />
             </div>
-            <span className="text-[13px] sm:text-sm font-semibold text-apple-text group-hover:text-apple-blue transition-colors">
+            <span className="text-[13px] sm:text-sm font-semibold text-apple-text group-hover:text-[#5B2A86] transition-colors">
               {displayLocation}
             </span>
             <ChevronDown className="w-3 h-3 text-apple-text-muted/50 group-hover:rotate-180 transition-transform duration-500" />
@@ -133,45 +131,45 @@ export default function Header() {
           {isScrolled ? (
             <button 
               onClick={() => setShowSearchModal(true)}
-              className="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-lg bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer transition-all hover:border-[#0F766E] shadow-sm group"
+              className="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/80 dark:bg-[#1E1E20]/90 border border-[var(--brand-purple-light)]/20 dark:border-white/10 text-xs text-apple-text-muted hover:text-apple-text cursor-pointer transition-all hover:border-[#5B2A86] shadow-sm group"
             >
-              <Search className="w-3.5 h-3.5 text-[#0F766E] group-hover:scale-110 transition-transform" />
+              <Search className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#F0A830] group-hover:scale-110 transition-transform" />
               <span className="font-medium">Search DHA, Clifton, Sector F-7...</span>
               <kbd className="hidden sm:inline-block ml-1 text-[10px] bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-1.5 py-0.5 rounded font-bold text-slate-500 dark:text-slate-300 shadow-xs">
                 ⌘K
               </kbd>
             </button>
           ) : (
-            <nav className="hidden lg:flex items-center gap-1 bg-slate-100/70 dark:bg-slate-800/50 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
+            <nav className="hidden lg:flex items-center gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-full border border-black/5 dark:border-white/10">
               <Link
                 to="/marketplace?purpose=buy"
-                className="px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-900 rounded-md transition-all shadow-none hover:shadow-sm"
+                className="px-3.5 py-1.5 text-xs font-semibold text-apple-text hover:text-[#5B2A86] dark:hover:text-[#F0A830] hover:bg-white dark:hover:bg-white/10 rounded-full transition-all"
               >
                 Buy
               </Link>
               <Link
                 to="/marketplace?purpose=rent"
-                className="px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-900 rounded-md transition-all shadow-none hover:shadow-sm"
+                className="px-3.5 py-1.5 text-xs font-semibold text-apple-text hover:text-[#5B2A86] dark:hover:text-[#F0A830] hover:bg-white dark:hover:bg-white/10 rounded-full transition-all"
               >
                 Rent
               </Link>
               <Link
                 to="/marketplace?make=Plot"
-                className="px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-900 rounded-md transition-all shadow-none hover:shadow-sm"
+                className="px-3.5 py-1.5 text-xs font-semibold text-apple-text hover:text-[#5B2A86] dark:hover:text-[#F0A830] hover:bg-white dark:hover:bg-white/10 rounded-full transition-all"
               >
                 Plots
               </Link>
               <Link
                 to="/marketplace?make=Commercial"
-                className="px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-900 rounded-md transition-all shadow-none hover:shadow-sm"
+                className="px-3.5 py-1.5 text-xs font-semibold text-apple-text hover:text-[#5B2A86] dark:hover:text-[#F0A830] hover:bg-white dark:hover:bg-white/10 rounded-full transition-all"
               >
                 Commercial
               </Link>
               <Link
                 to="/auction-verification"
-                className="px-3 py-1.5 text-xs font-semibold text-[#0F766E] dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-950/40 rounded-md transition-all flex items-center gap-1"
+                className="px-3.5 py-1.5 text-xs font-semibold text-[#5B2A86] dark:text-[#F0A830] hover:bg-white dark:hover:bg-white/10 rounded-full transition-all flex items-center gap-1"
               >
-                <ShieldCheck className="w-3.5 h-3.5" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#5FA84C]" />
                 <span>Verification</span>
               </Link>
             </nav>
@@ -481,20 +479,20 @@ export default function Header() {
           ) : (
             <button 
               onClick={() => setShowAuthModal(true)}
-              className="hidden lg:flex items-center gap-1.5 h-9 px-3.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="hidden lg:flex items-center gap-1.5 h-10 px-4 text-xs font-bold rounded-full pakizzle-button-primary"
             >
               <User className="w-3.5 h-3.5" />
               Sign In
             </button>
           )}
 
-          {/* Post Property CTA */}
+          {/* Post Property CTA with signature purple gradient */}
           <Link
             to="/post-ad"
-            className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3.5 text-xs font-semibold rounded-lg bg-[#0F766E] hover:bg-[#0D9488] text-white shadow-sm transition-all active:scale-95"
+            className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-xs font-bold rounded-full pakizzle-button-primary"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Post Property</span>
+            <span>List a Property</span>
           </Link>
         </div>
       </div>

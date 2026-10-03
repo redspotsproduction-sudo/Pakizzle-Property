@@ -6,23 +6,23 @@ import { Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 outline-none select-none focus-visible:ring-2 focus-visible:ring-[#0F766E] focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 outline-none select-none focus-visible:ring-2 focus-visible:ring-[#5B2A86] focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          "bg-[#0F766E] text-white hover:bg-[#0D9488] shadow-sm",
+          "bg-gradient-to-r from-[#5B2A86] to-[#1A1526] text-white hover:brightness-110 shadow-md border border-[#C9A227]/30",
         primary:
-          "bg-[#0F766E] text-white hover:bg-[#0D9488] shadow-sm",
+          "bg-gradient-to-r from-[#5B2A86] to-[#1A1526] text-white hover:brightness-110 shadow-md border border-[#C9A227]/30",
         secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700",
+          "bg-white/90 text-[#1A1526] hover:bg-[#FAF3E6] dark:bg-[#1E1E20] dark:text-[#F5F5F7] dark:hover:bg-[#242426] border border-slate-200 dark:border-white/10 shadow-xs",
         outline:
-          "border border-slate-300 dark:border-slate-700 bg-transparent text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800",
+          "border border-[#5B2A86]/25 dark:border-white/10 bg-transparent text-[#1A1526] dark:text-[#F5F5F7] hover:bg-[#FAF3E6] dark:hover:bg-white/5",
         ghost:
-          "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800",
+          "text-[#1A1526] dark:text-[#F5F5F7] hover:bg-[#FAF3E6] dark:hover:bg-white/5",
         destructive:
-          "bg-red-600 text-white hover:bg-red-700 shadow-sm",
-        link: "text-[#0F766E] underline-offset-4 hover:underline",
+          "bg-[#D93A45] text-white hover:bg-red-700 shadow-sm",
+        link: "text-[#5B2A86] dark:text-[#F5F5F7] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2 text-sm",

@@ -52,7 +52,7 @@ export default function CategoryShowcase() {
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-[#0F766E] dark:text-teal-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-teal-200 dark:border-teal-800"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#F0A830] text-xs font-semibold uppercase tracking-wider mb-4 border border-[#5B2A86]/20 dark:border-[#C9A227]/30"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Curated Typologies
@@ -84,7 +84,7 @@ export default function CategoryShowcase() {
                 className={cn(
                   "relative px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5",
                   activeTab === tab.id 
-                    ? "bg-white dark:bg-slate-900 text-[#0F766E] dark:text-teal-400 shadow-sm" 
+                    ? "bg-white dark:bg-slate-900 text-[#5B2A86] dark:text-[#F0A830] shadow-sm font-bold" 
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
                 )}
               >
@@ -97,7 +97,7 @@ export default function CategoryShowcase() {
         
         <button
           onClick={() => navigate("/marketplace")}
-          className="group flex items-center gap-2 text-[#0F766E] dark:text-teal-400 font-semibold text-sm hover:underline"
+          className="group flex items-center gap-2 text-[#5B2A86] dark:text-[#F0A830] font-semibold text-sm hover:underline"
         >
           Explore All Categories
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -140,11 +140,11 @@ export default function CategoryShowcase() {
             {/* Content Container */}
             <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end text-white z-10">
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-semibold text-teal-300">
+                <span className="text-xs font-semibold text-[#F0A830]">
                   {category.subtitle}
                 </span>
               </div>
-              <h3 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white group-hover:text-teal-200 transition-colors">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white group-hover:text-[#FAF3E6] transition-colors">
                 {category.title}
               </h3>
             </div>

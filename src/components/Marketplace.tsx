@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import React, { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Search, 
@@ -12,13 +12,16 @@ import {
   TrendingUp, 
   History,
   Scale,
+  Check,
   CheckCircle2,
   ArrowRight,
   Sparkles,
   Bell,
-  ShieldCheck
+  ShieldCheck,
+  Hash,
+  AlertCircle
 } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useProperties } from "@/context/PropertyContext";
 import { useLocation } from "@/context/LocationContext";
 import { Property, Vehicle, CategoryField } from "@/types";
@@ -26,6 +29,7 @@ import { PAKISTAN_LOCATIONS } from "../constants/locations";
 import PropertyCard, { VehicleCard } from "./PropertyCard";
 import Header from "./Header";
 import { cn, formatPrice } from "@/lib/utils";
+import { extractReferenceId, formatPropertyUrl } from "@/lib/referenceId";
 import { useIntelligence } from "@/hooks/useIntelligence";
 import { featureStore } from "@/services/intelligence/FeatureStore";
 import { intelligenceEngine } from "@/services/intelligence/IntelligenceEngine";
@@ -35,19 +39,144 @@ import { CarSelector } from "./CarSelector/CarSelector";
 import ComparisonModal from "./Marketplace/ComparisonModal";
 import ComparisonDrawer from "./Marketplace/ComparisonDrawer";
 import SaveSearchModal from "./Marketplace/SaveSearchModal";
+import TopFilterBar, { TopFilterBarState, AREA_UNITS } from "./Marketplace/TopFilterBar";
+import QuickAccessRow from "./Marketplace/QuickAccessRow";
+import SidebarFilters, { ListingFreshness } from "./Marketplace/SidebarFilters";
+import MarketInsightBanner from "./Marketplace/MarketInsightBanner";
+import FilterPopover from "./ui/FilterPopover";
 import { GoogleAdSenseSlot } from "./GoogleAdSenseSlot";
 import SEO from "./SEO";
 import { AnimatedCounter, SPRING_SNAPPY } from "./motion";
 
 export default function Marketplace() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { properties, vehicles } = useProperties();
   const { location: userLocation } = useLocation();
   const { trackSearch } = useIntelligence();
   const initialQuery = searchParams.get("q") || "";
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [idSearchInput, setIdSearchInput] = useState("");
+  const [idSearchError, setIdSearchError] = useState("");
+
+  const handleIdSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!idSearchInput.trim()) return;
+
+    const extracted = extractReferenceId(idSearchInput);
+    if (!extracted) {
+      setIdSearchError("Please enter a valid 6-8 digit Property ID or paste a property link");
+      return;
+    }
+
+    const matched = vehicles.find(
+      (v) => (v.reference_id && v.reference_id === extracted) || v.id === extracted
+    );
+
+    if (matched) {
+      setIdSearchError("");
+      setIsFilterOpen(false);
+      navigate(formatPropertyUrl(matched));
+    } else {
+      setIdSearchError(`Property ID #${extracted} was not found. Please verify the ID.`);
+    }
+  };
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  
+  // Real Estate Top Filter Bar State (Zameen Architecture)
+  const [topFilters, setTopFilters] = useState<TopFilterBarState>({
+    purpose: (searchParams.get("purpose") as any) === "rent" ? "for-rent" : "for-sale",
+    city: searchParams.get("city") || "",
+    propertyType: searchParams.get("type") || searchParams.get("make") || "",
+    minPrice: searchParams.get("priceMin") ? parseInt(searchParams.get("priceMin")!) : null,
+    maxPrice: searchParams.get("priceMax") ? parseInt(searchParams.get("priceMax")!) : null,
+    beds: searchParams.get("beds") || null,
+    baths: searchParams.get("baths") || null,
+    minArea: searchParams.get("minArea") ? parseInt(searchParams.get("minArea")!) : null,
+    maxArea: searchParams.get("maxArea") ? parseInt(searchParams.get("maxArea")!) : null,
+    areaUnit: "marla",
+    furnishedStatus: undefined,
+    cornerPlot: false,
+    parkFacing: false,
+    boundaryWall: false,
+    parkingAvailable: false,
+  });
+
+  const handleTopFilterChange = useCallback((updated: Partial<TopFilterBarState>) => {
+    setTopFilters(prev => ({ ...prev, ...updated }));
+  }, []);
+
+  const handleResetTopFilters = useCallback(() => {
+    setTopFilters({
+      purpose: "for-sale",
+      city: "",
+      propertyType: "",
+      minPrice: null,
+      maxPrice: null,
+      beds: null,
+      baths: null,
+      minArea: null,
+      maxArea: null,
+      areaUnit: "marla",
+      furnishedStatus: undefined,
+      cornerPlot: false,
+      parkFacing: false,
+      boundaryWall: false,
+      parkingAvailable: false,
+    });
+  }, []);
+
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
+  const [freshness, setFreshness] = useState<ListingFreshness>("any");
+  const [electricityBackup, setElectricityBackup] = useState<boolean>(false);
+
+  const handleTogglePropertyType = useCallback((typeName: string) => {
+    setSelectedPropertyTypes(prev => {
+      const exists = prev.includes(typeName);
+      const next = exists ? prev.filter(t => t !== typeName) : [...prev, typeName];
+      if (next.length === 1) {
+        setTopFilters(f => ({ ...f, propertyType: next[0] }));
+      } else if (next.length === 0) {
+        setTopFilters(f => ({ ...f, propertyType: "" }));
+      }
+      return next;
+    });
+  }, []);
+
+  const handleResetAllFilters = useCallback(() => {
+    handleResetTopFilters();
+    setSelectedPropertyTypes([]);
+    setSelectedLocations([]);
+    setFreshness("any");
+    setElectricityBackup(false);
+    setOnlyVerified(false);
+  }, [handleResetTopFilters]);
+
+  const handleApplyInsight = useCallback((query: {
+    city?: string;
+    area?: string;
+    make?: string;
+    verifiedOnly?: boolean;
+    minArea?: number;
+    maxArea?: number;
+    areaUnit?: "marla" | "kanal" | "sqft" | "sqyd";
+  }) => {
+    setTopFilters(prev => ({
+      ...prev,
+      city: query.city !== undefined ? query.city : prev.city,
+      propertyType: query.make !== undefined ? query.make : prev.propertyType,
+      minArea: query.minArea !== undefined ? query.minArea : prev.minArea,
+      maxArea: query.maxArea !== undefined ? query.maxArea : prev.maxArea,
+      areaUnit: query.areaUnit !== undefined ? query.areaUnit : prev.areaUnit,
+    }));
+    if (query.area) {
+      setSelectedLocations([query.area]);
+    }
+    if (query.verifiedOnly !== undefined) {
+      setOnlyVerified(query.verifiedOnly);
+    }
+  }, []);
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "price-low" | "price-high" | "mileage" | "mileage-low" | "mileage-high" | "year-high" | "year-low" | "ai">("ai");
   const [compareList, setCompareList] = useState<Vehicle[]>([]);
   const [selectedCondition, setSelectedCondition] = useState<string[]>([]);
@@ -104,27 +233,40 @@ export default function Marketplace() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
+    if (topFilters.city) count++;
+    if (topFilters.propertyType) count++;
+    if (topFilters.minPrice || topFilters.maxPrice) count++;
+    if (topFilters.beds) count++;
+    if (topFilters.baths) count++;
+    if (topFilters.minArea || topFilters.maxArea) count++;
+    if (topFilters.furnishedStatus) count++;
+    if (topFilters.cornerPlot) count++;
+    if (topFilters.parkFacing) count++;
+    if (topFilters.boundaryWall) count++;
+    if (topFilters.parkingAvailable) count++;
     if (searchQuery) count++;
-    if (selectedMake) count++;
-    if (selectedModel) count++;
-    if (selectedVariant) count++;
-    count += selectedCondition.length;
-    count += selectedBodyType.length;
-    count += selectedFuel.length;
     if (onlyVerified) count++;
-    if (maxPrice) count++;
-    if (minPrice) count++;
-    if (minYear) count++;
-    if (maxYear) count++;
-    if (minMileage) count++;
-    if (maxMileage) count++;
-    count += selectedCities.length;
-    count += Object.keys(customFilters).filter(key => {
-      const val = customFilters[key];
-      return val && (!Array.isArray(val) || val.length > 0);
-    }).length;
     return count;
-  }, [searchQuery, selectedMake, selectedModel, selectedVariant, selectedCondition, selectedBodyType, selectedFuel, onlyVerified, maxPrice, minPrice, minYear, maxYear, minMileage, maxMileage, selectedCities, customFilters]);
+  }, [topFilters, searchQuery, onlyVerified]);
+
+  const handleDirectIdSearch = useCallback((idQuery: string) => {
+    if (!idQuery.trim()) return;
+    const extracted = extractReferenceId(idQuery);
+    if (!extracted) {
+      setIdSearchError("Please enter a valid 6-8 digit Property ID");
+      return;
+    }
+    const matched = vehicles.find(
+      (v) => (v.reference_id && v.reference_id === extracted) || v.id === extracted
+    );
+    if (matched) {
+      setIdSearchError("");
+      setIsFilterOpen(false);
+      navigate(formatPropertyUrl(matched));
+    } else {
+      setIdSearchError(`Property ID #${extracted} was not found. Please verify the ID.`);
+    }
+  }, [vehicles, navigate]);
 
   useEffect(() => {
     const fetchFields = async () => {
@@ -269,55 +411,110 @@ export default function Marketplace() {
         // Only show active vehicles in marketplace
         if (v.status === 'inactive') return false;
 
+        const queryRefId = extractReferenceId(searchQuery);
         const matchesSearch = !searchQuery ||
+          (queryRefId && ((v.reference_id && v.reference_id === queryRefId) || v.id === queryRefId)) ||
+          (v.reference_id && v.reference_id.toLowerCase().includes(searchQuery.trim().toLowerCase())) ||
           (v.make && v.make.toLowerCase().includes(searchQuery.toLowerCase())) ||
           (v.model && v.model.toLowerCase().includes(searchQuery.toLowerCase()));
         
-        const matchesCondition = selectedCondition.length === 0 || selectedCondition.includes(v.condition || "");
-        const matchesFuel = selectedFuel.length === 0 || selectedFuel.includes(v.fuelType || "");
-        const matchesBodyType = selectedBodyType.length === 0 || (v.bodyType && selectedBodyType.includes(v.bodyType));
+        // 1. Purpose Filter (Buy vs Rent)
+        const isRent = topFilters.purpose === "for-rent";
+        const matchesPurpose = isRent 
+          ? (v.purpose === "for-rent" || v.purpose === "rent" || (v.price && v.price < 5000000))
+          : (v.purpose !== "for-rent" && v.purpose !== "rent");
+
+        // 2. City Filter
+        const matchesCity = !topFilters.city || 
+          v.city?.toLowerCase() === topFilters.city.toLowerCase() ||
+          (selectedCities.length > 0 && selectedCities.includes(v.city || ""));
+
+        // 3. Property Type Filter (Supports multi-select from sidebar or single-select from top bar)
+        const matchesType = (selectedPropertyTypes.length === 0 && !topFilters.propertyType) ||
+          (selectedPropertyTypes.length > 0 && selectedPropertyTypes.some(t => v.make?.toLowerCase().includes(t.toLowerCase()))) ||
+          (topFilters.propertyType && v.make?.toLowerCase().includes(topFilters.propertyType.toLowerCase()));
+
+        // 4. Price Filter (Scaled based on Buy vs Rent)
+        const displayPrice = isRent && v.price !== undefined ? Math.floor(v.price / 400) : v.price;
+        const matchesMaxPrice = !topFilters.maxPrice || (displayPrice !== undefined && displayPrice <= topFilters.maxPrice);
+        const matchesMinPrice = !topFilters.minPrice || (displayPrice !== undefined && displayPrice >= topFilters.minPrice);
+
+        // 5. Beds & Baths (Ignored for Plot/Commercial)
+        let matchesBeds = true;
+        const pt = topFilters.propertyType.toLowerCase();
+        if (topFilters.beds && pt !== "plot" && pt !== "commercial") {
+          const pBeds = v.bedrooms ?? v.specs?.bedrooms ?? v.specs?.seating ?? 0;
+          if (topFilters.beds === "studio") {
+            matchesBeds = pBeds === 0;
+          } else if (topFilters.beds === "5+") {
+            matchesBeds = pBeds >= 5;
+          } else {
+            matchesBeds = pBeds >= parseInt(topFilters.beds);
+          }
+        }
+
+        let matchesBaths = true;
+        if (topFilters.baths && pt !== "plot" && pt !== "commercial") {
+          const pBaths = v.bathrooms ?? v.specs?.bathrooms ?? v.specs?.horsepower ?? 0;
+          if (topFilters.baths === "5+") {
+            matchesBaths = pBaths >= 5;
+          } else {
+            matchesBaths = pBaths >= parseInt(topFilters.baths);
+          }
+        }
+
+        // 6. Area / Size Filter with Pakistani Unit Multipliers
+        const unitMultiplier = AREA_UNITS.find(u => u.id === topFilters.areaUnit)?.sqftMultiplier || 225;
+        const pAreaSqft = v.mileage || v.areaSize || 0;
+        const matchesMinArea = !topFilters.minArea || (pAreaSqft >= topFilters.minArea * unitMultiplier);
+        const matchesMaxArea = !topFilters.maxArea || (pAreaSqft <= topFilters.maxArea * unitMultiplier);
+
+        // 7. More Filters Overflow Attributes
+        const matchesFurnished = !topFilters.furnishedStatus || 
+          v.transmission === topFilters.furnishedStatus || 
+          v.specs?.furnishedStatus === topFilters.furnishedStatus;
+        const matchesCorner = !topFilters.cornerPlot || v.features?.includes("Corner Plot") || v.specs?.facing === "Corner";
+        const matchesPark = !topFilters.parkFacing || v.features?.includes("Park Facing") || v.specs?.facing === "Park Facing";
+        const matchesBoundary = !topFilters.boundaryWall || v.features?.includes("Boundary Wall");
+        const matchesParking = !topFilters.parkingAvailable || v.features?.includes("Parking Available") || (v.specs?.parkingSpaces && v.specs.parkingSpaces > 0);
+
         const matchesVerified = !onlyVerified || !!v.seller?.isVerified;
-        const isRentPurpose = searchParams.get("purpose") === "rent";
-        const displayPrice = isRentPurpose && v.price !== undefined ? Math.floor(v.price / 400) : v.price;
 
-        const matchesMaxPrice = !maxPrice || (displayPrice !== undefined && displayPrice <= maxPrice);
-        const matchesMinPrice = !minPrice || (displayPrice !== undefined && displayPrice >= minPrice);
-        
-        const matchesMinYear = !minYear || (v.year !== undefined && v.year >= minYear);
-        const matchesMaxYear = !maxYear || (v.year !== undefined && v.year <= maxYear);
-        
-        const matchesMinMileage = !minMileage || (v.mileage !== undefined && v.mileage >= minMileage);
-        const matchesMaxMileage = !maxMileage || (v.mileage !== undefined && v.mileage <= maxMileage);
-        
-        const matchesMake = !selectedMake || selectedMake.split(",").some(mk => v.make?.toLowerCase() === mk.trim().toLowerCase());
-        const matchesModel = !selectedModel || v.model === selectedModel;
-        const matchesVariant = !selectedVariant || (v.id && v.id.includes(selectedVariant));
+        // 8. Listing Freshness Filter (Zameen Date of Addition)
+        let matchesFreshness = true;
+        if (freshness !== "any") {
+          const createdTime = new Date(v.createdAt || 0).getTime();
+          const now = Date.now();
+          if (freshness === "24h") matchesFreshness = now - createdTime <= 24 * 3600 * 1000;
+          else if (freshness === "week") matchesFreshness = now - createdTime <= 7 * 24 * 3600 * 1000;
+          else if (freshness === "month") matchesFreshness = now - createdTime <= 30 * 24 * 3600 * 1000;
+        }
 
-        const matchesBeds = !minBeds || (v.specs?.seating !== undefined && v.specs.seating >= minBeds);
-        const matchesBaths = !minBaths || (v.specs?.horsepower !== undefined && v.specs.horsepower >= minBaths);
+        // 9. Electricity Backup Feature
+        const matchesElectricity = !electricityBackup || 
+          (v.features && v.features.some(f => /electricity|solar|ups|generator/i.test(f)));
 
-        const matchesLocation = (selectedCities.length === 0 || selectedCities.includes(v.city || "")) &&
-                               (selectedLocations.length === 0 || selectedLocations.includes(v.area || "")) &&
-                               (!userLocation || userLocation.city === "Pakistan" || v.city === userLocation.city);
-
-        const matchesCategory = 
-          (!categoryFilter.categoryId && !categoryFilter.parentId && !categoryFilter.childId && !categoryFilter.subChildId) ||
-          (v.category?.parentId === categoryFilter.parentId) ||
-          (v.category?.childId === categoryFilter.childId) ||
-          (v.category?.subChildId === categoryFilter.subChildId) ||
-          (v.category?.parentId === categoryFilter.categoryId);
+        const matchesLocation = selectedLocations.length === 0 || 
+          selectedLocations.some(loc => 
+            (v.area && v.area.toLowerCase().includes(loc.toLowerCase())) ||
+            (v.location && v.location.toLowerCase().includes(loc.toLowerCase())) ||
+            (v.model && v.model.toLowerCase().includes(loc.toLowerCase()))
+          );
 
         const matchesCustomFilters = Object.entries(customFilters).every(([key, value]) => {
           if (!value || (Array.isArray(value) && value.length === 0)) return true;
           const vehicleValue = v.customFields?.[key];
-          
           if (Array.isArray(value)) {
             return value.includes(vehicleValue);
           }
           return vehicleValue === value;
         });
 
-        return matchesSearch && matchesCondition && matchesFuel && matchesBodyType && matchesVerified && matchesMaxPrice && matchesMinPrice && matchesMinYear && matchesMaxYear && matchesMinMileage && matchesMaxMileage && matchesLocation && matchesCategory && matchesMake && matchesModel && matchesVariant && matchesCustomFilters && matchesBeds && matchesBaths;
+        return matchesSearch && matchesPurpose && matchesCity && matchesType && 
+               matchesMinPrice && matchesMaxPrice && matchesBeds && matchesBaths && 
+               matchesMinArea && matchesMaxArea && matchesFurnished && matchesCorner && 
+               matchesPark && matchesBoundary && matchesParking && matchesVerified && 
+               matchesFreshness && matchesElectricity && matchesLocation && matchesCustomFilters;
       });
 
       // Apply Sorting with full clone to avoid mutation side effects
@@ -812,6 +1009,50 @@ export default function Marketplace() {
 
   const renderFilterSections = () => (
     <div className="space-y-10">
+      {/* Dedicated Search by Property ID Section (Mobile Sheet & Desktop Sidebar) */}
+      <section className="p-4 rounded-2xl bg-gradient-to-br from-apple-blue/5 via-teal-500/5 to-transparent border border-apple-blue/20">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-[11px] font-bold text-apple-blue uppercase tracking-[0.18em] flex items-center gap-1.5">
+            <Hash className="w-3.5 h-3.5" />
+            <span>Search by Property ID</span>
+          </h3>
+          <span className="text-[9px] font-semibold text-apple-text-muted bg-white/70 dark:bg-white/10 px-2 py-0.5 rounded-full border border-apple-border/20">
+            Direct Hit
+          </span>
+        </div>
+        <p className="text-[11px] text-apple-text-muted mb-3 leading-tight">
+          Received a reference ID or link on WhatsApp / Call? Jump straight to the property.
+        </p>
+        <form onSubmit={handleIdSearchSubmit} className="space-y-2">
+          <div className="relative flex items-center">
+            <Hash className="absolute left-3 w-3.5 h-3.5 text-apple-blue shrink-0 pointer-events-none" />
+            <input
+              type="text"
+              value={idSearchInput}
+              onChange={(e) => {
+                setIdSearchInput(e.target.value);
+                if (idSearchError) setIdSearchError("");
+              }}
+              placeholder="e.g. 3421789 or paste URL"
+              className="w-full pl-8 pr-18 py-2 text-xs font-mono font-medium rounded-xl border border-apple-border/30 dark:border-white/10 bg-white/90 dark:bg-white/5 text-apple-text dark:text-white placeholder:text-apple-text-muted placeholder:font-sans focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/10 outline-none transition-all"
+            />
+            <button
+              type="submit"
+              disabled={!idSearchInput.trim()}
+              className="absolute right-1 px-3 py-1 text-[11px] font-bold rounded-lg bg-apple-blue text-white hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs cursor-pointer"
+            >
+              Jump ↵
+            </button>
+          </div>
+          {idSearchError && (
+            <div className="flex items-start gap-1.5 text-[11px] text-apple-red font-medium px-1">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+              <span>{idSearchError}</span>
+            </div>
+          )}
+        </form>
+      </section>
+
       <section>
         <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Property Category & Type</h3>
         <CarSelector 
@@ -1094,248 +1335,35 @@ export default function Marketplace() {
       <main className="pt-24 pb-20">
         <div className="max-w-7xl lg:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
 
-          {/* Comprehensive Dubizzle.com Premium Sticky Filter Bar */}
-          <div className={cn(
-            "transition-all duration-300 ease-in-out z-40 mb-8 md:mb-12",
-            isSticky 
-              ? "sticky top-[68px] lg:top-[84px] py-4 liquid-glass-foreground shadow-2xl -mx-4 px-4 sm:-mx-8 sm:px-8 md:-mx-12 md:px-12 w-[calc(100%+2rem)] sm:w-[calc(100%+4rem)] md:w-[calc(100%+6rem)] rounded-none"
-              : "relative"
-          )}>
-            <div className="max-w-7xl lg:max-w-[1440px] mx-auto relative">
-              <div className="flex flex-col gap-4">
-                {/* The Main Multi-Selector Glass Capsule */}
-                <div className="w-full liquid-glass-mid rounded-[32px] md:rounded-full p-2 transition-all duration-500 hover:shadow-2xl relative shadow-lg">
-                  <div className="grid grid-cols-2 md:grid-cols-6 items-center divide-y md:divide-y-0 md:divide-x divide-white/20 dark:divide-white/10">
-                    
-                    {/* 1. City Trigger */}
-                    <button 
-                      onClick={() => setActiveDropdown(activeDropdown === 'city' ? null : 'city')}
-                      className={cn(
-                        "flex flex-col items-start px-5 md:px-7 py-3 md:py-4 transition-all hover:bg-apple-gray/40 dark:hover:bg-white/5 text-left h-full rounded-tl-[24px] rounded-bl-[20px] md:rounded-l-full relative group cursor-pointer",
-                        activeDropdown === 'city' ? "bg-apple-gray/50 dark:bg-white/10" : ""
-                      )}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-apple-text-muted group-hover:text-apple-blue transition-colors">City</span>
-                        <ChevronDown className="w-3.5 h-3.5 text-apple-text-muted transition-transform group-hover:translate-y-0.5" />
-                      </div>
-                      <span className="text-[13px] md:text-[15px] font-medium text-apple-text mt-1 truncate max-w-full">
-                        {selectedCities.length === 0 ? "Pakistan (All)" : selectedCities.join(", ")}
-                      </span>
-                    </button>
+          {/* 1. TOP FILTER BAR (Zameen Proven Architecture & 2026 Enhanced) */}
+          <TopFilterBar
+            filters={topFilters}
+            onChange={handleTopFilterChange}
+            onReset={handleResetTopFilters}
+            resultCount={filteredVehicles.length}
+            activeCount={activeFiltersCount}
+            onOpenMobileFilters={() => setIsFilterOpen(true)}
+            onDirectIdSearch={handleDirectIdSearch}
+            idSearchError={idSearchError}
+            isSticky={isSticky}
+          />
 
-                    {/* 2. Make and Model Trigger */}
-                    <button 
-                      onClick={() => setActiveDropdown(activeDropdown === 'makeModel' ? null : 'makeModel')}
-                      className={cn(
-                        "flex flex-col items-start px-5 md:px-7 py-3 md:py-4 transition-all hover:bg-apple-gray/40 dark:hover:bg-white/5 text-left h-full group cursor-pointer",
-                        activeDropdown === 'makeModel' ? "bg-apple-gray/50 dark:bg-white/10" : ""
-                      )}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-apple-text-muted group-hover:text-apple-blue transition-colors">Make & Model</span>
-                        <ChevronDown className="w-3.5 h-3.5 text-apple-text-muted transition-transform group-hover:translate-y-0.5" />
-                      </div>
-                      <span className="text-[13px] md:text-[15px] font-medium text-apple-text mt-1 truncate max-w-full">
-                        {(selectedMake || selectedModel) ? `${selectedMake} ${selectedModel}`.trim() : "Search Make/Model"}
-                      </span>
-                    </button>
-
-                    {/* 3. Price Range Trigger */}
-                    <button 
-                      onClick={() => setActiveDropdown(activeDropdown === 'price' ? null : 'price')}
-                      className={cn(
-                        "flex flex-col items-start px-5 md:px-7 py-3 md:py-4 transition-all hover:bg-apple-gray/40 dark:hover:bg-white/5 text-left h-full group cursor-pointer",
-                        activeDropdown === 'price' ? "bg-apple-gray/50 dark:bg-white/10" : ""
-                      )}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-apple-text-muted group-hover:text-apple-blue transition-colors">Price Range</span>
-                        <ChevronDown className="w-3.5 h-3.5 text-apple-text-muted transition-transform group-hover:translate-y-0.5" />
-                      </div>
-                      <span className="text-[13px] md:text-[15px] font-medium text-apple-text mt-1 truncate max-w-full">
-                        {(minPrice !== null || maxPrice !== null) 
-                          ? `${minPrice ? formatPrice(minPrice) : "0"} - ${maxPrice ? formatPrice(maxPrice) : "Any"}` 
-                          : "Select Range"
-                        }
-                      </span>
-                    </button>
-
-                    {/* 4. Year Trigger */}
-                    <button 
-                      onClick={() => setActiveDropdown(activeDropdown === 'year' ? null : 'year')}
-                      className={cn(
-                        "flex flex-col items-start px-5 md:px-7 py-3 md:py-4 transition-all hover:bg-apple-gray/40 dark:hover:bg-white/5 text-left h-full group cursor-pointer",
-                        activeDropdown === 'year' ? "bg-apple-gray/50 dark:bg-white/10" : ""
-                      )}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-apple-text-muted group-hover:text-apple-blue transition-colors">Year</span>
-                        <ChevronDown className="w-3.5 h-3.5 text-apple-text-muted transition-transform group-hover:translate-y-0.5" />
-                      </div>
-                      <span className="text-[13px] md:text-[15px] font-medium text-apple-text mt-1 truncate max-w-full">
-                        {(minYear !== null || maxYear !== null)
-                          ? `${minYear || "Any"} - ${maxYear || "Any"}`
-                          : "Select Year"
-                        }
-                      </span>
-                    </button>
-
-                    {/* 5. Kilometers Trigger */}
-                    <button 
-                      onClick={() => setActiveDropdown(activeDropdown === 'km' ? null : 'km')}
-                      className={cn(
-                        "flex flex-col items-start px-5 md:px-7 py-3 md:py-4 transition-all hover:bg-apple-gray/40 dark:hover:bg-white/5 text-left h-full group cursor-pointer",
-                        activeDropdown === 'km' ? "bg-apple-gray/50 dark:bg-white/10" : ""
-                      )}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-apple-text-muted group-hover:text-apple-blue transition-colors">Kilometers</span>
-                        <ChevronDown className="w-3.5 h-3.5 text-apple-text-muted transition-transform group-hover:translate-y-0.5" />
-                      </div>
-                      <span className="text-[13px] md:text-[15px] font-medium text-apple-text mt-1 truncate max-w-full">
-                        {(minMileage !== null || maxMileage !== null)
-                          ? `${minMileage !== null ? (minMileage/1000) + 'k' : "0"} - ${maxMileage !== null ? (maxMileage/1000) + 'k km' : "Any"}`
-                          : "Select Mileage"
-                        }
-                      </span>
-                    </button>
-
-                    {/* 6. Grand Option Filters Indicator & Trigger */}
-                    <div className="flex items-center justify-between px-5 md:px-7 py-3 md:py-4 rounded-tr-[24px] rounded-br-[20px] md:rounded-r-full transition-all hover:bg-apple-gray/40 dark:hover:bg-white/5 relative group cursor-pointer">
-                      <button 
-                        onClick={() => {
-                          setIsFilterOpen(!isFilterOpen);
-                          setActiveDropdown(null);
-                        }}
-                        className="flex flex-col items-start text-left w-full h-full cursor-pointer"
-                      >
-                        <div className="flex items-center gap-1.5 w-full">
-                          <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-apple-text-muted group-hover:text-apple-blue transition-colors">Filters</span>
-                          <ChevronDown className="w-3.5 h-3.5 text-apple-text-muted transition-transform group-hover:translate-y-0.5" />
-                        </div>
-                        <span className="text-[13px] font-medium text-apple-text-muted mt-1 truncate">
-                          {activeFiltersCount > 0 ? `${activeFiltersCount} active` : "Specs, Keywords"}
-                        </span>
-                      </button>
-
-                      <div className="flex items-center gap-2">
-                        {activeFiltersCount > 0 && (
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedCities([]);
-                              setSelectedMake("");
-                              setSelectedModel("");
-                              setSelectedVariant("");
-                              setMinPrice(null);
-                              setMaxPrice(null);
-                              setMinYear(null);
-                              setMaxYear(null);
-                              setMinMileage(null);
-                              setMaxMileage(null);
-                              setSearchQuery("");
-                              setSelectedCondition([]);
-                              setSelectedBodyType([]);
-                              setSelectedFuel([]);
-                              setOnlyVerified(false);
-                              setCustomFilters({});
-                            }}
-                            title="Clear all filters"
-                            className="p-1 hover:bg-apple-red/15 text-apple-red rounded-full transition-colors flex items-center justify-center shrink-0 cursor-pointer"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* Dropdown Container below the active tab */}
-                <AnimatePresence>
-                  {activeDropdown && (
-                    <>
-                      {/* Overlay backdrop to dismiss dropdown when tapping outside */}
-                      <div 
-                        className="fixed inset-0 z-40 bg-black/0" 
-                        onClick={() => setActiveDropdown(null)} 
-                      />
-                      <motion.div
-                        initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 4, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.12 } }}
-                        transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                        className={cn(
-                          "absolute top-full z-50 w-full md:max-w-xl bg-white dark:bg-[#1C1C1E] border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-3xl overflow-hidden",
-                          activeDropdown === 'city' && "left-0",
-                          activeDropdown === 'makeModel' && "left-0 md:left-[10%]",
-                          activeDropdown === 'price' && "left-0 md:left-[20%]",
-                          activeDropdown === 'year' && "left-0 md:left-[30%]",
-                          activeDropdown === 'km' && "right-0"
-                        )}
-                      >
-                        {renderDropdownContent()}
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Dynamic scroll-aware Brand Navigation Slider */}
-              <div className={cn(
-                "overflow-x-auto pb-1 pb-1.5 pt-2 flex items-center gap-3 scrollbar-none",
-                isSticky ? "border-t border-apple-border/10 mt-3" : "mt-4"
-              )} style={{ WebkitOverflowScrolling: 'touch' }}>
-                <span className="text-[10px] uppercase font-black tracking-widest text-apple-text-muted shrink-0 mr-1.5 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-apple-blue" /> Quick Brands
-                </span>
-                <div className="flex items-center gap-2 shrink-0">
-                  {[
-                    { name: "Toyota", label: "Toyota" },
-                    { name: "Honda", label: "Honda" },
-                    { name: "Suzuki", label: "Suzuki" },
-                    { name: "Audi", label: "Audi" },
-                    { name: "BMW", label: "BMW" },
-                    { name: "Mercedes-Benz", label: "Mercedes" },
-                    { name: "Hyundai", label: "Hyundai" },
-                    { name: "Kia", label: "Kia" },
-                    { name: "MG", label: "MG" },
-                    { name: "Changan", label: "Changan" },
-                    { name: "Tesla", label: "Tesla" }
-                  ].map((brand, i) => (
-                    <motion.button
-                      whileHover={{ scale: 1.04 }}
-                      whileTap={{ scale: 0.96 }}
-                      key={`quick-brand-${i}`}
-                      onClick={() => {
-                        setSelectedMake(selectedMake === brand.name ? "" : brand.name);
-                        setViewMode("list");
-                      }}
-                      className={cn(
-                        "flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-medium transition-all duration-300 shadow-sm cursor-pointer",
-                        selectedMake === brand.name
-                          ? "bg-apple-blue border-apple-blue text-white ring-2 ring-apple-blue/25"
-                          : "bg-apple-card-bg/70 dark:bg-black/30 border-apple-border/30 text-apple-text hover:bg-apple-gray dark:hover:bg-white/5"
-                      )}
-                    >
-                      <div className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center font-medium text-[9px] uppercase tracking-wider shrink-0",
-                        selectedMake === brand.name
-                          ? "bg-white/20 text-white"
-                          : "bg-apple-blue/10 text-apple-blue dark:bg-white/10 dark:text-apple-blue"
-                      )}>
-                        {brand.name[0]}
-                      </div>
-                      <span className="truncate">{brand.label}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* 2. QUICK-ACCESS ROW (Property Types + Dynamic Popular Societies per City) */}
+          <QuickAccessRow
+            activePropertyType={topFilters.propertyType}
+            onSelectPropertyType={(pt) => {
+              handleTopFilterChange({ propertyType: pt });
+            }}
+            activeArea={selectedLocations.length > 0 ? selectedLocations[0] : ""}
+            onSelectArea={(area) => {
+              if (area) {
+                setSelectedLocations([area]);
+              } else {
+                setSelectedLocations([]);
+              }
+            }}
+            currentCity={topFilters.city || (userLocation?.city !== "Pakistan" ? userLocation?.city : "Lahore")}
+          />
 
           <div className="flex gap-6 items-start">
             {/* 1. PERSISTENT FILTER SIDEBAR FOR DESKTOP (1280px+) */}
@@ -1343,32 +1371,34 @@ export default function Marketplace() {
               <div className="glass-card p-5 bg-apple-card-bg backdrop-blur-md rounded-2xl border border-apple-border/30">
                 <div className="flex items-center justify-between pb-3.5 border-b border-apple-border/20 mb-4">
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-4 h-4 text-apple-blue" />
+                    <SlidersHorizontal className="w-4 h-4 text-brand-primary" />
                     <h3 className="font-bold text-sm text-apple-text">Refine Properties</h3>
                   </div>
                   {activeFiltersCount > 0 && (
                     <button
-                      onClick={() => {
-                        setSelectedCities([]);
-                        setSelectedMake("");
-                        setSelectedModel("");
-                        setSelectedVariant("");
-                        setSelectedCondition([]);
-                        setSelectedBodyType([]);
-                        setSelectedFuel([]);
-                        setMinPrice(null);
-                        setMaxPrice(null);
-                        setSearchQuery("");
-                        setOnlyVerified(false);
-                        setCustomFilters({});
-                      }}
-                      className="text-[11px] font-bold text-apple-red hover:underline cursor-pointer"
+                      onClick={handleResetAllFilters}
+                      className="text-[11px] font-bold text-red-500 hover:underline cursor-pointer"
                     >
-                      Reset ({activeFiltersCount})
+                      Clear all ({activeFiltersCount})
                     </button>
                   )}
                 </div>
-                {renderFilterSections()}
+                <SidebarFilters
+                  filters={topFilters}
+                  onChange={handleTopFilterChange}
+                  selectedTypes={selectedPropertyTypes}
+                  onToggleType={handleTogglePropertyType}
+                  selectedArea={selectedLocations.length > 0 ? selectedLocations[0] : ""}
+                  onSelectArea={(area) => setSelectedLocations(area ? [area] : [])}
+                  freshness={freshness}
+                  onChangeFreshness={setFreshness}
+                  onlyVerified={onlyVerified}
+                  onToggleVerified={setOnlyVerified}
+                  electricityBackup={electricityBackup}
+                  onToggleElectricityBackup={setElectricityBackup}
+                  onResetAll={handleResetAllFilters}
+                  activeCount={activeFiltersCount}
+                />
               </div>
             </aside>
 
@@ -1410,9 +1440,9 @@ export default function Marketplace() {
                     {/* Header */}
                     <div className="flex items-center justify-between px-6 py-3 border-b border-apple-border/20 dark:border-white/10 shrink-0">
                       <div className="flex items-center gap-2">
-                        <h2 className="text-lg font-bold text-apple-text dark:text-white">Filters</h2>
+                        <h2 className="text-lg font-bold text-apple-text dark:text-white">Refine Properties</h2>
                         {activeFiltersCount > 0 && (
-                          <span className="px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue text-xs font-bold">
+                          <span className="px-2 py-0.5 rounded-full bg-brand-primary/10 text-brand-primary text-xs font-bold">
                             {activeFiltersCount} active
                           </span>
                         )}
@@ -1428,32 +1458,37 @@ export default function Marketplace() {
 
                     {/* Scrollable Filters Content */}
                     <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                      {renderFilterSections()}
+                      <SidebarFilters
+                        filters={topFilters}
+                        onChange={handleTopFilterChange}
+                        selectedTypes={selectedPropertyTypes}
+                        onToggleType={handleTogglePropertyType}
+                        selectedArea={selectedLocations.length > 0 ? selectedLocations[0] : ""}
+                        onSelectArea={(area) => setSelectedLocations(area ? [area] : [])}
+                        freshness={freshness}
+                        onChangeFreshness={setFreshness}
+                        onlyVerified={onlyVerified}
+                        onToggleVerified={setOnlyVerified}
+                        electricityBackup={electricityBackup}
+                        onToggleElectricityBackup={setElectricityBackup}
+                        onResetAll={handleResetAllFilters}
+                        activeCount={activeFiltersCount}
+                      />
                     </div>
 
                     {/* Sticky Bottom Actions Bar */}
                     <div className="p-4 bg-white/90 dark:bg-[#1C1C1E]/90 backdrop-blur-xl border-t border-apple-border/20 dark:border-white/10 flex items-center gap-3 shrink-0">
                       <button
-                        onClick={() => {
-                          setSelectedCities([]);
-                          setSelectedMake("");
-                          setSelectedModel("");
-                          setSelectedVariant("");
-                          setSelectedCondition([]);
-                          setSelectedBodyType([]);
-                          setSelectedFuel([]);
-                          setMinPrice(null);
-                          setMaxPrice(null);
-                        }}
+                        onClick={handleResetAllFilters}
                         className="px-4 py-3 rounded-2xl text-xs font-bold text-apple-text-muted hover:text-apple-red hover:bg-apple-red/10 transition-colors cursor-pointer min-h-[44px]"
                       >
-                        Reset All
+                        Clear All
                       </button>
                       <button
                         onClick={() => setIsFilterOpen(false)}
-                        className="flex-1 apple-button-primary !h-12 text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-apple-blue/20 cursor-pointer active:scale-98 transition-transform min-h-[48px]"
+                        className="flex-1 apple-button-primary !h-12 text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-primary/20 cursor-pointer active:scale-98 transition-transform min-h-[48px]"
                       >
-                        Apply Filters ({filteredVehicles.length})
+                        Show Properties ({filteredVehicles.length})
                       </button>
                     </div>
                   </motion.div>
@@ -1463,23 +1498,11 @@ export default function Marketplace() {
 
             {/* Main Grid */}
             <div className="flex-1">
-              {/* Market Insight Nudge Banner */}
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-8 p-4 bg-apple-blue/5 border border-apple-blue/10 rounded-[24px] flex items-center justify-between gap-4 group cursor-pointer hover:bg-apple-blue/10 transition-all"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-apple-card-bg flex items-center justify-center shadow-sm text-apple-blue">
-                    <TrendingUp className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-blue mb-0.5">Market Insight</p>
-                    <p className="text-sm font-bold text-apple-text tracking-tight">Demand for Hybrid SUVs in {userLocation?.city || "Pakistan"} is up 24% this week.</p>
-                  </div>
-                </div>
-                <ArrowRight className="w-5 h-5 text-apple-blue group-hover:translate-x-1 transition-transform" />
-              </motion.div>
+              {/* 4. MARKET INSIGHT MODULE (Rotating aggregate signals & 1-tap filtered search) */}
+              <MarketInsightBanner
+                currentCity={topFilters.city || (userLocation?.city !== "Pakistan" ? userLocation?.city : "Lahore")}
+                onApplyInsight={handleApplyInsight}
+              />
 
               {/* Active Filter Chips */}
               {(selectedBodyType.length > 0 || selectedFuel.length > 0 || onlyVerified || maxPrice || searchQuery) && (
@@ -1643,71 +1666,66 @@ export default function Marketplace() {
                     )}
                   </motion.button>
 
-                  <div className="relative" ref={sortRef}>
+                  <div className="relative">
                     <button
+                      ref={sortRef as any}
                       onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                       className={cn(
-                        "flex items-center justify-between gap-3 px-5 py-2.5 bg-white dark:bg-[#161618]/95 border border-apple-border/40 dark:border-white/10 shadow-md hover:shadow-apple-soft transition-all duration-300 relative group cursor-pointer text-left focus:outline-none rounded-full text-xs font-semibold h-[38px]",
-                        isSortDropdownOpen ? "ring-2 ring-apple-blue/20 bg-apple-gray/50 dark:bg-white/10" : ""
+                        "flex items-center justify-between gap-3 px-5 py-2.5 bg-white dark:bg-[#1C1C1E] border border-apple-border/40 dark:border-white/10 shadow-md hover:shadow-apple-soft transition-all duration-300 relative group cursor-pointer text-left focus:outline-none rounded-full text-xs font-semibold h-[38px]",
+                        isSortDropdownOpen ? "ring-2 ring-brand-primary/20 bg-apple-gray/50 dark:bg-white/10" : ""
                       )}
                     >
-                      <span className="text-apple-text truncate selection-none">
-                        Sort: <span className="font-extrabold text-apple-blue">{([
-                          { id: "ai", label: "Default" },
-                          { id: "newest", label: "Newest" },
-                          { id: "oldest", label: "Oldest" },
-                          { id: "price-low", label: "Price: Low" },
-                          { id: "price-high", label: "Price: High" },
-                          { id: "mileage-low", label: "Mileage: Low" },
-                          { id: "mileage-high", label: "Mileage: High" },
-                          { id: "year-high", label: "Year: High" },
-                          { id: "year-low", label: "Year: Low" }
-                        ].find(option => option.id === sortBy)?.label) || "Default"}</span>
+                      <span className="text-apple-text dark:text-[#F5F5F7] truncate selection-none">
+                        Sort: <span className="font-extrabold text-brand-primary">{([
+                          { id: "ai", label: "Recommended" },
+                          { id: "newest", label: "Newest First" },
+                          { id: "oldest", label: "Oldest First" },
+                          { id: "price-low", label: "Price: Low to High" },
+                          { id: "price-high", label: "Price: High to Low" },
+                        ].find(option => option.id === sortBy)?.label) || "Recommended"}</span>
                       </span>
-                      <ChevronDown className={cn("w-3.5 h-3.5 text-apple-text-muted transition-transform duration-300 shrink-0", isSortDropdownOpen ? "rotate-180 text-apple-blue" : "group-hover:translate-y-0.5")} />
+                      <ChevronDown className={cn("w-3.5 h-3.5 text-apple-text-muted dark:text-[#8E8E93] transition-transform duration-300 shrink-0", isSortDropdownOpen ? "rotate-180 text-brand-primary" : "group-hover:translate-y-0.5")} />
                     </button>
-                    <AnimatePresence>
-                      {isSortDropdownOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                          className="absolute right-0 mt-2 min-w-[200px] w-full bg-white/95 dark:bg-[#161618]/95 backdrop-blur-xl border border-apple-border/20 shadow-2xl rounded-2xl p-1.5 z-40 overflow-hidden max-h-[300px] overflow-y-auto"
-                        >
-                          {[
-                            { id: "ai", label: "Default" },
-                            { id: "newest", label: "Newest" },
-                            { id: "oldest", label: "Oldest" },
-                            { id: "price-low", label: "Price: Low" },
-                            { id: "price-high", label: "Price: High" },
-                            { id: "mileage-low", label: "Mileage: Low" },
-                            { id: "mileage-high", label: "Mileage: High" },
-                            { id: "year-high", label: "Year: High" },
-                            { id: "year-low", label: "Year: Low" }
-                          ].map((option) => (
-                            <button
-                              key={option.id}
-                              onClick={() => {
-                                setSortBy(option.id as any);
-                                setIsSortDropdownOpen(false);
-                              }}
-                              className={cn(
-                                "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-between",
-                                sortBy === option.id 
-                                  ? "bg-apple-blue text-white shadow-md shadow-apple-blue/15" 
-                                  : "text-apple-text-muted hover:text-apple-text hover:bg-apple-gray/40 dark:hover:bg-white/5"
-                              )}
-                            >
-                              <span>{option.label}</span>
-                              {sortBy === option.id && (
-                                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                              )}
-                            </button>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+
+                    <FilterPopover
+                      isOpen={isSortDropdownOpen}
+                      onClose={() => setIsSortDropdownOpen(false)}
+                      triggerRef={sortRef as any}
+                      title="Sort Properties"
+                      align="end"
+                      width={230}
+                      maxHeight={320}
+                    >
+                      <div className="space-y-1">
+                        {[
+                          { id: "ai", label: "Recommended" },
+                          { id: "newest", label: "Newest First" },
+                          { id: "oldest", label: "Oldest First" },
+                          { id: "price-low", label: "Price: Low to High" },
+                          { id: "price-high", label: "Price: High to Low" },
+                        ].map((option) => (
+                          <button
+                            key={option.id}
+                            type="button"
+                            onClick={() => {
+                              setSortBy(option.id as any);
+                              setIsSortDropdownOpen(false);
+                            }}
+                            className={cn(
+                              "w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-between",
+                              sortBy === option.id 
+                                ? "bg-brand-primary text-white shadow-xs" 
+                                : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                            )}
+                          >
+                            <span>{option.label}</span>
+                            {sortBy === option.id && (
+                              <Check className="w-3.5 h-3.5 text-white" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </FilterPopover>
                   </div>
 
                   {/* Grid/List View Selector pill perfectly styled right after sort */}

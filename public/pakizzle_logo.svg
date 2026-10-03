@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none" width="100%" height="100%">
+  <defs>
+    <linearGradient id="brandWordmarkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B2A86" />
+      <stop offset="100%" stop-color="#1A1526" />
+    </linearGradient>
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1A1526" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- 5-Color Flame Mark Spectrum (Blue, Green, Gold, Red, Magenta) -->
+  <g transform="translate(6, 6)">
+    <!-- Petal 1: Accent Blue #4A90D2 -->
+    <path d="M12 44C8 38 7 30 11 22C13 18 16 15 17 10C18 15 22 20 22 26C22 35 17 42 12 44Z" fill="#4A90D2" />
+    <!-- Petal 2: Accent Green #5FA84C -->
+    <path d="M18 45C16 38 18 29 23 20C25 16 26 11 26 4C29 11 34 17 33 25C32 34 26 42 18 45Z" fill="#5FA84C" />
+    <!-- Petal 3 (Center): Accent Gold #F0A830 -->
+    <path d="M26 46C26 38 29 28 34 16C36 11 36 6 35 0C38 7 42 14 41 23C40 33 34 43 26 46Z" fill="#F0A830" />
+    <!-- Petal 4: Accent Red #D93A45 -->
+    <path d="M33 45C35 38 35 29 32 21C30 17 30 12 32 6C36 12 39 19 40 27C41 35 38 42 33 45Z" fill="#D93A45" />
+    <!-- Petal 5: Accent Magenta #7A1E5E -->
+    <path d="M39 44C43 38 43 30 40 23C38 19 36 15 37 11C41 16 45 22 45 29C45 36 43 41 39 44Z" fill="#7A1E5E" />
+  </g>
+
+  <!-- Wordmark: Pakizzle (Bold Rounded Sans with Primary Gradient) -->
+  <text x="68" y="38" font-family="'Plus Jakarta Sans', 'Manrope', 'Poppins', ui-sans-serif, sans-serif" font-size="30" font-weight="800" letter-spacing="-0.8" fill="url(#brandWordmarkGradient)">
+    Pakizzle
+  </text>
+
+  <!-- Supporting Tagline in Brand Indigo -->
+  <text x="69" y="52" font-family="'Plus Jakarta Sans', 'Manrope', 'Poppins', ui-sans-serif, sans-serif" font-size="8.5" font-weight="600" letter-spacing="2.8" fill="#4B2C82">
+    REAL ESTATE PORTAL
+  </text>
+</svg>
