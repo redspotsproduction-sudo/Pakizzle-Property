@@ -1,565 +1,558 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   CheckCircle2, 
   XCircle, 
-  Search, 
-  MoreVertical, 
-  Car, 
-  Store, 
+  Clock, 
+  Building2, 
+  Home, 
   ShieldCheck, 
-  Clock,
-  User,
-  AlertCircle,
-  FileText,
-  ChevronRight,
-  Zap,
-  CheckCircle,
-  ShieldAlert
+  FileText, 
+  AlertTriangle, 
+  Search, 
+  Filter, 
+  Eye, 
+  Check, 
+  X, 
+  MapPin, 
+  DollarSign, 
+  ExternalLink,
+  ShieldAlert,
+  ArrowRight,
+  Layers,
+  Sparkles,
+  UserCheck,
+  FileCheck
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from "@/components/ui/table";
 import { 
   Dialog, 
   DialogContent, 
-  DialogDescription, 
   DialogHeader, 
   DialogTitle, 
+  DialogDescription,
   DialogFooter 
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn, formatPrice } from "../../lib/utils";
-import { ApprovalRequest } from "../../types";
+import { db } from "../../firebase";
+import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp, addDoc } from "firebase/firestore";
 
-const mockRequests: ApprovalRequest[] = [
+export interface PendingQueueItem {
+  id: string;
+  type: "listing_approval" | "agency_verification" | "title_verification";
+  title: string;
+  submitterName: string;
+  submitterEmail: string;
+  submitterPhone: string;
+  category: string;
+  city: string;
+  details: {
+    price?: number;
+    propertyType?: string;
+    areaSize?: string;
+    licenseNumber?: string;
+    authority?: string;
+    deedType?: string;
+    documents?: string[];
+    images?: string[];
+  };
+  qualityScore: number;
+  fraudWarning?: string;
+  createdAt: string;
+  status: "pending" | "approved" | "rejected";
+}
+
+const mockPendingQueue: PendingQueueItem[] = [
   {
-    id: 'req_1',
-    type: 'listing_approval',
-    status: 'pending',
-    createdBy: 'user_123',
-    targetId: 'veh_456',
-    newData: {
-      make: 'Audi',
-      model: 'e-tron GT',
-      year: 2024,
-      price: 45000000,
-      images: ['https://picsum.photos/seed/car1/800/600'],
-      description: 'Pristine condition Audi e-tron GT. Fully loaded with all options.'
+    id: "appr_101",
+    type: "listing_approval",
+    title: "1 Kanal Luxury Designer Bungalow · Sector J, Phase 6 DHA",
+    submitterName: "Chaudhry Farhan (Al-Miraj Builders)",
+    submitterEmail: "farhan@almiraj.pk",
+    submitterPhone: "+92 300 8472911",
+    category: "Residential House",
+    city: "Lahore",
+    details: {
+      price: 145000000,
+      propertyType: "House",
+      areaSize: "1 Kanal",
+      images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"]
     },
-    createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+    qualityScore: 98,
+    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    status: "pending"
   },
   {
-    id: 'req_2',
-    type: 'dealer_verification',
-    status: 'pending',
-    createdBy: 'user_789',
-    targetId: 'dealer_789',
-    newData: {
-      businessName: 'Premium Motors Lahore',
-      licenseNumber: 'LHR-2024-8892',
-      documents: ['license.pdf', 'tax_reg.pdf']
+    id: "appr_102",
+    type: "agency_verification",
+    title: "Clifton Waterfront Estates · KDA License Verification",
+    submitterName: "Tariq Mansoor",
+    submitterEmail: "support@cliftonwaterfront.pk",
+    submitterPhone: "+92 333 2198471",
+    category: "Agency Registration",
+    city: "Karachi",
+    details: {
+      licenseNumber: "KDA-EST-9920",
+      authority: "KDA",
+      documents: ["https://picsum.photos/seed/kda_doc/800/600", "https://picsum.photos/seed/tax_doc/800/600"]
     },
-    createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    qualityScore: 92,
+    createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    status: "pending"
   },
   {
-    id: 'req_3',
-    type: 'auction_verification',
-    status: 'pending',
-    createdBy: 'user_101',
-    targetId: 'auc_101',
-    newData: {
-      chassisNumber: 'JZ1234567890',
-      lotNumber: '5021',
-      auctionHouse: 'USS Tokyo'
+    id: "appr_103",
+    type: "title_verification",
+    title: "2 Kanal Margalla Estate Registry & Non-Encumbrance Deed",
+    submitterName: "Malik Usman",
+    submitterEmail: "usman@capitalprime.pk",
+    submitterPhone: "+92 321 5567890",
+    category: "CDA Title Verification",
+    city: "Islamabad",
+    details: {
+      deedType: "Registered Allotment & Fard",
+      documents: ["https://picsum.photos/seed/cda_deed/800/600"]
     },
+    qualityScore: 96,
+    createdAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    status: "pending"
+  },
+  {
+    id: "appr_104",
+    type: "listing_approval",
+    title: "5 Marla House · Johar Town Lahore (Distress Sale)",
+    submitterName: "Anonymous Private Poster",
+    submitterEmail: "quickdeal@gmail.com",
+    submitterPhone: "+92 300 0001234",
+    category: "Residential House",
+    city: "Lahore",
+    details: {
+      price: 6500000,
+      propertyType: "House",
+      areaSize: "5 Marla",
+      images: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800"]
+    },
+    qualityScore: 42,
+    fraudWarning: "40% below historical sector median + duplicate photo match on external database.",
     createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+    status: "pending"
   }
 ];
 
 export default function ApprovalCenter() {
-  const [requests, setRequests] = useState<ApprovalRequest[]>(mockRequests);
-  const [selectedRequest, setSelectedRequest] = useState<ApprovalRequest | null>(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'all' | 'listing' | 'dealer' | 'verification'>('all');
+  const [items, setItems] = useState<PendingQueueItem[]>(mockPendingQueue);
+  const [selectedItem, setSelectedItem] = useState<PendingQueueItem | null>(null);
+  const [activeTab, setActiveTab] = useState<"all" | "listing" | "agency" | "title">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [isInspectModalOpen, setIsInspectModalOpen] = useState(false);
 
-  React.useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [activeTab]);
+  const filteredItems = useMemo(() => {
+    return items.filter(item => {
+      const q = searchQuery.toLowerCase();
+      const matchSearch = item.title.toLowerCase().includes(q) || 
+                          item.submitterName.toLowerCase().includes(q) || 
+                          item.city.toLowerCase().includes(q);
 
-  const filteredRequests = useMemo(() => {
-    return requests.filter(req => {
-      // Tab filter
-      if (activeTab !== 'all') {
-        if (activeTab === 'listing' && req.type !== 'listing_approval') return false;
-        if (activeTab === 'dealer' && req.type !== 'dealer_verification') return false;
-        if (activeTab === 'verification' && req.type !== 'auction_verification') return false;
-      }
-      
-      // Search query filter
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const matchType = req.type.toLowerCase().includes(q);
-        const matchId = req.id.toLowerCase().includes(q);
-        const matchCreatedBy = req.createdBy.toLowerCase().includes(q);
-        const matchTargetId = req.targetId.toLowerCase().includes(q);
-        
-        let matchData = false;
-        if (req.type === 'listing_approval' && req.newData) {
-          matchData = (req.newData.make?.toLowerCase().includes(q) || req.newData.model?.toLowerCase().includes(q));
-        } else if (req.type === 'dealer_verification' && req.newData) {
-          matchData = req.newData.businessName?.toLowerCase().includes(q);
-        } else if (req.type === 'auction_verification' && req.newData) {
-          matchData = (req.newData.chassisNumber?.toLowerCase().includes(q) || req.newData.auctionHouse?.toLowerCase().includes(q));
-        }
-        
-        return matchType || matchId || matchCreatedBy || matchTargetId || matchData;
-      }
-      
-      return true;
+      const matchTab = activeTab === "all" ? true :
+                       activeTab === "listing" ? item.type === "listing_approval" :
+                       activeTab === "agency" ? item.type === "agency_verification" :
+                       item.type === "title_verification";
+
+      return matchSearch && matchTab && item.status === "pending";
     });
-  }, [requests, activeTab, searchQuery]);
+  }, [items, searchQuery, activeTab]);
 
-  const handleApprove = (id: string) => {
-    setRequests(prev => prev.filter(req => req.id !== id));
-    toast.success("Request Approved Successfully", {
-      description: `Target ID: ${id} has been authorized and synced with production database.`
+  const handleApprove = async (item: PendingQueueItem) => {
+    setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "approved" } : i));
+    setSelectedIds(prev => prev.filter(id => id !== item.id));
+    toast.success(`${item.title} Approved`, {
+      description: "Listing/Verification credentials confirmed and published to marketplace."
     });
-    setIsDetailsOpen(false);
+    setIsInspectModalOpen(false);
   };
 
-  const handleReject = (id: string) => {
-    setRequests(prev => prev.filter(req => req.id !== id));
-    toast.error("Request Rejected", {
-      description: `Target ID: ${id} has been rejected and flagged.`
-    });
-    setIsDetailsOpen(false);
-  };
-
-  const tabs = [
-    { id: 'all', label: 'All Requests', type: 'all' },
-    { id: 'listing', label: 'Listings', type: 'listing_approval' },
-    { id: 'dealer', label: 'Dealers', type: 'dealer_verification' },
-    { id: 'verification', label: 'Verifications', type: 'auction_verification' },
-  ] as const;
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'listing_approval': return <Car className="w-5 h-5" />;
-      case 'dealer_verification': return <Store className="w-5 h-5" />;
-      case 'auction_verification': return <ShieldCheck className="w-5 h-5" />;
-      default: return <FileText className="w-5 h-5" />;
+  const handleRejectConfirm = () => {
+    if (!selectedItem) return;
+    if (!rejectionReason.trim()) {
+      toast.error("Rejection reason required", { description: "Please explain rejection cause for seller audit." });
+      return;
     }
+    setItems(prev => prev.map(i => i.id === selectedItem.id ? { ...i, status: "rejected" } : i));
+    setSelectedIds(prev => prev.filter(id => id !== selectedItem.id));
+    toast.error(`Rejected: ${selectedItem.title}`, {
+      description: `Audit Reason: ${rejectionReason}`
+    });
+    setIsRejectModalOpen(false);
+    setIsInspectModalOpen(false);
+    setRejectionReason("");
   };
 
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'listing_approval': return 'Listing Approval';
-      case 'dealer_verification': return 'Dealer Verification';
-      case 'auction_verification': return 'Auction Sheet';
-      default: return type;
-    }
+  // Bulk actions
+  const handleBulkApprove = () => {
+    if (selectedIds.length === 0) return;
+    setItems(prev => prev.map(i => selectedIds.includes(i.id) ? { ...i, status: "approved" } : i));
+    toast.success(`Bulk Approved ${selectedIds.length} items`);
+    setSelectedIds([]);
+  };
+
+  const handleBulkReject = () => {
+    if (selectedIds.length === 0) return;
+    setItems(prev => prev.map(i => selectedIds.includes(i.id) ? { ...i, status: "rejected" } : i));
+    toast.error(`Bulk Rejected ${selectedIds.length} items`);
+    setSelectedIds([]);
   };
 
   return (
     <div className="space-y-6">
-      {/* Header with Search and Actions - EXACT match with Seller Console layout and sizing */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-7 border-b border-black/[0.06] dark:border-white/[0.06]">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-apple-blue uppercase tracking-[0.18em]">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            Verified Administration Console
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#F0A830] text-xs font-bold uppercase tracking-wider mb-2 border border-[#5B2A86]/20">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Compliance & Moderation Protocol</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-apple-text dark:text-white">
             Approval Center
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
-            Review, moderate, and authorize all critical platform requests with advanced forensic scans.
+          <p className="text-xs sm:text-sm text-apple-text-muted mt-1 max-w-2xl">
+            Triage pending real estate listings, inspect LDA/CDA agency regulatory documents, and certify property registry deeds with AI quality scoring.
           </p>
         </div>
-        
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
-          <div className="relative group min-w-[200px] sm:w-64">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
-            <input
-              type="text"
-              placeholder="Search request archives..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
-            />
+
+        {selectedIds.length > 0 && (
+          <div className="flex items-center gap-2 p-1.5 bg-slate-900 text-white rounded-2xl shadow-xl px-3 border border-white/10 animate-fade-in">
+            <span className="text-xs font-bold mr-2 text-amber-400">{selectedIds.length} selected</span>
+            <Button size="sm" onClick={handleBulkApprove} className="h-7 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">
+              Bulk Approve
+            </Button>
+            <Button size="sm" onClick={handleBulkReject} className="h-7 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl">
+              Bulk Reject
+            </Button>
           </div>
+        )}
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Total Pending</span>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+              {items.filter(i => i.status === "pending").length}
+            </div>
+            <span className="text-[11px] font-semibold text-amber-600 mt-1 block">Awaiting Review</span>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Pending Listings</span>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-blue-600">
+              {items.filter(i => i.status === "pending" && i.type === "listing_approval").length}
+            </div>
+            <span className="text-[11px] font-semibold text-slate-400 mt-1 block">Property Submissions</span>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Agency KYC</span>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-purple-600">
+              {items.filter(i => i.status === "pending" && i.type === "agency_verification").length}
+            </div>
+            <span className="text-[11px] font-semibold text-slate-400 mt-1 block">License & Tax Certs</span>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Title Guarantees</span>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-emerald-600">
+              {items.filter(i => i.status === "pending" && i.type === "title_verification").length}
+            </div>
+            <span className="text-[11px] font-semibold text-slate-400 mt-1 block">Deeds & Allotments</span>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tabs and Search Bar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#1E1E20] border border-slate-200/80 dark:border-white/10 shadow-xs">
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+          {(["all", "listing", "agency", "title"] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer",
+                activeTab === tab ? "bg-white dark:bg-[#1E1E20] text-slate-900 dark:text-white shadow-xs" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+              )}
+            >
+              {tab === "all" ? "All Queue" : tab === "listing" ? "Listings" : tab === "agency" ? "Agencies" : "Title Deeds"}
+            </button>
+          ))}
+        </div>
+
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Input 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search pending submissions by title, submitter, or city..."
+            className="pl-10 h-9 rounded-xl bg-slate-50 dark:bg-white/5 border-transparent text-xs font-semibold"
+          />
         </div>
       </div>
 
-      {/* Tabs Row - EXACT match with Seller Console style */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0" style={{ WebkitOverflowScrolling: 'touch' }}>
-        {tabs.map((tab) => {
-          const count = tab.id === 'all' 
-            ? requests.length 
-            : requests.filter(r => r.type === tab.type).length;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
-                isActive
-                  ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                  : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+      {/* Main Queue Table */}
+      <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#1E1E20] shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-slate-50/80 dark:bg-white/5 border-b border-slate-200/80 dark:border-white/10">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-12 text-center py-4 pl-4">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedIds.length === filteredItems.length && filteredItems.length > 0}
+                    onChange={(e) => setSelectedIds(e.target.checked ? filteredItems.map(i => i.id) : [])}
+                    className="rounded"
+                  />
+                </TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Submission / Scope</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Category & City</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Submitter</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4 text-center">Quality Grade</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4 pr-6 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-slate-100 dark:divide-white/5">
+              {filteredItems.map(item => (
+                <TableRow key={item.id} className={cn("hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors", item.fraudWarning && "bg-rose-50/20 dark:bg-rose-950/10")}>
+                  <TableCell className="text-center py-4 pl-4">
+                    <input 
+                      type="checkbox" 
+                      checked={selectedIds.includes(item.id)}
+                      onChange={() => setSelectedIds(prev => prev.includes(item.id) ? prev.filter(x => x !== item.id) : [...prev, item.id])}
+                      className="rounded"
+                    />
+                  </TableCell>
+
+                  <TableCell className="py-4">
+                    <div className="min-w-0 max-w-[280px]">
+                      <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
+                        {item.title}
+                      </div>
+                      <div className="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center gap-1.5">
+                        <span className="font-bold text-[#5B2A86] dark:text-[#C9A227]">{item.id}</span>
+                        <span>·</span>
+                        <span>{new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                      {item.fraudWarning && (
+                        <div className="text-[10px] text-rose-600 font-bold flex items-center gap-1 mt-1">
+                          <AlertTriangle className="w-3 h-3 shrink-0" />
+                          <span className="truncate">{item.fraudWarning}</span>
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="py-4">
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      {item.category}
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {item.city}
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="py-4">
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      {item.submitterName}
+                    </div>
+                    <div className="text-[10px] text-slate-400 font-mono">
+                      {item.submitterPhone}
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="py-4 text-center">
+                    <Badge className={cn(
+                      "text-[10px] font-bold rounded-lg px-2",
+                      item.qualityScore >= 90 ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" :
+                      item.qualityScore >= 70 ? "bg-amber-500/10 text-amber-600 border-amber-500/20" :
+                      "bg-rose-500/10 text-rose-600 border-rose-500/20"
+                    )}>
+                      Score: {item.qualityScore}%
+                    </Badge>
+                  </TableCell>
+
+                  <TableCell className="py-4 pr-6 text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => { setSelectedItem(item); setIsInspectModalOpen(true); }}
+                        className="h-8 px-2 text-xs font-bold"
+                      >
+                        <Eye className="w-3.5 h-3.5 mr-1" /> Inspect
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => handleApprove(item)}
+                        className="h-8 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold gap-1 cursor-pointer"
+                      >
+                        <Check className="w-3.5 h-3.5" /> Approve
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => { setSelectedItem(item); setIsRejectModalOpen(true); }}
+                        className="h-8 px-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 border-rose-200 cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
+      {/* Inspect Detail Modal */}
+      <Dialog open={isInspectModalOpen} onOpenChange={setIsInspectModalOpen}>
+        <DialogContent className="max-w-2xl rounded-3xl bg-white dark:bg-[#1E1E20] border-slate-200 dark:border-white/15 p-6 max-h-[85vh] overflow-y-auto">
+          {selectedItem && (
+            <div className="space-y-5">
+              <DialogHeader>
+                <div className="flex items-center gap-2 mb-1">
+                  <Badge className="bg-[#5B2A86] text-white text-[10px] uppercase font-bold">{selectedItem.type.replace('_', ' ')}</Badge>
+                  <span className="font-mono text-xs text-slate-400 font-bold">{selectedItem.id}</span>
+                </div>
+                <DialogTitle className="text-lg font-extrabold text-slate-900 dark:text-white">
+                  {selectedItem.title}
+                </DialogTitle>
+                <DialogDescription className="text-xs text-slate-500">
+                  Submitted by {selectedItem.submitterName} ({selectedItem.submitterEmail})
+                </DialogDescription>
+              </DialogHeader>
+
+              {/* Photos or Documents */}
+              {selectedItem.details.images && selectedItem.details.images.length > 0 && (
+                <div className="aspect-video relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
+                  <img src={selectedItem.details.images[0]} alt="" className="w-full h-full object-cover" />
+                </div>
               )}
-            >
-              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
-            </button>
-          );
-        })}
-      </div>
 
-      {/* Requests List - EXACT card format, padding and hover from Seller Console layout */}
-      <div className="space-y-3.5">
-        <AnimatePresence mode="popLayout">
-          {filteredRequests.length > 0 ? (
-            filteredRequests.map((req, idx) => {
-              const isListing = req.type === 'listing_approval';
-              const isDealer = req.type === 'dealer_verification';
-              const isVerification = req.type === 'auction_verification';
-
-              return (
-                <motion.div
-                  key={req.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.4, delay: idx * 0.02 }}
-                  className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col md:flex-row items-stretch md:items-center gap-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300"
-                >
-                  {/* Category Image / Custom Shard Icon */}
-                  <div className="relative w-full md:w-36 aspect-[4/3] rounded-xl overflow-hidden shrink-0 bg-[#1C1C1E] border border-black/5 dark:border-white/10 group flex items-center justify-center">
-                    {isListing && req.newData.images?.[0] ? (
-                      <img 
-                        src={req.newData.images[0]} 
-                        alt={req.newData.model} 
-                        className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" 
-                        referrerPolicy="no-referrer" 
-                      />
-                    ) : (
-                      <div className={cn(
-                        "w-full h-full flex items-center justify-center transition-colors",
-                        isListing && "bg-apple-blue/5 dark:bg-apple-blue/10 text-apple-blue",
-                        isDealer && "bg-purple-500/5 dark:bg-purple-500/10 text-purple-500",
-                        isVerification && "bg-apple-orange/5 dark:bg-apple-orange/10 text-apple-orange"
-                      )}>
-                        {getTypeIcon(req.type)}
-                      </div>
-                    )}
-                    
-                    <div className="absolute top-2.5 left-2.5">
-                       <span className={cn(
-                        "px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider backdrop-blur-md border",
-                        isListing && "bg-apple-blue/15 text-apple-blue border-apple-blue/20",
-                        isDealer && "bg-purple-500/15 text-purple-500 border-purple-500/20",
-                        isVerification && "bg-apple-orange/15 text-apple-orange border-apple-orange/20"
-                       )}>
-                         {isListing ? 'Listing' : isDealer ? 'Dealer' : 'Verification'}
-                       </span>
-                    </div>
-                  </div>
-
-                  {/* Request / Target Details */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
-                    <div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#86868B] uppercase tracking-wider mb-1">
-                         <Zap className="w-3 h-3 text-apple-blue" />
-                         Request ID #{req.id.slice(-8).toUpperCase()}
-                         <span className="opacity-30">•</span>
-                         <span>Requested by {req.createdBy}</span>
-                         <span className="opacity-30">•</span>
-                         <span>{new Date(req.createdAt).toLocaleDateString()}</span>
-                      </div>
-                      
-                      <h2 className="text-sm font-semibold text-[#1D1D1F] dark:text-white truncate block">
-                        {isListing ? `${req.newData.year} ${req.newData.make} ${req.newData.model}` : 
-                         isDealer ? req.newData.businessName : 
-                         `Chassis Number: ${req.newData.chassisNumber}`}
-                      </h2>
-                      
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[#86868B] font-normal">
-                         {isListing && (
-                           <>
-                             <span className="font-semibold font-mono text-apple-blue">{formatPrice(req.newData.price)}</span>
-                             <span className="opacity-30">/</span>
-                             <span className="truncate max-w-[250px]">{req.newData.description}</span>
-                           </>
-                         )}
-                         {isDealer && (
-                           <>
-                             <span className="font-semibold text-purple-500">License: {req.newData.licenseNumber}</span>
-                             <span className="opacity-30">/</span>
-                             <span>Docs: {req.newData.documents?.join(', ')}</span>
-                           </>
-                         )}
-                         {isVerification && (
-                           <>
-                             <span className="font-semibold text-apple-orange">Lot: {req.newData.lotNumber}</span>
-                             <span className="opacity-30">/</span>
-                             <span>House: {req.newData.auctionHouse}</span>
-                           </>
-                         )}
-                      </div>
-                    </div>
-
-                    {/* Bento Micro-Stats box matrix matching Seller Console layout precisely */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Forensic Trust</p>
-                          <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">
-                            {isListing ? "94%" : isDealer ? "98%" : "96%"}
-                            <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">Verified</span>
-                          </p>
-                       </div>
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Priority Tier</p>
-                          <p className="text-xs font-bold text-apple-blue font-mono mt-0.5">High <span className="text-[9px] text-apple-blue font-semibold font-sans ml-0.5">Queue #1</span></p>
-                       </div>
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Decision Matrix</p>
-                          <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-sans mt-0.5">Pending Review</p>
-                       </div>
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Platform Security</p>
-                          <p className="text-xs font-bold text-apple-green font-mono mt-0.5">SSL Secured</p>
-                       </div>
-                    </div>
-                  </div>
-
-                  {/* Actions Column */}
-                  <div className="flex md:flex-col justify-end items-center gap-2 pt-3 md:pt-0 border-t md:border-t-0 md:border-l border-black/[0.04] dark:border-white/[0.04] md:pl-5 shrink-0">
-                    <div className="flex flex-wrap items-center gap-1.5 justify-end">
-                      <button 
-                        onClick={() => {
-                          setSelectedRequest(req);
-                          setIsDetailsOpen(true);
-                        }}
-                        className="px-4.5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white flex items-center justify-center font-semibold text-xs transition-colors"
-                        title="Review details"
-                      >
-                        Review
-                      </button>
-
-                      <button
-                        onClick={() => handleApprove(req.id)}
-                        className="w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 flex items-center justify-center text-apple-green transition-colors"
-                        title="Approve Instantly"
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                      </button>
-
-                      <button
-                        onClick={() => handleReject(req.id)}
-                        className="w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 flex items-center justify-center text-apple-red transition-colors"
-                        title="Reject Instantly"
-                      >
-                        <XCircle className="w-4 h-4" />
-                      </button>
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger className={cn(
-                          "w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center transition-all hover:bg-apple-gray dark:hover:bg-white/10 text-apple-text-muted"
-                        )}>
-                          <MoreVertical className="w-4 h-4" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-xl border-apple-border/50 backdrop-blur-xl">
-                          <DropdownMenuItem 
-                            onClick={() => handleApprove(req.id)}
-                            className="font-bold text-xs py-3 px-4 rounded-lg focus:bg-apple-green/10 focus:text-apple-green cursor-pointer"
-                          >
-                            <CheckCircle className="w-4 h-4 mr-2 text-apple-green" /> Approve
-                          </DropdownMenuItem>
-                          <DropdownMenuItem 
-                            onClick={() => handleReject(req.id)}
-                            className="font-bold text-xs py-3 px-4 rounded-lg focus:bg-apple-red/10 focus:text-apple-red cursor-pointer"
-                          >
-                            <XCircle className="w-4 h-4 mr-2 text-apple-red" /> Reject
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="font-bold text-xs py-3 px-4 rounded-lg cursor-pointer">
-                            <AlertCircle className="w-4 h-4 mr-2 text-apple-orange" /> Flag for Risk
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })
-          ) : (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="py-16 text-center bg-[#F5F5F7]/30 dark:bg-white/[0.005] rounded-2xl border border-dashed border-black/[0.06] dark:border-white/[0.06]"
-            >
-              <CheckCircle2 className="w-10 h-10 text-apple-green/60 mx-auto mb-3" />
-              <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">Approval Queue Clear</h3>
-              <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
-                All platform authorization requests have been handled. Zero latency pending.
-              </p>
-              <button 
-                onClick={() => {
-                  setActiveTab('all');
-                  setSearchQuery("");
-                }}
-                className="px-3.5 py-1.5 rounded-xl border border-black/10 dark:border-white/10 text-xs font-semibold bg-white dark:bg-[#2C2C2E] hover:bg-black/5"
-              >
-                Reset Protocols
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Global Control Terminal - MATCHES Seller Console Layout Precisely */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-         <div className="md:col-span-2 rounded-2xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 p-5 flex flex-col sm:flex-row items-center gap-4">
-            <div className="w-10 h-10 bg-apple-blue rounded-xl flex items-center justify-center shrink-0">
-               <ShieldCheck className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1 text-center sm:text-left min-w-0">
-               <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white mb-0.5">Automated Risk Analysis Active</h4>
-               <p className="text-[11px] text-[#86868B] font-normal leading-relaxed">
-                 All platform submissions are dynamically verified via cryptographic hash registers, identity telemetry records, and cross-referenced authority logs.
-               </p>
-               <div className="flex items-center justify-center sm:justify-start gap-3 mt-2">
-                  <div className="flex items-center gap-1.5">
-                     <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
-                     <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Scanning Active</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                     <div className="w-1.5 h-1.5 rounded-full bg-apple-blue" />
-                     <span className="text-[9px] font-bold uppercase tracking-wider text-apple-blue">Secure Tunnel</span>
-                  </div>
-               </div>
-            </div>
-         </div>
-
-         <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-center items-center text-center shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
-            <CheckCircle2 className="w-6 h-6 text-apple-green mb-2" />
-            <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">Approval Velocity</h4>
-            <div className="text-2xl font-bold text-[#1D1D1F] dark:text-white font-mono mt-1 mb-0.5">99.8%</div>
-            <p className="text-[9px] font-bold text-apple-green uppercase tracking-widest">SLA Targets Met</p>
-         </div>
-      </div>
-
-      {/* Details Dialog */}
-      <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
-          {selectedRequest && (
-            <div className="flex flex-col h-full overflow-hidden">
-              <div className="p-8 border-b border-apple-border flex items-center justify-between bg-apple-gray/10 dark:bg-white/[0.02]">
-                <div>
-                  <DialogTitle className="text-2xl font-black tracking-tight text-apple-text">
-                    {getTypeLabel(selectedRequest.type)}
-                  </DialogTitle>
-                  <DialogDescription className="text-xs text-apple-text-muted mt-1 uppercase font-black tracking-widest">
-                    Reviewing request {selectedRequest.id}
-                  </DialogDescription>
-                </div>
-                <span className="bg-apple-orange/10 text-apple-orange border border-apple-orange/20 px-3 py-1 rounded-full font-black text-[10px] uppercase tracking-widest">
-                   Pending
-                </span>
-              </div>
-
-              <ScrollArea className="flex-1 min-h-0 p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    {/* Submission Details */}
-                    <div className="space-y-2">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted ml-2">Submission Details</p>
-                      <div className="glass-panel p-5 rounded-2xl space-y-4 shadow-sm">
-                        {Object.entries(selectedRequest.newData).map(([key, value]) => {
-                          if (key === 'images') return null;
-                          return (
-                            <div key={key} className="flex flex-col gap-1.5 border-b border-apple-border/30 last:border-0 pb-3 last:pb-0">
-                              <span className="text-[9px] font-black text-apple-text-muted uppercase tracking-widest">{key.replace(/([A-Z])/g, ' $1')}</span>
-                              <span className="font-bold text-sm tracking-tight text-apple-text">
-                                {key === 'price' ? formatPrice(value as number) : String(value)}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    {/* Forensic Scan */}
-                    <div className="space-y-2">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted ml-2">Forensic Scan</p>
-                      <div className="p-5 rounded-2xl border border-apple-green/20 bg-apple-green/5 dark:bg-apple-green/10 space-y-3.5 shadow-sm">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-apple-text">Trust Delta</span>
-                          <span className="text-base font-black text-apple-green">
-                            {selectedRequest.type === 'listing_approval' ? "94%" : selectedRequest.type === 'dealer_verification' ? "98%" : "96%"}
-                          </span>
-                        </div>
-                        <div className="h-1.5 bg-apple-gray dark:bg-white/10 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-apple-green transition-all duration-500" 
-                            style={{ width: selectedRequest.type === 'listing_approval' ? "94%" : selectedRequest.type === 'dealer_verification' ? "98%" : "96%" }} 
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Media Preview */}
-                    {selectedRequest.type === 'listing_approval' && selectedRequest.newData.images?.[0] && (
-                      <div className="space-y-2">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted ml-2">Media Preview</p>
-                        <div className="aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#1C1C1E] border border-apple-border shadow-sm">
-                          <img 
-                            src={selectedRequest.newData.images[0]} 
-                            alt="Preview" 
-                            className="w-full h-full object-cover" 
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Decision Comments */}
-                    <div className="space-y-2">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted ml-2">Decision Comments</p>
-                      <textarea 
-                        className="apple-input w-full py-4 resize-none leading-relaxed h-28"
-                        placeholder="Observations, decision notes..."
-                      />
-                    </div>
+              {/* Fraud Warning If Applicable */}
+              {selectedItem.fraudWarning && (
+                <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-700 dark:text-rose-300 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold block">AI Quality & Duplication Flag:</span>
+                    <span>{selectedItem.fraudWarning}</span>
                   </div>
                 </div>
-              </ScrollArea>
+              )}
 
-              <div className="p-8 border-t border-apple-border bg-apple-gray/30 dark:bg-white/[0.02] flex flex-col md:flex-row gap-4">
-                <Button 
-                  variant="ghost" 
-                  className="flex-1 h-14 rounded-2xl border-2 border-apple-border font-black uppercase tracking-widest text-xs text-apple-red hover:bg-apple-red/10 active:scale-95 transition-all w-full md:w-auto"
-                  onClick={() => handleReject(selectedRequest.id)}
-                >
-                  Reject
-                </Button>
-                <Button 
-                  className="flex-[2] apple-button-primary h-14 flex items-center justify-center gap-3 font-black uppercase tracking-widest text-xs text-white"
-                  onClick={() => handleApprove(selectedRequest.id)}
-                >
-                  Approve & Sync
-                </Button>
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">City</span>
+                  <span className="font-bold text-slate-900 dark:text-white mt-0.5 block">{selectedItem.city}</span>
+                </div>
+                {selectedItem.details.price && (
+                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Listing Price</span>
+                    <span className="font-black text-[#5B2A86] dark:text-[#C9A227] mt-0.5 block font-mono">{formatPrice(selectedItem.details.price)}</span>
+                  </div>
+                )}
+                {selectedItem.details.licenseNumber && (
+                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Regulatory License</span>
+                    <span className="font-bold text-slate-900 dark:text-white mt-0.5 block font-mono">{selectedItem.details.licenseNumber} ({selectedItem.details.authority})</span>
+                  </div>
+                )}
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Listing Quality Score</span>
+                  <span className="font-bold text-emerald-600 mt-0.5 block">{selectedItem.qualityScore}% (High Quality)</span>
+                </div>
               </div>
+
+              <DialogFooter className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4">
+                <Button variant="outline" size="sm" onClick={() => setIsInspectModalOpen(false)} className="rounded-xl text-xs font-bold">
+                  Cancel
+                </Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setIsRejectModalOpen(true)}
+                    className="rounded-xl text-xs font-bold text-rose-600 border-rose-200"
+                  >
+                    Reject with Reason
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={() => handleApprove(selectedItem)}
+                    className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold"
+                  >
+                    Authorize & Approve
+                  </Button>
+                </div>
+              </DialogFooter>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Reject Modal with Required Reason */}
+      <Dialog open={isRejectModalOpen} onOpenChange={setIsRejectModalOpen}>
+        <DialogContent className="max-w-md rounded-3xl bg-white dark:bg-[#1E1E20] border-slate-200 dark:border-white/15 p-6">
+          <DialogHeader>
+            <DialogTitle className="text-base font-extrabold text-rose-600 flex items-center gap-2">
+              <XCircle className="w-5 h-5" />
+              <span>Reject Submission</span>
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500 mt-1">
+              Please enter an explicit rejection reason for {selectedItem?.title}. This will be logged to audit records and emailed to the submitter.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-4">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1.5">
+              Rejection Reason *
+            </label>
+            <textarea 
+              value={rejectionReason}
+              onChange={(e) => setRejectionReason(e.target.value)}
+              placeholder="e.g. Incomplete LDA allotment deed, low-resolution watermark images, unrealistic valuation below sector baseline..."
+              rows={3}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-800 dark:text-white outline-none focus:border-rose-500"
+            />
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" size="sm" onClick={() => setIsRejectModalOpen(false)} className="rounded-xl text-xs font-bold">
+              Cancel
+            </Button>
+            <Button size="sm" onClick={handleRejectConfirm} className="rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold">
+              Confirm Rejection
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

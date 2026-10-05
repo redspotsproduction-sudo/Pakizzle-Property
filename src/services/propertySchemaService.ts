@@ -63,7 +63,7 @@ export interface MarketInsightsResponse {
 }
 
 // Fallbacks strictly matching the real DB schema in case of network interruption
-const CANONICAL_PROPERTY_TYPES: PropertyTypeItem[] = [
+export const CANONICAL_PROPERTY_TYPES: PropertyTypeItem[] = [
   { id: 1, name: "House", slug: "house", category: "residential", icon: "Home", sortOrder: 1, isActive: true },
   { id: 2, name: "Flat / Apartment", slug: "flat-apartment", category: "residential", icon: "Building2", sortOrder: 2, isActive: true },
   { id: 3, name: "Plot", slug: "plot", category: "plot", icon: "LandPlot", sortOrder: 3, isActive: true },
@@ -73,7 +73,7 @@ const CANONICAL_PROPERTY_TYPES: PropertyTypeItem[] = [
   { id: 7, name: "Penthouse", slug: "penthouse", category: "residential", icon: "Sparkles", sortOrder: 7, isActive: true },
 ];
 
-const CANONICAL_CITIES: CityItem[] = [
+export const CANONICAL_CITIES: CityItem[] = [
   { id: 1, name: "Karachi", slug: "karachi", province: "Sindh", isPopular: true, sortOrder: 1, isActive: true },
   { id: 2, name: "Lahore", slug: "lahore", province: "Punjab", isPopular: true, sortOrder: 2, isActive: true },
   { id: 3, name: "Islamabad", slug: "islamabad", province: "Islamabad Capital Territory", isPopular: true, sortOrder: 3, isActive: true },
@@ -86,6 +86,9 @@ const CANONICAL_CITIES: CityItem[] = [
   { id: 10, name: "Gujranwala", slug: "gujranwala", province: "Punjab", isPopular: false, sortOrder: 10, isActive: true },
   { id: 11, name: "Hyderabad", slug: "hyderabad", province: "Sindh", isPopular: false, sortOrder: 11, isActive: true },
   { id: 12, name: "Gwadar", slug: "gwadar", province: "Balochistan", isPopular: false, sortOrder: 12, isActive: true },
+  { id: 13, name: "Abbottabad", slug: "abbottabad", province: "Khyber Pakhtunkhwa", isPopular: false, sortOrder: 13, isActive: true },
+  { id: 14, name: "Bahawalpur", slug: "bahawalpur", province: "Punjab", isPopular: false, sortOrder: 14, isActive: true },
+  { id: 15, name: "Sargodha", slug: "sargodha", province: "Punjab", isPopular: false, sortOrder: 15, isActive: true },
 ];
 
 const CANONICAL_AREAS: Record<string, AreaItem[]> = {

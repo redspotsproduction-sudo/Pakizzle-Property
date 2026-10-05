@@ -272,6 +272,7 @@ export default function TopFilterBar({
               }
               width={340}
               maxHeight={460}
+              contentClassName="p-4 flex flex-col min-h-0 overflow-hidden"
             >
               {/* Search input for cities */}
               <div className="relative mb-3">
@@ -313,14 +314,16 @@ export default function TopFilterBar({
                 </div>
               </div>
 
-              {/* Contained Scrolling City List */}
-              <div className="max-h-52 overflow-y-auto space-y-1 custom-scrollbar pr-1 border-t border-slate-100 dark:border-white/5 pt-2">
+              {/* Contained Scrolling City List with Visible Scrollbar & Scroll Affordance */}
+              <div 
+                className="max-h-72 overflow-y-auto space-y-1 pr-2 border-t border-slate-200/80 dark:border-white/10 pt-2 custom-scrollbar"
+              >
                 <button
                   type="button"
                   onClick={() => { onChange({ city: "" }); setActiveDropdown(null); }}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between cursor-pointer",
-                    !filters.city ? "bg-brand-primary/10 text-brand-primary font-bold dark:bg-brand-primary/20" : "hover:bg-slate-100 dark:hover:bg-white/5"
+                    "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                    !filters.city ? "bg-brand-primary/10 text-brand-primary font-bold dark:bg-brand-primary/20" : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
                   )}
                 >
                   <span>All over Pakistan</span>
@@ -343,11 +346,21 @@ export default function TopFilterBar({
                           : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
                       )}
                     >
-                      <span>{c.name}</span>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3 h-3 text-slate-400 dark:text-[#8E8E93]" />
+                        <span>{c.name}</span>
+                      </div>
                       <span className="text-[10px] text-slate-400 dark:text-[#8E8E93] font-normal">{c.province}</span>
                     </button>
                   );
                 })}
+
+                {/* Clear Affordance Footer: Confirms full list is accessible */}
+                <div className="pt-2.5 pb-1 text-center border-t border-slate-100 dark:border-white/5 mt-2">
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] block">
+                    ✓ All 15 metropolitan hubs available · End of list
+                  </span>
+                </div>
               </div>
             </FilterPopover>
           </div>

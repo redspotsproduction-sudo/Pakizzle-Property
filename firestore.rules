@@ -283,6 +283,28 @@ service cloud.firestore {
       allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
     }
 
+    match /property_videos/{videoId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        isAdmin() ||
+        (existing().creatorId == request.auth.uid && incoming().creatorId == request.auth.uid) ||
+        (incoming().diff(existing()).affectedKeys().hasAny(['viewsCount', 'likesCount', 'sharesCount', 'savesCount', 'listingClicksCount', 'watchTimeTotalSeconds']))
+      );
+      allow delete: if isSignedIn() && (existing().creatorId == request.auth.uid || isAdmin());
+    }
+
+    match /video_reports/{reportId} {
+      allow read: if isAdmin();
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    match /video_platform_settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /admins/{adminId} {
       allow read: if isSignedIn();
       allow write: if false;

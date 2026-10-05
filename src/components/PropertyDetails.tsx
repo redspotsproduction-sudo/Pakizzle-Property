@@ -405,8 +405,8 @@ export default function PropertyDetails() {
       <main className="pt-20 sm:pt-22 lg:pt-28 pb-24 md:pb-8">
         <div className="flex flex-col lg:flex-row min-h-[calc(100-80px)]">
           
-          {/* Left Column: Carousel Gallery */}
-          <div className="w-full lg:w-[60%] xl:w-[65%] bg-apple-gray relative group/gallery">
+          {/* Left Column: Carousel Gallery (Golden Ratio: 61.8% of viewport container) */}
+          <div className="w-full lg:w-[61.8%] bg-apple-gray relative group/gallery">
             <div className="lg:sticky lg:top-28 h-[44vh] sm:h-[55vh] md:h-[65vh] lg:h-[calc(100vh-140px)] w-full overflow-hidden">
               <motion.button
                 whileHover={{ scale: 1.05, x: -2 }}
@@ -509,8 +509,8 @@ export default function PropertyDetails() {
             </div>
           </div>
 
-          {/* Right Column: Sticky Configuration Glass Panel */}
-          <div className="w-full lg:w-[40%] xl:w-[35%] relative">
+          {/* Right Column: Sticky Configuration Glass Panel (Golden Ratio: 38.2% of viewport container) */}
+          <div className="w-full lg:w-[38.2%] relative">
             <div className="lg:sticky lg:top-28 lg:h-[calc(100vh-140px)] overflow-y-auto scrollbar-hide px-6 md:px-8 py-5 md:py-7 flex flex-col liquid-glass-foreground rounded-[32px] m-3 lg:m-4 shadow-2xl">
               
               {/* Header Info */}

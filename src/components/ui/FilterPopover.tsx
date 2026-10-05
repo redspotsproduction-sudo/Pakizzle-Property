@@ -148,8 +148,8 @@ export default function FilterPopover({
   return createPortal(
     <AnimatePresence>
       {isOpen && coords && (
-        <div className="fixed inset-0 pointer-events-none z-[110]" role="dialog" aria-modal="true">
-          {/* Backdrop Scrim: Dims page slightly and establishes clear visual elevation */}
+        <div className="fixed inset-0 pointer-events-none z-[9990]" role="dialog" aria-modal="true">
+          {/* Backdrop Scrim: Dims page completely and establishes unambiguous visual elevation */}
           {showBackdrop && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -157,12 +157,12 @@ export default function FilterPopover({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
               onClick={onClose}
-              className="fixed inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-auto cursor-pointer"
+              className="fixed inset-0 bg-black/65 backdrop-blur-[4px] pointer-events-auto cursor-pointer z-[9990]"
               aria-hidden="true"
             />
           )}
 
-          {/* Elevated Popover Panel Container */}
+          {/* Elevated Popover Panel Container: Solid Opaque Background, High Elevation */}
           <motion.div
             ref={popoverRef}
             initial={{ 
@@ -187,13 +187,14 @@ export default function FilterPopover({
               left: `${coords.left}px`,
               width: `${coords.width}px`,
               maxHeight: `${coords.maxHeight}px`,
+              backgroundColor: undefined, // Handled via opaque classes
             }}
             className={cn(
-              // True Neutral Apple Elevation & Containment
-              "pointer-events-auto flex flex-col rounded-3xl overflow-hidden",
-              "bg-white dark:bg-[#1E1E20]",
-              "border border-slate-200/90 dark:border-white/10",
-              "shadow-[0_25px_60px_-15px_rgba(0,0,0,0.25)] dark:shadow-[0_30px_70px_rgba(0,0,0,0.75)]",
+              // True Neutral Apple Elevation & Containment: 100% Solid Fill
+              "pointer-events-auto flex flex-col rounded-3xl overflow-hidden z-[9995]",
+              "bg-white dark:bg-[#1E1E20] opacity-100",
+              "border border-slate-300 dark:border-white/15",
+              "shadow-[0_25px_70px_rgba(0,0,0,0.3)] dark:shadow-[0_35px_90px_rgba(0,0,0,0.9)]",
               "text-slate-900 dark:text-[#F5F5F7]",
               className
             )}
@@ -201,9 +202,9 @@ export default function FilterPopover({
           >
             {/* Optional Clean Header */}
             {(title || headerAction) && (
-              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/10 shrink-0 bg-slate-50/50 dark:bg-white/[0.02]">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200/80 dark:border-white/10 shrink-0 bg-slate-50 dark:bg-[#1A1A1C]">
                 {title ? (
-                  <span className="text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-[#8E8E93]">
+                  <span className="text-[11px] font-black uppercase tracking-widest text-slate-600 dark:text-[#8E8E93]">
                     {title}
                   </span>
                 ) : (
@@ -214,7 +215,7 @@ export default function FilterPopover({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="p-1 rounded-xl text-slate-400 hover:text-slate-600 dark:text-[#8E8E93] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                    className="p-1 rounded-xl text-slate-400 hover:text-slate-700 dark:text-[#8E8E93] dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors cursor-pointer"
                     title="Close"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -226,8 +227,8 @@ export default function FilterPopover({
             {/* Scrollable Contained Content - NEVER expands into page flow */}
             <div 
               className={cn(
-                "flex-1 overflow-y-auto p-4 custom-scrollbar min-h-0",
-                contentClassName
+                "flex-1 p-4 min-h-0",
+                contentClassName ? contentClassName : "overflow-y-auto"
               )}
             >
               {children}

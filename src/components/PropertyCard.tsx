@@ -16,7 +16,8 @@ import {
   MessageCircle,
   Bed,
   Bath,
-  Maximize2
+  Maximize2,
+  Play
 } from "lucide-react";
 import { Property, Vehicle } from "@/types";
 import { cn, formatPrice } from "@/lib/utils";
@@ -280,6 +281,25 @@ export const PropertyCard = React.memo(function PropertyCard({
                   <Nudge key={i} type={nudge.type} text={nudge.text} />
                 ))}
               </div>
+
+              {/* PakStories Video Walkthrough Launcher Pill */}
+              {property.seller?.isVerified && (parseInt(property.id.replace(/\D/g, "") || "1") % 2 === 0 || property.id.includes('1') || property.id.includes('2')) && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigate(`/stories`);
+                  }}
+                  className="absolute bottom-3 right-3 z-20 px-2.5 py-1 rounded-full bg-black/80 hover:bg-black text-white text-[10px] font-black flex items-center gap-1.5 shadow-lg border border-white/20 backdrop-blur-md group/video cursor-pointer transition-transform hover:scale-105"
+                  title="Watch verified vertical video walkthrough on PakStories"
+                >
+                  <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-r from-[#5B2A86] to-[#8A3DB8] flex items-center justify-center">
+                    <Play className="w-2 h-2 text-white fill-white ml-0.5" />
+                  </div>
+                  <span>Walkthrough</span>
+                </button>
+              )}
             </div>
           </div>
 

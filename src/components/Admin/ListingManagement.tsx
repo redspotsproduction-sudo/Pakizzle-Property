@@ -1,42 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
-  Car, 
+  Building2, 
+  Home, 
   Search, 
   Filter, 
   MoreVertical, 
-  Eye, 
-  Edit3, 
+  CheckCircle2, 
+  AlertTriangle, 
+  ArrowUpRight, 
+  Download, 
+  Activity, 
   Trash2, 
   ExternalLink, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
-  TrendingUp, 
+  ShieldCheck, 
+  MapPin, 
+  Calendar, 
+  Eye, 
+  Sparkles, 
+  SlidersHorizontal, 
   DollarSign, 
-  MapPin,
-  ChevronRight,
-  Download,
-  Plus,
-  ArrowUpRight,
-  ShieldCheck,
-  ShieldAlert,
-  Info,
-  Zap,
-  Gauge,
-  Activity,
-  Settings,
-  Shield
+  Layers, 
+  Tag, 
+  Bed, 
+  Bath, 
+  Maximize2, 
+  ShieldAlert, 
+  Flame, 
+  Check, 
+  X,
+  FileCheck,
+  Building,
+  LandPlot,
+  Store,
+  Trees,
+  BedDouble,
+  UserCheck
 } from "lucide-react";
 import { toast } from "sonner";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogDescription,
-  DialogFooter
-} from "@/components/ui/dialog";
 import { 
   Table, 
   TableBody, 
@@ -52,599 +53,805 @@ import {
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
-  DropdownMenuTrigger,
-  DropdownMenuSeparator
+  DropdownMenuTrigger, 
+  DropdownMenuSeparator,
+  DropdownMenuLabel 
 } from "@/components/ui/dropdown-menu";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription,
+  DialogFooter 
+} from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn, formatPrice } from "../../lib/utils";
-import { Vehicle } from "../../types";
+import { db } from "../../firebase";
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
-// Mock data based on Vehicle type
-const mockListings: Vehicle[] = [
+export interface PropertyListing {
+  id: string;
+  referenceId: string; // e.g. PK-849102
+  title: string;
+  purpose: "buy" | "rent" | "plots";
+  propertyType: string;
+  price: number;
+  city: string;
+  area: string;
+  address: string;
+  bedrooms: number;
+  bathrooms: number;
+  areaSize: number;
+  areaUnit: "Marla" | "Kanal" | "Sq. Yd." | "Sq. Ft.";
+  status: "active" | "pending" | "sold" | "expired" | "rejected";
+  titleStatus: "registry_verified" | "lda_approved" | "pending" | "rejected";
+  qualityScore: number; // 0 - 100
+  isFraudFlagged: boolean;
+  fraudReason?: string;
+  isFeatured: boolean;
+  isBoosted: boolean;
+  views: number;
+  favorites: number;
+  inquiries: number;
+  agencyName?: string;
+  sellerName: string;
+  sellerBadge: "none" | "basic" | "identity" | "agency_certified";
+  images: string[];
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const mockPropertyListings: PropertyListing[] = [
   {
-    id: 'veh_101',
-    make: 'Audi',
-    model: 'e-tron GT',
-    year: 2024,
-    price: 34500000,
-    mileage: 1200,
-    fuelType: 'electric',
-    transmission: 'automatic',
-    city: 'Lahore',
-    location: 'Gulberg III, Lahore',
-    type: 'car',
-    condition: 'used',
-    engineSize: '350kW',
-    seller: {
-      name: 'Ali Khan',
-      isVerified: true,
-      rating: 4.8,
-      badgeType: 'identity'
-    },
-    description: 'Pristine condition Audi e-tron GT. Fully loaded with premium options.',
-    images: ['https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&q=80&w=800'],
-    status: 'active',
-    isAuctionVerified: true,
+    id: "prop_101",
+    referenceId: "PK-109482",
+    title: "The Glass Pavilion Villa · 1 Kanal Luxury Estate",
+    purpose: "buy",
+    propertyType: "House",
+    price: 145000000,
+    city: "Lahore",
+    area: "DHA Phase 6",
+    address: "Block K, Phase 6 DHA, Lahore",
+    bedrooms: 5,
+    bathrooms: 6,
+    areaSize: 1,
+    areaUnit: "Kanal",
+    status: "active",
+    titleStatus: "registry_verified",
+    qualityScore: 98,
+    isFraudFlagged: false,
     isFeatured: true,
-    views: 1240,
-    favorites: 45,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
-    updatedAt: new Date().toISOString(),
-    features: ['Panoramic Roof', 'Matrix LED', 'Bang & Olufsen Sound']
+    isBoosted: true,
+    views: 3410,
+    favorites: 142,
+    inquiries: 38,
+    agencyName: "Al-Miraj Real Estate & Builders",
+    sellerName: "Chaudhry Farhan",
+    sellerBadge: "agency_certified",
+    images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"],
+    description: "Architectural masterpiece with Italian marble floors, bespoke imported kitchen, swimming pool, and pristine LDA title warranty.",
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
-    id: 'veh_102',
-    make: 'Toyota',
-    model: 'Land Cruiser ZX',
-    year: 2023,
-    price: 89000000,
-    mileage: 5000,
-    fuelType: 'diesel',
-    transmission: 'automatic',
-    city: 'Islamabad',
-    location: 'F-7, Islamabad',
-    type: 'car',
-    condition: 'used',
-    engineSize: '3300cc',
-    seller: {
-      name: 'Capital Motors',
-      isVerified: true,
-      rating: 4.9,
-      badgeType: 'business'
-    },
-    description: 'Black edition LC300. Immaculate condition.',
-    images: ['https://images.unsplash.com/photo-1594568284297-7c64464062b1?auto=format&fit=crop&q=80&w=800'],
-    status: 'pending',
+    id: "prop_102",
+    referenceId: "PK-109483",
+    title: "Margalla Ridgeline Panoramic Residence",
+    purpose: "buy",
+    propertyType: "House",
+    price: 280000000,
+    city: "Islamabad",
+    area: "Sector F-7/3",
+    address: "Street 14, Sector F-7/3, Islamabad",
+    bedrooms: 6,
+    bathrooms: 7,
+    areaSize: 2,
+    areaUnit: "Kanal",
+    status: "active",
+    titleStatus: "lda_approved",
+    qualityScore: 96,
+    isFraudFlagged: false,
+    isFeatured: true,
+    isBoosted: false,
+    views: 2890,
+    favorites: 110,
+    inquiries: 24,
+    agencyName: "Capital Prime Associates",
+    sellerName: "Malik Usman",
+    sellerBadge: "agency_certified",
+    images: ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=800"],
+    description: "Diplomatic enclave adjacent luxury estate with Margalla hill facing terraces, smart home automation, and heated pool.",
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "prop_103",
+    referenceId: "PK-109484",
+    title: "Panoramic Oceanfront Sky Penthouse",
+    purpose: "buy",
+    propertyType: "Flat / Apartment",
+    price: 182000000,
+    city: "Karachi",
+    area: "Clifton Block 4",
+    address: "Emaar Crescent Bay, Karachi",
+    bedrooms: 4,
+    bathrooms: 5,
+    areaSize: 5400,
+    areaUnit: "Sq. Ft.",
+    status: "active",
+    titleStatus: "registry_verified",
+    qualityScore: 94,
+    isFraudFlagged: false,
+    isFeatured: true,
+    isBoosted: true,
+    views: 4120,
+    favorites: 195,
+    inquiries: 46,
+    agencyName: "Clifton Waterfront Estates",
+    sellerName: "Tariq Mansoor",
+    sellerBadge: "agency_certified",
+    images: ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800"],
+    description: "Direct sea-facing duplex penthouse with double-height glass facade, wraparound viewing balcony, and 3 dedicated parking bays.",
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "prop_104",
+    referenceId: "PK-109485",
+    title: "Prime Commercial Corner Plot · Sector J",
+    purpose: "plots",
+    propertyType: "Plot",
+    price: 87500000,
+    city: "Lahore",
+    area: "DHA Phase 9 Prism",
+    address: "Commercial Broadway, DHA Phase 9 Prism",
+    bedrooms: 0,
+    bathrooms: 0,
+    areaSize: 10,
+    areaUnit: "Marla",
+    status: "pending",
+    titleStatus: "pending",
+    qualityScore: 82,
+    isFraudFlagged: false,
     isFeatured: false,
-    views: 89,
-    favorites: 12,
+    isBoosted: false,
+    views: 640,
+    favorites: 28,
+    inquiries: 9,
+    agencyName: "DHA Prism Consultants",
+    sellerName: "Raja Noman",
+    sellerBadge: "identity",
+    images: ["https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800"],
+    description: "Direct owner corner plot with 100ft road access. Ideal for 5-storey mixed commercial building development.",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-    updatedAt: new Date().toISOString(),
-    features: ['Sunroof', 'Leather Seats', 'Cool Box']
+    updatedAt: new Date().toISOString()
   },
   {
-    id: 'veh_103',
-    make: 'Honda',
-    model: 'Civic RS',
-    year: 2022,
-    price: 8200000,
-    mileage: 15000,
-    fuelType: 'petrol',
-    transmission: 'automatic',
-    city: 'Karachi',
-    location: 'DHA Phase 6, Karachi',
-    type: 'car',
-    condition: 'used',
-    engineSize: '1500cc',
-    seller: {
-      name: 'Owner Name',
-      isVerified: false,
-      rating: 4.5
-    },
-    description: 'Single owner, maintained by Honda dealership.',
-    images: ['https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=800'],
-    status: 'sold',
+    id: "prop_105",
+    referenceId: "PK-109486",
+    title: "Duplicate Suspicious 5 Marla Listing",
+    purpose: "buy",
+    propertyType: "House",
+    price: 6500000,
+    city: "Lahore",
+    area: "Johar Town",
+    address: "Block G, Johar Town, Lahore",
+    bedrooms: 3,
+    bathrooms: 3,
+    areaSize: 5,
+    areaUnit: "Marla",
+    status: "pending",
+    titleStatus: "pending",
+    qualityScore: 42,
+    isFraudFlagged: true,
+    fraudReason: "Duplicate photos detected matching active listing PK-104921 with 40% under-market price anomaly.",
     isFeatured: false,
-    views: 4500,
-    favorites: 120,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).toISOString(),
-    updatedAt: new Date().toISOString(),
-    features: ['Honda Sensing', 'Apple CarPlay']
+    isBoosted: false,
+    views: 120,
+    favorites: 2,
+    inquiries: 1,
+    sellerName: "Anonymous Poster",
+    sellerBadge: "none",
+    images: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800"],
+    description: "Urgent distress sale. Contact on private number immediately.",
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    updatedAt: new Date().toISOString()
   }
 ];
 
 export default function ListingManagement() {
-  const [listings, setListings] = useState<Vehicle[]>(mockListings);
+  const [listings, setListings] = useState<PropertyListing[]>(mockPropertyListings);
+  const [selectedListing, setSelectedListing] = useState<PropertyListing | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedListing, setSelectedListing] = useState<Vehicle | null>(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [cityFilter, setCityFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [fraudFilterOnly, setFraudFilterOnly] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
 
-  React.useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [statusFilter]);
+  // Real-time Firestore sync
+  useEffect(() => {
+    try {
+      const q = query(collection(db, "properties"), orderBy("createdAt", "desc"));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const list: PropertyListing[] = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              referenceId: data.referenceId || `PK-${doc.id.substring(0, 6).toUpperCase()}`,
+              title: data.title || "Untitled Property",
+              purpose: data.purpose || "buy",
+              propertyType: data.propertyType || data.make || "House",
+              price: data.price || 0,
+              city: data.city || "Lahore",
+              area: data.area || data.location || "Central",
+              address: data.address || `${data.area || ''}, ${data.city || ''}`,
+              bedrooms: data.bedrooms || data.specs?.beds || 0,
+              bathrooms: data.bathrooms || data.specs?.baths || 0,
+              areaSize: data.areaSize || 1,
+              areaUnit: data.areaUnit || "Kanal",
+              status: data.status || "active",
+              titleStatus: data.titleStatus || "pending",
+              qualityScore: data.qualityScore || 85,
+              isFraudFlagged: data.isFraudFlagged || false,
+              fraudReason: data.fraudReason,
+              isFeatured: data.isFeatured || false,
+              isBoosted: data.isBoosted || false,
+              views: data.views || 0,
+              favorites: data.favorites || 0,
+              inquiries: data.inquiries || 0,
+              agencyName: data.agencyName || data.dealerName,
+              sellerName: data.seller?.name || data.sellerName || "Private Seller",
+              sellerBadge: data.seller?.badgeType || "identity",
+              images: data.images && data.images.length > 0 ? data.images : ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"],
+              description: data.description || "",
+              createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+              updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : new Date().toISOString()
+            };
+          });
+          setListings(list);
+        }
+      });
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn("Using fallback real estate listings data", e);
+    }
+  }, []);
 
-  const filteredListings = listings.filter(l => {
-    const matchesSearch = `${l.make} ${l.model} ${l.id}`.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || l.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredListings = useMemo(() => {
+    return listings.filter(item => {
+      const q = searchQuery.toLowerCase();
+      const matchSearch = item.title.toLowerCase().includes(q) || 
+                          item.referenceId.toLowerCase().includes(q) || 
+                          item.city.toLowerCase().includes(q) ||
+                          item.area.toLowerCase().includes(q) ||
+                          item.sellerName.toLowerCase().includes(q);
 
-  const handleQuickView = (listing: Vehicle) => {
-    setSelectedListing(listing);
-    setIsDetailsOpen(true);
-  };
+      const matchStatus = statusFilter === "all" || item.status === statusFilter;
+      const matchCity = cityFilter === "all" || item.city.toLowerCase() === cityFilter.toLowerCase();
+      const matchType = typeFilter === "all" || item.propertyType.toLowerCase() === typeFilter.toLowerCase();
+      const matchFraud = !fraudFilterOnly || item.isFraudFlagged;
 
-  const handleModify = (listing: Vehicle) => {
-    toast.info(`Redirecting to edit mode for ${listing.make} ${listing.model}`, {
-      description: "Admin edit permission granted.",
-      icon: <Edit3 className="w-4 h-4" />
+      return matchSearch && matchStatus && matchCity && matchType && matchFraud;
     });
+  }, [listings, searchQuery, statusFilter, cityFilter, typeFilter, fraudFilterOnly]);
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(filteredListings.map(l => l.id));
+    } else {
+      setSelectedIds([]);
+    }
   };
 
-  const handleViewOnSite = (listing: Vehicle) => {
-    toast.success(`Opening public view for ${listing.id}`, {
-      description: "Redirecting to marketplace frontend.",
-      icon: <ExternalLink className="w-4 h-4" />
-    });
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
-  const promptDelete = (listing: Vehicle) => {
-    setSelectedListing(listing);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (!selectedListing) return;
-    setListings(prev => prev.filter(l => l.id !== selectedListing.id));
-    toast.error("Inventory Removed", {
-      description: `${selectedListing.make} ${selectedListing.model} has been purged from inventory.`,
-      icon: <Trash2 className="w-4 h-4" />
-    });
-    setIsDeleteDialogOpen(false);
-    setSelectedListing(null);
+  // Bulk Status Updates
+  const handleBulkAction = (action: "approve" | "reject" | "boost" | "expire" | "delete") => {
+    if (selectedIds.length === 0) return;
+    if (action === "delete") {
+      setListings(prev => prev.filter(l => !selectedIds.includes(l.id)));
+      toast.success(`Deleted ${selectedIds.length} listings`);
+    } else if (action === "approve") {
+      setListings(prev => prev.map(l => selectedIds.includes(l.id) ? { ...l, status: "active" } : l));
+      toast.success(`Approved ${selectedIds.length} listings`);
+    } else if (action === "boost") {
+      setListings(prev => prev.map(l => selectedIds.includes(l.id) ? { ...l, isBoosted: true, isFeatured: true } : l));
+      toast.success(`Elevated & Boosted ${selectedIds.length} listings`);
+    } else if (action === "expire") {
+      setListings(prev => prev.map(l => selectedIds.includes(l.id) ? { ...l, status: "expired" } : l));
+      toast.info(`Marked ${selectedIds.length} listings as expired`);
+    }
+    setSelectedIds([]);
   };
 
   return (
     <div className="space-y-6">
-      {/* Header with Search and Actions - EXACT match with Approval Center layout and sizing */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-7 border-b border-black/[0.06] dark:border-white/[0.06]">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-apple-blue uppercase tracking-[0.18em]">
-            <Car className="w-3.5 h-3.5 animate-pulse" />
-            Verified Listings Console
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#F0A830] text-xs font-bold uppercase tracking-wider mb-2 border border-[#5B2A86]/20">
+            <Building2 className="w-3.5 h-3.5" />
+            <span>Master Inventory Registry</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
-            Listings Inventory
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-apple-text dark:text-white">
+            Listings Management
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
-            Monitor, edit, elevate, and moderate all active vehicle listings across the platform.
+          <p className="text-xs sm:text-sm text-apple-text-muted mt-1 max-w-2xl">
+            Supervise real estate listings, inspect title verification credentials, manage pricing benchmarks, and monitor AI duplicate/fraud signals.
           </p>
         </div>
-        
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
-          <Button 
-            variant="outline" 
-            className="rounded-xl border-black/[0.08] dark:border-white/[0.08] bg-white/50 dark:bg-white/5 backdrop-blur-sm text-xs font-semibold h-10 px-4"
-            onClick={() => toast.success("Export Initialized", { description: "Generating encrypted CSV of marketplace inventory." })}
-          >
-            <Download className="w-3.5 h-3.5 mr-2 text-apple-blue" /> Export
-          </Button>
-          <Button 
-            className="apple-button-primary rounded-xl text-xs font-semibold h-10 px-5 text-white"
-            onClick={() => toast.info("New Inventory Entry", { description: "Opening listing creation wizard..." })}
-          >
-            <Plus className="w-3.5 h-3.5 mr-2" /> Add Listing
-          </Button>
-        </div>
+
+        {/* Bulk Action Bar */}
+        {selectedIds.length > 0 && (
+          <div className="flex items-center gap-2 p-1.5 bg-slate-900 text-white rounded-2xl shadow-xl px-3 border border-white/10 animate-fade-in">
+            <span className="text-xs font-bold mr-2 text-amber-400">{selectedIds.length} selected</span>
+            <Button size="sm" onClick={() => handleBulkAction("approve")} className="h-7 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">
+              Approve
+            </Button>
+            <Button size="sm" onClick={() => handleBulkAction("boost")} className="h-7 text-xs font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-xl">
+              Boost
+            </Button>
+            <Button size="sm" onClick={() => handleBulkAction("expire")} className="h-7 text-xs font-bold bg-slate-700 hover:bg-slate-600 text-white rounded-xl">
+              Expire
+            </Button>
+            <Button size="sm" onClick={() => handleBulkAction("delete")} className="h-7 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl">
+              Delete
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* High-Velocity Metrics Shard - Sized perfectly like Approval Center bento elements */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-apple-text">
-        {[
-          { label: 'Total Inventory', value: '4,289', change: '+12%', description: 'Active vehicle listings', icon: Car, color: 'blue' },
-          { label: 'Market Value', value: '₨ 1.2B', change: '+8%', description: 'Aggregate marketplace value', icon: DollarSign, color: 'green' },
-          { label: 'Total Views', value: '1.2M', change: '+24%', description: 'Cumulative page interactions', icon: TrendingUp, color: 'purple' },
-          { label: 'Pending Audit', value: '54', change: '-5', description: 'Queued validation checks', icon: Clock, color: 'orange' },
-        ].map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 relative group"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md",
-                stat.color === 'blue' && "bg-apple-blue shadow-apple-blue/10",
-                stat.color === 'orange' && "bg-apple-orange shadow-apple-orange/10",
-                stat.color === 'green' && "bg-apple-green shadow-apple-green/10",
-                stat.color === 'purple' && "bg-[#AF52DE] shadow-purple-500/10"
-              )}>
-                <stat.icon className="w-5 h-5" />
+      {/* KPI Stats Row */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Total Properties</span>
+              <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                <Building2 className="w-4 h-4" />
               </div>
-              <span className={cn(
-                "text-[10px] font-bold px-2 py-0.5 rounded-full",
-                stat.change.startsWith('+') ? "text-apple-green bg-apple-green/10" : "text-apple-red bg-apple-red/10"
-              )}>
-                {stat.change}
-              </span>
             </div>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+              {listings.length}
+            </div>
+            <span className="text-[11px] font-semibold text-slate-400 mt-1 block">
+              Active & Pending Submissions
+            </span>
+          </CardContent>
+        </Card>
 
-            <div className="space-y-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">
-                {stat.label}
-              </p>
-              <h3 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white font-sans">{stat.value}</h3>
-              <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">{stat.description}</p>
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Title Guaranteed</span>
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
             </div>
-          </motion.div>
-        ))}
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+              {listings.filter(l => l.titleStatus === "registry_verified" || l.titleStatus === "lda_approved").length}
+            </div>
+            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
+              LDA / CDA Registry Validated
+            </span>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Fraud / Duplicate Flags</span>
+              <div className="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                <ShieldAlert className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-rose-600 dark:text-rose-400">
+              {listings.filter(l => l.isFraudFlagged).length}
+            </div>
+            <span className="text-[11px] font-semibold text-rose-500 mt-1 block">
+              Requires Admin Intervention
+            </span>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Active Boosts</span>
+              <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <Flame className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+              {listings.filter(l => l.isBoosted || l.isFeatured).length}
+            </div>
+            <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 mt-1 block">
+              High-Visibility Placements
+            </span>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Tabs Row and Search Block - EXACT match with Seller Console/Approval Center layout */}
-      <div className="flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0" style={{ WebkitOverflowScrolling: 'touch' }}>
-          {['all', 'active', 'pending', 'sold', 'inactive'].map((status) => {
-            const count = status === 'all' ? listings.length : listings.filter(l => l.status === status).length;
-            const isActive = statusFilter === status;
-            return (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
-                  isActive
-                    ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                    : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
-                )}
-              >
-                {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="relative group min-w-[200px] sm:w-64">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
-          <input
-            type="text"
-            placeholder="Search make, model, ID..."
+      {/* Filter and Search Bar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#1E1E20] border border-slate-200/80 dark:border-white/10 shadow-xs">
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Input 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+            placeholder="Search by title, Property ID (PK-...), city, society, or agency..."
+            className="pl-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border-transparent text-xs font-semibold"
           />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <select 
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="h-10 px-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-[#F5F5F7] outline-none"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="pending">Pending</option>
+            <option value="sold">Sold</option>
+            <option value="expired">Expired</option>
+            <option value="rejected">Rejected</option>
+          </select>
+
+          <select 
+            value={cityFilter}
+            onChange={(e) => setCityFilter(e.target.value)}
+            className="h-10 px-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-[#F5F5F7] outline-none"
+          >
+            <option value="all">All Cities</option>
+            <option value="lahore">Lahore</option>
+            <option value="islamabad">Islamabad</option>
+            <option value="karachi">Karachi</option>
+            <option value="rawalpindi">Rawalpindi</option>
+          </select>
+
+          <select 
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="h-10 px-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-[#F5F5F7] outline-none"
+          >
+            <option value="all">All Types</option>
+            <option value="house">House</option>
+            <option value="flat / apartment">Flat / Apartment</option>
+            <option value="plot">Plot</option>
+            <option value="commercial">Commercial</option>
+          </select>
+
+          <Button 
+            variant={fraudFilterOnly ? "destructive" : "outline"}
+            size="sm"
+            onClick={() => setFraudFilterOnly(!fraudFilterOnly)}
+            className={cn("h-10 rounded-xl text-xs font-bold gap-1.5 cursor-pointer", fraudFilterOnly && "bg-rose-600 text-white")}
+          >
+            <ShieldAlert className="w-3.5 h-3.5" />
+            <span>Fraud Flags Only</span>
+          </Button>
         </div>
       </div>
 
-      {/* Listings List Cards - EXACT card format, padding and hover from Seller Console / Approval Center layout */}
-      <div className="space-y-3.5">
-        <AnimatePresence mode="popLayout">
-          {filteredListings.length > 0 ? (
-            filteredListings.map((listing, idx) => {
-              return (
-                <motion.div
-                  key={listing.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.4, delay: idx * 0.02 }}
-                  className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col md:flex-row items-stretch md:items-center gap-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300"
-                >
-                  {/* Category Image */}
-                  <div className="relative w-full md:w-36 aspect-[4/3] rounded-xl overflow-hidden shrink-0 bg-[#1C1C1E] border border-black/5 dark:border-white/10 group flex items-center justify-center">
-                    <img 
-                      src={listing.images[0]} 
-                      alt={listing.model} 
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" 
-                      referrerPolicy="no-referrer" 
+      {/* Main Properties Table */}
+      <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#1E1E20] shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-slate-50/80 dark:bg-white/5 border-b border-slate-200/80 dark:border-white/10">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-12 text-center py-4 pl-4">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedIds.length === filteredListings.length && filteredListings.length > 0}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    className="rounded"
+                  />
+                </TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Property / Ref ID</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Location</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Specs & Size</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Price</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4 text-center">Quality / Title</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4">Status</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider py-4 pr-6 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-slate-100 dark:divide-white/5">
+              {filteredListings.map((prop) => (
+                <TableRow key={prop.id} className={cn("hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors", prop.isFraudFlagged && "bg-rose-50/20 dark:bg-rose-950/10")}>
+                  <TableCell className="text-center py-4 pl-4">
+                    <input 
+                      type="checkbox" 
+                      checked={selectedIds.includes(prop.id)}
+                      onChange={() => handleToggleSelect(prop.id)}
+                      className="rounded"
                     />
-                    
-                    <div className="absolute top-2.5 left-2.5">
-                       <span className={cn(
-                        "px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider backdrop-blur-md border",
-                        listing.status === 'active' && "bg-apple-green/15 text-apple-green border-apple-green/20",
-                        listing.status === 'pending' && "bg-apple-orange/15 text-apple-orange border-apple-orange/20",
-                        listing.status === 'sold' && "bg-apple-blue/15 text-apple-blue border-apple-blue/20",
-                        listing.status === 'inactive' && "bg-gray-500/15 text-gray-400 border-gray-500/20"
-                       )}>
-                         {listing.status}
-                       </span>
-                    </div>
-                  </div>
+                  </TableCell>
 
-                  {/* Listings Details */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
-                    <div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#86868B] uppercase tracking-wider mb-1">
-                         <Zap className="w-3 h-3 text-apple-blue" />
-                         Asset ID #{listing.id.toUpperCase()}
-                         <span className="opacity-30">•</span>
-                         <span>{listing.year} model</span>
-                         <span className="opacity-30">•</span>
-                         <span>{listing.city}</span>
+                  <TableCell className="py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-14 h-14 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-white/10">
+                        <img src={prop.images[0]} alt={prop.title} className="w-full h-full object-cover" />
+                        {prop.isFeatured && (
+                          <div className="absolute top-1 left-1 bg-amber-500 text-black text-[8px] font-black px-1 rounded-sm">
+                            BOOST
+                          </div>
+                        )}
                       </div>
-                      
-                      <h2 className="text-sm font-semibold text-[#1D1D1F] dark:text-white truncate block">
-                        {listing.make} {listing.model} <span className="font-mono text-xs font-bold text-apple-blue ml-2">{formatPrice(listing.price)}</span>
-                      </h2>
-                      
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[#86868B] font-normal">
-                         <span className="font-semibold text-purple-500">Transmission: {listing.transmission}</span>
-                         <span className="opacity-30">/</span>
-                         <span className="font-semibold text-apple-orange">Fuel: {listing.fuelType}</span>
-                         <span className="opacity-30">/</span>
-                         <span className="truncate max-w-[300px]">{listing.description}</span>
+                      <div className="min-w-0 max-w-[260px]">
+                        <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate flex items-center gap-1.5">
+                          <span>{prop.title}</span>
+                        </div>
+                        <div className="text-[10px] font-mono text-slate-400 mt-0.5 flex items-center gap-1">
+                          <span className="font-bold text-[#5B2A86] dark:text-[#C9A227]">{prop.referenceId}</span>
+                          <span>·</span>
+                          <span className="uppercase">{prop.purpose}</span>
+                          <span>·</span>
+                          <span>{prop.propertyType}</span>
+                        </div>
+                        {prop.agencyName && (
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold truncate flex items-center gap-1 mt-0.5">
+                            <Building2 className="w-3 h-3 text-slate-400" />
+                            <span>{prop.agencyName}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
+                  </TableCell>
 
-                    {/* Bento Micro-Stats box matrix */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Odometer</p>
-                          <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">
-                            {listing.mileage.toLocaleString()} km
-                          </p>
-                       </div>
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Engine core</p>
-                          <p className="text-xs font-bold text-apple-blue truncate mt-0.5">
-                            {listing.engineSize || 'N/A'}
-                          </p>
-                       </div>
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Engagement</p>
-                          <p className="text-xs font-bold text-apple-green font-mono mt-0.5">{(listing.views || 0).toLocaleString()} Views</p>
-                       </div>
-                       <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Verification</p>
-                          <p className="text-xs font-bold text-apple-green font-mono mt-0.5">
-                            {listing.isAuctionVerified ? 'Verified' : 'Pending'}
-                          </p>
-                       </div>
+                  <TableCell className="py-4">
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      {prop.area}
                     </div>
-                  </div>
+                    <div className="text-[11px] text-slate-400 truncate max-w-[140px]">
+                      {prop.city}
+                    </div>
+                  </TableCell>
 
-                  {/* Actions Column */}
-                  <div className="flex md:flex-col justify-end items-center gap-2 pt-3 md:pt-0 border-t md:border-t-0 md:border-l border-black/[0.04] dark:border-white/[0.04] md:pl-5 shrink-0">
-                    <div className="flex flex-wrap items-center gap-1.5 justify-end">
-                      <button 
-                        onClick={() => handleQuickView(listing)}
-                        className="px-4.5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white flex items-center justify-center font-semibold text-xs transition-colors"
-                        title="Investigate details"
+                  <TableCell className="py-4">
+                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      {prop.areaSize} {prop.areaUnit}
+                    </div>
+                    {prop.bedrooms > 0 && (
+                      <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5 font-medium">
+                        <span>{prop.bedrooms} Beds</span>
+                        <span>·</span>
+                        <span>{prop.bathrooms} Baths</span>
+                      </div>
+                    )}
+                  </TableCell>
+
+                  <TableCell className="py-4">
+                    <div className="text-xs font-black font-mono text-slate-900 dark:text-[#F0A830]">
+                      {formatPrice(prop.price)}
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="py-4 text-center">
+                    <div className="inline-flex flex-col items-center gap-1">
+                      <Badge className={cn(
+                        "text-[9px] font-bold rounded-md px-1.5",
+                        prop.qualityScore >= 90 ? "bg-emerald-500/10 text-emerald-600" :
+                        prop.qualityScore >= 70 ? "bg-amber-500/10 text-amber-600" : "bg-rose-500/10 text-rose-600"
+                      )}>
+                        Score: {prop.qualityScore}%
+                      </Badge>
+                      {prop.titleStatus === "registry_verified" && (
+                        <span className="text-[9px] font-bold text-emerald-600 flex items-center gap-0.5">
+                          <Check className="w-3 h-3" /> Title Verified
+                        </span>
+                      )}
+                      {prop.isFraudFlagged && (
+                        <span className="text-[9px] font-bold text-rose-600 flex items-center gap-0.5">
+                          <AlertTriangle className="w-3 h-3" /> Flagged
+                        </span>
+                      )}
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="py-4">
+                    <span className={cn(
+                      "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold",
+                      prop.status === "active" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
+                      prop.status === "pending" && "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+                      prop.status === "sold" && "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
+                      prop.status === "expired" && "bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20",
+                      prop.status === "rejected" && "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20"
+                    )}>
+                      {prop.status.toUpperCase()}
+                    </span>
+                  </TableCell>
+
+                  <TableCell className="py-4 pr-6 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => { setSelectedListing(prop); setIsDetailOpen(true); }}
+                        className="h-8 px-2.5 rounded-lg text-xs font-bold hover:bg-slate-100 dark:hover:bg-white/10"
                       >
-                        Investigate
-                      </button>
+                        Inspect
+                      </Button>
 
                       <DropdownMenu>
-                        <DropdownMenuTrigger className={cn(
-                          "w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 flex items-center justify-center text-apple-blue transition-colors"
-                        )}>
-                          <MoreVertical className="w-4 h-4" />
+                        <DropdownMenuTrigger asChild>
+                          <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 rounded-2xl border-apple-border/50 bg-white/95 dark:bg-[#1D1D1F]/95 backdrop-blur-xl shadow-2xl p-2">
+                        <DropdownMenuContent align="end" className="w-48 rounded-2xl bg-white dark:bg-[#1E1E20] border-slate-200 dark:border-white/15">
+                          {prop.status === "pending" && (
+                            <DropdownMenuItem 
+                              onClick={() => {
+                                setListings(prev => prev.map(l => l.id === prop.id ? { ...l, status: "active" } : l));
+                                toast.success(`Listing ${prop.referenceId} Approved`);
+                              }}
+                              className="text-emerald-600 font-bold text-xs cursor-pointer"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5 mr-2" /> Approve Listing
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem 
-                            onClick={() => handleModify(listing)}
-                            className="rounded-xl py-3 px-4 font-bold text-xs"
+                            onClick={() => {
+                              setListings(prev => prev.map(l => l.id === prop.id ? { ...l, isBoosted: !l.isBoosted, isFeatured: !l.isFeatured } : l));
+                              toast.success(prop.isBoosted ? "Boost Removed" : "Listing Promoted to Boost & Featured Showcase");
+                            }}
+                            className="text-purple-600 font-bold text-xs cursor-pointer"
                           >
-                            <Edit3 className="w-4 h-4 mr-3 text-apple-orange" /> Modify Listing
+                            <Flame className="w-3.5 h-3.5 mr-2" /> {prop.isBoosted ? "Remove Boost" : "Boost & Feature"}
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleViewOnSite(listing)}
-                            className="rounded-xl py-3 px-4 font-bold text-xs"
+                            onClick={() => window.open(`/property/${prop.id}`, "_blank")}
+                            className="text-xs font-semibold cursor-pointer"
                           >
-                            <ExternalLink className="w-4 h-4 mr-3 text-purple-500" /> View on Site
+                            <ExternalLink className="w-3.5 h-3.5 mr-2" /> View on Site
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator className="bg-apple-border/50 my-2 mx-2" />
+                          <DropdownMenuSeparator />
                           <DropdownMenuItem 
-                            onClick={() => promptDelete(listing)}
-                            className="rounded-xl py-3 px-4 font-bold text-xs text-apple-red focus:bg-apple-red/10 focus:text-apple-red"
+                            onClick={() => {
+                              setListings(prev => prev.filter(l => l.id !== prop.id));
+                              toast.success(`Listing ${prop.referenceId} Deleted`);
+                            }}
+                            className="text-rose-600 font-bold text-xs cursor-pointer"
                           >
-                            <Trash2 className="w-4 h-4 mr-3" /> Remove Inventory
+                            <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete Listing
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })
-          ) : (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="py-16 text-center bg-[#F5F5F7]/30 dark:bg-white/[0.005] rounded-2xl border border-dashed border-black/[0.06] dark:border-white/[0.06]"
-            >
-              <CheckCircle2 className="w-10 h-10 text-apple-green/60 mx-auto mb-3" />
-              <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">No Listings Found</h3>
-              <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
-                No vehicles match your status filter or search parameters.
-              </p>
-              <button 
-                onClick={() => {
-                  setStatusFilter('all');
-                  setSearchQuery("");
-                }}
-                className="px-3.5 py-1.5 rounded-xl border border-black/10 dark:border-white/10 text-xs font-semibold bg-white dark:bg-[#2C2C2E] hover:bg-black/5"
-              >
-                Reset Filter
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Pagination Footer */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-black/[0.06] dark:border-white/[0.06]">
-        <p className="text-xs font-bold text-[#86868B]">Showing 1 to {filteredListings.length} of {listings.length} items</p>
-        <div className="flex items-center gap-1.5">
-          <Button variant="outline" className="rounded-xl h-8.5 text-[11px] font-semibold border-black/[0.08] dark:border-white/[0.08]" disabled>Previous</Button>
-          <Button size="sm" className="w-8.5 h-8.5 rounded-xl bg-apple-blue text-white text-xs font-bold shadow-md shadow-apple-blue/20">1</Button>
-          <Button variant="outline" className="rounded-xl h-8.5 text-[11px] font-semibold border-black/[0.08] dark:border-white/[0.08]">Next</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       </div>
 
-      {/* Vehicle Archive Detail Shard */}
-      <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="max-w-[95vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
+      {/* Property Detail Drawer */}
+      <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+        <DialogContent className="max-w-3xl rounded-3xl bg-white dark:bg-[#1E1E20] border-slate-200 dark:border-white/15 p-6 max-h-[90vh] overflow-y-auto">
           {selectedListing && (
-            <div className="flex flex-col lg:flex-row h-full overflow-hidden">
-              {/* Visual Shard Sidebar */}
-              <aside className="w-full lg:w-[280px] border-r border-apple-border/10 flex flex-col bg-apple-gray/40 dark:bg-white/[0.02] overflow-y-auto custom-scrollbar shrink-0">
-                 <div className="relative aspect-video group overflow-hidden bg-black">
-                    <img 
-                      src={selectedListing.images[0]} 
-                      alt={selectedListing.model}
-                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-90"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4 space-y-0.5">
-                       <Badge className="bg-apple-blue/20 backdrop-blur-xl text-apple-blue border-apple-blue/30 text-[8px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full mb-1">
-                          {selectedListing.condition} • {selectedListing.year}
-                       </Badge>
-                       <h3 className="text-base font-black text-white tracking-tighter leading-tight">
-                         {selectedListing.make} <br/> {selectedListing.model}
-                       </h3>
+            <div className="space-y-6">
+              <DialogHeader>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-mono text-xs font-bold text-[#5B2A86] dark:text-[#F0A830]">
+                        {selectedListing.referenceId}
+                      </span>
+                      <Badge className="text-[10px]">{selectedListing.propertyType}</Badge>
+                      <Badge variant="outline" className="text-[10px] uppercase">{selectedListing.purpose}</Badge>
                     </div>
-                 </div>
-
-                 <div className="p-5 space-y-4 flex-1">
-                    <section className="space-y-3">
-                       <h4 className="text-[8px] font-black uppercase tracking-[0.3em] text-apple-text-muted px-1">Identity</h4>
-                       <div className="p-4 rounded-[18px] bg-white/60 dark:bg-white/5 backdrop-blur-3xl border border-apple-border/10 space-y-3 shadow-sm">
-                          <div className="flex items-center justify-between">
-                             <span className="text-[9px] font-bold text-apple-text-muted">Asset ID</span>
-                             <span className="text-[10px] font-black text-apple-blue uppercase tracking-tighter">{selectedListing.id}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                             <span className="text-[9px] font-bold text-apple-text-muted">Valuation</span>
-                             <span className="text-base font-black tracking-tighter">{formatPrice(selectedListing.price)}</span>
-                          </div>
-                       </div>
-                    </section>
-
-                    <section className="space-y-3">
-                       <h4 className="text-[8px] font-black uppercase tracking-[0.3em] text-apple-text-muted px-1">Owner</h4>
-                       <div className="flex items-center gap-3 p-4 rounded-[18px] bg-white/60 dark:bg-white/5 border border-apple-border/5 group cursor-pointer hover:bg-apple-blue/5 transition-all duration-500">
-                          <div className="w-8 h-8 rounded-lg bg-apple-gray dark:bg-white/10 flex items-center justify-center font-black text-[11px] text-apple-text shadow-sm group-hover:scale-110 transition-transform">
-                             {selectedListing.seller.name[0]}
-                          </div>
-                          <div className="min-w-0">
-                             <div className="text-[12px] font-black tracking-tight truncate">{selectedListing.seller.name}</div>
-                             <div className="flex items-center gap-1 mt-0.5">
-                                <ShieldCheck className="w-2.5 h-2.5 text-apple-blue" />
-                                <span className="text-[7px] font-black text-apple-blue uppercase tracking-widest leading-none">{selectedListing.seller.isVerified ? 'Authoritative' : 'Citizen'}</span>
-                             </div>
-                          </div>
-                       </div>
-                    </section>
-
-                    <Button variant="outline" className="w-full h-11 rounded-xl border-apple-border/20 font-black text-[9px] uppercase tracking-widest hover:bg-apple-gray dark:hover:bg-white/5 transition-all group overflow-hidden outline-none" onClick={() => handleViewOnSite(selectedListing)}>
-                       <span className="relative z-10 flex items-center gap-2"><ExternalLink className="w-3.5 h-3.5" /> Public View</span>
-                    </Button>
-                 </div>
-              </aside>
-
-              {/* Specification Shard Area */}
-              <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                 <header className="p-5 lg:p-6 border-b border-apple-border/10 flex items-center justify-between bg-white/40 dark:bg-white/5 backdrop-blur-xl">
-                    <div className="space-y-0">
-                       <h3 className="text-lg font-black tracking-tight">Specifications</h3>
-                       <div className="flex items-center gap-1.5 opacity-60">
-                          <div className="w-1.5 h-1.5 rounded-full bg-apple-blue animate-pulse" />
-                          <span className="text-[8px] font-black uppercase tracking-[0.3em]">Exposure Active</span>
-                       </div>
+                    <DialogTitle className="text-xl font-extrabold text-slate-900 dark:text-white">
+                      {selectedListing.title}
+                    </DialogTitle>
+                    <DialogDescription className="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                      <span>{selectedListing.address}</span>
+                    </DialogDescription>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-black font-mono text-[#5B2A86] dark:text-[#F0A830]">
+                      {formatPrice(selectedListing.price)}
                     </div>
-                 </header>
+                  </div>
+                </div>
+              </DialogHeader>
 
-                 <div className="flex-1 overflow-y-auto p-5 lg:p-6 custom-scrollbar space-y-6">
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                       {[
-                          { label: 'Transmission', value: selectedListing.transmission, icon: Gauge },
-                          { label: 'Fuel Matrix', value: selectedListing.fuelType, icon: Zap },
-                          { label: 'Odometer', value: `${selectedListing.mileage}km`, icon: Activity },
-                          { label: 'Engine Core', value: selectedListing.engineSize, icon: Settings },
-                       ].map((spec, i) => (
-                          <div key={i} className="p-4 rounded-[18px] bg-apple-gray dark:bg-white/[0.02] border border-apple-border/5 group hover:border-apple-blue/30 transition-all duration-700">
-                             <spec.icon className="w-4 h-4 text-apple-text-muted/40 mb-2 group-hover:scale-110 group-hover:text-apple-blue transition-all" />
-                             <div className="text-[7px] font-black uppercase tracking-[0.2em] text-apple-text-muted mb-0.5">{spec.label}</div>
-                             <div className="font-black text-[11px] tracking-tight uppercase leading-none truncate capitalize">{spec.value}</div>
-                          </div>
-                       ))}
-                    </div>
-
-                    <div className="space-y-4">
-                       <h4 className="text-[8px] font-black uppercase tracking-[0.3em] text-apple-text-muted px-1">Context</h4>
-                       <div className="p-6 rounded-[24px] bg-apple-gray dark:bg-white/[0.02] border border-apple-border/5 relative group">
-                          <p className="text-sm lg:text-base font-bold leading-tight tracking-tight text-apple-text/90">
-                             "{selectedListing.description}"
-                          </p>
-                       </div>
-                    </div>
-
-                    <div className="space-y-3">
-                       <h4 className="text-[8px] font-black uppercase tracking-[0.3em] text-apple-text-muted px-1">Shards</h4>
-                       <div className="flex flex-wrap gap-2">
-                          {selectedListing.features.map((feature, i) => (
-                             <Badge key={i} variant="outline" className="px-2 py-0.5 rounded-lg border-apple-border/10 bg-white dark:bg-white/5 font-black text-[8px] tracking-tight">
-                                {feature}
-                             </Badge>
-                          ))}
-                       </div>
-                    </div>
-                 </div>
-
-                 <footer className="p-5 lg:p-6 border-t border-apple-border/10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <Button 
-                      variant="outline" 
-                      className="h-11 rounded-xl border-apple-border/20 font-black text-[8px] uppercase tracking-[0.2em] hover:bg-apple-gray dark:hover:bg-white/10 transition-all active:scale-95 outline-none" 
-                      onClick={() => handleModify(selectedListing)}
-                    >
-                       Modify
-                    </Button>
-                    <Button 
-                      className="apple-button-primary h-11 rounded-xl font-black text-[8px] uppercase tracking-[0.2em] shadow-xl shadow-apple-blue/20 active:scale-90 transition-all outline-none"
-                      onClick={() => toast.success(`Performance Boost initiated`)}
-                    >
-                       Elevate
-                    </Button>
-                    <Button 
-                      variant="destructive" 
-                      className="h-11 rounded-xl bg-apple-red shadow-xl shadow-apple-red/10 font-black text-[8px] uppercase tracking-[0.2em] active:scale-95 transition-all border-none text-white outline-none" 
-                      onClick={() => { setIsDetailsOpen(false); setIsDeleteDialogOpen(true); }}
-                    >
-                       Purge
-                    </Button>
-                 </footer>
+              {/* Photos Gallery */}
+              <div className="grid grid-cols-3 gap-2 rounded-2xl overflow-hidden">
+                {selectedListing.images.map((img, i) => (
+                  <div key={i} className="aspect-video relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/10">
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ))}
               </div>
+
+              {/* Fraud Warning Box if Flagged */}
+              {selectedListing.isFraudFlagged && (
+                <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
+                  <div className="flex items-start gap-2.5">
+                    <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-xs font-bold text-rose-800 dark:text-rose-300">Fraud & Anomaly Warning</h4>
+                      <p className="text-xs text-rose-700 dark:text-rose-400 mt-0.5 leading-relaxed">{selectedListing.fraudReason}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Specs Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Size</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-1 block">{selectedListing.areaSize} {selectedListing.areaUnit}</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Bedrooms</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-1 block">{selectedListing.bedrooms} Beds</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Bathrooms</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-1 block">{selectedListing.bathrooms} Baths</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Quality Score</span>
+                  <span className="text-sm font-bold text-emerald-600 mt-1 block">{selectedListing.qualityScore}% High Grade</span>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Description</span>
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{selectedListing.description}</p>
+              </div>
+
+              {/* Seller / Agency */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Listed By</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{selectedListing.sellerName}</span>
+                  {selectedListing.agencyName && (
+                    <span className="text-xs text-purple-600 dark:text-purple-400 font-semibold">{selectedListing.agencyName}</span>
+                  )}
+                </div>
+                <Badge className="bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 text-xs">
+                  {selectedListing.sellerBadge.toUpperCase()}
+                </Badge>
+              </div>
+
+              <DialogFooter className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4">
+                <Button variant="outline" size="sm" onClick={() => setIsDetailOpen(false)} className="rounded-xl text-xs font-bold">
+                  Close
+                </Button>
+                <div className="flex items-center gap-2">
+                  {selectedListing.status === "pending" && (
+                    <Button 
+                      size="sm"
+                      onClick={() => {
+                        setListings(prev => prev.map(l => l.id === selectedListing.id ? { ...l, status: "active" } : l));
+                        toast.success("Listing Approved");
+                        setIsDetailOpen(false);
+                      }}
+                      className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold"
+                    >
+                      Approve Listing
+                    </Button>
+                  )}
+                </div>
+              </DialogFooter>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="max-w-sm rounded-[24px] border-apple-border/50 bg-white dark:bg-[#1D1D1F] p-6">
-          <div className="text-center space-y-3">
-            <div className="w-14 h-14 bg-apple-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Trash2 className="w-7 h-7 text-apple-red" />
-            </div>
-            <DialogTitle className="text-xl font-bold tracking-tight">Purge Listing?</DialogTitle>
-            <DialogDescription className="text-xs font-medium text-apple-text-muted pb-2">
-              You are about to remove <span className="text-apple-text font-bold">"{selectedListing?.year} {selectedListing?.make} {selectedListing?.model}"</span> from the global directory.
-            </DialogDescription>
-            <DialogFooter className="flex-col gap-2 pt-2">
-              <Button className="bg-apple-red hover:bg-apple-red/90 text-white rounded-xl w-full h-11 font-bold shadow-lg shadow-apple-red/20 border-none" onClick={confirmDelete}>
-                Delete Permanently
-              </Button>
-              <Button variant="ghost" className="rounded-xl w-full h-11 font-bold text-xs" onClick={() => setIsDeleteDialogOpen(false)}>
-                Cancel
-              </Button>
-            </DialogFooter>
-          </div>
         </DialogContent>
       </Dialog>
     </div>

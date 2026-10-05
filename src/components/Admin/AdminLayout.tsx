@@ -59,7 +59,7 @@ const navItems: NavItem[] = [
   { id: 'audit', label: 'Audit Logs', icon: Activity, path: '/admin/audit', category: 'Console' },
 
   { id: 'listings', label: 'Listings', icon: Car, path: '/admin/listings', category: 'Inventory' },
-  { id: 'reels', label: 'Reels Management', icon: Video, path: '/admin/reels', category: 'Inventory' },
+  { id: 'videos', label: 'PakStories Videos', icon: Video, path: '/admin/videos', badge: 'New', category: 'Inventory' },
   { id: 'vehicle-data', label: 'Vehicle Data', icon: Database, path: '/admin/vehicle-data', category: 'Inventory' },
   { id: 'categories', label: 'Categories', icon: LayoutDashboard, path: '/admin/categories', category: 'Inventory' },
   { id: 'popular-styles', label: 'Popular Vehicle Styles', icon: Sliders, path: '/admin/popular-styles', category: 'Inventory' },

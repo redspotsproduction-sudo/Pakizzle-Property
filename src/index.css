@@ -139,12 +139,66 @@
   --fluid-small: clamp(0.75rem, 0.2vw + 0.7rem, 0.875rem);
   --fluid-caption: clamp(0.6875rem, 0.15vw + 0.65rem, 0.75rem);
 
+  /* ==========================================================================
+     GOLDEN-RATIO TYPOGRAPHY SCALE (φ = 1.618 Major, 1.25 / 1.333 Minor UI)
+     ========================================================================== */
+  /* Major Marketing Golden Scale (φ = 1.618, Base 16px) */
+  --type-phi-display: 6.875rem; /* 110px ≈ 68 * 1.618, line-height: 1.05 */
+  --type-phi-h1: 4.25rem;       /* 68px ≈ 42 * 1.618, line-height: 1.1 */
+  --type-phi-h2: 2.625rem;      /* 42px ≈ 26 * 1.618, line-height: 1.2 */
+  --type-phi-h3: 1.625rem;      /* 26px ≈ 16 * 1.618, line-height: 1.3 */
+  --type-phi-body: 1rem;        /* 16px (Base body text), line-height: 1.5 */
+  --type-phi-small: 0.75rem;    /* 12px floor (16 ÷ 1.618 ≈ 9.88px rounded to 12px for accessibility/readability), line-height: 1.4 */
+
+  /* Fluid Responsive Scaling for Golden Marketing Headings */
+  --fluid-phi-display: clamp(3rem, 7vw + 1rem, 6.875rem);
+  --fluid-phi-h1: clamp(2.5rem, 5vw + 0.8rem, 4.25rem);      /* 40px → 68px */
+  --fluid-phi-h2: clamp(1.75rem, 3vw + 0.6rem, 2.625rem);    /* 28px → 42px */
+  --fluid-phi-h3: clamp(1.25rem, 1.4vw + 0.8rem, 1.625rem);  /* 20px → 26px */
+  --fluid-phi-body: clamp(0.9375rem, 0.25vw + 0.875rem, 1rem); /* 15px → 16px */
+  --fluid-phi-small: 0.75rem;                                /* 12px floor */
+
+  /* Minor UI Scale (Gentler 1.25 / 1.333 for dense UI chrome, tables, filters, forms) */
+  --type-ui-xl: 1.5rem;         /* 24px (Drawer / modal title, line-height: 1.3) */
+  --type-ui-lg: 1.25rem;        /* 20px (Card title / price, line-height: 1.35) */
+  --type-ui-md: 1.125rem;       /* 18px (Widget header / subhead, line-height: 1.4) */
+  --type-ui-base: 1rem;         /* 16px (Buttons, main inputs, line-height: 1.5) */
+  --type-ui-sm: 0.875rem;       /* 14px (Secondary labels, table cells, line-height: 1.45) */
+  --type-ui-xs: 0.75rem;        /* 12px (Caps, badges, pill tags, line-height: 1.4) */
+  --type-ui-micro: 0.6875rem;   /* 11px (Micro tags, timestamps, line-height: 1.35) */
+
   /* Fluid spacing tokens using CSS clamp() */
   --space-page-x: clamp(1rem, 3.5vw, 3rem);
   --space-section-y: clamp(2.5rem, 6vw, 5.5rem);
   --space-card-p: clamp(0.875rem, 2vw, 1.5rem);
   --space-grid-gap: clamp(0.875rem, 2vw, 1.5rem);
   --space-stack-gap: clamp(0.75rem, 1.5vw, 1.25rem);
+
+  /* ==========================================================================
+     DUAL SPACING SYSTEM: 4px Fine UI + Golden-Ratio Section Scale (φ = 1.618)
+     ========================================================================== */
+  /* 1. Fine-Grained 4px Base Scale (Component Interiors & Controls) */
+  --space-1: 0.25rem;   /* 4px  - Micro gap, badge icon offset */
+  --space-2: 0.5rem;    /* 8px  - Chip padding, input label gap */
+  --space-3: 0.75rem;   /* 12px - Button padding-x, card badge offset */
+  --space-4: 1rem;      /* 16px - Standard card padding, form field gap */
+  --space-6: 1.5rem;    /* 24px - Modal body padding, grid gutter */
+  --space-8: 2rem;      /* 32px - Large card padding, drawer margin */
+  --space-12: 3rem;     /* 48px - Sub-module division */
+  --space-16: 4rem;     /* 64px - Desktop container edge */
+
+  /* 2. Section-Level Golden-Ratio Scale (φ = 1.618, Base 24px) */
+  --space-phi-base: 1.5rem;   /* 24px - Base section padding & block inset */
+  --space-phi-sm: 2.5rem;     /* 40px ≈ 24 * 1.618 - Block gap & filter bar margin */
+  --space-phi-md: 4rem;       /* 64px ≈ 40 * 1.618 - Homepage section vertical spacing */
+  --space-phi-lg: 6.5rem;     /* 104px ≈ 64 * 1.618 - Major section divisions & hero breathing room */
+  --space-phi-xl: 10.5rem;    /* 168px ≈ 104 * 1.618 - Grand editorial spacing & page breaks */
+
+  /* Responsive Fluid Golden Spacing (Adapts across viewport breakpoints) */
+  --fluid-phi-gap-sm: clamp(1.5rem, 2vw + 1rem, 2.5rem);      /* 24px → 40px */
+  --fluid-phi-gap-md: clamp(2.5rem, 4vw + 1.5rem, 4rem);      /* 40px → 64px */
+  --fluid-phi-gap-lg: clamp(4rem, 6vw + 2rem, 6.5rem);        /* 64px → 104px */
+  --fluid-phi-gap-xl: clamp(5.5rem, 8vw + 3rem, 10.5rem);     /* 88px → 168px */
 
   /* Safe Area Insets for iOS Home Indicator and Notch */
   --safe-top: env(safe-area-inset-top, 0px);
@@ -309,6 +363,111 @@
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+  }
+
+  /* --- GOLDEN-RATIO TYPOGRAPHY UTILITIES (φ = 1.618 Major, 1.25 / 1.333 Minor) --- */
+  .phi-display {
+    font-size: var(--fluid-phi-display);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+  .phi-h1 {
+    font-size: var(--fluid-phi-h1);
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .phi-h2 {
+    font-size: var(--fluid-phi-h2);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .phi-h3 {
+    font-size: var(--fluid-phi-h3);
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .phi-body {
+    font-size: var(--fluid-phi-body);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .phi-small {
+    font-size: var(--fluid-phi-small);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  /* Gentler UI Scale Classes */
+  .ui-text-xl {
+    font-size: var(--type-ui-xl);
+    line-height: 1.3;
+    font-weight: 700;
+  }
+  .ui-text-lg {
+    font-size: var(--type-ui-lg);
+    line-height: 1.35;
+    font-weight: 600;
+  }
+  .ui-text-md {
+    font-size: var(--type-ui-md);
+    line-height: 1.4;
+    font-weight: 600;
+  }
+  .ui-text-base {
+    font-size: var(--type-ui-base);
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .ui-text-sm {
+    font-size: var(--type-ui-sm);
+    line-height: 1.45;
+    font-weight: 500;
+  }
+  .ui-text-xs {
+    font-size: var(--type-ui-xs);
+    line-height: 1.4;
+    font-weight: 600;
+  }
+  .ui-text-micro {
+    font-size: var(--type-ui-micro);
+    line-height: 1.35;
+    font-weight: 700;
+  }
+
+  /* --- GOLDEN-RATIO SECTION SPACING UTILITIES (φ = 1.618) --- */
+  .phi-py-base {
+    padding-top: var(--space-phi-base);
+    padding-bottom: var(--space-phi-base);
+  }
+  .phi-py-sm {
+    padding-top: var(--fluid-phi-gap-sm);
+    padding-bottom: var(--fluid-phi-gap-sm);
+  }
+  .phi-py-md {
+    padding-top: var(--fluid-phi-gap-md);
+    padding-bottom: var(--fluid-phi-gap-md);
+  }
+  .phi-py-lg {
+    padding-top: var(--fluid-phi-gap-lg);
+    padding-bottom: var(--fluid-phi-gap-lg);
+  }
+  .phi-py-xl {
+    padding-top: var(--fluid-phi-gap-xl);
+    padding-bottom: var(--fluid-phi-gap-xl);
+  }
+
+  .phi-gap-sm {
+    gap: var(--fluid-phi-gap-sm);
+  }
+  .phi-gap-md {
+    gap: var(--fluid-phi-gap-md);
+  }
+  .phi-gap-lg {
+    gap: var(--fluid-phi-gap-lg);
   }
 
   /* --- CORE CARD SHELL (Unified radius 8px and border) --- */
@@ -673,32 +832,49 @@
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 }
 
 .dark .custom-scrollbar {
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 
+.custom-scrollbar::-webkit-scrollbar,
 .custom-scrollbar-thin::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
+.custom-scrollbar::-webkit-scrollbar-track,
 .custom-scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 9999px;
 }
 
+.dark .custom-scrollbar::-webkit-scrollbar-track,
+.dark .custom-scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
 .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 9999px;
 }
 
+.dark .custom-scrollbar::-webkit-scrollbar-thumb,
 .dark .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.35);
 }
 
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
 .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.dark .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.55);
 }
 
 /* Custom scrollbar utility classes */

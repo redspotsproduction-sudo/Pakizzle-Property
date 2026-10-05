@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -25,9 +25,12 @@ import {
   Sun,
   Moon,
   ArrowUpRight,
+  Check,
   X
 } from "lucide-react";
 import { cn } from "../lib/utils";
+import FilterPopover from "./ui/FilterPopover";
+import { propertySchemaService, CityItem, PropertyTypeItem, CANONICAL_CITIES, CANONICAL_PROPERTY_TYPES } from "../services/propertySchemaService";
 import { bannerService } from "../services/bannerService";
 import { Banner } from "../types";
 import { useLocation as useAppLocation } from "../context/LocationContext";
@@ -121,6 +124,35 @@ export default function Hero() {
   const [isValuationOpen, setIsValuationOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+
+  // Cockpit popover state & trigger refs for shared FilterPopover
+  const [activeDropdown, setActiveDropdown] = useState<"city" | "type" | "price" | "tablet-city" | "tablet-type" | "tablet-price" | null>(null);
+  const [heroCitySearch, setHeroCitySearch] = useState("");
+  const heroCityTriggerRef = useRef<HTMLButtonElement>(null);
+  const heroTypeTriggerRef = useRef<HTMLButtonElement>(null);
+  const heroPriceTriggerRef = useRef<HTMLButtonElement>(null);
+  const tabletCityTriggerRef = useRef<HTMLButtonElement>(null);
+  const tabletTypeTriggerRef = useRef<HTMLButtonElement>(null);
+  const tabletPriceTriggerRef = useRef<HTMLButtonElement>(null);
+
+  const [schemaCities, setSchemaCities] = useState<CityItem[]>(CANONICAL_CITIES);
+  const [schemaTypes, setSchemaTypes] = useState<PropertyTypeItem[]>(CANONICAL_PROPERTY_TYPES);
+
+  useEffect(() => {
+    propertySchemaService.getCities().then(setSchemaCities);
+    propertySchemaService.getPropertyTypes().then(setSchemaTypes);
+  }, []);
+
+  const heroPopularCities = useMemo(() => schemaCities.filter(c => c.isPopular), [schemaCities]);
+  const heroOtherCities = useMemo(() => {
+    return schemaCities
+      .filter(c => !c.isPopular)
+      .filter(c => c.name.toLowerCase().includes(heroCitySearch.toLowerCase()));
+  }, [schemaCities, heroCitySearch]);
+
+  const heroFilteredPopular = useMemo(() => {
+    return heroPopularCities.filter(c => c.name.toLowerCase().includes(heroCitySearch.toLowerCase()));
+  }, [heroPopularCities, heroCitySearch]);
 
   const heroSectionRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -370,51 +402,278 @@ export default function Hero() {
               </motion.button>
             </div>
 
-            {/* Row 2: Selectors */}
+            {/* Row 2: Selectors with portal FilterPopover */}
             <div className="grid grid-cols-3 gap-2 pt-1 border-t border-white/15">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/20 border border-white/10">
-                <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
-                <select
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer w-full"
+              {/* Tablet City Selector */}
+              <div className="relative">
+                <button
+                  ref={tabletCityTriggerRef}
+                  type="button"
+                  onClick={() => setActiveDropdown(activeDropdown === "tablet-city" ? null : "tablet-city")}
+                  className={cn(
+                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/30 border text-white text-xs font-semibold cursor-pointer transition-colors",
+                    activeDropdown === "tablet-city" ? "border-amber-400 bg-black/50" : "border-white/15 hover:bg-black/40"
+                  )}
                 >
-                  {MAJOR_CITIES.map((c) => (
-                    <option key={c} value={c} className="bg-slate-900 text-white">
-                      {c}
-                    </option>
-                  ))}
-                </select>
+                  <div className="flex items-center gap-1.5 truncate">
+                    <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                    <span className="truncate">{selectedCity || "All Pakistan"}</span>
+                  </div>
+                  <ChevronDown className={cn("w-3 h-3 text-white/60 shrink-0 transition-transform", activeDropdown === "tablet-city" && "rotate-180")} />
+                </button>
+
+                <FilterPopover
+                  isOpen={activeDropdown === "tablet-city"}
+                  onClose={() => setActiveDropdown(null)}
+                  triggerRef={tabletCityTriggerRef}
+                  title="Select City"
+                  headerAction={
+                    selectedCity && selectedCity !== "All Pakistan" ? (
+                      <button
+                        type="button"
+                        onClick={() => { setSelectedCity("All Pakistan"); setActiveDropdown(null); }}
+                        className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    ) : undefined
+                  }
+                  width={340}
+                  maxHeight={460}
+                  contentClassName="p-4 flex flex-col min-h-0 overflow-hidden"
+                >
+                  <div className="relative mb-3">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="Search Pakistan city..."
+                      value={heroCitySearch}
+                      onChange={(e) => setHeroCitySearch(e.target.value)}
+                      className="w-full pl-8.5 pr-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 text-xs font-semibold text-slate-900 dark:text-[#F5F5F7] border border-transparent focus:border-[#5B2A86] dark:focus:border-[#C9A227] outline-none"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] uppercase tracking-wider block mb-1.5">Top Metros</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {heroFilteredPopular.map((c) => {
+                        const isSelected = selectedCity === c.name;
+                        return (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedCity(c.name);
+                              setActiveDropdown(null);
+                            }}
+                            className={cn(
+                              "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer",
+                              isSelected
+                                ? "bg-[#5B2A86] dark:bg-[#C9A227] text-white dark:text-black border-transparent shadow-xs font-bold"
+                                : "bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-[#F5F5F7] border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20"
+                            )}
+                          >
+                            {c.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div 
+                    className="max-h-60 overflow-y-auto space-y-1 pr-1.5 border-t border-slate-200/80 dark:border-white/10 pt-2 custom-scrollbar"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedCity("All Pakistan"); setActiveDropdown(null); }}
+                      className={cn(
+                        "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                        selectedCity === "All Pakistan" 
+                          ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
+                          : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                      )}
+                    >
+                      <span>All over Pakistan</span>
+                      {selectedCity === "All Pakistan" && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                    </button>
+
+                    {heroOtherCities.map((c) => {
+                      const isSelected = selectedCity === c.name;
+                      return (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCity(c.name);
+                            setActiveDropdown(null);
+                          }}
+                          className={cn(
+                            "w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between cursor-pointer transition-colors",
+                            isSelected 
+                              ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
+                              : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-3 h-3 text-slate-400 dark:text-[#8E8E93]" />
+                            <span>{c.name}</span>
+                          </div>
+                          <span className="text-[10px] text-slate-400 dark:text-[#8E8E93] font-normal">{c.province}</span>
+                        </button>
+                      );
+                    })}
+
+                    <div className="pt-2 pb-1 text-center border-t border-slate-100 dark:border-white/5 mt-2">
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] block">
+                        ✓ All 15 metropolitan hubs available · End of list
+                      </span>
+                    </div>
+                  </div>
+                </FilterPopover>
               </div>
 
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/20 border border-white/10">
-                <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer w-full"
+              {/* Tablet Property Type */}
+              <div className="relative">
+                <button
+                  ref={tabletTypeTriggerRef}
+                  type="button"
+                  onClick={() => setActiveDropdown(activeDropdown === "tablet-type" ? null : "tablet-type")}
+                  className={cn(
+                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/30 border text-white text-xs font-semibold cursor-pointer transition-colors",
+                    activeDropdown === "tablet-type" ? "border-amber-400 bg-black/50" : "border-white/15 hover:bg-black/40"
+                  )}
                 >
-                  {PROPERTY_TYPES.map((t) => (
-                    <option key={t.label} value={t.value} className="bg-slate-900 text-white">
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
+                  <div className="flex items-center gap-1.5 truncate">
+                    <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                    <span className="truncate">{selectedType || "All Types"}</span>
+                  </div>
+                  <ChevronDown className={cn("w-3 h-3 text-white/60 shrink-0 transition-transform", activeDropdown === "tablet-type" && "rotate-180")} />
+                </button>
+
+                <FilterPopover
+                  isOpen={activeDropdown === "tablet-type"}
+                  onClose={() => setActiveDropdown(null)}
+                  triggerRef={tabletTypeTriggerRef}
+                  title="Property Type"
+                  headerAction={
+                    selectedType ? (
+                      <button
+                        type="button"
+                        onClick={() => { setSelectedType(""); setActiveDropdown(null); }}
+                        className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    ) : undefined
+                  }
+                  width={280}
+                  maxHeight={420}
+                >
+                  <div className="space-y-1">
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedType(""); setActiveDropdown(null); }}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                        !selectedType 
+                          ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
+                          : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                      )}
+                    >
+                      <span>All Property Types</span>
+                      {!selectedType && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                    </button>
+                    {schemaTypes.map((t) => {
+                      const isSelected = selectedType.toLowerCase() === t.slug.toLowerCase() || selectedType.toLowerCase() === t.name.toLowerCase();
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedType(t.name);
+                            setActiveDropdown(null);
+                          }}
+                          className={cn(
+                            "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                            isSelected
+                              ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
+                              : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Building2 className="w-3.5 h-3.5 text-slate-400 dark:text-[#8E8E93]" />
+                            <span>{t.name}</span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </FilterPopover>
               </div>
 
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/20 border border-white/10">
-                <span className="text-[11px] font-bold text-white/60">PKR</span>
-                <select
-                  value={selectedPriceIdx}
-                  onChange={(e) => setSelectedPriceIdx(Number(e.target.value))}
-                  className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer w-full"
+              {/* Tablet Price Range */}
+              <div className="relative">
+                <button
+                  ref={tabletPriceTriggerRef}
+                  type="button"
+                  onClick={() => setActiveDropdown(activeDropdown === "tablet-price" ? null : "tablet-price")}
+                  className={cn(
+                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/30 border text-white text-xs font-semibold cursor-pointer transition-colors",
+                    activeDropdown === "tablet-price" ? "border-amber-400 bg-black/50" : "border-white/15 hover:bg-black/40"
+                  )}
                 >
-                  {PRICE_PRESETS.map((p, idx) => (
-                    <option key={idx} value={idx} className="bg-slate-900 text-white">
-                      {p.label}
-                    </option>
-                  ))}
-                </select>
+                  <div className="flex items-center gap-1 truncate">
+                    <span className="text-[10px] font-bold text-[#F0A830]">PKR</span>
+                    <span className="truncate">{PRICE_PRESETS[selectedPriceIdx].label}</span>
+                  </div>
+                  <ChevronDown className={cn("w-3 h-3 text-white/60 shrink-0 transition-transform", activeDropdown === "tablet-price" && "rotate-180")} />
+                </button>
+
+                <FilterPopover
+                  isOpen={activeDropdown === "tablet-price"}
+                  onClose={() => setActiveDropdown(null)}
+                  triggerRef={tabletPriceTriggerRef}
+                  title="Price Range (PKR)"
+                  headerAction={
+                    selectedPriceIdx !== 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => { setSelectedPriceIdx(0); setActiveDropdown(null); }}
+                        className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    ) : undefined
+                  }
+                  width={280}
+                  maxHeight={420}
+                >
+                  <div className="space-y-1">
+                    {PRICE_PRESETS.map((p, idx) => {
+                      const isSelected = selectedPriceIdx === idx;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setSelectedPriceIdx(idx);
+                            setActiveDropdown(null);
+                          }}
+                          className={cn(
+                            "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                            isSelected
+                              ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
+                              : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                          )}
+                        >
+                          <span>{p.label}</span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </FilterPopover>
               </div>
             </div>
           </div>
@@ -447,55 +706,274 @@ export default function Hero() {
               })}
             </div>
 
-            {/* City Segment */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
-              <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer pr-4"
+            {/* City Segment - Connected to portal FilterPopover */}
+            <div className="relative shrink-0">
+              <button
+                ref={heroCityTriggerRef}
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === "city" ? null : "city")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10",
+                  activeDropdown === "city" && "bg-white/15 ring-1 ring-white/30"
+                )}
               >
-                {MAJOR_CITIES.map((c) => (
-                  <option key={c} value={c} className="bg-slate-900 text-white">
-                    {c}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
+                <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                <span className="truncate max-w-[120px]">{selectedCity || "All Pakistan"}</span>
+                <ChevronDown className={cn("w-3 h-3 text-white/60 transition-transform", activeDropdown === "city" && "rotate-180")} />
+              </button>
+
+              <FilterPopover
+                isOpen={activeDropdown === "city"}
+                onClose={() => setActiveDropdown(null)}
+                triggerRef={heroCityTriggerRef}
+                title="Select City"
+                headerAction={
+                  selectedCity && selectedCity !== "All Pakistan" ? (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedCity("All Pakistan"); setActiveDropdown(null); }}
+                      className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                    >
+                      Reset
+                    </button>
+                  ) : undefined
+                }
+                width={360}
+                maxHeight={480}
+                contentClassName="p-4 flex flex-col min-h-0 overflow-hidden"
+              >
+                {/* Search input for cities */}
+                <div className="relative mb-3">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search Pakistan city..."
+                    value={heroCitySearch}
+                    onChange={(e) => setHeroCitySearch(e.target.value)}
+                    className="w-full pl-8.5 pr-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 text-xs font-semibold text-slate-900 dark:text-[#F5F5F7] border border-transparent focus:border-[#5B2A86] dark:focus:border-[#C9A227] outline-none"
+                  />
+                </div>
+
+                {/* Pinned Most-Searched Cities */}
+                <div className="mb-3">
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] uppercase tracking-wider block mb-1.5">Top Metros</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {heroFilteredPopular.map((c) => {
+                      const isSelected = selectedCity === c.name;
+                      return (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCity(c.name);
+                            setActiveDropdown(null);
+                          }}
+                          className={cn(
+                            "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer",
+                            isSelected
+                              ? "bg-[#5B2A86] dark:bg-[#C9A227] text-white dark:text-black border-transparent shadow-xs font-bold"
+                              : "bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-[#F5F5F7] border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20"
+                          )}
+                        >
+                          {c.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Contained Scrolling City List with Visible Scrollbar & Scroll Affordance */}
+                <div 
+                  className="max-h-64 overflow-y-auto space-y-1 pr-1.5 border-t border-slate-200/80 dark:border-white/10 pt-2 custom-scrollbar"
+                >
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedCity("All Pakistan"); setActiveDropdown(null); }}
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                      selectedCity === "All Pakistan" 
+                        ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
+                        : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                    )}
+                  >
+                    <span>All over Pakistan</span>
+                    {selectedCity === "All Pakistan" && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                  </button>
+
+                  {heroOtherCities.map((c) => {
+                    const isSelected = selectedCity === c.name;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCity(c.name);
+                          setActiveDropdown(null);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between cursor-pointer transition-colors",
+                          isSelected 
+                            ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
+                            : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                        )}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-3 h-3 text-slate-400 dark:text-[#8E8E93]" />
+                          <span>{c.name}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400 dark:text-[#8E8E93] font-normal">{c.province}</span>
+                      </button>
+                    );
+                  })}
+
+                  {/* Explicit End-of-List Indicator: Confirms full list is accessible and scrolled */}
+                  <div className="pt-2.5 pb-1 text-center border-t border-slate-100 dark:border-white/5 mt-2">
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] block">
+                      ✓ All 15 metropolitan hubs available · End of list
+                    </span>
+                  </div>
+                </div>
+              </FilterPopover>
             </div>
 
-            {/* Property Type Segment */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
-              <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer pr-4"
+            {/* Property Type Segment - Connected to portal FilterPopover */}
+            <div className="relative shrink-0">
+              <button
+                ref={heroTypeTriggerRef}
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === "type" ? null : "type")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10",
+                  activeDropdown === "type" && "bg-white/15 ring-1 ring-white/30"
+                )}
               >
-                {PROPERTY_TYPES.map((t) => (
-                  <option key={t.label} value={t.value} className="bg-slate-900 text-white">
-                    {t.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
+                <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                <span className="truncate max-w-[120px]">{selectedType || "All Properties"}</span>
+                <ChevronDown className={cn("w-3 h-3 text-white/60 transition-transform", activeDropdown === "type" && "rotate-180")} />
+              </button>
+
+              <FilterPopover
+                isOpen={activeDropdown === "type"}
+                onClose={() => setActiveDropdown(null)}
+                triggerRef={heroTypeTriggerRef}
+                title="Property Type"
+                headerAction={
+                  selectedType ? (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedType(""); setActiveDropdown(null); }}
+                      className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                    >
+                      Reset
+                    </button>
+                  ) : undefined
+                }
+                width={300}
+                maxHeight={440}
+              >
+                <div className="space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedType(""); setActiveDropdown(null); }}
+                    className={cn(
+                      "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                      !selectedType 
+                        ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
+                        : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                    )}
+                  >
+                    <span>All Property Types</span>
+                    {!selectedType && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                  </button>
+                  {schemaTypes.map((t) => {
+                    const isSelected = selectedType.toLowerCase() === t.slug.toLowerCase() || selectedType.toLowerCase() === t.name.toLowerCase();
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedType(t.name);
+                          setActiveDropdown(null);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                          isSelected
+                            ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
+                            : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                        )}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Building2 className="w-3.5 h-3.5 text-slate-400 dark:text-[#8E8E93]" />
+                          <span>{t.name}</span>
+                        </div>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </FilterPopover>
             </div>
 
-            {/* Price Range Segment */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 border-l border-white/20 shrink-0">
-              <span className="text-[11px] font-bold text-white/60">PKR</span>
-              <select
-                value={selectedPriceIdx}
-                onChange={(e) => setSelectedPriceIdx(Number(e.target.value))}
-                className="bg-transparent text-white text-xs font-semibold focus:outline-none appearance-none cursor-pointer pr-4"
+            {/* Price Range Segment - Connected to portal FilterPopover */}
+            <div className="relative shrink-0">
+              <button
+                ref={heroPriceTriggerRef}
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === "price" ? null : "price")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10",
+                  activeDropdown === "price" && "bg-white/15 ring-1 ring-white/30"
+                )}
               >
-                {PRICE_PRESETS.map((p, idx) => (
-                  <option key={idx} value={idx} className="bg-slate-900 text-white">
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="w-3 h-3 text-white/60 pointer-events-none -ml-3" />
+                <span className="text-[11px] font-bold text-[#F0A830]">PKR</span>
+                <span className="truncate max-w-[120px]">{PRICE_PRESETS[selectedPriceIdx].label}</span>
+                <ChevronDown className={cn("w-3 h-3 text-white/60 transition-transform", activeDropdown === "price" && "rotate-180")} />
+              </button>
+
+              <FilterPopover
+                isOpen={activeDropdown === "price"}
+                onClose={() => setActiveDropdown(null)}
+                triggerRef={heroPriceTriggerRef}
+                title="Price Range (PKR)"
+                headerAction={
+                  selectedPriceIdx !== 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedPriceIdx(0); setActiveDropdown(null); }}
+                      className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                    >
+                      Reset
+                    </button>
+                  ) : undefined
+                }
+                width={300}
+                maxHeight={440}
+              >
+                <div className="space-y-1">
+                  {PRICE_PRESETS.map((p, idx) => {
+                    const isSelected = selectedPriceIdx === idx;
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPriceIdx(idx);
+                          setActiveDropdown(null);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
+                          isSelected
+                            ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
+                            : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                        )}
+                      >
+                        <span>{p.label}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </FilterPopover>
             </div>
 
             {/* Execute Search Capsule Button with Tactile Press Spring */}
@@ -531,7 +1009,7 @@ export default function Hero() {
             <span className="truncate">Pakistan's 100% Registry-Verified Land Portal</span>
           </div>
 
-          <h1 className="fluid-hero font-extrabold text-white tracking-tight leading-[1.05] drop-shadow-md text-balance">
+          <h1 className="phi-h1 font-extrabold text-white tracking-tight drop-shadow-md text-balance">
             Architectural Sanctuaries. <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FAF3E6] to-[#F0A830]">
               Title Guaranteed.
@@ -544,19 +1022,18 @@ export default function Hero() {
         </motion.div>
 
         {/* 
-          BOTTOM ROW: ASYMMETRICAL DUAL GLASS PANELS (RESPONSIVE STACK)
-          - Mobile (<768px): Full-width stacked cards (Featured property card stacked on top of liquidity card)
-          - Tablet portrait (768-1023px): 2-column side-by-side cards
-          - Desktop (1024px+): Asymmetric dual cards (left 4 cols, right 5 cols)
+          BOTTOM ROW: GOLDEN RATIO 61.8% / 38.2% ASYMMETRICAL DUAL GLASS PANELS
+          - Desktop (1024px+): Exact Golden Split (Right Showcase Card: 61.8%, Left Metric Panel: 38.2%)
+          - Mobile / Tablet: Responsive ergonomic stack
         */}
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.3, ease: REVEAL_EASE }}
-          className="relative z-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 lg:gap-6 items-end lg:pl-16 w-full"
+          className="relative z-20 flex flex-col lg:flex-row gap-4 lg:gap-6 items-stretch lg:items-end lg:pl-16 w-full"
         >
-          {/* Bottom-Left: Value Metric & Verification Guarantee Glass Panel */}
-          <div className="order-2 md:order-1 md:col-span-1 lg:col-span-4 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-4 sm:p-5 text-white shadow-2xl border border-white/20">
+          {/* Bottom-Left: Value Metric & Verification Guarantee Glass Panel (Golden Ratio: 38.2%) */}
+          <div className="order-2 lg:order-1 w-full lg:w-[38.2%] shrink-0 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-4 sm:p-5 text-white shadow-2xl border border-white/20">
             <div className="flex items-center justify-between pb-2.5 border-b border-white/20 mb-2.5">
               <span className="text-[11px] sm:text-xs uppercase tracking-wider font-semibold text-white/70">
                 Network Liquidity
@@ -603,14 +1080,11 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Desktop Spacer */}
-          <div className="hidden lg:block lg:col-span-3" />
-
-          {/* Bottom-Right (or Mobile Stack Top): Featured Property Glass Card with signature hairline gold border */}
-          <div className="order-1 md:order-2 md:col-span-1 lg:col-span-5 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-3.5 sm:p-5 text-white shadow-2xl glass-hover-sheen group w-full border border-[#C9A227]/50">
-            <div className="flex gap-3 sm:gap-4 items-center">
-              {/* Thumbnail with floating badge */}
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl sm:rounded-[20px] overflow-hidden shrink-0 border border-white/40 shadow-inner">
+          {/* Bottom-Right: Active Hero Property Showcase Card (Golden Ratio: 61.8% container & 1.618:1 showcase aspect ratio) */}
+          <div className="order-1 lg:order-2 w-full lg:w-[61.8%] shrink-0 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-3.5 sm:p-5 text-white shadow-2xl glass-hover-sheen group border border-[#C9A227]/50">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+              {/* Thumbnail with Golden Ratio (1:1.618) aspect ratio container */}
+              <div className="relative w-full sm:w-44 md:w-52 aspect-[1.618/1] rounded-xl sm:rounded-[20px] overflow-hidden shrink-0 border border-white/40 shadow-inner">
                 <img
                   src={activeHero.image}
                   alt={activeHero.title}

@@ -132,6 +132,8 @@ const PricingManagement = lazy(() => import('./components/Admin/PricingManagemen
 const InspectionManagement = lazy(() => import('./components/Admin/InspectionManagement'));
 const ReelsFeed = lazy(() => import('./components/Reels/ReelsFeed'));
 const ReelsManagement = lazy(() => import('./components/Admin/ReelsManagement'));
+const PakStoriesFeed = lazy(() => import('./components/PakStories/PakStoriesFeed'));
+const VideosManagement = lazy(() => import('./components/Admin/VideosManagement'));
 const SeoAeoGeoHub = lazy(() => import('./components/Admin/SeoAeoGeoHub'));
 const AdminLogin = lazy(() => import('./components/Admin/AdminLogin'));
 
@@ -611,7 +613,9 @@ export default function App() {
         <Route path="/signup" element={<PageTransition><SignUpPage /></PageTransition>} />
         <Route path="/login" element={<PageTransition><SignInPage /></PageTransition>} />
         <Route path="/signin" element={<PageTransition><SignInPage /></PageTransition>} />
-        <Route path="/reels" element={<PageTransition><ReelsFeed /></PageTransition>} />
+        <Route path="/stories" element={<PageTransition><PakStoriesFeed /></PageTransition>} />
+        <Route path="/pakstories" element={<PageTransition><PakStoriesFeed /></PageTransition>} />
+        <Route path="/reels" element={<PageTransition><PakStoriesFeed /></PageTransition>} />
         <Route path="/clone" element={<PageTransition><CloneAnalysis /></PageTransition>} />
         <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
         <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />
@@ -731,10 +735,17 @@ export default function App() {
             </AdminLayout>
           </AdminRoute>
         } />
+        <Route path="/admin/videos" element={
+          <AdminRoute>
+            <AdminLayout>
+              <VideosManagement />
+            </AdminLayout>
+          </AdminRoute>
+        } />
         <Route path="/admin/reels" element={
           <AdminRoute>
             <AdminLayout>
-              <ReelsManagement />
+              <VideosManagement />
             </AdminLayout>
           </AdminRoute>
         } />

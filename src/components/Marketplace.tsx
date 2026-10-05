@@ -1365,9 +1365,9 @@ export default function Marketplace() {
             currentCity={topFilters.city || (userLocation?.city !== "Pakistan" ? userLocation?.city : "Lahore")}
           />
 
-          <div className="flex gap-6 items-start">
-            {/* 1. PERSISTENT FILTER SIDEBAR FOR DESKTOP (1280px+) */}
-            <aside className="hidden xl:block w-[280px] shrink-0 sticky top-28 self-start max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar pr-1">
+          <div className="flex gap-6 lg:gap-8 xl:gap-10 items-start">
+            {/* 1. PERSISTENT FILTER SIDEBAR FOR DESKTOP (Golden Ratio 1:φ² ≈ 23.6% supporting element) */}
+            <aside className="hidden xl:block w-[23.6%] shrink-0 sticky top-28 self-start max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar pr-1">
               <div className="glass-card p-5 bg-apple-card-bg backdrop-blur-md rounded-2xl border border-apple-border/30">
                 <div className="flex items-center justify-between pb-3.5 border-b border-apple-border/20 mb-4">
                   <div className="flex items-center gap-2">
@@ -1496,8 +1496,8 @@ export default function Marketplace() {
               )}
             </AnimatePresence>
 
-            {/* Main Grid */}
-            <div className="flex-1">
+            {/* Main Results Grid Container (Golden Ratio Dominant Canvas: 76.4%) */}
+            <div className="flex-1 w-full xl:w-[76.4%] min-w-0">
               {/* 4. MARKET INSIGHT MODULE (Rotating aggregate signals & 1-tap filtered search) */}
               <MarketInsightBanner
                 currentCity={topFilters.city || (userLocation?.city !== "Pakistan" ? userLocation?.city : "Lahore")}

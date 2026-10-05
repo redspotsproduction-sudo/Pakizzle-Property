@@ -212,3 +212,92 @@ CREATE TABLE IF NOT EXISTS reserved_reference_ids (
 
 CREATE INDEX IF NOT EXISTS idx_reserved_reference_ids_ref ON reserved_reference_ids(reference_id);
 
+-- ============================================================================
+-- PakStories — Verified Property Walkthrough Video Infrastructure (Phase 1)
+-- ============================================================================
+
+-- Alter Users table for video permissions
+ALTER TABLE users ADD COLUMN IF NOT EXISTS can_upload_videos BOOLEAN DEFAULT TRUE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS video_suspension_reason TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS video_suspended_until TIMESTAMP WITH TIME ZONE;
+
+-- Property Videos Table
+CREATE TABLE IF NOT EXISTS property_videos (
+    id VARCHAR(64) PRIMARY KEY, -- e.g. vid_...
+    listing_id VARCHAR(64) NOT NULL, -- attached to real, reviewable property listing
+    listing_reference_id VARCHAR(16),
+    creator_id VARCHAR(64) NOT NULL, -- verified account
+    creator_name VARCHAR(255) NOT NULL,
+    creator_avatar TEXT,
+    creator_badge VARCHAR(32) NOT NULL DEFAULT 'identity', -- 'identity' | 'business'
+    creator_type VARCHAR(32) NOT NULL DEFAULT 'agent', -- 'agent' | 'agency' | 'owner'
+    title VARCHAR(255) NOT NULL,
+    caption TEXT,
+    video_url TEXT NOT NULL,
+    renditions JSONB DEFAULT '{"360p": "", "480p": "", "720p": ""}'::jsonb,
+    thumbnail_url TEXT,
+    duration NUMERIC(6, 2) NOT NULL DEFAULT 60.00, -- max 90.00 seconds
+    file_size_bytes BIGINT NOT NULL DEFAULT 0,
+    format VARCHAR(16) NOT NULL DEFAULT 'mp4', -- 'mp4' | 'mov'
+    aspect_ratio VARCHAR(16) NOT NULL DEFAULT '9:16',
+    overlay_spec JSONB DEFAULT '{"priceText": "", "locationText": "", "keySpecs": [], "customTag": ""}'::jsonb,
+    trim_range JSONB DEFAULT '{"startSec": 0, "endSec": 90}'::jsonb,
+    status VARCHAR(32) NOT NULL DEFAULT 'pending_review', -- 'pending_review' | 'approved' | 'rejected' | 'deactivated'
+    rejection_reason TEXT,
+    visibility_scope VARCHAR(32) NOT NULL DEFAULT 'public', -- 'public' (discovery + listing) | 'listing_only'
+    is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+    sort_boost_score NUMERIC(10, 4) NOT NULL DEFAULT 0.0000,
+    ai_prescreen JSONB DEFAULT '{"passed": true, "confidence": 0.95, "label": "genuine_walkthrough", "detectedElements": ["interior", "living_room"], "flaggedReasons": []}'::jsonb,
+    views_count BIGINT NOT NULL DEFAULT 0,
+    unique_viewers_count BIGINT NOT NULL DEFAULT 0,
+    likes_count BIGINT NOT NULL DEFAULT 0,
+    shares_count BIGINT NOT NULL DEFAULT 0,
+    saves_count BIGINT NOT NULL DEFAULT 0,
+    watch_time_total_seconds NUMERIC(14, 2) NOT NULL DEFAULT 0.00,
+    completion_rate NUMERIC(5, 2) NOT NULL DEFAULT 0.00,
+    listing_clicks_count BIGINT NOT NULL DEFAULT 0, -- Click-Through Rate (CTR) driver
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TIMESTAMP WITH TIME ZONE,
+    reviewed_by VARCHAR(64)
+);
+
+CREATE INDEX IF NOT EXISTS idx_property_videos_listing ON property_videos(listing_id);
+CREATE INDEX IF NOT EXISTS idx_property_videos_creator ON property_videos(creator_id);
+CREATE INDEX IF NOT EXISTS idx_property_videos_status ON property_videos(status);
+CREATE INDEX IF NOT EXISTS idx_property_videos_visibility ON property_videos(visibility_scope);
+CREATE INDEX IF NOT EXISTS idx_property_videos_featured ON property_videos(is_featured);
+CREATE INDEX IF NOT EXISTS idx_property_videos_created_at ON property_videos(created_at DESC);
+
+-- Video Reports Table (Flagging inappropriate / misleading content)
+CREATE TABLE IF NOT EXISTS video_reports (
+    id VARCHAR(64) PRIMARY KEY,
+    video_id VARCHAR(64) NOT NULL REFERENCES property_videos(id) ON DELETE CASCADE,
+    listing_id VARCHAR(64),
+    reporter_id VARCHAR(64),
+    reporter_email VARCHAR(255),
+    reason VARCHAR(64) NOT NULL, -- 'misleading_property', 'inappropriate_content', 'wrong_location', 'spam_watermark', 'other'
+    description TEXT,
+    status VARCHAR(32) NOT NULL DEFAULT 'pending', -- 'pending' | 'reviewed' | 'action_taken' | 'dismissed'
+    admin_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    resolved_at TIMESTAMP WITH TIME ZONE,
+    resolved_by VARCHAR(64)
+);
+
+CREATE INDEX IF NOT EXISTS idx_video_reports_video ON video_reports(video_id);
+CREATE INDEX IF NOT EXISTS idx_video_reports_status ON video_reports(status);
+
+-- Platform-wide Video Configuration Table
+CREATE TABLE IF NOT EXISTS video_platform_settings (
+    id VARCHAR(32) PRIMARY KEY DEFAULT 'global_settings',
+    feature_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    max_duration_seconds INTEGER NOT NULL DEFAULT 90,
+    max_file_size_mb INTEGER NOT NULL DEFAULT 75,
+    allowed_formats JSONB DEFAULT '["mp4", "mov"]'::jsonb,
+    ai_prescreen_required BOOLEAN NOT NULL DEFAULT TRUE,
+    ranking_weights JSONB DEFAULT '{"recencyWeight": 0.45, "engagementWeight": 0.35, "ctrWeight": 0.20, "featuredBoost": 50.0}'::jsonb,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(64)
+);
+

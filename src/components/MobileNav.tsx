@@ -1,14 +1,21 @@
 import { motion } from "motion/react";
-import { Home, Search, PlusCircle, Heart, User } from "lucide-react";
+import { Home, Search, PlusCircle, Heart, User, Sparkles } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { useWishlist } from "../context/WishlistContext";
 import { SPRING_SNAPPY } from "./motion";
 
-const NAV_ITEMS = [
+interface MobileNavItem {
+  name: string;
+  icon: any;
+  path: string;
+  highlight?: boolean;
+}
+
+const NAV_ITEMS: MobileNavItem[] = [
   { name: "Home", icon: Home, path: "/" },
   { name: "Search", icon: Search, path: "/marketplace" },
-  { name: "Sell", icon: PlusCircle, path: "/sell", highlight: true },
+  { name: "Stories", icon: Sparkles, path: "/stories", highlight: false },
   { name: "Saved", icon: Heart, path: "/wishlist" },
   { name: "Profile", icon: User, path: "/dashboard" },
 ];

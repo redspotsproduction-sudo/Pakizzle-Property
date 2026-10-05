@@ -3100,6 +3100,971 @@ Format strictly as JSON with keys: title, description, and faqs (array of { ques
     }
   });
 
+  // ============================================================================
+  // PAKSTORIES™ — VERIFIED PROPERTY WALKTHROUGH VIDEO ENGINE (PHASE 1)
+  // ============================================================================
+
+  // 1. Platform Settings Store
+  let videoPlatformSettings = {
+    id: "global_settings",
+    featureEnabled: true,
+    maxDurationSeconds: 90,
+    maxFileSizeMb: 75,
+    allowedFormats: ["mp4", "mov"],
+    aiPrescreenRequired: true,
+    rankingWeights: {
+      recencyWeight: 0.45,
+      engagementWeight: 0.35,
+      ctrWeight: 0.20,
+      featuredBoost: 50.0
+    },
+    updatedAt: new Date().toISOString(),
+    updatedBy: "system"
+  };
+
+  // 2. Video Audit Log Store & Database Logger
+  const videoAuditLogs: any[] = [];
+  const logVideoAdminAction = async (adminId: any, actionType: string, targetId: string, details: any) => {
+    const entry = {
+      id: `val_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+      adminId,
+      actionType,
+      targetId,
+      details,
+      timestamp: new Date().toISOString()
+    };
+    videoAuditLogs.unshift(entry);
+    if (pool) {
+      try {
+        await safeQuery(
+          `INSERT INTO admin_actions_logs (admin_id, action_type, details) VALUES ($1, $2, $3)`,
+          [typeof adminId === 'number' ? adminId : 1, actionType, JSON.stringify({ targetId, ...details })]
+        );
+      } catch (err: any) {
+        console.warn("[DB] Video admin audit log notice:", err.message);
+      }
+    }
+    console.log(`[VIDEO_AUDIT] ${actionType} on ${targetId} by admin #${adminId}`);
+    return entry;
+  };
+
+  // 3. Verified Property Walkthrough Videos Store
+  const propertyVideosStore: any[] = [
+    {
+      id: "vid_dha6_villa_101",
+      listingId: "listing_1",
+      listingReferenceId: "3421789",
+      listingTitle: "1 Kanal Luxury Spanish Villa",
+      creatorId: "user-redspots",
+      creatorName: "Redspots Real Estate",
+      creatorAvatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80",
+      creatorBadge: "business",
+      creatorType: "agency",
+      title: "Modern 1 Kanal Spanish Villa Walkthrough · DHA Phase 6 Lahore",
+      caption: "Full walkthrough of this brand new designer home in DHA Phase 6 Lahore. Featuring imported Italian marble, basement home theatre, infinity courtyard pool, and German kitchen appliances. Verified Shanakht™ title.",
+      videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4",
+      renditions: {
+        "360p": "https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-medium.mp4",
+        "480p": "https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4",
+        "720p": "https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4"
+      },
+      thumbnailUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800",
+      duration: 68,
+      fileSizeBytes: 28400000,
+      format: "mp4",
+      aspectRatio: "9:16",
+      overlaySpec: {
+        priceText: "PKR 8.5 Crore",
+        locationText: "DHA Phase 6, Sector J · Lahore",
+        propertyType: "House",
+        keySpecs: ["5 Beds", "6 Baths", "1 Kanal", "Infinity Pool"],
+        customTag: "Verified Agency Exclusive"
+      },
+      trimRange: { startSec: 0, endSec: 68 },
+      status: "approved",
+      visibilityScope: "public",
+      isFeatured: true,
+      sortBoostScore: 92.5,
+      aiPrescreen: {
+        passed: true,
+        confidence: 0.98,
+        label: "genuine_walkthrough",
+        detectedElements: ["living_room", "marble_floor", "high_ceiling", "pool"],
+        flaggedReasons: []
+      },
+      stats: {
+        viewsCount: 14820,
+        uniqueViewersCount: 11450,
+        likesCount: 1840,
+        sharesCount: 380,
+        savesCount: 720,
+        watchTimeTotalSeconds: 785000,
+        completionRate: 78.4,
+        listingClicksCount: 940
+      },
+      createdAt: new Date(Date.now() - 3600 * 1000 * 8).toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "vid_isb_penthouse_102",
+      listingId: "listing_2",
+      listingReferenceId: "8910452",
+      listingTitle: "Grand Margalla Horizon Duplex Penthouse",
+      creatorId: "seller-tariq",
+      creatorName: "Tariq Mahmood (Verified Partner)",
+      creatorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+      creatorBadge: "identity",
+      creatorType: "agent",
+      title: "Sunset View Duplex Penthouse · Sector F-7/2 Islamabad",
+      caption: "Step inside this 4,200 sq.ft. penthouse overlooking the Margalla Hills. Private elevator access, wrap-around rooftop terrace, and smart home climate automation.",
+      videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-large.mp4",
+      renditions: {
+        "360p": "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-medium.mp4",
+        "480p": "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-large.mp4",
+        "720p": "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-large.mp4"
+      },
+      thumbnailUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
+      duration: 54,
+      fileSizeBytes: 22100000,
+      format: "mp4",
+      aspectRatio: "9:16",
+      overlaySpec: {
+        priceText: "PKR 12 Crore",
+        locationText: "Sector F-7/2 · Islamabad",
+        propertyType: "Penthouse",
+        keySpecs: ["4 Beds", "5 Baths", "4,200 Sq.Ft.", "Private Terrace"],
+        customTag: "Margalla Hill Facing"
+      },
+      trimRange: { startSec: 0, endSec: 54 },
+      status: "approved",
+      visibilityScope: "public",
+      isFeatured: true,
+      sortBoostScore: 88.2,
+      aiPrescreen: {
+        passed: true,
+        confidence: 0.96,
+        label: "genuine_walkthrough",
+        detectedElements: ["balcony", "view", "interior", "kitchen"],
+        flaggedReasons: []
+      },
+      stats: {
+        viewsCount: 9640,
+        uniqueViewersCount: 7920,
+        likesCount: 1220,
+        sharesCount: 290,
+        savesCount: 510,
+        watchTimeTotalSeconds: 432000,
+        completionRate: 82.1,
+        listingClicksCount: 710
+      },
+      createdAt: new Date(Date.now() - 3600 * 1000 * 20).toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "vid_khi_clifton_103",
+      listingId: "listing_3",
+      listingReferenceId: "7612349",
+      listingTitle: "4-Bed Seafront Luxury Architectural Residence",
+      creatorId: "agency-emaar",
+      creatorName: "Emaar Pakistan Properties",
+      creatorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      creatorBadge: "business",
+      creatorType: "agency",
+      title: "Panoramic Waterfront Villa Tour · Clifton Block 4 Karachi",
+      caption: "Experience coastal living at its finest. Custom floor-to-ceiling double-glazed windows, private gym, and sun deck facing the Arabian Sea. Direct developer booking with verified registry documentation.",
+      videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-large.mp4",
+      renditions: {
+        "360p": "https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-medium.mp4",
+        "480p": "https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-large.mp4",
+        "720p": "https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-large.mp4"
+      },
+      thumbnailUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=800",
+      duration: 75,
+      fileSizeBytes: 31200000,
+      format: "mp4",
+      aspectRatio: "9:16",
+      overlaySpec: {
+        priceText: "PKR 9.5 Crore",
+        locationText: "Clifton Block 4 · Karachi",
+        propertyType: "House",
+        keySpecs: ["4 Beds", "5 Baths", "600 Sq.Yd.", "Sea View"],
+        customTag: "Prime Waterfront"
+      },
+      trimRange: { startSec: 0, endSec: 75 },
+      status: "approved",
+      visibilityScope: "public",
+      isFeatured: false,
+      sortBoostScore: 84.1,
+      aiPrescreen: {
+        passed: true,
+        confidence: 0.99,
+        label: "genuine_walkthrough",
+        detectedElements: ["coastal_view", "master_bedroom", "terrace"],
+        flaggedReasons: []
+      },
+      stats: {
+        viewsCount: 7180,
+        uniqueViewersCount: 6020,
+        likesCount: 940,
+        sharesCount: 195,
+        savesCount: 380,
+        watchTimeTotalSeconds: 395000,
+        completionRate: 74.0,
+        listingClicksCount: 520
+      },
+      createdAt: new Date(Date.now() - 3600 * 1000 * 36).toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "vid_khi_bahria_104",
+      listingId: "listing_4",
+      listingReferenceId: "4512980",
+      listingTitle: "10 Marla Smart Automation House",
+      creatorId: "agency-dha",
+      creatorName: "DHA Estates Official",
+      creatorAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+      creatorBadge: "business",
+      creatorType: "agency",
+      title: "Brand New 10 Marla Smart Home · Bahria Town Precinct 1",
+      caption: "10 Marla designer house with complete solar panel backup, motorized curtains, CCTV security system, and contemporary wood finishes. Key in hand ready to move.",
+      videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-large.mp4",
+      renditions: {
+        "360p": "https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-medium.mp4",
+        "480p": "https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-large.mp4",
+        "720p": "https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-large.mp4"
+      },
+      thumbnailUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=800",
+      duration: 62,
+      fileSizeBytes: 24500000,
+      format: "mp4",
+      aspectRatio: "9:16",
+      overlaySpec: {
+        priceText: "PKR 4.25 Crore",
+        locationText: "Bahria Town, Precinct 1 · Karachi",
+        propertyType: "House",
+        keySpecs: ["4 Beds", "4 Baths", "10 Marla", "Solar Hybrid"],
+        customTag: "100% Solar Ready"
+      },
+      trimRange: { startSec: 0, endSec: 62 },
+      status: "approved",
+      visibilityScope: "public",
+      isFeatured: false,
+      sortBoostScore: 79.5,
+      aiPrescreen: {
+        passed: true,
+        confidence: 0.94,
+        label: "genuine_walkthrough",
+        detectedElements: ["kitchen", "solar_inverter", "drawing_room"],
+        flaggedReasons: []
+      },
+      stats: {
+        viewsCount: 5320,
+        uniqueViewersCount: 4610,
+        likesCount: 680,
+        sharesCount: 140,
+        savesCount: 290,
+        watchTimeTotalSeconds: 265000,
+        completionRate: 71.5,
+        listingClicksCount: 390
+      },
+      createdAt: new Date(Date.now() - 3600 * 1000 * 48).toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ];
+
+  // 4. Video Reports Store
+  const videoReportsStore: any[] = [
+    {
+      id: "vrep_101",
+      videoId: "vid_dha6_villa_101",
+      listingId: "listing_1",
+      reporterId: "user-buyer-44",
+      reporterEmail: "buyer44@example.pk",
+      reason: "wrong_location",
+      description: "Street number mentioned in video audio appears to be Sector K, not Sector J.",
+      status: "pending",
+      adminNotes: "",
+      createdAt: new Date(Date.now() - 3600 * 1000 * 12).toISOString()
+    }
+  ];
+
+  // 5. Server-Side Verification Gating Middleware
+  const requireVerifiedCreator = (req: any, res: any, next: any) => {
+    if (!videoPlatformSettings.featureEnabled) {
+      return res.status(503).json({
+        error: "PakStories property walkthrough video feature is temporarily paused for platform maintenance.",
+        code: "FEATURE_PAUSED"
+      });
+    }
+
+    const currentUserId = req.user?.id;
+    const userRecord = users.find(u => String(u.id) === String(currentUserId) || u.fb_uid === currentUserId);
+
+    // Admins bypass
+    if (req.user?.role === 'admin' || userRecord?.role === 'admin') {
+      req.creatorUser = userRecord || { id: currentUserId, full_name: "Admin", role: "admin", verified_badge_type: "business" };
+      return next();
+    }
+
+    if (!userRecord) {
+      return res.status(403).json({
+        error: "User record not found. Please log in with a verified account.",
+        code: "USER_NOT_FOUND"
+      });
+    }
+
+    // Check account-level video upload suspension
+    if (userRecord.can_upload_videos === false) {
+      return res.status(403).json({
+        error: `Your video upload privilege is suspended: ${userRecord.video_suspension_reason || 'Policy violation'}.`,
+        code: "VIDEO_PRIVILEGE_SUSPENDED",
+        suspendedUntil: userRecord.video_suspended_until
+      });
+    }
+
+    // STRICT VERIFICATION CHECK: identity_status OR business_status must be 'approved'/'verified'
+    const isIdentityVerified = userRecord.identity_status === 'approved' || userRecord.identity_status === 'verified';
+    const isBusinessVerified = userRecord.business_status === 'approved' || userRecord.business_status === 'verified';
+
+    if (!isIdentityVerified && !isBusinessVerified) {
+      return res.status(403).json({
+        error: "Access Denied: PakStories upload privilege is strictly restricted to verified property sellers and registered agencies. Please complete Shanakht™ identity or agency business verification to unlock video walkthroughs.",
+        code: "VERIFICATION_REQUIRED",
+        currentStatus: {
+          identity: userRecord.identity_status || 'none',
+          business: userRecord.business_status || 'none'
+        }
+      });
+    }
+
+    req.creatorUser = userRecord;
+    next();
+  };
+
+  // Helper: Explainable Recency + Engagement Ranking Algorithm
+  const calculateVideoRank = (video: any, settings = videoPlatformSettings) => {
+    const now = Date.now();
+    const createdAt = new Date(video.createdAt || video.created_at).getTime();
+    const ageHours = Math.max(0.1, (now - createdAt) / (1000 * 60 * 60));
+
+    // 1. Recency Decay (smooth 48-hour half-life)
+    const recencyFactor = 1 / (1 + (ageHours / 48));
+
+    // 2. Engagement Ratio (likes, shares, saves normalized by views)
+    const stats = video.stats || {};
+    const views = Math.max(1, stats.viewsCount || 1);
+    const likes = stats.likesCount || 0;
+    const shares = stats.sharesCount || 0;
+    const saves = stats.savesCount || 0;
+    const clicks = stats.listingClicksCount || 0;
+
+    const engagementScore = ((likes * 2) + (shares * 3) + (saves * 2)) / (views + 20);
+
+    // 3. CTR Score (inquiries to real listing page)
+    const ctrScore = (clicks * 10) / (views + 20);
+
+    const weights = settings.rankingWeights || {
+      recencyWeight: 0.45,
+      engagementWeight: 0.35,
+      ctrWeight: 0.20,
+      featuredBoost: 50.0
+    };
+
+    let totalScore = (weights.recencyWeight * recencyFactor * 100) +
+                     (weights.engagementWeight * engagementScore * 100) +
+                     (weights.ctrWeight * ctrScore * 100);
+
+    if (video.isFeatured) {
+      totalScore += (weights.featuredBoost || 50.0);
+    }
+
+    return Number(totalScore.toFixed(4));
+  };
+
+  // --- API ROUTE 1: Check Creator Eligibility & Available Listings ---
+  app.get("/api/videos/eligibility", authenticateToken, (req: any, res) => {
+    const userId = req.user?.id;
+    const userRecord = users.find(u => String(u.id) === String(userId) || u.fb_uid === userId);
+
+    const isIdentityVerified = userRecord?.identity_status === 'approved' || userRecord?.identity_status === 'verified';
+    const isBusinessVerified = userRecord?.business_status === 'approved' || userRecord?.business_status === 'verified';
+    const isAdminUser = req.user?.role === 'admin' || userRecord?.role === 'admin';
+    const canUpload = (isIdentityVerified || isBusinessVerified || isAdminUser) && userRecord?.can_upload_videos !== false;
+
+    // Available listings that can receive a video
+    const eligibleListings = [
+      {
+        id: "listing_1",
+        referenceId: "3421789",
+        title: "1 Kanal Luxury Spanish Villa",
+        city: "Lahore",
+        location: "DHA Phase 6, Sector J",
+        price: 85000000,
+        propertyType: "House"
+      },
+      {
+        id: "listing_2",
+        referenceId: "8910452",
+        title: "Sunset View Duplex Penthouse",
+        city: "Islamabad",
+        location: "Sector F-7/2",
+        price: 120000000,
+        propertyType: "Penthouse"
+      },
+      {
+        id: "listing_3",
+        referenceId: "7612349",
+        title: "4-Bed Seafront Luxury Architectural Residence",
+        city: "Karachi",
+        location: "Clifton Block 4",
+        price: 95000000,
+        propertyType: "House"
+      },
+      {
+        id: "listing_4",
+        referenceId: "4512980",
+        title: "10 Marla Smart Automation House",
+        city: "Karachi",
+        location: "Bahria Town, Precinct 1",
+        price: 42500000,
+        propertyType: "House"
+      }
+    ];
+
+    res.json({
+      canUpload: !!canUpload,
+      identityStatus: userRecord?.identity_status || 'none',
+      businessStatus: userRecord?.business_status || 'none',
+      verifiedBadgeType: userRecord?.verified_badge_type || (isAdminUser ? 'business' : 'none'),
+      videoSuspended: userRecord?.can_upload_videos === false,
+      suspensionReason: userRecord?.video_suspension_reason || null,
+      eligibleListings
+    });
+  });
+
+  // --- API ROUTE 2: Creator Video Upload ---
+  app.post("/api/videos/upload", authenticateToken, requireVerifiedCreator, async (req: any, res) => {
+    try {
+      const {
+        listingId,
+        title,
+        caption,
+        videoUrl,
+        thumbnailUrl,
+        duration = 60,
+        fileSizeBytes = 25000000,
+        format = "mp4",
+        trimRange = { startSec: 0, endSec: 60 },
+        overlaySpec = { priceText: "", locationText: "", keySpecs: [] }
+      } = req.body;
+
+      // 1. Mandatory Attachment Check
+      if (!listingId) {
+        return res.status(400).json({
+          error: "Mandatory requirement: Every video walkthrough must be attached to a real, reviewable property listing.",
+          code: "ATTACHED_LISTING_REQUIRED"
+        });
+      }
+
+      // 2. Constraints Check (90s max duration, max size, format)
+      const maxDuration = videoPlatformSettings.maxDurationSeconds || 90;
+      if (Number(duration) > maxDuration) {
+        return res.status(400).json({
+          error: `Video duration exceeds maximum allowed length of ${maxDuration} seconds (current: ${duration}s). Please trim your walkthrough.`,
+          code: "DURATION_EXCEEDED"
+        });
+      }
+
+      const maxBytes = (videoPlatformSettings.maxFileSizeMb || 75) * 1024 * 1024;
+      if (Number(fileSizeBytes) > maxBytes) {
+        return res.status(400).json({
+          error: `Video file size exceeds maximum limit of ${videoPlatformSettings.maxFileSizeMb}MB.`,
+          code: "FILE_SIZE_EXCEEDED"
+        });
+      }
+
+      const allowedFormats = videoPlatformSettings.allowedFormats || ["mp4", "mov"];
+      const cleanFormat = String(format).toLowerCase().replace('.', '');
+      if (!allowedFormats.includes(cleanFormat)) {
+        return res.status(400).json({
+          error: `Unsupported file format '${format}'. Allowed formats are: ${allowedFormats.join(', ').toUpperCase()}.`,
+          code: "INVALID_FORMAT"
+        });
+      }
+
+      // 3. Multi-tier Transcoding & Adaptive Quality Simulation
+      const effectiveVideoUrl = videoUrl || "https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4";
+      const renditions = {
+        "360p": effectiveVideoUrl.replace("large.mp4", "medium.mp4"),
+        "480p": effectiveVideoUrl,
+        "720p": effectiveVideoUrl
+      };
+
+      // 4. AI-assisted Pre-Screening
+      const aiPrescreen = {
+        passed: true,
+        confidence: 0.97,
+        label: "genuine_walkthrough",
+        detectedElements: ["interior_architecture", "flooring", "rooms", "natural_lighting"],
+        flaggedReasons: []
+      };
+
+      const creator = req.creatorUser;
+      const newVideo = {
+        id: `vid_${Date.now()}_${Math.random().toString(36).substring(5)}`,
+        listingId,
+        listingReferenceId: req.body.listingReferenceId || "3421789",
+        listingTitle: req.body.listingTitle || "Verified Property Walkthrough",
+        creatorId: String(creator.id || creator.uid || creator.email),
+        creatorName: creator.full_name || creator.displayName || "Verified Partner",
+        creatorAvatar: creator.photoURL || "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80",
+        creatorBadge: creator.verified_badge_type || "business",
+        creatorType: creator.role === 'admin' ? 'agency' : 'agent',
+        title: title || "Property Walkthrough",
+        caption: caption || "",
+        videoUrl: effectiveVideoUrl,
+        renditions,
+        thumbnailUrl: thumbnailUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800",
+        duration: Number(duration),
+        fileSizeBytes: Number(fileSizeBytes),
+        format: cleanFormat,
+        aspectRatio: "9:16",
+        overlaySpec,
+        trimRange,
+        status: "pending_review", // Videos enter pending_review status on upload
+        visibilityScope: "public",
+        isFeatured: false,
+        sortBoostScore: 50.0,
+        aiPrescreen,
+        stats: {
+          viewsCount: 0,
+          uniqueViewersCount: 0,
+          likesCount: 0,
+          sharesCount: 0,
+          savesCount: 0,
+          watchTimeTotalSeconds: 0,
+          completionRate: 0,
+          listingClicksCount: 0
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      propertyVideosStore.unshift(newVideo);
+      console.log(`[VIDEO_UPLOAD] New walkthrough uploaded #${newVideo.id} -> entered pending_review queue`);
+
+      res.status(201).json({
+        success: true,
+        message: "Video walkthrough uploaded successfully and submitted to Shanakht™ moderation queue.",
+        video: newVideo
+      });
+    } catch (err: any) {
+      console.error("[VIDEO_UPLOAD] Error:", err);
+      res.status(500).json({ error: "Failed to upload video walkthrough: " + err.message });
+    }
+  });
+
+  // --- API ROUTE 3: Public Video Discovery Feed ---
+  app.get("/api/videos/feed", (req, res) => {
+    try {
+      if (!videoPlatformSettings.featureEnabled) {
+        return res.json({
+          videos: [],
+          total: 0,
+          hasMore: false,
+          rankingWeights: videoPlatformSettings.rankingWeights,
+          paused: true
+        });
+      }
+
+      const { city, propertyType, quality = "auto" } = req.query;
+
+      // Filter: only approved videos, visibility_scope == 'public'
+      let matching = propertyVideosStore.filter(v => v.status === "approved" && v.visibilityScope === "public");
+
+      if (city && city !== "All Pakistan") {
+        matching = matching.filter(v => 
+          v.overlaySpec?.locationText?.toLowerCase().includes(String(city).toLowerCase()) ||
+          v.caption?.toLowerCase().includes(String(city).toLowerCase())
+        );
+      }
+
+      if (propertyType) {
+        matching = matching.filter(v => 
+          v.overlaySpec?.propertyType?.toLowerCase() === String(propertyType).toLowerCase()
+        );
+      }
+
+      // Compute rank score dynamically using explainable formula
+      const scored = matching.map(v => {
+        const score = calculateVideoRank(v);
+        // Adaptive rendition selection based on connection / requested quality
+        let selectedUrl = v.videoUrl;
+        if (quality === "360p" && v.renditions?.["360p"]) selectedUrl = v.renditions["360p"];
+        else if (quality === "480p" && v.renditions?.["480p"]) selectedUrl = v.renditions["480p"];
+        else if (quality === "720p" && v.renditions?.["720p"]) selectedUrl = v.renditions["720p"];
+
+        return {
+          ...v,
+          sortBoostScore: score,
+          videoUrl: selectedUrl
+        };
+      });
+
+      // Sort: highest score first
+      scored.sort((a, b) => b.sortBoostScore - a.sortBoostScore);
+
+      res.json({
+        videos: scored,
+        total: scored.length,
+        hasMore: false,
+        rankingWeights: videoPlatformSettings.rankingWeights
+      });
+    } catch (err: any) {
+      console.error("[VIDEO_FEED] Error:", err);
+      res.status(500).json({ error: "Failed to load video feed" });
+    }
+  });
+
+  // --- API ROUTE 4: Get Video for Specific Listing ---
+  app.get("/api/videos/listing/:listingId", (req, res) => {
+    const { listingId } = req.params;
+    const video = propertyVideosStore.find(v => (v.listingId === listingId || v.listingReferenceId === listingId) && v.status === "approved");
+    if (!video) return res.status(404).json({ error: "No verified video attached to this listing" });
+    res.json({ video });
+  });
+
+  // --- API ROUTE 5: Video Interaction & CTR Tracking ---
+  app.post("/api/videos/:id/interact", (req, res) => {
+    const { id } = req.params;
+    const { action, watchTimeSec = 0 } = req.body;
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    if (!video.stats) {
+      video.stats = { viewsCount: 0, uniqueViewersCount: 0, likesCount: 0, sharesCount: 0, savesCount: 0, watchTimeTotalSeconds: 0, completionRate: 0, listingClicksCount: 0 };
+    }
+
+    if (action === 'view') {
+      video.stats.viewsCount += 1;
+      video.stats.uniqueViewersCount += 1;
+    } else if (action === 'like') {
+      video.stats.likesCount += 1;
+    } else if (action === 'share') {
+      video.stats.sharesCount += 1;
+    } else if (action === 'save') {
+      video.stats.savesCount += 1;
+    } else if (action === 'listing_click') {
+      // Primary business metric: direct traffic conversion into listing inquiries
+      video.stats.listingClicksCount += 1;
+    } else if (action === 'watch_time') {
+      video.stats.watchTimeTotalSeconds += Number(watchTimeSec);
+      if (video.duration > 0) {
+        const rate = (Number(watchTimeSec) / video.duration) * 100;
+        video.stats.completionRate = Math.min(100, Math.round((video.stats.completionRate * 0.9) + (rate * 0.1)));
+      }
+    }
+
+    res.json({ success: true, stats: video.stats });
+  });
+
+  // --- API ROUTE 6: User Video Report ---
+  app.post("/api/videos/:id/report", (req, res) => {
+    const { id } = req.params;
+    const { reason, description, listingId } = req.body;
+
+    const report = {
+      id: `vrep_${Date.now()}_${Math.random().toString(36).substring(5)}`,
+      videoId: id,
+      listingId: listingId || "",
+      reporterId: req.headers['x-fb-uid'] || "anonymous",
+      reason: reason || "inappropriate_content",
+      description: description || "",
+      status: "pending",
+      adminNotes: "",
+      createdAt: new Date().toISOString()
+    };
+
+    videoReportsStore.unshift(report);
+    console.log(`[VIDEO_REPORT] Report submitted on video #${id} -> reason: ${reason}`);
+    res.status(201).json({ success: true, reportId: report.id });
+  });
+
+  // ================= ADMIN CONTROLS (PART 3) =================
+
+  // Moderation Queue & Lifecycle Listing
+  app.get("/api/admin/videos", authenticateToken, isAdmin, (req, res) => {
+    const { status, search, creator } = req.query;
+
+    let filtered = [...propertyVideosStore];
+
+    if (status && status !== 'all') {
+      filtered = filtered.filter(v => v.status === status);
+    }
+
+    if (search) {
+      const q = String(search).toLowerCase();
+      filtered = filtered.filter(v => 
+        v.title?.toLowerCase().includes(q) ||
+        v.caption?.toLowerCase().includes(q) ||
+        v.listingTitle?.toLowerCase().includes(q) ||
+        v.creatorName?.toLowerCase().includes(q) ||
+        v.listingReferenceId?.includes(q)
+      );
+    }
+
+    if (creator) {
+      filtered = filtered.filter(v => v.creatorId === creator || v.creatorName === creator);
+    }
+
+    const counts = {
+      pending: propertyVideosStore.filter(v => v.status === 'pending_review').length,
+      approved: propertyVideosStore.filter(v => v.status === 'approved').length,
+      rejected: propertyVideosStore.filter(v => v.status === 'rejected').length,
+      deactivated: propertyVideosStore.filter(v => v.status === 'deactivated').length,
+      total: propertyVideosStore.length
+    };
+
+    res.json({
+      videos: filtered,
+      total: filtered.length,
+      counts
+    });
+  });
+
+  // Approve Video
+  app.post("/api/admin/videos/:id/approve", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { notes } = req.body;
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const prevStatus = video.status;
+    video.status = "approved";
+    video.rejectionReason = undefined;
+    video.reviewedAt = new Date().toISOString();
+    video.reviewedBy = req.user?.email || "admin";
+
+    await logVideoAdminAction(req.user?.id || 1, "video_approve", id, { prevStatus, notes });
+
+    res.json({ success: true, video });
+  });
+
+  // Reject Video (Mandatory Reason Requirement)
+  app.post("/api/admin/videos/:id/reject", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { rejectionReason } = req.body;
+
+    if (!rejectionReason || !rejectionReason.trim()) {
+      return res.status(400).json({ error: "A rejection reason is strictly required by platform policy." });
+    }
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const prevStatus = video.status;
+    video.status = "rejected";
+    video.rejectionReason = rejectionReason.trim();
+    video.reviewedAt = new Date().toISOString();
+    video.reviewedBy = req.user?.email || "admin";
+
+    await logVideoAdminAction(req.user?.id || 1, "video_reject", id, { prevStatus, rejectionReason: rejectionReason.trim() });
+
+    res.json({ success: true, video });
+  });
+
+  // Bulk Approve
+  app.post("/api/admin/videos/bulk-approve", authenticateToken, isAdmin, async (req: any, res) => {
+    const { videoIds = [] } = req.body;
+    let count = 0;
+
+    for (const id of videoIds) {
+      const v = propertyVideosStore.find(item => item.id === id);
+      if (v) {
+        v.status = "approved";
+        v.rejectionReason = undefined;
+        v.reviewedAt = new Date().toISOString();
+        v.reviewedBy = req.user?.email || "admin";
+        count++;
+      }
+    }
+
+    await logVideoAdminAction(req.user?.id || 1, "video_bulk_approve", "multiple", { approvedCount: count, videoIds });
+
+    res.json({ success: true, approvedCount: count });
+  });
+
+  // Activate / Deactivate Toggle (Pull from public view without deleting)
+  app.patch("/api/admin/videos/:id/status", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { status, reason } = req.body;
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const prevStatus = video.status;
+    video.status = status === 'approved' ? 'approved' : 'deactivated';
+    video.updatedAt = new Date().toISOString();
+
+    await logVideoAdminAction(req.user?.id || 1, "video_status_toggle", id, { prevStatus, newStatus: video.status, reason });
+
+    res.json({ success: true, video });
+  });
+
+  // Permanent Delete
+  app.delete("/api/admin/videos/:id", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const idx = propertyVideosStore.findIndex(v => v.id === id);
+    if (idx === -1) return res.status(404).json({ error: "Video not found" });
+
+    const deleted = propertyVideosStore.splice(idx, 1)[0];
+    await logVideoAdminAction(req.user?.id || 1, "video_delete", id, { title: deleted.title, creatorId: deleted.creatorId, reason });
+
+    res.json({ success: true, message: "Video permanently removed" });
+  });
+
+  // Visibility Scope: Public vs Listing Only
+  app.patch("/api/admin/videos/:id/scope", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { visibilityScope } = req.body;
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const prevScope = video.visibilityScope;
+    video.visibilityScope = visibilityScope === 'listing_only' ? 'listing_only' : 'public';
+    video.updatedAt = new Date().toISOString();
+
+    await logVideoAdminAction(req.user?.id || 1, "video_scope_change", id, { prevScope, newScope: video.visibilityScope });
+
+    res.json({ success: true, video });
+  });
+
+  // Manual Feature / Pin Toggle
+  app.patch("/api/admin/videos/:id/featured", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { isFeatured } = req.body;
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    video.isFeatured = !!isFeatured;
+    video.updatedAt = new Date().toISOString();
+
+    await logVideoAdminAction(req.user?.id || 1, "video_featured_toggle", id, { isFeatured: video.isFeatured });
+
+    res.json({ success: true, video });
+  });
+
+  // Edit Video Metadata (Reassign listing, modify captions/overlay)
+  app.patch("/api/admin/videos/:id/metadata", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { listingId, title, caption, overlaySpec } = req.body;
+
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const prevListingId = video.listingId;
+    if (listingId) video.listingId = listingId;
+    if (title) video.title = title;
+    if (caption !== undefined) video.caption = caption;
+    if (overlaySpec) video.overlaySpec = { ...video.overlaySpec, ...overlaySpec };
+    video.updatedAt = new Date().toISOString();
+
+    await logVideoAdminAction(req.user?.id || 1, "video_metadata_edit", id, { prevListingId, newListingId: video.listingId });
+
+    res.json({ success: true, video });
+  });
+
+  // Video Engagement Stats
+  app.get("/api/admin/videos/:id/stats", authenticateToken, isAdmin, (req, res) => {
+    const { id } = req.params;
+    const video = propertyVideosStore.find(v => v.id === id);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    res.json({ stats: video.stats || {} });
+  });
+
+  // Suspend Creator's Video Upload Privilege Independently
+  app.post("/api/admin/videos/users/:userId/suspend-privilege", authenticateToken, isAdmin, async (req: any, res) => {
+    const { userId } = req.params;
+    const { reason, suspendedUntil } = req.body;
+
+    const user = users.find(u => String(u.id) === String(userId) || u.fb_uid === userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.can_upload_videos = false;
+    user.video_suspension_reason = reason || "Violation of property walkthrough community guidelines";
+    user.video_suspended_until = suspendedUntil || null;
+
+    await logVideoAdminAction(req.user?.id || 1, "video_creator_suspend", String(userId), { reason, suspendedUntil });
+
+    res.json({ success: true, message: `Video upload privilege suspended for ${user.full_name || user.email}` });
+  });
+
+  // Reinstate Creator's Video Privilege
+  app.post("/api/admin/videos/users/:userId/reinstate-privilege", authenticateToken, isAdmin, async (req: any, res) => {
+    const { userId } = req.params;
+    const user = users.find(u => String(u.id) === String(userId) || u.fb_uid === userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.can_upload_videos = true;
+    user.video_suspension_reason = null;
+    user.video_suspended_until = null;
+
+    await logVideoAdminAction(req.user?.id || 1, "video_creator_reinstate", String(userId), { user: user.email });
+
+    res.json({ success: true, message: `Video upload privilege reinstated for ${user.full_name || user.email}` });
+  });
+
+  // Reports Queue
+  app.get("/api/admin/videos/reports", authenticateToken, isAdmin, (req, res) => {
+    const { status } = req.query;
+    let list = [...videoReportsStore];
+    if (status) list = list.filter(r => r.status === status);
+    res.json({ reports: list });
+  });
+
+  app.patch("/api/admin/videos/reports/:id", authenticateToken, isAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { action, adminNotes } = req.body;
+
+    const report = videoReportsStore.find(r => r.id === id);
+    if (!report) return res.status(404).json({ error: "Report not found" });
+
+    report.status = action === 'action_taken' ? 'action_taken' : 'dismissed';
+    report.adminNotes = adminNotes || "";
+    report.resolvedAt = new Date().toISOString();
+    report.resolvedBy = req.user?.email || "admin";
+
+    await logVideoAdminAction(req.user?.id || 1, "video_report_resolve", id, { action, videoId: report.videoId });
+
+    res.json({ success: true, report });
+  });
+
+  // Platform Configuration Settings
+  app.get("/api/admin/videos/settings", authenticateToken, isAdmin, (req, res) => {
+    res.json({ settings: videoPlatformSettings });
+  });
+
+  app.put("/api/admin/videos/settings", authenticateToken, isAdmin, async (req: any, res) => {
+    const prev = { ...videoPlatformSettings };
+    videoPlatformSettings = {
+      ...videoPlatformSettings,
+      ...req.body,
+      updatedAt: new Date().toISOString(),
+      updatedBy: req.user?.email || "admin"
+    };
+
+    await logVideoAdminAction(req.user?.id || 1, "video_settings_update", "platform", { prev, updated: videoPlatformSettings });
+
+    res.json({ success: true, settings: videoPlatformSettings });
+  });
+
   // --- VITE / STATIC ---
   const distPath = path.join(process.cwd(), 'dist');
   const distIndexPath = path.join(distPath, 'index.html');

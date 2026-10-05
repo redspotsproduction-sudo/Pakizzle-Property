@@ -438,6 +438,18 @@
     "reels_offers": {
       "schema": "ReelOffer",
       "description": "Offers and bids submitted directly on video reels"
+    },
+    "property_videos": {
+      "schema": "object",
+      "description": "PakStories verified property walkthrough videos attached to listings"
+    },
+    "video_reports": {
+      "schema": "object",
+      "description": "Flagged inappropriate or misleading property video reports"
+    },
+    "video_platform_settings": {
+      "schema": "object",
+      "description": "Platform-wide video configuration and ranking weights"
     }
   }
 }

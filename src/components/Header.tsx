@@ -172,6 +172,13 @@ export default function Header() {
                 <ShieldCheck className="w-3.5 h-3.5 text-[#5FA84C]" />
                 <span>Verification</span>
               </Link>
+              <Link
+                to="/stories"
+                className="px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-[#5B2A86] to-[#8A3DB8] hover:opacity-90 rounded-full transition-all flex items-center gap-1.5 shadow-sm"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#F0A830]" />
+                <span>PakStories</span>
+              </Link>
             </nav>
           )}
         </div>
