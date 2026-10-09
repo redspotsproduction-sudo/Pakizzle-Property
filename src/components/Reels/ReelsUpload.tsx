@@ -38,17 +38,10 @@ interface VehicleDropdownItem {
 
 // Stunning public loop videos for selection so users can play with beautiful samples immediately
 const LUX_DEMO_VIDEOS = [
-  { name: 'Red Porsche Neon Glow', url: 'https://assets.mixkit.co/videos/preview/mixkit-red-sports-car-parked-under-neon-lights-42289-large.mp4', category: 'Showroom' },
-  { name: 'Rain Audi R8 Vibe', url: 'https://assets.mixkit.co/videos/preview/mixkit-wet-sports-car-reflecting-city-neon-lights-42291-large.mp4', category: 'Cinematic' },
-  { name: 'Cockpit Capture', url: 'https://assets.mixkit.co/videos/preview/mixkit-dashboard-of-a-sports-car-at-night-42304-large.mp4', category: 'Interior' },
-  { name: 'Sunset Highway Cruise', url: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-highway-at-sunset-12966-large.mp4', category: 'Highway' },
-  { name: 'Neon Rain Headlights', url: 'https://assets.mixkit.co/videos/preview/mixkit-car-headlights-in-the-rain-at-night-42301-large.mp4', category: 'Detailing' },
-  { name: 'Black S-Class Night', url: 'https://assets.mixkit.co/videos/preview/mixkit-front-of-a-black-car-parked-at-night-42283-large.mp4', category: 'Showroom' },
-  { name: 'High-Velocity Tire Drift', url: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-drifting-on-a-wet-track-34354-large.mp4', category: 'Performance' },
-  { name: 'Cyberpunk Speed Tunnel', url: 'https://assets.mixkit.co/videos/preview/mixkit-driving-in-a-futuristic-city-at-night-44358-large.mp4', category: 'Aesthetic' },
-  { name: 'Tokyo Retro Neon Run', url: 'https://assets.mixkit.co/videos/preview/mixkit-car-under-neon-sign-42284-large.mp4', category: 'Aesthetic' },
-  { name: 'Premium Porsche Polish', url: 'https://assets.mixkit.co/videos/preview/mixkit-man-polishing-a-porsche-sports-car-42309-large.mp4', category: 'Detailing' },
-  { name: 'Neon Garage Static', url: 'https://assets.mixkit.co/videos/preview/mixkit-underground-car-parking-with-neon-lights-42296-large.mp4', category: 'Showroom' }
+  { name: '1 Kanal Luxury Villa Walkthrough', url: '/videos/walkthrough_villa.mp4', category: 'Showroom' },
+  { name: 'Margalla View Penthouse Tour', url: '/videos/walkthrough_penthouse.mp4', category: 'Cinematic' },
+  { name: 'Seafront Architectural Mansion', url: '/videos/walkthrough_mansion.mp4', category: 'Interior' },
+  { name: 'Smart Home Automation Tour', url: '/videos/walkthrough_smart_home.mp4', category: 'Highway' }
 ];
 
 export default function ReelsUpload({ onClose }: ReelsUploadProps) {
@@ -285,7 +278,15 @@ export default function ReelsUpload({ onClose }: ReelsUploadProps) {
                           : 'border-white/5 hover:border-white/15'
                       }`}
                     >
-                      <video src={vid.url} muted playsInline className="w-full h-full object-cover pointer-events-none" />
+                      <video 
+                        src={vid.url} 
+                        muted 
+                        playsInline 
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                        className="w-full h-full object-cover pointer-events-none" 
+                      />
                       <div className="absolute inset-0 bg-black/50 hover:bg-black/20 transition-all flex flex-col justify-between p-2">
                         <span className="self-end px-1.5 py-0.5 rounded bg-black/60 text-[7px] font-bold text-blue-400 uppercase tracking-widest">{vid.category}</span>
                         <span className="text-[10px] font-bold text-white truncate max-w-full">{vid.name}</span>
@@ -388,7 +389,17 @@ export default function ReelsUpload({ onClose }: ReelsUploadProps) {
             <div className="hidden sm:flex w-2/5 border-r border-white/5 bg-black p-6 flex-col justify-between items-center relative overflow-hidden">
               <span className="absolute top-4 left-6 z-20 font-mono text-[9px] text-[#0071e3] tracking-widest font-bold uppercase">Aesthetic Preview</span>
               {videoUrl ? (
-                <video src={videoUrl} muted autoPlay loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-60 filter blur-[1px]" />
+                <video 
+                  src={videoUrl} 
+                  muted 
+                  autoPlay 
+                  loop 
+                  playsInline 
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover opacity-60 filter blur-[1px]" 
+                />
               ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-black/45 pointer-events-none" />
 

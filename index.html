@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pakizzle | Elite Real Estate Portal</title>
     
+    <!-- Browser UI Theme Colors and Pre-paint Script -->
+    <meta name="theme-color" content="#FAF3E6" id="theme-color-meta" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem("pakizzle-theme") || localStorage.getItem("theme");
+          var systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var isDark = stored === "dark" || ((!stored || stored === "system") && systemDark);
+          var root = document.documentElement;
+          if (isDark) {
+            root.classList.add("dark");
+            root.classList.remove("light");
+            root.style.colorScheme = "dark";
+            var meta = document.getElementById("theme-color-meta");
+            if (meta) meta.setAttribute("content", "#000000");
+          } else {
+            root.classList.add("light");
+            root.classList.remove("dark");
+            root.style.colorScheme = "light";
+            var meta = document.getElementById("theme-color-meta");
+            if (meta) meta.setAttribute("content", "#FAF3E6");
+          }
+          // Enable smooth transition after first paint without flash
+          window.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+              root.classList.add("theme-transition");
+            }, 100);
+          });
+        } catch (e) {}
+      })();
+    </script>
+    
     <!-- Key SEO Fallbacks -->
     <meta name="description" content="Pakizzle is the premium real estate marketplace for Pakistan. Browse, buy, and sell certified luxury homes, high-rise apartments, premium commercial spaces, and residential land plots with immersive feeds, unified agent portals, and verified listings." />
     <meta name="keywords" content="luxury real estate, homes for sale, apartments, pakizzle, premium properties, certified property inspections, real estate agent pakistan, zameen, premium property marketplace" />

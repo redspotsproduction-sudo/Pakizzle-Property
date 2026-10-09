@@ -52,7 +52,7 @@ export default function ReelsManagement() {
             } else {
               setLocalUrls(prev => ({ 
                 ...prev, 
-                [url]: 'https://assets.mixkit.co/videos/preview/mixkit-red-sports-car-parked-under-neon-lights-42289-large.mp4' 
+                [url]: '/videos/walkthrough_villa.mp4' 
               }));
             }
           } catch (e) {
@@ -361,7 +361,17 @@ export default function ReelsManagement() {
                   {/* Portrait Media Preview Column */}
                   <div className="relative w-full md:w-28 aspect-[9/16] max-h-[160px] md:max-h-[190px] rounded-xl overflow-hidden shrink-0 bg-[#0C0C0D] border border-black/5 dark:border-white/10 group flex items-center justify-center">
                     {resolvedUrl && (resolvedUrl.startsWith('blob:') || resolvedUrl.startsWith('http') || resolvedUrl.startsWith('/') || resolvedUrl.startsWith('./')) ? (
-                      <video src={resolvedUrl} muted className="w-full h-full object-cover pointer-events-none" />
+                      <video 
+                        src={resolvedUrl} 
+                        muted 
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src && !target.src.includes('/videos/walkthrough_')) {
+                            target.src = '/videos/walkthrough_villa.mp4';
+                          }
+                        }}
+                        className="w-full h-full object-cover pointer-events-none" 
+                      />
                     ) : (
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0C0C0D] font-mono text-[8px] text-blue-400">
                         <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
@@ -508,7 +518,19 @@ export default function ReelsManagement() {
                       );
                     }
                     return (
-                      <video src={resolvedUrl} muted playsInline controls className="w-full h-full object-cover" />
+                      <video 
+                        src={resolvedUrl} 
+                        muted 
+                        playsInline 
+                        controls 
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src && !target.src.includes('/videos/walkthrough_')) {
+                            target.src = '/videos/walkthrough_villa.mp4';
+                          }
+                        }}
+                        className="w-full h-full object-cover" 
+                      />
                     );
                   })()}
                 </div>

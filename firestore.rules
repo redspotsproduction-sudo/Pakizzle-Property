@@ -39,7 +39,9 @@ service cloud.firestore {
              data.uid == request.auth.uid &&
              data.email is string &&
              data.status in ['active', 'suspended', 'banned', 'pending'] &&
-             data.role in ['user', 'admin', 'moderator', 'finance', 'support'];
+             data.role in ['user', 'moderator', 'finance', 'support'] &&
+             (!('identity_status' in data) || data.identity_status != 'verified') &&
+             (!('verified_badge_type' in data) || data.verified_badge_type == 'none');
     }
 
     match /users/{userId} {
@@ -78,14 +80,26 @@ service cloud.firestore {
         );
       }
 
+      // Constraints enforcing that normal users cannot write identity_status='verified', verified_badge_type, or role
+      function isSafeUserSelfUpdate() {
+        return isOwner(userId) &&
+          // Normal user cannot change role
+          (incoming().role == existing().role || (!('role' in incoming()) && !('role' in existing()))) &&
+          // Normal user cannot make themselves admin
+          (!('role' in incoming()) || incoming().role != 'admin' || existing().role == 'admin') &&
+          // Normal user cannot self-grant identity_status == 'verified'
+          (!('identity_status' in incoming()) || incoming().identity_status != 'verified' || existing().identity_status == 'verified') &&
+          // Normal user cannot self-grant verified_badge_type
+          (!('verified_badge_type' in incoming()) || incoming().verified_badge_type == existing().verified_badge_type) &&
+          // Normal user cannot self-grant badgeType
+          (!('badgeType' in incoming()) || incoming().badgeType == existing().badgeType);
+      }
+
       allow update: if isSignedIn() && (
         (isOwner(userId) && 
          (
            isTransitioningOnboarding() ||
-           (
-             (incoming().role == existing().role || (!('role' in incoming()) && !('role' in existing()))) &&
-             (incoming().status == existing().status || (!('status' in incoming()) && !('status' in existing())))
-           )
+           isSafeUserSelfUpdate()
          )
         ) || isAdmin()
       );
@@ -97,6 +111,31 @@ service cloud.firestore {
       match /payment_methods/{methodId} {
         allow read, write: if isOwner(userId) || isAdmin();
       }
+    }
+
+    // ---------------------------------------------------------
+    // Verification Requests
+    // ---------------------------------------------------------
+    match /verification_requests/{requestId} {
+      allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && incoming().status == 'pending';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // Properties & Listings
+    // ---------------------------------------------------------
+    match /properties/{propertyId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidVehicle(incoming()) && propertyId == incoming().id;
+      allow update: if isSignedIn() && (
+        (isOwner(existing().seller.uid) && 
+         incoming().seller.uid == existing().seller.uid &&
+         (!('title_deed_status' in incoming()) || incoming().title_deed_status == existing().title_deed_status)
+        ) || isAdmin()
+      );
+      allow delete: if isSignedIn() && (isOwner(existing().seller.uid) || isAdmin());
     }
 
     // ---------------------------------------------------------

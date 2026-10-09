@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   LayoutDashboard, 
@@ -27,6 +27,7 @@ import {
   Video,
   Plus,
   Building2,
+  Home,
   Sparkles
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -38,6 +39,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { db } from "@/firebase";
 import { collection, query, orderBy, limit, onSnapshot, where } from "firebase/firestore";
+import SearchModal from "@/components/SearchModal";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -94,6 +96,25 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [pendingInsuranceCount, setPendingInsuranceCount] = useState(0);
   const [pendingFinancingCount, setPendingFinancingCount] = useState(0);
   const [isAuthReady, setIsAuthReady] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
+  // Global 1-Tap Search & Cmd+K listeners for Admin
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setShowSearchModal((prev) => !prev);
+      }
+    };
+    const handleOpenSearch = () => setShowSearchModal(true);
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("pakizzle:open-search", handleOpenSearch);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pakizzle:open-search", handleOpenSearch);
+    };
+  }, []);
 
   // Real-time listener for new requests
   React.useEffect(() => {
@@ -210,7 +231,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 className="flex items-center gap-3 cursor-pointer group"
               >
                 <div className="w-10 h-10 bg-apple-blue rounded-[12px] flex items-center justify-center shadow-lg shadow-apple-blue/30 group-hover:scale-105 transition-transform duration-500">
-                  <Car className="w-6 h-6 text-white" />
+                  <Building2 className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-apple-text to-apple-text/50">Pakizzle</span>
               </motion.div>
@@ -323,14 +344,26 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="relative hidden sm:block group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-focus-within:text-apple-blue transition-colors duration-500" />
+            <div 
+              onClick={() => setShowSearchModal(true)}
+              className="relative hidden sm:block group cursor-pointer"
+            >
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-hover:text-apple-blue transition-colors duration-500" />
               <input
                 type="text"
-                placeholder="Search anything..."
-                className="pl-11 pr-4 py-3 bg-apple-gray/50 dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-2xl text-[13px] font-medium focus:ring-0 outline-none w-64 lg:w-96 transition-all duration-500 shadow-inner"
+                readOnly
+                placeholder="Search anything... (⌘K)"
+                className="pl-11 pr-4 py-3 bg-apple-gray/50 dark:bg-white/5 border border-transparent hover:border-apple-blue/30 rounded-2xl text-[13px] font-medium focus:ring-0 outline-none w-64 lg:w-96 transition-all duration-500 shadow-inner cursor-pointer"
               />
             </div>
+
+            <button 
+              onClick={() => setShowSearchModal(true)}
+              className="sm:hidden w-11 h-11 flex items-center justify-center bg-apple-gray/50 dark:bg-white/5 rounded-2xl hover:scale-105 transition-all text-apple-text-muted hover:text-apple-blue cursor-pointer" 
+              title="Search (1-Tap)"
+            >
+              <Search className="w-5 h-5" />
+            </button>
             
             <div className="flex items-center gap-2">
               <button className="relative w-11 h-11 flex items-center justify-center bg-apple-gray/50 dark:bg-white/5 rounded-2xl hover:scale-105 transition-all group overflow-hidden">
@@ -482,6 +515,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </>
         )}
       </AnimatePresence>
+
+      {/* Global 1-Tap Search Modal */}
+      <SearchModal isOpen={showSearchModal} onClose={() => setShowSearchModal(false)} />
     </div>
   );
 }

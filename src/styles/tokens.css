@@ -1,0 +1,235 @@
+/**
+ * PAKIZZLE DESIGN SYSTEM - SEMANTIC TOKEN ARCHITECTURE
+ * 
+ * Rebuilt to Apple-grade standards (restrained, high-contrast, consistent).
+ * Both Light (#FAF3E6 cream) and Dark (#000000 true black) modes pass WCAG AA (>= 4.5:1 text, >= 3:1 large).
+ */
+
+:root {
+  /* =========================================================================
+     LIGHT THEME: BRAND WARM CREAM & DEEP PURPLE ACCENT
+     ========================================================================= */
+  
+  /* Page background */
+  --bg-page: #FAF3E6;
+  
+  /* Base card / content surface */
+  --bg-surface: #FFFFFF;
+  
+  /* Raised card surface */
+  --bg-raised: #FFFFFF;
+  
+  /* Inset areas, pill containers, segmented track */
+  --bg-inset: #F2EBE0;
+
+  /* Typography */
+  --text-primary: #1D1D1F;      /* 15.25:1 on cream (#FAF3E6), 16.83:1 on white (#FFFFFF) */
+  --text-secondary: #59595E;    /* 6.31:1 on cream (#FAF3E6), 6.96:1 on white (#FFFFFF) */
+  --text-tertiary: #7D7886;     /* 3.8:1 for non-essential muted text */
+
+  /* Borders & Dividers */
+  --border: rgba(91, 42, 134, 0.10);        /* 1px 10% brand ink */
+  --border-subtle: rgba(91, 42, 134, 0.06);
+  --border-strong: rgba(91, 42, 134, 0.20);
+
+  /* Primary Brand Accent (Pakizzle Imperial Purple) */
+  --accent: #5B2A86;            /* 8.97:1 on cream, 9.90:1 on white */
+  --accent-hover: #4B2270;
+  --accent-text: #5B2A86;
+  --accent-subtle: rgba(91, 42, 134, 0.08);
+
+  /* Focus ring */
+  --focus-ring: #5B2A86;
+
+  /* Status Colors (All WCAG AA >= 4.5:1 on cream and white) */
+  --success: #1E7A38;           /* 4.88:1 on cream, 5.39:1 on white */
+  --warning: #9A4800;           /* 5.76:1 on cream, 6.36:1 on white */
+  --danger: #C53030;            /* 4.96:1 on cream, 5.47:1 on white */
+
+  /* Gold (DECORATION ONLY on light surfaces: hairlines, fills, featured marker) */
+  --gold-decoration: #C9A227;
+
+  /* Elevation Shadows (Soft shadows tinted with brand deep purple at low opacity) */
+  --shadow-card: 0 4px 20px rgba(36, 18, 56, 0.06);
+  --shadow-hover: 0 12px 32px rgba(36, 18, 56, 0.10);
+  --shadow-elevated: 0 20px 48px rgba(36, 18, 56, 0.12);
+
+  /* Primary Button Gradient */
+  --btn-primary-gradient: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%);
+  --btn-primary-gradient-hover: linear-gradient(135deg, #6E32A0 0%, #251D36 100%);
+  --btn-primary-inner-edge: none;
+
+  /* Legacy Apple-* Remappings to Semantic Tokens */
+  --apple-bg: var(--bg-page);
+  --apple-surface: var(--bg-surface);
+  --apple-card-bg: var(--bg-raised);
+  --apple-gray: var(--bg-inset);
+  --apple-text: var(--text-primary);
+  --apple-text-muted: var(--text-secondary);
+  --apple-border: var(--border);
+  --apple-blue: var(--accent);
+  --apple-green: var(--success);
+  --apple-orange: var(--warning);
+  --apple-red: var(--danger);
+
+  /* Shadcn standard tokens */
+  --background: var(--bg-page);
+  --foreground: var(--text-primary);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--bg-inset);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-inset);
+  --muted-foreground: var(--text-secondary);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--focus-ring);
+}
+
+.dark {
+  /* =========================================================================
+     DARK THEME: TRUE NEUTRAL BLACK & HIGH-CONTRAST STEPPED GREYS
+     ========================================================================= */
+
+  /* Page background: true black */
+  --bg-page: #000000;
+
+  /* Surfaces step up in pure neutral greys (no purple or blue tint) */
+  --bg-surface: #111113;        /* Step 1 base surface */
+  --bg-raised: #1C1C1E;         /* Step 2 elevated cards */
+  --bg-inset: #2C2C2E;          /* Step 3 inputs, chips, inset areas */
+
+  /* Typography */
+  --text-primary: #F5F5F7;      /* 19.29:1 on black, 17.32:1 on #111113, 15.63:1 on #1C1C1E */
+  --text-secondary: #98989D;    /* 7.31:1 on black, 6.57:1 on #111113, 5.93:1 on #1C1C1E, 4.85:1 on #2C2C2E */
+  --text-tertiary: #737378;
+
+  /* Borders: white at ~10% */
+  --border: rgba(255, 255, 255, 0.10);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.20);
+
+  /* Accent: lighter tint of brand purple (#B18CE6) for dark mode */
+  /* (Brand #5B2A86 is only ~2:1 on black; #B18CE6 provides 7.76:1 on black, 6.97:1 on #111113, 6.29:1 on #1C1C1E) */
+  --accent: #B18CE6;
+  --accent-hover: #C4A5F0;
+  --accent-text: #B18CE6;
+  --accent-subtle: rgba(177, 140, 230, 0.12);
+
+  /* Focus ring */
+  --focus-ring: #B18CE6;
+
+  /* Status Colors (All WCAG AA >= 4.5:1 on dark surfaces) */
+  --success: #4ADE80;           /* 12.05:1 on black, 10.82:1 on #111113 */
+  --warning: #FBBF24;           /* 12.58:1 on black, 11.30:1 on #111113 */
+  --danger: #F87171;            /* 7.59:1 on black, 6.82:1 on #111113 */
+
+  /* Gold (#C9A227 is 8.68:1 on black, 7.80:1 on #111113 - headline highlight, featured markers, hairlines) */
+  --gold-decoration: #C9A227;
+
+  /* Elevation: Little or no drop shadow; elevation comes from surface steps + 10% white border */
+  --shadow-card: none;
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.50);
+  --shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.65);
+
+  /* Primary Button Gradient with 1px light inner edge */
+  --btn-primary-gradient: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%);
+  --btn-primary-gradient-hover: linear-gradient(135deg, #6E32A0 0%, #251D36 100%);
+  --btn-primary-inner-edge: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+
+  /* Legacy Apple-* Remappings in Dark Mode */
+  --apple-bg: var(--bg-page);
+  --apple-surface: var(--bg-surface);
+  --apple-card-bg: var(--bg-raised);
+  --apple-gray: var(--bg-inset);
+  --apple-text: var(--text-primary);
+  --apple-text-muted: var(--text-secondary);
+  --apple-border: var(--border);
+  --apple-blue: var(--accent);
+  --apple-green: var(--success);
+  --apple-orange: var(--warning);
+  --apple-red: var(--danger);
+
+  /* Shadcn tokens in Dark Mode */
+  --background: var(--bg-page);
+  --foreground: var(--text-primary);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-raised);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: #000000;
+  --secondary: var(--bg-inset);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-inset);
+  --muted-foreground: var(--text-secondary);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--focus-ring);
+}
+
+/* =========================================================================
+   PART 5: PHOTOGRAPHIC OVERLAYS (IDENTICAL IN BOTH THEMES)
+   Any element directly on a photo uses this overlay style regardless of theme.
+   ========================================================================= */
+
+.photo-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.40) 25%,
+    rgba(0, 0, 0, 0.70) 65%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+.photo-glass-panel {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22), 0 20px 40px rgba(0, 0, 0, 0.45) !important;
+  color: #FFFFFF !important;
+}
+
+/* Focus Ring Specification (Part 6) */
+.focus-ring-pakizzle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg-page), 0 0 0 4px var(--focus-ring);
+}
+
+/* Button with primary gradient & dark inner edge */
+.pakizzle-button-primary {
+  background: var(--btn-primary-gradient);
+  color: #FFFFFF;
+  box-shadow: var(--btn-primary-inner-edge);
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pakizzle-button-primary:hover {
+  background: var(--btn-primary-gradient-hover);
+}
+
+/* Smooth Theme Transitions (~200ms, disabled during first load and for prefers-reduced-motion) */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *:before,
+html.theme-transition *:after {
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *:before,
+  html.theme-transition *:after {
+    transition: none !important;
+  }
+}

@@ -50,7 +50,7 @@ import { getLocalVideo } from '../../utils/videoDb';
 const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: string })[] = [
   {
     id: 'demo_1',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-highway-at-sunset-12966-large.mp4',
+    videoUrl: '/videos/walkthrough_villa.mp4',
     caption: "⭐ Pakistan's ONLY 2024 Nissan GT-R Nismo Carbon Pack has landed! 🇯🇵 🔥 The Godzilla of tracks with active titanium exhaust! Check full profile. #NissanGTR #Nismo",
     listingId: 'demo_1',
     sellerId: 'demo_seller_1',
@@ -68,7 +68,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_2',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-red-sports-car-parked-under-neon-lights-42289-large.mp4',
+    videoUrl: '/videos/walkthrough_penthouse.mp4',
     caption: 'Neon lights reflecting on pristine crimson metallic paint. Built to move, designed to command respect on every street. #911Carrera #TrackReady #Stuttgart',
     listingId: 'demo_2',
     sellerId: 'demo_seller_2',
@@ -85,7 +85,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_3',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-wet-sports-car-reflecting-city-neon-lights-42291-large.mp4',
+    videoUrl: '/videos/walkthrough_mansion.mp4',
     caption: 'Rainy night aesthetics. Custom carbon fiber spoiler, active aero aerodynamics, and true track performance. Hear that V10 song! #AudiR8 #SupercarsOfPakistan',
     listingId: 'demo_3',
     sellerId: 'demo_seller_3',
@@ -102,7 +102,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_4',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-fast-sports-car-driving-on-highway-42292-large.mp4',
+    videoUrl: '/videos/walkthrough_smart_home.mp4',
     caption: 'Italian absolute perfection. 986 HP petrol-hybrid beast screaming through the highway. Double tap for pure exhaust sounds! 🏎️🇮🇹 #FerrariSF90 #SF90Stradale',
     listingId: 'demo_4',
     sellerId: 'demo_seller_4',
@@ -119,7 +119,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_5',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-wet-highway-at-night-42296-large.mp4',
+    videoUrl: '/videos/walkthrough_villa.mp4',
     caption: 'Adrenaline on demand. The STO is a direct street-legal descendant of Squadra Corse. Raw. Uncompromising. Screaming V10 power. #Lamborghini #HuracanSTO',
     listingId: 'demo_5',
     sellerId: 'demo_seller_5',
@@ -136,7 +136,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_6',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-headlights-of-a-sports-car-shining-at-night-42290-large.mp4',
+    videoUrl: '/videos/walkthrough_penthouse.mp4',
     caption: 'Piercing the dark with adaptive laser-matrix lights. The twin-turbo McLaren carbon chassis is a true aerospace engineering triumph. 🚀🛸 #McLaren720S #WokingMagic',
     listingId: 'demo_6',
     sellerId: 'demo_seller_6',
@@ -153,7 +153,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_7',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-front-of-a-sports-car-parked-at-dusk-42293-large.mp4',
+    videoUrl: '/videos/walkthrough_mansion.mp4',
     caption: 'Classic British luxury muscle at dusk. Superleggera represents the ultimate flagship grand tourer. 715 Horsepower brute in a tuxedo. 🇬🇧🕶️ #AstonMartin #DBS',
     listingId: 'demo_7',
     sellerId: 'demo_seller_7',
@@ -170,7 +170,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_8',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-wheels-of-a-car-driving-fast-on-a-paved-road-42295-large.mp4',
+    videoUrl: '/videos/walkthrough_smart_home.mp4',
     caption: 'Hear that flat-plane crank scream up to 8,600 RPM! The LT6 V8 in the Corvette C8 Z06 is the most powerful naturally aspirated V8 in production. 🇺🇸🔥 #C8Z06 #Corvette',
     listingId: 'demo_8',
     sellerId: 'demo_seller_8',
@@ -187,7 +187,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_9',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-modern-car-driving-on-scenic-coastal-road-42323-large.mp4',
+    videoUrl: '/videos/walkthrough_villa.mp4',
     caption: 'Basking in absolute luxury. The Affalterbach flagship Black Series pushing limits on the coast. Active rear wing and flat-plane raw power. #AMG #GTBlackSeries',
     listingId: 'demo_9',
     sellerId: 'demo_seller_9',
@@ -204,7 +204,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_10',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-sports-car-speeding-on-a-winding-mountain-road-42301-large.mp4',
+    videoUrl: '/videos/walkthrough_penthouse.mp4',
     caption: 'Attacking corners on a beautiful mountain pass. Pure rear-wheel-drive drama with the S58 twin-turbo engine. Perfect balance. 🇩🇪⛰️ #BMWM4 #MCompetition',
     listingId: 'demo_10',
     sellerId: 'demo_seller_10',
@@ -221,7 +221,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_11',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-dashboard-of-a-car-driving-at-sunset-40292-large.mp4',
+    videoUrl: '/videos/walkthrough_mansion.mp4',
     caption: 'Stepping into the future. Cruising into the sunset on a test run of the hyper electric roadster. 0-100 km/h in 2.1s is not acceleration, it is a launch! ⚡🌌 #Tesla #Roadster',
     listingId: 'demo_11',
     sellerId: 'demo_seller_11',
@@ -238,7 +238,7 @@ const MOCK_REELS: (Omit<Reel, 'id' | 'coverImage'> & { id: string; coverImage?: 
   },
   {
     id: 'demo_12',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-driving-a-premium-suv-through-a-highway-at-sunset-42337-large.mp4',
+    videoUrl: '/videos/walkthrough_smart_home.mp4',
     caption: 'The absolute king of luxury sports SUVs. Carbon-ceramic brakes, 626 HP hybrid power, and dynamic active air suspension. Perfect daily cruiser. 👑⛰️ #RangeRover #SportSV',
     listingId: 'demo_12',
     sellerId: 'demo_seller_12',
@@ -404,10 +404,10 @@ export default function ReelsFeed() {
               const objUrl = URL.createObjectURL(blob);
               setLocalUrls(prev => ({ ...prev, [url]: objUrl }));
             } else {
-              // Fallback to our high-end sportscar pre-defined showcase URL on missing DB
+              // Fallback to our high-end walkthrough pre-defined showcase URL on missing DB
               setLocalUrls(prev => ({ 
                 ...prev, 
-                [url]: 'https://assets.mixkit.co/videos/preview/mixkit-red-sports-car-parked-under-neon-lights-42289-large.mp4' 
+                [url]: '/videos/walkthrough_villa.mp4' 
               }));
             }
           } catch (e) {

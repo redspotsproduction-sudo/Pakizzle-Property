@@ -179,7 +179,7 @@ export default function PakStoriesUploadModal({
         listingId: selectedListingId,
         title: title || 'Verified Property Walkthrough',
         caption: caption || 'Complete video walkthrough with verified specs and Shanakht™ title.',
-        videoUrl: previewUrl || 'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4',
+        videoUrl: previewUrl || '/videos/walkthrough_villa.mp4',
         duration: trimRange.endSec - trimRange.startSec,
         fileSizeBytes: videoFile?.size || 25000000,
         format: 'mp4',
@@ -487,6 +487,9 @@ export default function PakStoriesUploadModal({
                       muted
                       loop
                       playsInline
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (

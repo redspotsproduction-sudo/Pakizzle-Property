@@ -82,7 +82,7 @@ import { UserProfile, UserRole, SecurityAlert, ActivityLog } from "../../types";
 import { analyzeUserSecurity } from "../../services/securityAiService";
 import { db } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
-import { collection, doc, updateDoc, onSnapshot, query, orderBy, where, addDoc } from "firebase/firestore";
+import { collection, doc, updateDoc, onSnapshot, query, orderBy, where, addDoc, getDocs } from "firebase/firestore";
 
 const mockUsers: UserProfile[] = [
   {
@@ -345,6 +345,25 @@ export default function UserManagement() {
         ...data,
         updatedAt: new Date().toISOString()
       });
+
+      // Synchronize verified badge across all listings owned by this seller
+      try {
+        const propsQuery = query(collection(db, 'properties'), where('seller.uid', '==', uid));
+        const propSnap = await getDocs(propsQuery);
+        const badgeType = data.verified_badge_type || data.badgeType || (data.isVerified ? 'identity' : 'none');
+        const isVerifiedVal = data.isVerified !== undefined ? data.isVerified : ((data.verificationLevel ?? 0) >= 2);
+
+        propSnap.forEach(async (pDoc) => {
+          await updateDoc(doc(db, 'properties', pDoc.id), {
+            'seller.isVerified': isVerifiedVal,
+            'seller.badgeType': badgeType,
+            'seller.verified_badge_type': badgeType
+          });
+        });
+      } catch (propErr) {
+        console.warn("Could not batch update listing badges:", propErr);
+      }
+
       toast.success("Identity Records Updated", {
         description: "Administrative overrule applied successfully."
       });
@@ -1215,6 +1234,9 @@ export default function UserManagement() {
                           email_verified: true,
                           phone_verified: true,
                           verificationLevel: 3,
+                          verified_badge_type: 'identity',
+                          badgeType: 'identity',
+                          isVerified: true,
                           trustScore: 100
                         }).then(() => {
                           setSelectedUser(prev => prev ? { 
@@ -1225,6 +1247,9 @@ export default function UserManagement() {
                             email_verified: true,
                             phone_verified: true,
                             verificationLevel: 3,
+                            verified_badge_type: 'identity',
+                            badgeType: 'identity',
+                            isVerified: true,
                             trustScore: 100
                           } : null);
                         });
@@ -1246,17 +1271,23 @@ export default function UserManagement() {
                           email_verified: false,
                           phone_verified: false,
                           verificationLevel: 0,
+                          verified_badge_type: 'none',
+                          badgeType: 'none',
+                          isVerified: false,
                           trustScore: 0,
                           suspiciousActivityCount: 0
                         }).then(() => {
                           setSelectedUser(prev => prev ? { 
                             ...prev, 
-                            identity_status: 'unverified',
-                            isEmailVerified: false,
+                            identity_status: 'unverified', 
+                            isEmailVerified: false, 
                             isPhoneVerified: false,
                             email_verified: false,
                             phone_verified: false,
                             verificationLevel: 0,
+                            verified_badge_type: 'none',
+                            badgeType: 'none',
+                            isVerified: false,
                             trustScore: 0,
                             suspiciousActivityCount: 0
                           } : null);

@@ -46,8 +46,9 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn, formatPrice } from "../../lib/utils";
-import { db } from "../../firebase";
-import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp, addDoc } from "firebase/firestore";
+import { db, storage } from "../../firebase";
+import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp, addDoc, getDocs } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 
 export interface PendingQueueItem {
   id: string;
@@ -66,7 +67,14 @@ export interface PendingQueueItem {
     authority?: string;
     deedType?: string;
     documents?: string[];
+    documentPaths?: string[];
+    documentUrls?: string[];
     images?: string[];
+    cnic_front_path?: string;
+    cnic_back_path?: string;
+    cnic_front_url?: string;
+    cnic_back_url?: string;
+    userId?: string;
   };
   qualityScore: number;
   fraudWarning?: string;
@@ -151,6 +159,126 @@ const mockPendingQueue: PendingQueueItem[] = [
   }
 ];
 
+function VerificationDocumentPreview({ item }: { item: PendingQueueItem }) {
+  const [resolvedDocs, setResolvedDocs] = useState<{ label: string; url: string }[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadDocs() {
+      setLoading(true);
+      const itemsToResolve: { label: string; src: string }[] = [];
+
+      // Explicit front and back
+      if (item.details.cnic_front_url) {
+        itemsToResolve.push({ label: 'CNIC Front', src: item.details.cnic_front_url });
+      } else if (item.details.cnic_front_path) {
+        itemsToResolve.push({ label: 'CNIC Front', src: item.details.cnic_front_path });
+      }
+
+      if (item.details.cnic_back_url) {
+        itemsToResolve.push({ label: 'CNIC Back', src: item.details.cnic_back_url });
+      } else if (item.details.cnic_back_path) {
+        itemsToResolve.push({ label: 'CNIC Back', src: item.details.cnic_back_path });
+      }
+
+      // If documentPaths or documents exist and not already loaded
+      const allDocs = item.details.documentPaths || item.details.documents || [];
+      if (itemsToResolve.length === 0 && allDocs.length > 0) {
+        allDocs.forEach((docPath, idx) => {
+          const isFront = docPath.toLowerCase().includes('front') || idx === 0;
+          const isBack = docPath.toLowerCase().includes('back') || idx === 1;
+          const label = isFront ? 'CNIC Front' : isBack ? 'CNIC Back' : `Document ${idx + 1}`;
+          itemsToResolve.push({ label, src: docPath });
+        });
+      }
+
+      // If images array exists and not already loaded
+      if (itemsToResolve.length === 0 && item.details.images && item.details.images.length > 0) {
+        item.details.images.forEach((img, idx) => {
+          itemsToResolve.push({ label: idx === 0 ? 'Document 1' : `Document ${idx + 1}`, src: img });
+        });
+      }
+
+      const resolved: { label: string; url: string }[] = [];
+      for (const entry of itemsToResolve) {
+        if (!entry.src) continue;
+        if (entry.src.startsWith('http') || entry.src.startsWith('data:')) {
+          resolved.push({ label: entry.label, url: entry.src });
+        } else {
+          try {
+            const downloadUrl = await getDownloadURL(ref(storage, entry.src));
+            resolved.push({ label: entry.label, url: downloadUrl });
+          } catch (e) {
+            console.warn("Storage download URL error:", entry.src, e);
+            resolved.push({ label: entry.label, url: entry.src });
+          }
+        }
+      }
+
+      if (active) {
+        setResolvedDocs(resolved);
+        setLoading(false);
+      }
+    }
+
+    loadDocs();
+    return () => { active = false; };
+  }, [item]);
+
+  if (loading) {
+    return (
+      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-xs text-slate-500">
+        Loading verification documents...
+      </div>
+    );
+  }
+
+  if (resolvedDocs.length === 0) return null;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+        <span className="flex items-center gap-1.5">
+          <FileCheck className="w-4 h-4 text-emerald-500" />
+          Submitted Identity Documents
+        </span>
+        <span className="text-[10px] text-slate-400 font-mono">
+          {resolvedDocs.length} {resolvedDocs.length === 1 ? 'file' : 'files'}
+        </span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {resolvedDocs.map((doc, idx) => (
+          <div key={idx} className="space-y-1.5 p-2 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+            <div className="flex items-center justify-between px-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              <span className="font-bold text-slate-800 dark:text-slate-200">{doc.label}</span>
+              <a 
+                href={doc.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-apple-blue hover:underline flex items-center gap-1 text-[10px]"
+              >
+                <ExternalLink className="w-3 h-3" /> View Full
+              </a>
+            </div>
+            <div className="aspect-[1.58/1] relative rounded-xl overflow-hidden bg-black/90 flex items-center justify-center border border-slate-200/50 dark:border-white/5">
+              <img 
+                src={doc.url} 
+                alt={doc.label} 
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ApprovalCenter() {
   const [items, setItems] = useState<PendingQueueItem[]>(mockPendingQueue);
   const [selectedItem, setSelectedItem] = useState<PendingQueueItem | null>(null);
@@ -160,6 +288,53 @@ export default function ApprovalCenter() {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [isInspectModalOpen, setIsInspectModalOpen] = useState(false);
+
+  // Live Firestore subscription for identity verification submissions
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'verification_requests'), where('status', '==', 'pending'));
+      const unsub = onSnapshot(q, (snapshot) => {
+        const liveItems: PendingQueueItem[] = snapshot.docs.map(d => {
+          const data = d.data();
+          return {
+            id: d.id,
+            type: data.type === 'business' ? 'agency_verification' : 'agency_verification',
+            title: `Identity Verification · ${data.userName || 'New User'}`,
+            submitterName: data.userName || 'Test User',
+            submitterEmail: data.userEmail || '',
+            submitterPhone: data.userPhone || '',
+            category: 'Shanakht™ Identity Clearance',
+            city: data.city || 'Islamabad',
+            details: {
+              documents: data.documents || [],
+              documentPaths: data.documentPaths || [],
+              documentUrls: data.documentUrls || [],
+              images: data.images || (data.documentUrls || []),
+              cnic_front_path: data.cnic_front_path,
+              cnic_back_path: data.cnic_back_path,
+              cnic_front_url: data.cnic_front_url,
+              cnic_back_url: data.cnic_back_url,
+              userId: data.userId
+            },
+            qualityScore: 95,
+            createdAt: data.createdAt || new Date().toISOString(),
+            status: 'pending'
+          };
+        });
+
+        if (liveItems.length > 0) {
+          setItems(prev => {
+            const existingIds = new Set(liveItems.map(i => i.id));
+            const retained = prev.filter(i => !existingIds.has(i.id));
+            return [...liveItems, ...retained];
+          });
+        }
+      }, () => {});
+      return () => unsub();
+    } catch {
+      // Offline fallback
+    }
+  }, []);
 
   const filteredItems = useMemo(() => {
     return items.filter(item => {
@@ -180,8 +355,44 @@ export default function ApprovalCenter() {
   const handleApprove = async (item: PendingQueueItem) => {
     setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "approved" } : i));
     setSelectedIds(prev => prev.filter(id => id !== item.id));
+
+    // Persist approval to Firestore and sync user + listing badges
+    try {
+      const badgeTier = item.type === "agency_verification" ? "business" : "identity";
+
+      // 1. If Firestore user exists with this email, update their badge tier
+      if (item.submitterEmail) {
+        const uQuery = query(collection(db, 'users'), where('email', '==', item.submitterEmail));
+        const uSnap = await getDocs(uQuery);
+        uSnap.forEach(async (uDoc) => {
+          await updateDoc(doc(db, 'users', uDoc.id), {
+            isVerified: true,
+            verificationLevel: 3,
+            verified_badge_type: badgeTier,
+            badgeType: badgeTier,
+            identity_status: 'verified',
+            business_status: item.type === "agency_verification" ? 'approved' : 'none',
+            updatedAt: new Date().toISOString()
+          });
+
+          // Sync all listings owned by this user
+          const pQuery = query(collection(db, 'properties'), where('seller.uid', '==', uDoc.id));
+          const pSnap = await getDocs(pQuery);
+          pSnap.forEach(async (pDoc) => {
+            await updateDoc(doc(db, 'properties', pDoc.id), {
+              'seller.isVerified': true,
+              'seller.badgeType': badgeTier,
+              'seller.verified_badge_type': badgeTier
+            });
+          });
+        });
+      }
+    } catch (e) {
+      console.warn("Could not sync Firestore approval state:", e);
+    }
+
     toast.success(`${item.title} Approved`, {
-      description: "Listing/Verification credentials confirmed and published to marketplace."
+      description: "Listing/Verification credentials confirmed and badge tier published across marketplace."
     });
     setIsInspectModalOpen(false);
   };
@@ -452,7 +663,9 @@ export default function ApprovalCenter() {
               </DialogHeader>
 
               {/* Photos or Documents */}
-              {selectedItem.details.images && selectedItem.details.images.length > 0 && (
+              <VerificationDocumentPreview item={selectedItem} />
+
+              {selectedItem.details.images && selectedItem.details.images.length > 0 && selectedItem.type === 'listing_approval' && (
                 <div className="aspect-video relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
                   <img src={selectedItem.details.images[0]} alt="" className="w-full h-full object-cover" />
                 </div>

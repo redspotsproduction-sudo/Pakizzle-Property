@@ -18,10 +18,10 @@ const isPlayableUrl = (url: string) => {
 
 const getFallbackVideo = (id: string) => {
   const FALLBACK_VIDEOS = [
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+    "/videos/walkthrough_villa.mp4",
+    "/videos/walkthrough_penthouse.mp4",
+    "/videos/walkthrough_mansion.mp4",
+    "/videos/walkthrough_smart_home.mp4"
   ];
   let hash = 0;
   for (let i = 0; i < id.length; i++) {

@@ -251,7 +251,7 @@ export default function SearchBar() {
       </div>
 
       {/* Main Consolidated Search & Filter Panel Container */}
-      <div className="bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-2xl rounded-[32px] shadow-apple-soft border border-apple-border/40 dark:border-white/5 p-4 sm:p-5">
+      <div className="bg-white/95 dark:bg-apple-card-bg/95 backdrop-blur-2xl rounded-[32px] shadow-apple-soft border border-apple-border/40 dark:border-white/5 p-4 sm:p-5">
         
         {/* Core Address / Search Input bar & Autocomplete Trigger */}
         <div className="relative flex flex-col md:flex-row items-center gap-3 w-full">
@@ -306,7 +306,7 @@ export default function SearchBar() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 4 }}
               exit={{ opacity: 0 }}
-              className="absolute left-4 right-4 md:left-8 md:right-8 top-[140px] md:top-[124px] z-50 bg-white dark:bg-[#1C1C1E] border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl overflow-hidden p-4 max-h-[380px] overflow-y-auto custom-scrollbar"
+              className="absolute left-4 right-4 md:left-8 md:right-8 top-[140px] md:top-[124px] z-50 bg-white dark:bg-apple-card-bg border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl overflow-hidden p-4 max-h-[380px] overflow-y-auto custom-scrollbar"
               ref={suggestionsRef}
             >
               {/* Typeahead Suggestions */}
@@ -481,7 +481,7 @@ export default function SearchBar() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 4 }}
                   exit={{ opacity: 0 }}
-                  className="absolute left-0 mt-1 z-50 w-56 bg-white dark:bg-[#1C1C1E] border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-3 space-y-2.5"
+                  className="absolute left-0 mt-1 z-50 w-56 bg-white dark:bg-apple-card-bg border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-3 space-y-2.5"
                 >
                   <p className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted px-1.5">Select Types</p>
                   <div className="space-y-1">
@@ -545,7 +545,7 @@ export default function SearchBar() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 4 }}
                   exit={{ opacity: 0 }}
-                  className="absolute left-0 mt-1 z-50 w-72 bg-white dark:bg-[#1C1C1E] border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 space-y-4"
+                  className="absolute left-0 mt-1 z-50 w-72 bg-white dark:bg-apple-card-bg border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between border-b border-apple-border/10 pb-2">
                     <span className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Price Range</span>
@@ -644,7 +644,7 @@ export default function SearchBar() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 4 }}
                   exit={{ opacity: 0 }}
-                  className="absolute left-0 mt-1 z-50 w-64 bg-white dark:bg-[#1C1C1E] border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 space-y-4"
+                  className="absolute left-0 mt-1 z-50 w-64 bg-white dark:bg-apple-card-bg border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between border-b border-apple-border/10 pb-2">
                     <span className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Beds & Baths</span>
@@ -732,7 +732,7 @@ export default function SearchBar() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 4 }}
                   exit={{ opacity: 0 }}
-                  className="absolute left-0 mt-1 z-50 w-72 bg-white dark:bg-[#1C1C1E] border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 space-y-4"
+                  className="absolute left-0 mt-1 z-50 w-72 bg-white dark:bg-apple-card-bg border border-apple-border/30 dark:border-white/10 shadow-2xl rounded-2xl p-4 space-y-4"
                 >
                   <div className="flex items-center justify-between border-b border-apple-border/10 pb-2">
                     <span className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Area Size (Sq. Ft.)</span>
@@ -857,7 +857,7 @@ export default function SearchBar() {
                           "px-3 py-2 text-xs font-semibold border rounded-xl transition-all cursor-pointer",
                           constructionState === opt.id
                             ? "bg-apple-blue border-apple-blue text-white shadow-sm"
-                            : "bg-apple-gray/30 dark:bg-[#1C1C1E] border-apple-border/10 text-apple-text hover:bg-apple-gray"
+                            : "bg-apple-gray/30 dark:bg-apple-card-bg border-apple-border/10 text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         {opt.label}
@@ -882,7 +882,7 @@ export default function SearchBar() {
                           "px-3 py-2 text-xs font-semibold border rounded-xl transition-all cursor-pointer",
                           furnishing === opt.id
                             ? "bg-apple-blue border-apple-blue text-white shadow-sm"
-                            : "bg-apple-gray/30 dark:bg-[#1C1C1E] border-apple-border/10 text-apple-text hover:bg-apple-gray"
+                            : "bg-apple-gray/30 dark:bg-apple-card-bg border-apple-border/10 text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         {opt.label}

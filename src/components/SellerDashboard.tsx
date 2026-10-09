@@ -14,7 +14,8 @@ import {
   Clock,
   ArrowUpRight,
   Sparkles,
-  Car,
+  Building2,
+  Home,
   Edit2,
   Power,
   PowerOff,
@@ -22,6 +23,8 @@ import {
   Star,
   CheckCircle2,
   AlertCircle,
+  AlertTriangle,
+  RefreshCw,
   Sliders,
   Lock,
   Compass,
@@ -33,20 +36,28 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { useChat } from "../context/ChatContext";
 import { formatPrice, cn } from "../lib/utils";
+import { listingFreshnessService } from "../services/listingFreshnessService";
 import Header from "./Header";
 import ConfirmationModal from "./ConfirmationModal";
 import VerificationModal from "./VerificationModal";
+import ListingAnalyticsModal from "./ListingAnalyticsModal";
 import { Link, useLocation } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { Review } from "../types";
+import { Review, Property } from "../types";
 
 const ITEMS_PER_PAGE = 8;
 
 export default function SellerDashboard() {
   const { pathname } = useLocation();
   const isNestedInDashboard = pathname.startsWith('/dashboard');
-  const { properties: vehicles, updateProperty: updateVehicle, deleteProperty: deleteVehicle } = useProperties();
+  const { 
+    properties: vehicles, 
+    updateProperty: updateVehicle, 
+    deleteProperty: deleteVehicle,
+    confirmListingActive,
+    reactivateListing
+  } = useProperties();
   const { wishlist } = useWishlist();
   const { user } = useAuth();
   const { conversations } = useChat();
@@ -55,6 +66,7 @@ export default function SellerDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [analyticsProperty, setAnalyticsProperty] = useState<Property | null>(null);
   
   // Interactive optimization & neural dashboard states
   const [selectedOptimizeId, setSelectedOptimizeId] = useState<string>("");
@@ -318,7 +330,7 @@ export default function SellerDashboard() {
                 className="px-5 py-2.5 text-xs font-semibold bg-apple-blue hover:bg-blue-600 text-white rounded-full transition-all shadow-sm flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5 stroke-[2.5px]" />
-                List Vehicle
+                List Property
               </motion.button>
             </Link>
           </div>
@@ -491,12 +503,12 @@ export default function SellerDashboard() {
                 {paginatedVehicles.length === 0 ? (
                   <div className="text-center py-16 px-6 border border-dashed border-[#E5E5E7] dark:border-white/10 rounded-2xl bg-[#F5F5F7]/30 dark:bg-white/[0.005]">
                     <div className="w-14 h-14 rounded-full bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center mx-auto mb-4 text-[#86868B]">
-                      <Car className="w-7 h-7" />
+                      <Building2 className="w-7 h-7" />
                     </div>
                     <h3 className="text-sm font-semibold mb-1 text-[#1D1D1F] dark:text-white">No listings match selection</h3>
                     <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-6 leading-relaxed">
                       {activeTab === 'active' 
-                        ? "List an automobile now to broadcast it across our high-intent buyer grid." 
+                        ? "List a property now to broadcast it across our high-intent buyer grid." 
                         : `No listings are flagged in "${tabLabel(activeTab)}" state right now.`}
                     </p>
                     {activeTab === 'active' && (
@@ -512,6 +524,7 @@ export default function SellerDashboard() {
                       const healthScore = vehicle.images.length > 2 ? 98 : 75;
                       const views = 142 + (index * 47);
                       const inquiries = 3 + (index * 2);
+                      const freshness = listingFreshnessService.getFreshness(vehicle);
 
                       return (
                         <motion.div 
@@ -530,7 +543,7 @@ export default function SellerDashboard() {
                                 referrerPolicy="no-referrer" 
                               />
                             ) : (
-                              <Car className="w-6 h-6 text-white/40" />
+                              <Home className="w-6 h-6 text-white/40" />
                             )}
                           </Link>
                           
@@ -545,28 +558,86 @@ export default function SellerDashboard() {
                             </div>
                             
                             <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#86868B] mt-1 font-normal">
-                              <span className="font-mono">{vehicle.mileage ? vehicle.mileage.toLocaleString() : "45,000"} km</span>
+                              <span className="font-mono">{vehicle.mileage ? vehicle.mileage.toLocaleString() : (vehicle.engineSize || "1 Kanal")} Sq.Ft.</span>
                               <span className="opacity-30">/</span>
-                              <span className="capitalize">{vehicle.transmission || "Automatic"}</span>
+                              <span className="capitalize">{vehicle.transmission || "Furnished"}</span>
                               <span className="opacity-30">/</span>
                               <span className={cn(
                                 "text-[9px] font-bold uppercase tracking-wider",
-                                vehicle.status === 'active' ? "text-apple-green" : "text-[#86868B]"
+                                vehicle.status === 'active' ? "text-apple-green" : (vehicle.status === 'expired' ? "text-rose-500" : "text-[#86868B]")
                               )}>
                                 {vehicle.status || "active"}
                               </span>
+                              <span className="opacity-30">•</span>
+                              <span className="text-[10px] text-slate-500 font-medium">
+                                {freshness.displayText}
+                              </span>
                             </div>
 
-                            <div className="flex items-center gap-4 text-[10px] font-semibold font-mono text-[#86868B] mt-2.5">
+                            <div className="flex flex-wrap items-center gap-4 text-[10px] font-semibold font-mono text-[#86868B] mt-2.5">
                               <span className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5 text-[#86868B]/70" /> {views} views</span>
                               <span className="flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-[#86868B]/70" /> {inquiries} chats</span>
                               <span className="flex items-center gap-1.5 text-apple-blue"><Sparkles className="w-3.5 h-3.5" /> {healthScore}% ranking</span>
+                              <button
+                                onClick={() => setAnalyticsProperty(vehicle)}
+                                className="inline-flex items-center gap-1 text-purple-600 dark:text-purple-400 hover:underline font-bold ml-auto cursor-pointer"
+                              >
+                                <BarChart3 className="w-3 h-3" />
+                                <span>30-Day Performance & Benchmarks</span>
+                              </button>
                             </div>
+
+                            {/* Freshness Grace Period 1-Tap Prompt */}
+                            {freshness.isGracePeriod && (
+                              <div className="mt-2.5 p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5 text-xs text-amber-800 dark:text-amber-200 font-semibold">
+                                  <AlertTriangle className="w-3.5 h-3.5 text-amber-500 animate-pulse shrink-0" />
+                                  <span>Still Available? Action needed within {Math.max(1, 67 - freshness.daysSinceConfirmed)} days.</span>
+                                </div>
+                                <button
+                                  onClick={async () => {
+                                    await confirmListingActive(vehicle.id);
+                                    triggerToast(`Listing "${vehicle.model}" confirmed active today!`);
+                                  }}
+                                  className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors shrink-0 cursor-pointer"
+                                >
+                                  Yes, Still Available
+                                </button>
+                              </div>
+                            )}
+
+                            {/* Expired Listing 1-Click Reactivation */}
+                            {(freshness.isExpired || vehicle.status === 'expired') && (
+                              <div className="mt-2.5 p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5 text-xs text-rose-800 dark:text-rose-200 font-semibold">
+                                  <AlertCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                                  <span>Delisted from search ({freshness.daysSinceConfirmed} days unconfirmed).</span>
+                                </div>
+                                <button
+                                  onClick={async () => {
+                                    await reactivateListing(vehicle.id);
+                                    triggerToast(`Listing "${vehicle.model}" reactivated and live!`);
+                                  }}
+                                  className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors shrink-0 cursor-pointer flex items-center gap-1"
+                                >
+                                  <RefreshCw className="w-3 h-3" />
+                                  <span>Reactivate Listing</span>
+                                </button>
+                              </div>
+                            )}
                           </div>
                           
                           {/* Compact actions rail */}
                           <div className="flex sm:flex-col justify-end items-center gap-1.5 shrink-0 pt-2 sm:pt-0">
                             <div className="flex items-center gap-1 bg-[#F5F5F7]/80 dark:bg-white/5 p-1 rounded-xl border border-[#E5E5E7]/40 dark:border-white/5 w-full sm:w-auto justify-around sm:justify-start">
+                              <button
+                                onClick={() => setAnalyticsProperty(vehicle)}
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-purple-600 dark:text-purple-400 transition-all flex items-center justify-center cursor-pointer touch-target"
+                                title="View 30-Day Analytics & Comparative Benchmark"
+                              >
+                                <BarChart3 className="w-3.5 h-3.5" />
+                              </button>
+
                               <button
                                 onClick={() => triggerToast(`Campaign metrics expanded for ${vehicle.model}!`)}
                                 className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
@@ -794,7 +865,7 @@ export default function SellerDashboard() {
                               referrerPolicy="no-referrer" 
                             />
                           ) : (
-                            <Car className="w-4 h-4 text-white/40" />
+                            <Home className="w-4 h-4 text-white/40" />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -842,6 +913,15 @@ export default function SellerDashboard() {
           setIsVerificationModalOpen(false);
           triggerToast("Verification documents queued for instant review.");
         }}
+      />
+
+      {/* 30-Day Seller Analytics & Market Comparative Context Modal */}
+      <ListingAnalyticsModal
+        property={analyticsProperty}
+        allProperties={vehicles}
+        isOpen={!!analyticsProperty}
+        onClose={() => setAnalyticsProperty(null)}
+        onConfirmActive={confirmListingActive}
       />
     </div>
   );

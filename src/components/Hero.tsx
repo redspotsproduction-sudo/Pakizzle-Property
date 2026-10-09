@@ -28,7 +28,7 @@ import {
   Check,
   X
 } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn, formatPrice, formatExactPrice } from "../lib/utils";
 import FilterPopover from "./ui/FilterPopover";
 import { propertySchemaService, CityItem, PropertyTypeItem, CANONICAL_CITIES, CANONICAL_PROPERTY_TYPES } from "../services/propertySchemaService";
 import { bannerService } from "../services/bannerService";
@@ -51,7 +51,8 @@ const HERO_HEROES = [
     image: villaImg,
     title: "The Glass Pavilion Villa",
     subtitle: "Phase 6 DHA, Lahore",
-    price: "PKR 14.5 Crore",
+    price: "Rs 14.5 Crore",
+    numericPrice: 145000000,
     specs: { beds: 5, baths: 6, area: "1 Kanal" },
     tag: "LDA Registry Clear",
     tagColor: "emerald"
@@ -61,7 +62,8 @@ const HERO_HEROES = [
     image: penthouseImg,
     title: "Panoramic Sky Penthouse",
     subtitle: "Crescent Bay, Karachi",
-    price: "PKR 18.2 Crore",
+    price: "Rs 18.2 Crore",
+    numericPrice: 182000000,
     specs: { beds: 4, baths: 5, area: "5,400 sq.ft" },
     tag: "Emaar Direct Title",
     tagColor: "teal"
@@ -71,7 +73,8 @@ const HERO_HEROES = [
     image: mansionImg,
     title: "Margalla Ridgeline Estate",
     subtitle: "Sector F-7/3, Islamabad",
-    price: "PKR 28.0 Crore",
+    price: "Rs 28 Crore",
+    numericPrice: 280000000,
     specs: { beds: 6, baths: 7, area: "2 Kanal" },
     tag: "CDA Non-Encumbrance",
     tagColor: "amber"
@@ -81,7 +84,8 @@ const HERO_HEROES = [
     image: plotImg,
     title: "Prime Commercial Corner Plot",
     subtitle: "DHA Phase 9 Prism, Lahore",
-    price: "PKR 8.75 Crore",
+    price: "Rs 8.75 Crore",
+    numericPrice: 87500000,
     specs: { beds: 0, baths: 0, area: "10 Marla" },
     tag: "DHA Possession Verified",
     tagColor: "indigo"
@@ -239,83 +243,73 @@ export default function Hero() {
               className="w-full h-full object-cover object-center animate-ken-burns"
             />
           </AnimatePresence>
-          {/* Subtle gradient vignette to guarantee text legibility while preserving photographic transparency */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-slate-950/50 pointer-events-none" />
+          {/* Certified High-Contrast Photo Scrim (Part 5: >= 4.5:1 text, >= 3:1 headline highlight) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/65 to-black/50 pointer-events-none" />
         </motion.div>
 
         {/* 
           FLOATING GLASS RAIL (Left Vertical Stack)
-          OS-style floating circular glass controls rail 
+          Part 6: Neutral icons by default, primary on hover, accent pill for active, no gold icons, single theme toggle in header.
         */}
-        <aside className="absolute left-4 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-3 p-2.5 rounded-full liquid-glass-subtle shadow-xl">
+        <aside className="absolute left-4 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-3 p-2.5 rounded-full photo-glass-panel shadow-2xl">
           <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             transition={SPRING_SNAPPY}
             onClick={() => navigate("/")}
             title="Home" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+            className="w-11 h-11 rounded-full flex items-center justify-center bg-apple-blue text-white transition-all cursor-pointer shadow-xs"
           >
             <Home className="w-5 h-5" />
           </motion.button>
           <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             transition={SPRING_SNAPPY}
             onClick={() => navigate("/marketplace")}
             title="Explore Properties" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 transition-all cursor-pointer"
           >
             <Compass className="w-5 h-5" />
           </motion.button>
           <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             transition={SPRING_SNAPPY}
             onClick={() => setIsValuationOpen(true)}
             title="AI Valuation" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-amber-300 hover:text-amber-200 hover:bg-white/20 transition-all cursor-pointer"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 transition-all cursor-pointer"
           >
             <Sparkles className="w-5 h-5" />
           </motion.button>
           <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             transition={SPRING_SNAPPY}
             onClick={() => navigate("/chat")}
             title="Chat & Concierge" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 transition-all cursor-pointer"
           >
             <MessageSquare className="w-5 h-5" />
           </motion.button>
           <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             transition={SPRING_SNAPPY}
             onClick={() => navigate("/notifications")}
             title="Notifications" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 transition-all cursor-pointer"
           >
             <Bell className="w-5 h-5" />
           </motion.button>
           <div className="w-6 h-[1px] bg-white/20 my-1" />
           <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
-            transition={SPRING_SNAPPY}
-            onClick={toggleTheme}
-            title="Toggle Light / Dark" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
-          >
-            {theme === "dark" ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5 text-teal-300" />}
-          </motion.button>
-          <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
             transition={SPRING_SNAPPY}
             onClick={() => navigate("/profile")}
             title="Account Profile" 
-            className="w-11 h-11 rounded-full flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 transition-all cursor-pointer"
           >
             <User className="w-5 h-5" />
           </motion.button>
@@ -339,11 +333,11 @@ export default function Hero() {
               whileTap={{ scale: 0.97 }}
               transition={SPRING_SNAPPY}
               onClick={() => setIsMobileSearchOpen(true)}
-              className="w-full max-w-md h-13 px-4 rounded-full liquid-glass-mid flex items-center justify-between text-white shadow-xl border border-white/25 cursor-pointer touch-target"
+              className="w-full max-w-md h-13 px-4 rounded-full photo-glass-panel flex items-center justify-between text-white shadow-xl cursor-pointer touch-target min-h-[44px]"
             >
               <div className="flex items-center gap-2.5 truncate">
-                <div className="w-8 h-8 rounded-full bg-[#5B2A86]/40 flex items-center justify-center shrink-0 border border-white/20">
-                  <Search className="w-4 h-4 text-[#F0A830]" />
+                <div className="w-8 h-8 rounded-full bg-apple-blue/40 flex items-center justify-center shrink-0 border border-white/20">
+                  <Search className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex flex-col text-left truncate">
                   <span className="text-xs font-bold text-white truncate">
@@ -355,16 +349,16 @@ export default function Hero() {
                 </div>
               </div>
               <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 ml-2">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#F0A830]" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-white/80" />
               </div>
             </motion.button>
           </div>
 
           {/* 2. TABLET PORTRAIT (768px–1023px): Two-tier Clean Wrapped Cockpit */}
-          <div className="hidden md:flex lg:hidden w-full max-w-2xl liquid-glass-mid rounded-3xl p-3 flex-col gap-2.5 shadow-2xl border border-white/20">
+          <div className="hidden md:flex lg:hidden w-full max-w-2xl photo-glass-panel rounded-3xl p-3 flex-col gap-2.5 shadow-2xl">
             <div className="flex items-center justify-between gap-2">
               {/* Buy / Rent / Plots Segmented Toggle */}
-              <div className="flex items-center gap-1 p-1 rounded-full bg-black/30 backdrop-blur-md border border-white/10 shrink-0">
+              <div className="flex items-center gap-1 p-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shrink-0">
                 {(["buy", "rent", "plots"] as const).map((tab) => {
                   const isSelected = activeTab === tab;
                   return (
@@ -372,8 +366,8 @@ export default function Hero() {
                       key={tab}
                       onClick={() => setActiveTab(tab)}
                       className={cn(
-                        "relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer min-h-[36px] flex items-center",
-                        isSelected ? "text-slate-900 font-bold" : "text-white/80 hover:text-white"
+                        "relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer min-h-[44px] flex items-center",
+                        isSelected ? "text-black font-bold" : "text-white/80 hover:text-white"
                       )}
                     >
                       {isSelected && (
@@ -395,9 +389,9 @@ export default function Hero() {
                 whileHover={{ scale: 1.02 }}
                 transition={SPRING_SNAPPY}
                 onClick={handleSearchSubmit}
-                className="h-10 px-5 rounded-full pakizzle-button-primary !text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0"
+                className="h-11 px-5 rounded-full pakizzle-button-primary !text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0 min-h-[44px]"
               >
-                <Search className="w-3.5 h-3.5 text-[#F0A830]" />
+                <Search className="w-3.5 h-3.5 text-white" />
                 <span>Explore Homes</span>
               </motion.button>
             </div>
@@ -411,12 +405,12 @@ export default function Hero() {
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "tablet-city" ? null : "tablet-city")}
                   className={cn(
-                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/30 border text-white text-xs font-semibold cursor-pointer transition-colors",
-                    activeDropdown === "tablet-city" ? "border-amber-400 bg-black/50" : "border-white/15 hover:bg-black/40"
+                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/40 border text-white text-xs font-semibold cursor-pointer transition-colors min-h-[44px]",
+                    activeDropdown === "tablet-city" ? "border-apple-blue bg-black/60 ring-1 ring-apple-blue" : "border-white/15 hover:bg-black/50"
                   )}
                 >
                   <div className="flex items-center gap-1.5 truncate">
-                    <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-white/70 shrink-0" />
                     <span className="truncate">{selectedCity || "All Pakistan"}</span>
                   </div>
                   <ChevronDown className={cn("w-3 h-3 text-white/60 shrink-0 transition-transform", activeDropdown === "tablet-city" && "rotate-180")} />
@@ -432,7 +426,7 @@ export default function Hero() {
                       <button
                         type="button"
                         onClick={() => { setSelectedCity("All Pakistan"); setActiveDropdown(null); }}
-                        className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                        className="text-[10px] font-bold text-apple-blue hover:underline cursor-pointer"
                       >
                         Reset
                       </button>
@@ -443,18 +437,18 @@ export default function Hero() {
                   contentClassName="p-4 flex flex-col min-h-0 overflow-hidden"
                 >
                   <div className="relative mb-3">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Search className="w-3.5 h-3.5 text-apple-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       placeholder="Search Pakistan city..."
                       value={heroCitySearch}
                       onChange={(e) => setHeroCitySearch(e.target.value)}
-                      className="w-full pl-8.5 pr-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 text-xs font-semibold text-slate-900 dark:text-[#F5F5F7] border border-transparent focus:border-[#5B2A86] dark:focus:border-[#C9A227] outline-none"
+                      className="w-full pl-8.5 pr-3 py-2 rounded-xl bg-apple-gray text-xs font-semibold text-apple-text border border-transparent focus:border-apple-blue outline-none"
                     />
                   </div>
 
                   <div className="mb-3">
-                    <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] uppercase tracking-wider block mb-1.5">Top Metros</span>
+                    <span className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1.5">Top Metros</span>
                     <div className="flex flex-wrap gap-1.5">
                       {heroFilteredPopular.map((c) => {
                         const isSelected = selectedCity === c.name;
@@ -469,8 +463,8 @@ export default function Hero() {
                             className={cn(
                               "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer",
                               isSelected
-                                ? "bg-[#5B2A86] dark:bg-[#C9A227] text-white dark:text-black border-transparent shadow-xs font-bold"
-                                : "bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-[#F5F5F7] border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20"
+                                ? "bg-apple-blue text-white border-transparent shadow-xs font-bold"
+                                : "bg-apple-surface text-apple-text border-apple-border hover:border-apple-blue/50"
                             )}
                           >
                             {c.name}
@@ -481,7 +475,7 @@ export default function Hero() {
                   </div>
 
                   <div 
-                    className="max-h-60 overflow-y-auto space-y-1 pr-1.5 border-t border-slate-200/80 dark:border-white/10 pt-2 custom-scrollbar"
+                    className="max-h-60 overflow-y-auto space-y-1 pr-1.5 border-t border-apple-border pt-2 custom-scrollbar"
                   >
                     <button
                       type="button"
@@ -489,12 +483,12 @@ export default function Hero() {
                       className={cn(
                         "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                         selectedCity === "All Pakistan" 
-                          ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
-                          : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                          ? "bg-apple-blue/10 text-apple-blue font-bold" 
+                          : "text-apple-text hover:bg-apple-gray"
                       )}
                     >
                       <span>All over Pakistan</span>
-                      {selectedCity === "All Pakistan" && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                      {selectedCity === "All Pakistan" && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                     </button>
 
                     {heroOtherCities.map((c) => {
@@ -510,21 +504,21 @@ export default function Hero() {
                           className={cn(
                             "w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between cursor-pointer transition-colors",
                             isSelected 
-                              ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
-                              : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                              ? "bg-apple-blue/10 text-apple-blue font-bold" 
+                              : "text-apple-text hover:bg-apple-gray"
                           )}
                         >
                           <div className="flex items-center gap-2">
-                            <MapPin className="w-3 h-3 text-slate-400 dark:text-[#8E8E93]" />
+                            <MapPin className="w-3 h-3 text-apple-text-muted" />
                             <span>{c.name}</span>
                           </div>
-                          <span className="text-[10px] text-slate-400 dark:text-[#8E8E93] font-normal">{c.province}</span>
+                          <span className="text-[10px] text-apple-text-muted font-normal">{c.province}</span>
                         </button>
                       );
                     })}
 
-                    <div className="pt-2 pb-1 text-center border-t border-slate-100 dark:border-white/5 mt-2">
-                      <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] block">
+                    <div className="pt-2 pb-1 text-center border-t border-apple-border mt-2">
+                      <span className="text-[10px] font-bold text-apple-text-muted block">
                         ✓ All 15 metropolitan hubs available · End of list
                       </span>
                     </div>
@@ -539,12 +533,12 @@ export default function Hero() {
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "tablet-type" ? null : "tablet-type")}
                   className={cn(
-                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/30 border text-white text-xs font-semibold cursor-pointer transition-colors",
-                    activeDropdown === "tablet-type" ? "border-amber-400 bg-black/50" : "border-white/15 hover:bg-black/40"
+                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/40 border text-white text-xs font-semibold cursor-pointer transition-colors min-h-[44px]",
+                    activeDropdown === "tablet-type" ? "border-apple-blue bg-black/60 ring-1 ring-apple-blue" : "border-white/15 hover:bg-black/50"
                   )}
                 >
                   <div className="flex items-center gap-1.5 truncate">
-                    <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                    <Building2 className="w-3.5 h-3.5 text-white/70 shrink-0" />
                     <span className="truncate">{selectedType || "All Types"}</span>
                   </div>
                   <ChevronDown className={cn("w-3 h-3 text-white/60 shrink-0 transition-transform", activeDropdown === "tablet-type" && "rotate-180")} />
@@ -560,7 +554,7 @@ export default function Hero() {
                       <button
                         type="button"
                         onClick={() => { setSelectedType(""); setActiveDropdown(null); }}
-                        className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                        className="text-[10px] font-bold text-apple-blue hover:underline cursor-pointer"
                       >
                         Reset
                       </button>
@@ -576,12 +570,12 @@ export default function Hero() {
                       className={cn(
                         "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                         !selectedType 
-                          ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
-                          : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                          ? "bg-apple-blue/15 text-apple-blue font-bold" 
+                          : "text-apple-text hover:bg-apple-gray"
                       )}
                     >
                       <span>All Property Types</span>
-                      {!selectedType && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                      {!selectedType && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                     </button>
                     {schemaTypes.map((t) => {
                       const isSelected = selectedType.toLowerCase() === t.slug.toLowerCase() || selectedType.toLowerCase() === t.name.toLowerCase();
@@ -596,15 +590,15 @@ export default function Hero() {
                           className={cn(
                             "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                             isSelected
-                              ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
-                              : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                              ? "bg-apple-blue/15 text-apple-blue font-bold"
+                              : "text-apple-text hover:bg-apple-gray"
                           )}
                         >
                           <div className="flex items-center gap-2">
-                            <Building2 className="w-3.5 h-3.5 text-slate-400 dark:text-[#8E8E93]" />
+                            <Building2 className="w-3.5 h-3.5 text-apple-text-muted" />
                             <span>{t.name}</span>
                           </div>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                         </button>
                       );
                     })}
@@ -619,12 +613,12 @@ export default function Hero() {
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "tablet-price" ? null : "tablet-price")}
                   className={cn(
-                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/30 border text-white text-xs font-semibold cursor-pointer transition-colors",
-                    activeDropdown === "tablet-price" ? "border-amber-400 bg-black/50" : "border-white/15 hover:bg-black/40"
+                    "w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl bg-black/40 border text-white text-xs font-semibold cursor-pointer transition-colors min-h-[44px]",
+                    activeDropdown === "tablet-price" ? "border-apple-blue bg-black/60 ring-1 ring-apple-blue" : "border-white/15 hover:bg-black/50"
                   )}
                 >
                   <div className="flex items-center gap-1 truncate">
-                    <span className="text-[10px] font-bold text-[#F0A830]">PKR</span>
+                    <span className="text-[10px] font-bold text-white/70">PKR</span>
                     <span className="truncate">{PRICE_PRESETS[selectedPriceIdx].label}</span>
                   </div>
                   <ChevronDown className={cn("w-3 h-3 text-white/60 shrink-0 transition-transform", activeDropdown === "tablet-price" && "rotate-180")} />
@@ -640,7 +634,7 @@ export default function Hero() {
                       <button
                         type="button"
                         onClick={() => { setSelectedPriceIdx(0); setActiveDropdown(null); }}
-                        className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                        className="text-[10px] font-bold text-apple-blue hover:underline cursor-pointer"
                       >
                         Reset
                       </button>
@@ -663,12 +657,12 @@ export default function Hero() {
                           className={cn(
                             "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                             isSelected
-                              ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
-                              : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                              ? "bg-apple-blue/15 text-apple-blue font-bold"
+                              : "text-apple-text hover:bg-apple-gray"
                           )}
                         >
                           <span>{p.label}</span>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                         </button>
                       );
                     })}
@@ -678,10 +672,10 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* 3. DESKTOP (1024px+): Full Floating Capsule Cockpit */}
-          <div className="hidden lg:flex w-full max-w-4xl liquid-glass-mid rounded-full p-2 pl-4 pr-2 items-center justify-between gap-2 shadow-2xl border border-white/20">
+          {/* 3. DESKTOP (1024px+): Full Floating Capsule Cockpit (photo-glass-panel, min-h-[44px] controls) */}
+          <div className="hidden lg:flex w-full max-w-4xl photo-glass-panel rounded-full p-2 pl-4 pr-2 items-center justify-between gap-2 shadow-2xl min-h-[52px]">
             {/* Buy / Rent / Plots Segmented Toggle with layoutId Glide */}
-            <div className="flex items-center gap-1 p-1 rounded-full bg-black/25 backdrop-blur-md border border-white/10 shrink-0 relative">
+            <div className="flex items-center gap-1 p-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shrink-0 relative">
               {(["buy", "rent", "plots"] as const).map((tab) => {
                 const isSelected = activeTab === tab;
                 return (
@@ -689,8 +683,8 @@ export default function Hero() {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={cn(
-                      "relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 z-10 cursor-pointer min-h-[36px] flex items-center",
-                      isSelected ? "text-slate-900 font-bold" : "text-white/80 hover:text-white"
+                      "relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 z-10 cursor-pointer min-h-[44px] flex items-center",
+                      isSelected ? "text-black font-bold" : "text-white/80 hover:text-white"
                     )}
                   >
                     {isSelected && (
@@ -713,11 +707,11 @@ export default function Hero() {
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === "city" ? null : "city")}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10",
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10 min-h-[44px]",
                   activeDropdown === "city" && "bg-white/15 ring-1 ring-white/30"
                 )}
               >
-                <MapPin className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-white/70 shrink-0" />
                 <span className="truncate max-w-[120px]">{selectedCity || "All Pakistan"}</span>
                 <ChevronDown className={cn("w-3 h-3 text-white/60 transition-transform", activeDropdown === "city" && "rotate-180")} />
               </button>
@@ -732,7 +726,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => { setSelectedCity("All Pakistan"); setActiveDropdown(null); }}
-                      className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                      className="text-[10px] font-bold text-apple-blue hover:underline cursor-pointer"
                     >
                       Reset
                     </button>
@@ -744,19 +738,19 @@ export default function Hero() {
               >
                 {/* Search input for cities */}
                 <div className="relative mb-3">
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Search className="w-3.5 h-3.5 text-apple-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     placeholder="Search Pakistan city..."
                     value={heroCitySearch}
                     onChange={(e) => setHeroCitySearch(e.target.value)}
-                    className="w-full pl-8.5 pr-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 text-xs font-semibold text-slate-900 dark:text-[#F5F5F7] border border-transparent focus:border-[#5B2A86] dark:focus:border-[#C9A227] outline-none"
+                    className="w-full pl-8.5 pr-3 py-2 rounded-xl bg-apple-gray text-xs font-semibold text-apple-text border border-transparent focus:border-apple-blue outline-none"
                   />
                 </div>
 
                 {/* Pinned Most-Searched Cities */}
                 <div className="mb-3">
-                  <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] uppercase tracking-wider block mb-1.5">Top Metros</span>
+                  <span className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1.5">Top Metros</span>
                   <div className="flex flex-wrap gap-1.5">
                     {heroFilteredPopular.map((c) => {
                       const isSelected = selectedCity === c.name;
@@ -771,8 +765,8 @@ export default function Hero() {
                           className={cn(
                             "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer",
                             isSelected
-                              ? "bg-[#5B2A86] dark:bg-[#C9A227] text-white dark:text-black border-transparent shadow-xs font-bold"
-                              : "bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-[#F5F5F7] border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20"
+                              ? "bg-apple-blue text-white border-transparent shadow-xs font-bold"
+                              : "bg-apple-surface text-apple-text border-apple-border hover:border-apple-blue/50"
                           )}
                         >
                           {c.name}
@@ -784,7 +778,7 @@ export default function Hero() {
 
                 {/* Contained Scrolling City List with Visible Scrollbar & Scroll Affordance */}
                 <div 
-                  className="max-h-64 overflow-y-auto space-y-1 pr-1.5 border-t border-slate-200/80 dark:border-white/10 pt-2 custom-scrollbar"
+                  className="max-h-64 overflow-y-auto space-y-1 pr-1.5 border-t border-apple-border pt-2 custom-scrollbar"
                 >
                   <button
                     type="button"
@@ -792,12 +786,12 @@ export default function Hero() {
                     className={cn(
                       "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                       selectedCity === "All Pakistan" 
-                        ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
-                        : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                        ? "bg-apple-blue/10 text-apple-blue font-bold" 
+                        : "text-apple-text hover:bg-apple-gray"
                     )}
                   >
                     <span>All over Pakistan</span>
-                    {selectedCity === "All Pakistan" && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                    {selectedCity === "All Pakistan" && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                   </button>
 
                   {heroOtherCities.map((c) => {
@@ -813,22 +807,22 @@ export default function Hero() {
                         className={cn(
                           "w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between cursor-pointer transition-colors",
                           isSelected 
-                            ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
-                            : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                            ? "bg-apple-blue/10 text-apple-blue font-bold" 
+                            : "text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-3 h-3 text-slate-400 dark:text-[#8E8E93]" />
+                          <MapPin className="w-3 h-3 text-apple-text-muted" />
                           <span>{c.name}</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-[#8E8E93] font-normal">{c.province}</span>
+                        <span className="text-[10px] text-apple-text-muted font-normal">{c.province}</span>
                       </button>
                     );
                   })}
 
                   {/* Explicit End-of-List Indicator: Confirms full list is accessible and scrolled */}
-                  <div className="pt-2.5 pb-1 text-center border-t border-slate-100 dark:border-white/5 mt-2">
-                    <span className="text-[10px] font-bold text-slate-400 dark:text-[#8E8E93] block">
+                  <div className="pt-2.5 pb-1 text-center border-t border-apple-border mt-2">
+                    <span className="text-[10px] font-bold text-apple-text-muted block">
                       ✓ All 15 metropolitan hubs available · End of list
                     </span>
                   </div>
@@ -843,11 +837,11 @@ export default function Hero() {
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === "type" ? null : "type")}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10",
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10 min-h-[44px]",
                   activeDropdown === "type" && "bg-white/15 ring-1 ring-white/30"
                 )}
               >
-                <Building2 className="w-3.5 h-3.5 text-[#F0A830] shrink-0" />
+                <Building2 className="w-3.5 h-3.5 text-white/70 shrink-0" />
                 <span className="truncate max-w-[120px]">{selectedType || "All Properties"}</span>
                 <ChevronDown className={cn("w-3 h-3 text-white/60 transition-transform", activeDropdown === "type" && "rotate-180")} />
               </button>
@@ -862,7 +856,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => { setSelectedType(""); setActiveDropdown(null); }}
-                      className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                      className="text-[10px] font-bold text-apple-blue hover:underline cursor-pointer"
                     >
                       Reset
                     </button>
@@ -878,12 +872,12 @@ export default function Hero() {
                     className={cn(
                       "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                       !selectedType 
-                        ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold" 
-                        : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                        ? "bg-apple-blue/15 text-apple-blue font-bold" 
+                        : "text-apple-text hover:bg-apple-gray"
                     )}
                   >
                     <span>All Property Types</span>
-                    {!selectedType && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                    {!selectedType && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                   </button>
                   {schemaTypes.map((t) => {
                     const isSelected = selectedType.toLowerCase() === t.slug.toLowerCase() || selectedType.toLowerCase() === t.name.toLowerCase();
@@ -898,15 +892,15 @@ export default function Hero() {
                         className={cn(
                           "w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                           isSelected
-                            ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
-                            : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                            ? "bg-apple-blue/15 text-apple-blue font-bold"
+                            : "text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         <div className="flex items-center gap-2">
-                          <Building2 className="w-3.5 h-3.5 text-slate-400 dark:text-[#8E8E93]" />
+                          <Building2 className="w-3.5 h-3.5 text-apple-text-muted" />
                           <span>{t.name}</span>
                         </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                       </button>
                     );
                   })}
@@ -921,11 +915,11 @@ export default function Hero() {
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === "price" ? null : "price")}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10",
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-l border-white/20 transition-all cursor-pointer text-xs font-semibold text-white hover:bg-white/10 min-h-[44px]",
                   activeDropdown === "price" && "bg-white/15 ring-1 ring-white/30"
                 )}
               >
-                <span className="text-[11px] font-bold text-[#F0A830]">PKR</span>
+                <span className="text-[11px] font-bold text-white/70">PKR</span>
                 <span className="truncate max-w-[120px]">{PRICE_PRESETS[selectedPriceIdx].label}</span>
                 <ChevronDown className={cn("w-3 h-3 text-white/60 transition-transform", activeDropdown === "price" && "rotate-180")} />
               </button>
@@ -940,7 +934,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => { setSelectedPriceIdx(0); setActiveDropdown(null); }}
-                      className="text-[10px] font-bold text-[#5B2A86] dark:text-[#C9A227] hover:underline cursor-pointer"
+                      className="text-[10px] font-bold text-apple-blue hover:underline cursor-pointer"
                     >
                       Reset
                     </button>
@@ -963,12 +957,12 @@ export default function Hero() {
                         className={cn(
                           "w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors",
                           isSelected
-                            ? "bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#C9A227] dark:bg-[#C9A227]/15 font-bold"
-                            : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                            ? "bg-apple-blue/15 text-apple-blue font-bold"
+                            : "text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         <span>{p.label}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-apple-blue" />}
                       </button>
                     );
                   })}
@@ -982,9 +976,9 @@ export default function Hero() {
               whileHover={{ scale: 1.02 }}
               transition={SPRING_SNAPPY}
               onClick={handleSearchSubmit}
-              className="h-10 px-6 rounded-full pakizzle-button-primary !text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0 ml-auto"
+              className="h-11 px-6 rounded-full pakizzle-button-primary !text-xs font-bold flex items-center gap-2 cursor-pointer shrink-0 ml-auto min-h-[44px]"
             >
-              <Search className="w-3.5 h-3.5 text-[#F0A830]" />
+              <Search className="w-3.5 h-3.5 text-white" />
               <span>Explore Homes</span>
             </motion.button>
           </div>
@@ -992,7 +986,7 @@ export default function Hero() {
 
         {/* 
           CENTERPIECE: FLUID DISPLAY HEADLINE DIRECTLY OVER IMAGERY
-          Scales continuously with CSS clamp() from 32px on 360px phones to 68px on desktops
+          Part 4: Single gold highlight word (#C9A227 >= 3:1 on scrim), rest neutral white.
         */}
         <motion.div 
           style={{
@@ -1004,19 +998,19 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.15, ease: REVEAL_EASE }}
           className="relative z-10 max-w-3xl my-auto py-6 sm:py-10 lg:pl-16 will-change-transform"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full liquid-glass-subtle text-[#FAF3E6] text-[11px] sm:text-xs font-semibold tracking-wide mb-3 sm:mb-4">
-            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5FA84C] shrink-0" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full photo-glass-panel text-white text-[11px] sm:text-xs font-semibold tracking-wide mb-3 sm:mb-4">
+            <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-apple-green shrink-0" />
             <span className="truncate">Pakistan's 100% Registry-Verified Land Portal</span>
           </div>
 
           <h1 className="phi-h1 font-extrabold text-white tracking-tight drop-shadow-md text-balance">
             Architectural Sanctuaries. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FAF3E6] to-[#F0A830]">
+            <span className="text-[#C9A227]">
               Title Guaranteed.
             </span>
           </h1>
 
-          <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-white/85 max-w-xl font-normal leading-relaxed drop-shadow">
+          <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-white/90 max-w-xl font-normal leading-relaxed drop-shadow">
             Experience Pakistan's most refined residential estates. Each property is pre-vetted against LDA, CDA & DHA land deeds with zero broker manipulation.
           </p>
         </motion.div>
@@ -1033,12 +1027,12 @@ export default function Hero() {
           className="relative z-20 flex flex-col lg:flex-row gap-4 lg:gap-6 items-stretch lg:items-end lg:pl-16 w-full"
         >
           {/* Bottom-Left: Value Metric & Verification Guarantee Glass Panel (Golden Ratio: 38.2%) */}
-          <div className="order-2 lg:order-1 w-full lg:w-[38.2%] shrink-0 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-4 sm:p-5 text-white shadow-2xl border border-white/20">
+          <div className="order-2 lg:order-1 w-full lg:w-[38.2%] shrink-0 photo-glass-panel rounded-2xl sm:rounded-[28px] p-4 sm:p-5 text-white shadow-2xl">
             <div className="flex items-center justify-between pb-2.5 border-b border-white/20 mb-2.5">
               <span className="text-[11px] sm:text-xs uppercase tracking-wider font-semibold text-white/70">
                 Network Liquidity
               </span>
-              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-[#5FA84C] bg-[#5FA84C]/15 px-2 py-0.5 rounded-full border border-[#5FA84C]/30">
+              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-apple-green bg-apple-green/15 px-2 py-0.5 rounded-full border border-apple-green/30">
                 Live Audited
               </span>
             </div>
@@ -1057,7 +1051,7 @@ export default function Hero() {
             <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/15 flex items-center justify-between">
               <button 
                 onClick={() => setIsValuationOpen(true)}
-                className="text-xs font-semibold text-[#F0A830] hover:text-[#C9A227] flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                className="text-xs font-semibold text-white/80 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Instant Property Valuation</span>
@@ -1072,7 +1066,7 @@ export default function Hero() {
                     aria-label={`Slide ${i + 1}`}
                     className={cn(
                       "h-1.5 rounded-full transition-all duration-300 cursor-pointer min-w-[6px]",
-                      i === currentIdx ? "w-5 sm:w-6 bg-[#F0A830]" : "w-1.5 bg-white/40"
+                      i === currentIdx ? "w-5 sm:w-6 bg-white" : "w-1.5 bg-white/40"
                     )}
                   />
                 ))}
@@ -1081,7 +1075,7 @@ export default function Hero() {
           </div>
 
           {/* Bottom-Right: Active Hero Property Showcase Card (Golden Ratio: 61.8% container & 1.618:1 showcase aspect ratio) */}
-          <div className="order-1 lg:order-2 w-full lg:w-[61.8%] shrink-0 liquid-glass-foreground rounded-2xl sm:rounded-[28px] p-3.5 sm:p-5 text-white shadow-2xl glass-hover-sheen group border border-[#C9A227]/50">
+          <div className="order-1 lg:order-2 w-full lg:w-[61.8%] shrink-0 photo-glass-panel rounded-2xl sm:rounded-[28px] p-3.5 sm:p-5 text-white shadow-2xl glass-hover-sheen group border border-[#C9A227]/50">
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
               {/* Thumbnail with Golden Ratio (1:1.618) aspect ratio container */}
               <div className="relative w-full sm:w-44 md:w-52 aspect-[1.618/1] rounded-xl sm:rounded-[20px] overflow-hidden shrink-0 border border-white/40 shadow-inner">
@@ -1090,7 +1084,7 @@ export default function Hero() {
                   alt={activeHero.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[8px] sm:text-[9px] font-bold text-[#F0A830] border border-[#C9A227]/40">
+                <div className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[8px] sm:text-[9px] font-bold text-[#C9A227] border border-[#C9A227]/40">
                   Featured
                 </div>
               </div>
@@ -1098,7 +1092,7 @@ export default function Hero() {
               {/* Information Cluster */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1">
-                  <span className="text-[10px] sm:text-[11px] font-semibold text-[#FAF3E6] truncate">
+                  <span className="text-[10px] sm:text-[11px] font-semibold text-white/90 truncate">
                     {activeHero.tag}
                   </span>
                   <div className="flex items-center gap-1">
@@ -1107,7 +1101,7 @@ export default function Hero() {
                       className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white/90 cursor-pointer touch-target min-w-[36px] min-h-[36px]"
                       title="Save property"
                     >
-                      <Heart className={cn("w-3.5 h-3.5", isLiked ? "fill-[#D93A45] text-[#D93A45]" : "")} />
+                      <Heart className={cn("w-3.5 h-3.5", isLiked ? "fill-apple-red text-apple-red" : "")} />
                     </button>
                     <button 
                       onClick={() => {
@@ -1127,13 +1121,18 @@ export default function Hero() {
                   {activeHero.title}
                 </h4>
                 <p className="text-[11px] sm:text-xs text-white/80 truncate flex items-center gap-1 mt-0.5">
-                  <MapPin className="w-3 h-3 text-[#F0A830] shrink-0" />
+                  <MapPin className="w-3 h-3 text-white/70 shrink-0" />
                   <span>{activeHero.subtitle}</span>
                 </p>
 
                 <div className="mt-1.5 sm:mt-2 flex items-center justify-between pt-1.5 sm:pt-2 border-t border-white/15">
-                  <div className="text-xs sm:text-sm md:text-base font-extrabold font-mono text-[#FAF3E6]">
-                    {activeHero.price}
+                  <div 
+                    className="text-xs sm:text-sm md:text-base font-extrabold text-white whitespace-nowrap [font-variant-numeric:tabular-nums]"
+                    title={formatExactPrice(activeHero.numericPrice || activeHero.price)}
+                    aria-label={`Price: ${formatExactPrice(activeHero.numericPrice || activeHero.price)}`}
+                  >
+                    <span className="sr-only">{formatExactPrice(activeHero.numericPrice || activeHero.price)}</span>
+                    <span aria-hidden="true">{formatPrice(activeHero.numericPrice || activeHero.price)}</span>
                   </div>
 
                   {activeHero.specs.beds > 0 && (
@@ -1183,23 +1182,23 @@ export default function Hero() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 350 }}
-              className="absolute bottom-0 inset-x-0 max-h-[92vh] bg-white dark:bg-[#121622] rounded-t-[32px] border-t border-black/10 dark:border-white/10 shadow-2xl flex flex-col overflow-hidden"
+              className="absolute bottom-0 inset-x-0 max-h-[92vh] bg-apple-surface rounded-t-[32px] border-t border-apple-border shadow-2xl flex flex-col overflow-hidden"
               style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom, 0px))" }}
             >
               {/* Drag Handle */}
-              <div className="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mx-auto my-3 shrink-0" />
+              <div className="w-12 h-1.5 bg-apple-border rounded-full mx-auto my-3 shrink-0" />
 
               {/* Sheet Header */}
-              <div className="flex items-center justify-between px-6 pb-3 border-b border-black/5 dark:border-white/10">
+              <div className="flex items-center justify-between px-6 pb-3 border-b border-apple-border">
                 <div className="flex items-center gap-2">
-                  <Search className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-                  <h3 className="text-base font-bold text-apple-text dark:text-white">
+                  <Search className="w-5 h-5 text-apple-blue" />
+                  <h3 className="text-base font-bold text-apple-text">
                     Search Properties
                   </h3>
                 </div>
                 <button
                   onClick={() => setIsMobileSearchOpen(false)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer touch-target"
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-apple-gray transition-colors text-apple-text-muted hover:text-apple-text cursor-pointer touch-target"
                   title="Close search modal"
                 >
                   <X className="w-5 h-5" />
@@ -1210,10 +1209,10 @@ export default function Hero() {
               <div className="p-6 overflow-y-auto space-y-6">
                 {/* 1. Purpose: Buy / Rent / Plots */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-apple-text-muted block mb-2.5">
                     Property Purpose
                   </label>
-                  <div className="grid grid-cols-3 gap-2 p-1 bg-slate-100 dark:bg-slate-800/60 rounded-2xl border border-black/5 dark:border-white/5">
+                  <div className="grid grid-cols-3 gap-2 p-1 bg-apple-gray rounded-2xl border border-black/5 dark:border-white/5">
                     {(["buy", "rent", "plots"] as const).map((tab) => {
                       const isSelected = activeTab === tab;
                       return (
@@ -1223,8 +1222,8 @@ export default function Hero() {
                           className={cn(
                             "py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[44px] flex items-center justify-center",
                             isSelected
-                              ? "bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-400 shadow-sm"
-                              : "text-slate-600 dark:text-slate-400"
+                              ? "bg-apple-surface text-apple-blue shadow-sm font-bold"
+                              : "text-apple-text-muted"
                           )}
                         >
                           {tab === "plots" ? "Plots" : tab}
@@ -1236,29 +1235,29 @@ export default function Hero() {
 
                 {/* 2. City Selection */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-apple-text-muted block mb-2.5">
                     Location / City
                   </label>
                   <div className="relative">
-                    <MapPin className="w-4 h-4 text-teal-600 dark:text-teal-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <MapPin className="w-4 h-4 text-apple-blue absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <select
                       value={selectedCity}
                       onChange={(e) => setSelectedCity(e.target.value)}
-                      className="w-full h-12 pl-11 pr-10 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-teal-500 appearance-none cursor-pointer"
+                      className="w-full h-12 pl-11 pr-10 rounded-2xl bg-apple-surface border border-apple-border text-sm font-semibold text-apple-text focus:outline-none focus:border-apple-blue appearance-none cursor-pointer"
                     >
                       {MAJOR_CITIES.map((c) => (
-                        <option key={c} value={c} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                        <option key={c} value={c} className="bg-apple-surface text-apple-text">
                           {c}
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <ChevronDown className="w-4 h-4 text-apple-text-muted absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                 </div>
 
                 {/* 3. Property Type */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-apple-text-muted block mb-2.5">
                     Property Type
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -1271,12 +1270,12 @@ export default function Hero() {
                           className={cn(
                             "px-3 py-2.5 rounded-xl border text-xs font-semibold text-left transition-all min-h-[44px] flex items-center justify-between cursor-pointer",
                             isSelected
-                              ? "bg-teal-50 dark:bg-teal-950/40 border-teal-500 text-teal-800 dark:text-teal-300 shadow-xs"
-                              : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
+                              ? "bg-apple-blue/10 border-apple-blue text-apple-blue shadow-xs font-bold"
+                              : "bg-apple-surface border-apple-border text-apple-text"
                           )}
                         >
                           <span className="truncate">{t.label}</span>
-                          {isSelected && <CheckCircle2 className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />}
+                          {isSelected && <CheckCircle2 className="w-4 h-4 text-apple-blue shrink-0" />}
                         </button>
                       );
                     })}
@@ -1285,7 +1284,7 @@ export default function Hero() {
 
                 {/* 4. Price Presets */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-apple-text-muted block mb-2.5">
                     Price Range (PKR)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -1298,8 +1297,8 @@ export default function Hero() {
                           className={cn(
                             "px-3 py-2.5 rounded-xl border text-xs font-semibold text-center transition-all min-h-[44px] flex items-center justify-center cursor-pointer",
                             isSelected
-                              ? "bg-teal-50 dark:bg-teal-950/40 border-teal-500 text-teal-800 dark:text-teal-300 shadow-xs"
-                              : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
+                              ? "bg-apple-blue/10 border-apple-blue text-apple-blue shadow-xs font-bold"
+                              : "bg-apple-surface border-apple-border text-apple-text"
                           )}
                         >
                           <span>{p.label}</span>
@@ -1311,7 +1310,7 @@ export default function Hero() {
               </div>
 
               {/* Sheet Bottom Sticky Action CTA */}
-              <div className="p-5 border-t border-black/5 dark:border-white/10 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-md">
+              <div className="p-5 border-t border-apple-border bg-apple-surface/90 backdrop-blur-md">
                 <motion.button
                   whileTap={{ scale: 0.98 }}
                   transition={SPRING_SNAPPY}
@@ -1319,7 +1318,7 @@ export default function Hero() {
                     setIsMobileSearchOpen(false);
                     handleSearchSubmit();
                   }}
-                  className="w-full h-12 rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 cursor-pointer min-h-[48px]"
+                  className="w-full h-12 rounded-2xl pakizzle-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg cursor-pointer min-h-[48px]"
                 >
                   <Search className="w-4 h-4" />
                   <span>Explore Verified Properties</span>

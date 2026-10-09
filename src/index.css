@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "./styles/tokens.css";
 
 /* Pre-optimize font performance & zero-layout-shift swap */
 @font-face {
@@ -38,16 +39,33 @@
   --color-bg-deep-purple: #241238;
   --color-accent-gold-line: #C9A227;
 
-  /* Semantic UI mappings */
-  --color-brand-primary: #5B2A86;
-  --color-brand-primary-hover: #4B2C82;
-  --color-brand-primary-light: #FAF3E6;
-  --color-brand-accent: #F0A830;
+  /* Pakizzle Semantic UI tokens */
+  --color-bg-page: var(--bg-page);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-inset: var(--bg-inset);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border-token: var(--border);
+  --color-accent-token: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-focus-ring: var(--focus-ring);
+  --color-success-token: var(--success);
+  --color-warning-token: var(--warning);
+  --color-danger-token: var(--danger);
+  --color-gold-decoration: var(--gold-decoration);
 
-  --color-apple-blue: #5B2A86;
-  --color-apple-green: #5FA84C;
-  --color-apple-red: #D93A45;
-  --color-apple-orange: #F0A830;
+  /* Semantic UI mappings */
+  --color-brand-primary: var(--accent);
+  --color-brand-primary-hover: var(--accent-hover);
+  --color-brand-primary-light: var(--bg-page);
+  --color-brand-accent: var(--accent);
+
+  /* Remapped Apple-* utility tokens */
+  --color-apple-blue: var(--apple-blue);
+  --color-apple-green: var(--apple-green);
+  --color-apple-red: var(--apple-red);
+  --color-apple-orange: var(--apple-orange);
 
   --color-apple-gray: var(--apple-gray);
   --color-apple-text: var(--apple-text);
@@ -230,36 +248,23 @@
   --ring: #5B2A86;
   --radius: 0.875rem;
 
-  --bg-base: #FAF3E6;
-  --bg-surface: #FFFFFF;
-  --bg-elevated: #FFFFFF;
+  --bg-base: var(--bg-page);
+  --bg-surface: var(--bg-surface);
+  --bg-elevated: var(--bg-raised);
 }
 
 .dark {
   /* True Neutral Apple Dark Mode System (Pure Neutral Elevation) */
-  --bg-base: #0A0A0A;
-  --bg-surface: #161618;
-  --bg-elevated: #1E1E20;
+  --bg-base: var(--bg-page);
+  --bg-surface: var(--bg-surface);
+  --bg-elevated: var(--bg-raised);
 
-  --bg-cream: #FAF3E6;
-  --bg-deep-purple: #0A0A0A;
-  --accent-gold-line: #C9A227;
+  --bg-cream: var(--bg-page);
+  --bg-deep-purple: var(--bg-page);
+  --accent-gold-line: var(--gold-decoration);
 
-  /* Apple System Neutral Gray Steps */
-  --apple-gray: rgba(255, 255, 255, 0.06);
-  --apple-text: #F5F5F7;
-  --apple-text-muted: #8E8E93;
-  --apple-border: rgba(255, 255, 255, 0.10);
-  --apple-bg: #0A0A0A;
-  --apple-surface: #161618;
-  --apple-card-bg: rgba(22, 22, 24, 0.88);
-  --apple-blue: #9E65D1;
-  --apple-green: #5FA84C;
-  --apple-red: #E25B65;
-  --apple-orange: #F0A830;
-
-  --apple-shadow-soft: 0px 8px 30px rgba(0, 0, 0, 0.55);
-  --apple-shadow-hover: 0px 20px 60px rgba(0, 0, 0, 0.80);
+  --apple-shadow-soft: none;
+  --apple-shadow-hover: 0px 8px 24px rgba(0, 0, 0, 0.50);
   --apple-shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.65);
 
   --background: #0A0A0A;

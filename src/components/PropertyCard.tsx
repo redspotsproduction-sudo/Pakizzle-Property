@@ -17,11 +17,13 @@ import {
   Bed,
   Bath,
   Maximize2,
-  Play
+  Play,
+  Clock
 } from "lucide-react";
 import { Property, Vehicle } from "@/types";
-import { cn, formatPrice } from "@/lib/utils";
+import { cn, formatPrice, formatExactPrice, truncateText, TITLE_MAX_CHARS } from "@/lib/utils";
 import { formatPropertyUrl } from "@/lib/referenceId";
+import { listingFreshnessService } from "@/services/listingFreshnessService";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useWishlist } from "@/context/WishlistContext";
 import { useChat } from "@/context/ChatContext";
@@ -31,6 +33,13 @@ import Nudge, { NudgeType } from "./Nudge";
 import Skeleton from "./ui/Skeleton";
 import PakizzleImage from "./ui/PakizzleImage";
 import { REVEAL_EASE, SPRING_SNAPPY } from "./motion";
+
+/**
+ * Shared layout token for media badges on listing cards.
+ * Uses logical bottom-left (bottom-3 start-3) so RTL layouts mirror correctly,
+ * and restricts width to prevent collision with bottom-right carousel indicator dots.
+ */
+const MEDIA_BADGE_CONTAINER_CLASS = "absolute bottom-3 start-3 z-20 pointer-events-none max-w-[calc(100%-84px)] h-7 flex items-center justify-start";
 
 export interface PropertyCardProps {
   property?: Property;
@@ -85,6 +94,13 @@ export const PropertyCard = React.memo(function PropertyCard({
   const isSaved = isInWishlist(property.id);
   const [activeImageIndex, setActiveImageIndex] = React.useState(0);
 
+  const hasWalkthrough = Boolean(
+    property.seller?.isVerified && 
+    (parseInt(property.id.replace(/\D/g, "") || "1") % 2 === 0 || property.id.includes('1') || property.id.includes('2'))
+  );
+  const compactPrice = formatPrice(displayPrice);
+  const exactPrice = formatExactPrice(displayPrice);
+
   // Valuation Assessment Index
   const dealValue = React.useMemo(() => {
     const numId = parseInt(property.id.replace(/\D/g, "") || "5");
@@ -92,24 +108,29 @@ export const PropertyCard = React.memo(function PropertyCard({
       return { 
         type: "great" as const,
         label: "Great Price", 
-        bg: "bg-[#5FA84C]/10 text-[#5FA84C] border-[#5FA84C]/30", 
+        bg: "bg-apple-green/15 text-apple-green border-apple-green/30", 
         detail: "Below average market valuation" 
       };
     } else if (numId % 4 === 0) {
       return { 
         type: "fair" as const,
         label: "Fair Valuation", 
-        bg: "bg-[#4A90D2]/10 text-[#4A90D2] border-[#4A90D2]/30", 
+        bg: "bg-apple-blue/15 text-apple-blue border-apple-blue/30", 
         detail: "Highly competitive per sq.ft. rate" 
       };
     }
     return { 
       type: "verified" as const,
       label: "Verified Price", 
-      bg: "bg-[#5B2A86]/10 dark:bg-[#FAF3E6]/10 text-[#5B2A86] dark:text-[#FAF3E6] border-[#5B2A86]/20 dark:border-[#C9A227]/30", 
+      bg: "bg-apple-blue/15 text-apple-blue border-apple-blue/30", 
       detail: "LDA/CDA verified legal valuation" 
     };
   }, [property.id]);
+
+  // Freshness & Availability Trust Signal
+  const freshness = React.useMemo(() => {
+    return property ? listingFreshnessService.getFreshness(property) : null;
+  }, [property]);
 
   // Nudges
   const nudges = React.useMemo(() => {
@@ -197,10 +218,10 @@ export const PropertyCard = React.memo(function PropertyCard({
             transition: SPRING_SNAPPY
           }}
           className={cn(
-            "flex flex-col h-full overflow-hidden transition-colors duration-300 rounded-[24px] liquid-glass-mid glass-hover-sheen group/card",
+            "flex flex-col h-full overflow-hidden transition-colors duration-300 rounded-[24px] bg-apple-surface shadow-apple-card border group/card",
             property.isFeatured 
-              ? "border border-[#C9A227]/60 shadow-[0_8px_30px_rgba(201,162,39,0.12)]" 
-              : "border border-apple-border/40",
+              ? "border-[#C9A227]/60 shadow-[0_8px_30px_rgba(201,162,39,0.12)]" 
+              : "border-apple-border/40",
             isList ? "md:flex-row p-2.5" : ""
           )}
         >
@@ -210,7 +231,7 @@ export const PropertyCard = React.memo(function PropertyCard({
             isList ? "w-full md:w-[256px] lg:w-[304px]" : "w-full"
           )}>
             <div className={cn(
-              "rounded-[20px] overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2] bg-slate-100 dark:bg-slate-800",
+              "rounded-[20px] overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2] bg-apple-gray",
               isList ? "min-h-[176px] md:min-h-0 md:h-full" : ""
             )}>
               <PakizzleImage
@@ -257,13 +278,16 @@ export const PropertyCard = React.memo(function PropertyCard({
                     <ChevronRight className="w-4.5 h-4.5" />
                   </motion.button>
                   
-                  {/* Indicator Dots */}
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 bg-black/25 backdrop-blur-md px-2 py-1 rounded-full z-20">
+                  {/* Indicator Dots - Anchored bottom-right using logical inset-inline-end, matching 12px baseline */}
+                  <div 
+                    className="absolute bottom-3 end-3 flex items-center justify-center gap-1 bg-black/40 backdrop-blur-md px-2 rounded-full z-20 pointer-events-none shadow-sm border border-white/10 h-7"
+                    aria-label={`Photo ${activeImageIndex + 1} of ${property.images.length}`}
+                  >
                     {property.images.slice(0, 5).map((_, i) => (
                       <div 
                         key={i} 
                         className={cn(
-                          "w-1 h-1 rounded-full transition-all duration-300",
+                          "w-1.5 h-1.5 rounded-full transition-all duration-300",
                           i === activeImageIndex ? "bg-white w-2.5" : "bg-white/40"
                         )}
                       />
@@ -272,8 +296,32 @@ export const PropertyCard = React.memo(function PropertyCard({
                 </>
               )}
               
-              {/* Badge Slider Overlay */}
-              <PropertyBadgeSlider badges={displayBadges as any} />
+              {/* Media Badge (Walkthrough / Off-Plan Project / Verified Badges) anchored bottom-left */}
+              {hasWalkthrough ? (
+                <div className={MEDIA_BADGE_CONTAINER_CLASS}>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      navigate(`/stories`);
+                    }}
+                    className="relative pointer-events-auto h-7 min-w-[44px] px-2.5 rounded-full bg-black/80 hover:bg-black text-white text-[10px] font-black flex items-center gap-1.5 shadow-lg border border-white/20 backdrop-blur-md group/video cursor-pointer transition-transform hover:scale-105 max-w-full after:absolute after:-inset-2 after:content-['']"
+                    title="Watch verified vertical video walkthrough on PakStories"
+                    aria-label="Watch video walkthrough"
+                  >
+                    <div className="w-4 h-4 rounded-full bg-apple-blue flex items-center justify-center shrink-0">
+                      <Play className="w-2.5 h-2.5 text-white fill-white ms-0.5" />
+                    </div>
+                    <span className="truncate">Walkthrough</span>
+                  </button>
+                </div>
+              ) : (
+                <PropertyBadgeSlider 
+                  badges={displayBadges as any} 
+                  className={MEDIA_BADGE_CONTAINER_CLASS} 
+                />
+              )}
 
               {/* Status Tags */}
               <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
@@ -281,25 +329,6 @@ export const PropertyCard = React.memo(function PropertyCard({
                   <Nudge key={i} type={nudge.type} text={nudge.text} />
                 ))}
               </div>
-
-              {/* PakStories Video Walkthrough Launcher Pill */}
-              {property.seller?.isVerified && (parseInt(property.id.replace(/\D/g, "") || "1") % 2 === 0 || property.id.includes('1') || property.id.includes('2')) && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    navigate(`/stories`);
-                  }}
-                  className="absolute bottom-3 right-3 z-20 px-2.5 py-1 rounded-full bg-black/80 hover:bg-black text-white text-[10px] font-black flex items-center gap-1.5 shadow-lg border border-white/20 backdrop-blur-md group/video cursor-pointer transition-transform hover:scale-105"
-                  title="Watch verified vertical video walkthrough on PakStories"
-                >
-                  <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-r from-[#5B2A86] to-[#8A3DB8] flex items-center justify-center">
-                    <Play className="w-2 h-2 text-white fill-white ml-0.5" />
-                  </div>
-                  <span>Walkthrough</span>
-                </button>
-              )}
             </div>
           </div>
 
@@ -323,16 +352,34 @@ export const PropertyCard = React.memo(function PropertyCard({
                   <span>{dealValue.label.split(" ")[1]?.toUpperCase() || "VALUATION"}</span>
                 </span>
               </span>
-              <span className="text-[10px] md:text-[11px] text-apple-text-muted dark:text-[#86868B] truncate font-medium">
+              <span className="text-[10px] md:text-[11px] text-apple-text-muted truncate font-medium">
                 {dealValue.detail}
               </span>
             </div>
 
             {/* Price Detail Row */}
             {!isList && (
-              <div className="font-bold text-apple-text text-lg md:text-2xl tracking-tight mb-1.5 flex items-baseline gap-1">
-                <span>{formatPrice(displayPrice)}</span>
-                <span className="text-[10px] font-normal text-apple-text-muted">{isRent ? "PKR / mo" : "PKR"}</span>
+              <div 
+                className="font-bold text-apple-text text-lg md:text-2xl tracking-tight mb-1.5 flex items-baseline gap-1 whitespace-nowrap [font-variant-numeric:tabular-nums] min-h-[28px] md:min-h-[32px] leading-tight"
+                title={exactPrice}
+                aria-label={`Price: ${exactPrice}${isRent ? " per month" : ""}`}
+              >
+                <span className="sr-only">{exactPrice}{isRent ? " per month" : ""}</span>
+                <span aria-hidden="true" className="whitespace-nowrap">
+                  {(() => {
+                    const parts = compactPrice.split(" ");
+                    if (parts.length >= 3) {
+                      return (
+                        <>
+                          <span>{parts[0]} {parts[1]}</span>{" "}
+                          <span className="font-semibold text-apple-text/85 dark:text-white/85">{parts.slice(2).join(" ")}</span>
+                        </>
+                      );
+                    }
+                    return compactPrice;
+                  })()}
+                </span>
+                {isRent && <span className="text-xs font-normal text-apple-text-muted">/ mo</span>}
               </div>
             )}
 
@@ -342,18 +389,24 @@ export const PropertyCard = React.memo(function PropertyCard({
               isList ? "mb-2 pr-12" : "mb-1"
             )}>
               <div className="min-w-0 w-full">
-                <h3 className={cn(
-                  "font-bold text-apple-text leading-tight tracking-tight line-clamp-2 flex items-baseline flex-wrap gap-1.5",
-                  isList ? "text-base md:text-2xl" : "text-sm md:text-lg"
-                )}>
-                  <span>{property.model}</span>
+                <h3 
+                  className={cn(
+                    "font-bold text-apple-text tracking-tight min-w-0 w-full truncate whitespace-nowrap overflow-hidden text-ellipsis flex items-baseline gap-1.5 leading-snug",
+                    isList ? "text-base md:text-2xl min-h-[28px] md:min-h-[36px]" : "text-sm md:text-lg min-h-[22px] md:min-h-[28px]"
+                  )}
+                  title={property.model}
+                  aria-label={property.model}
+                >
+                  <span className="truncate min-w-0">{truncateText(property.model, TITLE_MAX_CHARS)}</span>
                   {!isList && (
-                    <span className="text-[10px] font-normal text-apple-text-muted select-none self-baseline">
+                    <span className="text-[10px] font-normal text-apple-text-muted select-none shrink-0 self-baseline">
                       • Built {property.year}
                     </span>
                   )}
                   {!isList && property.seller.badgeType && (
-                    <Badge type={property.seller.badgeType} size="sm" />
+                    <span className="shrink-0">
+                      <Badge type={property.seller.badgeType} size="sm" />
+                    </span>
                   )}
                 </h3>
                 {isList && (
@@ -365,11 +418,32 @@ export const PropertyCard = React.memo(function PropertyCard({
               
               {/* Price in List View */}
               {isList && (
-                <div className="text-right shrink-0">
-                  <div className="font-bold text-apple-text text-lg md:text-2xl tracking-tight leading-none">
-                    {formatPrice(displayPrice)}
+                <div 
+                  className="text-right shrink-0 whitespace-nowrap"
+                  title={exactPrice}
+                  aria-label={`Price: ${exactPrice}${isRent ? " per month" : ""}`}
+                >
+                  <span className="sr-only">{exactPrice}{isRent ? " per month" : ""}</span>
+                  <div 
+                    aria-hidden="true"
+                    className="font-bold text-apple-text text-lg md:text-2xl tracking-tight leading-none [font-variant-numeric:tabular-nums] whitespace-nowrap"
+                  >
+                    {(() => {
+                      const parts = compactPrice.split(" ");
+                      if (parts.length >= 3) {
+                        return (
+                          <>
+                            <span>{parts[0]} {parts[1]}</span>{" "}
+                            <span className="font-semibold text-apple-text/85 dark:text-white/85">{parts.slice(2).join(" ")}</span>
+                          </>
+                        );
+                      }
+                      return compactPrice;
+                    })()}
                   </div>
-                  <div className="text-[10px] font-bold text-[#5B2A86] dark:text-[#FAF3E6] uppercase tracking-widest mt-1">{isRent ? "PKR / month" : "PKR"}</div>
+                  {isRent && (
+                    <div className="text-[10px] font-bold text-apple-blue uppercase tracking-widest mt-1">/ month</div>
+                  )}
                 </div>
               )}
             </div>
@@ -388,7 +462,7 @@ export const PropertyCard = React.memo(function PropertyCard({
               "flex items-center gap-1.5 text-apple-text-muted font-medium text-[11px] md:text-sm truncate",
               isList ? "mb-2 mt-0.5" : "mb-1.5 mt-0.5"
             )}>
-              <MapPin className="w-3.5 h-3.5 shrink-0 text-[#5B2A86] dark:text-[#C9A227]" />
+              <MapPin className="w-3.5 h-3.5 shrink-0 text-apple-blue" />
               {property.city ? (
                 <>
                   {property.area && (
@@ -406,25 +480,25 @@ export const PropertyCard = React.memo(function PropertyCard({
 
             {/* Accent Separator Line */}
             <div className={cn(
-              "h-[1px] bg-slate-100 dark:bg-slate-800 w-full",
+              "h-[1px] bg-apple-border/40 w-full",
               isList ? "mb-2 md:mb-2.5" : "mb-2"
             )} />
 
             {/* Property specs: Beds, Baths, Covered Area, Furnished Status */}
             <div className={cn(
-              "flex items-center flex-wrap gap-1.5 text-xs text-slate-600 dark:text-slate-400 font-medium",
+              "flex items-center flex-wrap gap-1.5 text-xs text-apple-text-muted font-medium",
               isList ? "mb-3" : "mb-2.5"
             )}>
-              <span className="font-semibold text-slate-800 dark:text-slate-200">
+              <span className="font-semibold text-apple-text">
                 {property.mileage ? `${property.mileage.toLocaleString()} Sq.Ft.` : property.engineSize}
               </span>
-              <span className="text-slate-300 dark:text-slate-700 select-none">•</span>
+              <span className="text-apple-text-muted/40 select-none">•</span>
               <span>
                 {property.make === "Plot" || property.make === "Commercial"
                   ? property.engineSize
                   : `${property.bedrooms || property.specs?.seating || 3} Bed, ${property.bathrooms || property.specs?.horsepower || 3} Bath`}
               </span>
-              <span className="text-slate-300 dark:text-slate-700 select-none">•</span>
+              <span className="text-apple-text-muted/40 select-none">•</span>
               <span className="capitalize">
                 {property.transmission === "furnished"
                   ? "Furnished"
@@ -436,28 +510,43 @@ export const PropertyCard = React.memo(function PropertyCard({
 
             {/* Grid View Seller Bar */}
             {!isList && (
-              <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-apple-border/20">
-                <Link 
-                  to={`/profile/${property.seller.uid || 'user-redspots'}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-1.5 min-w-0 group/seller max-w-[70%]"
-                >
-                  <div className="w-5 h-5 rounded-full bg-[#5B2A86]/10 dark:bg-white/5 flex items-center justify-center text-[10px] font-bold text-[#5B2A86] dark:text-[#FAF3E6] shrink-0 group-hover/seller:scale-105 transition-all">
-                    {property.seller.name ? property.seller.name[0] : "A"}
+              <div className="mt-auto pt-2.5 border-t border-apple-border/20 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Link 
+                    to={`/profile/${property.seller.uid || 'user-redspots'}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-1.5 min-w-0 group/seller max-w-[70%]"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-apple-blue/10 flex items-center justify-center text-[10px] font-bold text-apple-blue shrink-0 group-hover/seller:scale-105 transition-all">
+                      {property.seller.name ? property.seller.name[0] : "A"}
+                    </div>
+                    <span className="text-xs font-semibold text-apple-text-muted group-hover/seller:text-apple-blue truncate transition-colors">
+                      {property.seller.name}
+                    </span>
+                    <Badge 
+                      type={property.seller.verified_badge_type || property.seller.badgeType || (property.seller.isVerified ? 'identity' : 'none')} 
+                      size="sm" 
+                    />
+                  </Link>
+                  
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-apple-text-muted shrink-0">
+                    <Star className="w-3 h-3 fill-apple-orange text-apple-orange" />
+                    <span>{property.seller.rating || "5.0"}</span>
                   </div>
-                  <span className="text-xs font-semibold text-apple-text-muted group-hover/seller:text-[#5B2A86] truncate transition-colors">
-                    {property.seller.name}
-                  </span>
-                  <Badge 
-                    type={property.seller.verified_badge_type || property.seller.badgeType || (property.seller.isVerified ? 'identity' : 'none')} 
-                    size="sm" 
-                  />
-                </Link>
-                
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-apple-text-muted shrink-0">
-                  <Star className="w-3 h-3 fill-[#F0A830] text-[#F0A830]" />
-                  <span>{property.seller.rating || "5.0"}</span>
                 </div>
+
+                {freshness && (
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold text-apple-text-muted">
+                    <span className={cn(
+                      "w-1.5 h-1.5 rounded-full shrink-0",
+                      freshness.status === 'expired' ? "bg-apple-red" :
+                      freshness.status === 'stale_pending_confirmation' ? "bg-apple-orange animate-pulse" :
+                      freshness.status === 'approaching_stale' ? "bg-apple-orange" : "bg-apple-green"
+                    )} />
+                    <Clock className="w-2.5 h-2.5 text-apple-text-muted shrink-0" />
+                    <span className="truncate">{freshness.displayText}</span>
+                  </div>
+                )}
               </div>
             )}
 
@@ -469,11 +558,11 @@ export const PropertyCard = React.memo(function PropertyCard({
                   onClick={(e) => e.stopPropagation()}
                   className="flex items-center gap-3 min-w-0 group/seller"
                 >
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#5B2A86]/10 dark:bg-white/5 flex items-center justify-center text-xs md:text-sm font-bold shadow-inner border border-apple-border/40 shrink-0 group-hover/seller:scale-105 transition-all text-[#5B2A86] dark:text-[#FAF3E6]">
+                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-apple-blue/10 dark:bg-white/5 flex items-center justify-center text-xs md:text-sm font-bold shadow-inner border border-apple-border/40 shrink-0 group-hover/seller:scale-105 transition-all text-apple-blue">
                     {property.seller.name ? property.seller.name[0] : "A"}
                   </div>
                   <div className="min-w-0">
-                    <div className="text-xs md:text-sm font-bold text-apple-text truncate group-hover/seller:text-[#5B2A86] transition-colors flex items-center gap-1.5 flex-wrap">
+                    <div className="text-xs md:text-sm font-bold text-apple-text truncate group-hover/seller:text-apple-blue transition-colors flex items-center gap-1.5 flex-wrap">
                       <span>{property.seller.name}</span>
                       <Badge 
                         type={property.seller.verified_badge_type || property.seller.badgeType || (property.seller.isVerified ? 'identity' : 'none')} 
@@ -487,13 +576,26 @@ export const PropertyCard = React.memo(function PropertyCard({
                           className={cn(
                             "w-2.5 h-2.5",
                             i < Math.floor(property.seller.rating || 5)
-                              ? "fill-[#F0A830] text-[#F0A830]"
+                              ? "fill-apple-orange text-apple-orange"
                               : "text-apple-border"
                           )}
                         />
                       ))}
                       <span className="text-[10px] text-apple-text-muted ml-0.5 font-semibold">({property.seller.rating || "5.0"})</span>
                     </div>
+
+                    {freshness && (
+                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-apple-text-muted mt-1">
+                        <span className={cn(
+                          "w-1.5 h-1.5 rounded-full shrink-0",
+                          freshness.status === 'expired' ? "bg-apple-red" :
+                          freshness.status === 'stale_pending_confirmation' ? "bg-apple-orange animate-pulse" :
+                          freshness.status === 'approaching_stale' ? "bg-apple-orange" : "bg-apple-green"
+                        )} />
+                        <Clock className="w-2.5 h-2.5 text-apple-text-muted shrink-0" />
+                        <span className="truncate">{freshness.displayText}</span>
+                      </div>
+                    )}
                   </div>
                 </Link>
                 
@@ -513,7 +615,7 @@ export const PropertyCard = React.memo(function PropertyCard({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-[#25D366]/20 bg-[#25D366]/10 hover:bg-[#25D366]/25 text-[#25D366] active:scale-95 transition-all cursor-pointer shadow-sm"
+                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-apple-green/20 bg-apple-green/10 hover:bg-apple-green/25 text-apple-green active:scale-95 transition-all cursor-pointer shadow-sm"
                     title="WhatsApp Agency"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
@@ -522,7 +624,7 @@ export const PropertyCard = React.memo(function PropertyCard({
 
                   <button 
                     onClick={handleChatWithSeller}
-                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-[#5B2A86]/20 bg-[#5B2A86]/5 hover:bg-[#5B2A86]/15 text-[#5B2A86] dark:text-[#FAF3E6] active:scale-95 transition-all cursor-pointer shadow-sm"
+                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-apple-blue/20 bg-apple-blue/5 hover:bg-apple-blue/15 text-apple-blue active:scale-95 transition-all cursor-pointer shadow-sm"
                     title="Instant Chat"
                     type="button"
                   >
@@ -561,7 +663,7 @@ export const PropertyCard = React.memo(function PropertyCard({
           className={cn(
             "w-8 h-8 flex items-center justify-center rounded-full backdrop-blur-xl transition-all duration-[400ms] shadow-apple-soft border border-apple-border/20 cursor-pointer",
             isSaved 
-              ? "bg-[#D93A45] text-white border-[#D93A45] shadow-md opacity-100" 
+              ? "bg-apple-red text-white border-apple-red shadow-md opacity-100" 
               : "bg-white/80 dark:bg-black/80 text-apple-text hover:bg-white dark:hover:bg-white/15 opacity-0 group-hover:opacity-100",
             isList && !isSaved && "opacity-100 bg-white dark:bg-black"
           )}
@@ -586,7 +688,7 @@ export const PropertyCard = React.memo(function PropertyCard({
             className={cn(
               "w-8 h-8 flex items-center justify-center rounded-full backdrop-blur-xl transition-all duration-[400ms] shadow-apple-soft border border-apple-border/20 cursor-pointer",
               isCompared 
-                ? "bg-[#5B2A86] text-white border-[#5B2A86] shadow-md opacity-100" 
+                ? "bg-apple-blue text-white border-apple-blue shadow-md opacity-100" 
                 : "bg-white/80 dark:bg-black/80 text-apple-text hover:bg-white dark:hover:bg-white/15 opacity-0 group-hover:opacity-100"
             )}
             title="Compare properties"

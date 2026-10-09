@@ -53,6 +53,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn, formatPrice } from "../../lib/utils";
+import StaleListingsWidget from "./StaleListingsWidget";
 
 const data = [
   { name: '00:00', leads: 400, views: 3000, revenue: 1200 },
@@ -382,6 +383,11 @@ export default function AdminDashboard() {
           </div>
         </motion.div>
       </div>
+
+      {/* Listing Freshness & Anti-Stale Inventory Health Widget */}
+      <section className="mt-6">
+        <StaleListingsWidget />
+      </section>
 
       {/* Live Activity & Dealer Alpha */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">

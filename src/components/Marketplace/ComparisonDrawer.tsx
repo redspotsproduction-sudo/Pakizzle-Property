@@ -1,12 +1,12 @@
 import React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { X, Scale } from "lucide-react";
-import { Vehicle } from "@/types";
+import { Property } from "@/types";
 import { SPRING_SNAPPY, SPRING_BOUNCY } from "../motion";
 
 interface ComparisonDrawerProps {
-  compareList: Vehicle[];
-  onToggleCompare: (vehicle: Vehicle) => void;
+  compareList: Property[];
+  onToggleCompare: (property: Property) => void;
   onClear: () => void;
   onOpenModal: () => void;
 }
@@ -27,15 +27,15 @@ const ComparisonDrawer = React.memo(({ compareList, onToggleCompare, onClear, on
           <div className="glass-card bg-white/90 dark:bg-[#1C1C1E]/90 backdrop-blur-2xl p-3.5 md:p-5 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.25)] border border-black/10 dark:border-white/10 rounded-[28px] pointer-events-auto">
             <div className="flex items-center gap-3 md:gap-6 overflow-x-auto pb-1 scrollbar-hide w-full md:w-auto">
               <div className="shrink-0">
-                <div className="text-xs md:text-sm font-bold tracking-tight text-apple-text dark:text-white">Comparison</div>
+                <div className="text-xs md:text-sm font-bold tracking-tight text-apple-text dark:text-white">Property Comparison</div>
                 <div className="text-[10px] font-bold text-apple-blue uppercase tracking-widest">{compareList.length} of 3</div>
               </div>
 
               <div className="flex items-center gap-2.5 md:gap-3.5">
                 <AnimatePresence mode="popLayout">
-                  {compareList.map((v) => (
+                  {compareList.map((p) => (
                     <motion.div 
-                      key={v.id} 
+                      key={p.id} 
                       layout
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
@@ -44,19 +44,19 @@ const ComparisonDrawer = React.memo(({ compareList, onToggleCompare, onClear, on
                       className="flex items-center gap-2 bg-apple-gray/60 dark:bg-white/5 p-1.5 md:p-2 rounded-2xl border border-apple-border/20 dark:border-white/10 shrink-0 shadow-xs"
                     >
                       <img 
-                        src={v.images[0]} 
-                        alt={`${v.make} ${v.model}`}
+                        src={p.images?.[0] || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80"} 
+                        alt={p.title || `${p.propertyType || p.type} in ${p.city}`}
                         className="w-8 h-8 md:w-11 md:h-11 rounded-xl object-cover shadow-xs" 
                         loading="lazy" 
                       />
                       <div className="text-[10px] md:text-xs font-bold pr-1 max-w-[70px] md:max-w-[110px] truncate text-apple-text dark:text-white">
-                        {v.make} {v.model}
+                        {p.title || `${p.propertyType || p.type} in ${p.city}`}
                       </div>
                       <motion.button 
                         whileTap={{ scale: 0.85 }}
                         whileHover={{ scale: 1.1 }}
                         transition={SPRING_SNAPPY}
-                        onClick={() => onToggleCompare(v)} 
+                        onClick={() => onToggleCompare(p)} 
                         className="p-1 hover:bg-apple-red/10 text-apple-text-muted hover:text-apple-red rounded-full transition-colors cursor-pointer"
                         title="Remove from comparison"
                       >

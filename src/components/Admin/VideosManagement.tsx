@@ -1136,6 +1136,12 @@ export default function VideosManagement() {
                 controls
                 autoPlay
                 playsInline
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (target.src && !target.src.includes('/videos/walkthrough_')) {
+                    target.src = '/videos/walkthrough_villa.mp4';
+                  }
+                }}
                 className="w-full h-full object-cover"
               />
             </motion.div>

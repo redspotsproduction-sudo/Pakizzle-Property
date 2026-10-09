@@ -49,6 +49,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import StaleListingsWidget from "./StaleListingsWidget";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -480,6 +481,9 @@ export default function ListingManagement() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Freshness & Auto-Expiry Monitor */}
+      <StaleListingsWidget />
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#1E1E20] border border-slate-200/80 dark:border-white/10 shadow-xs">

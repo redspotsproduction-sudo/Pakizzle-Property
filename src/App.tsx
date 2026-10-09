@@ -91,7 +91,7 @@ const SignInPage = lazy(() => import("./pages/SignInPage"));
 const UploadIdentityForm = lazy(() => import("./components/UploadIdentityForm"));
 const UploadBusinessForm = lazy(() => import("./components/UploadBusinessForm"));
 const InsuranceLanding = lazy(() => import("./components/InsuranceLanding"));
-const CarInsurancePage = lazy(() => import("./components/CarInsurancePage"));
+const PropertyInsurancePage = lazy(() => import("./components/PropertyInsurancePage"));
 const InsuranceBookingFlow = lazy(() => import("./components/InsuranceBookingFlow"));
 const InsuranceQuoteFlow = lazy(() => import("./components/InsuranceQuoteFlow"));
 const InspectionLanding = lazy(() => import("./components/InspectionLanding"));
@@ -608,6 +608,13 @@ export default function App() {
             </UserLayout>
           </ProtectedRoute>
         } />
+        <Route path="/dashboard/verification" element={
+          <ProtectedRoute>
+            <UserLayout>
+              <VerificationPage />
+            </UserLayout>
+          </ProtectedRoute>
+        } />
 
         <Route path="/marketplace" element={<PageTransition><Marketplace /></PageTransition>} />
         <Route path="/signup" element={<PageTransition><SignUpPage /></PageTransition>} />
@@ -673,7 +680,8 @@ export default function App() {
           </ProtectedRoute>
         } />
         <Route path="/insurance" element={<InsuranceLanding />} />
-        <Route path="/insurance/car" element={<CarInsurancePage />} />
+        <Route path="/insurance/property" element={<PropertyInsurancePage />} />
+        <Route path="/insurance/car" element={<PropertyInsurancePage />} />
         <Route path="/insurance/book/:type" element={
           <ProtectedRoute>
             <InsuranceBookingFlow />

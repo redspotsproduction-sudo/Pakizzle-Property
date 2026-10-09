@@ -267,12 +267,15 @@ export default function PakStoriesFeed() {
             </AnimatePresence>
 
             {/* Performance Safeguard: Lazy preloader for immediately-next video ONLY */}
-            {currentIndex + 1 < videos.length && (
+            {currentIndex + 1 < videos.length && Boolean(videos[currentIndex + 1]?.videoUrl) && (
               <video
                 src={videos[currentIndex + 1].videoUrl}
                 preload="metadata"
                 className="hidden"
                 aria-hidden="true"
+                onError={(e) => {
+                  e.preventDefault();
+                }}
               />
             )}
           </div>

@@ -18,6 +18,8 @@ export interface PropertyContextType {
   getPropertyByReferenceId: (refId: string) => Property | undefined;
   searchByReferenceId: (query: string) => Property | undefined;
   generateUniqueReferenceId: () => string;
+  confirmListingActive: (id: string) => Promise<void>;
+  reactivateListing: (id: string) => Promise<void>;
   loading: boolean;
   recentlyViewed: string[]; // Stores property IDs
   addToRecentlyViewed: (propertyId: string) => void;
@@ -313,6 +315,31 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     }
   }, [properties]);
 
+  const confirmListingActive = useCallback(async (id: string) => {
+    const timestamp = new Date().toISOString();
+    const updates: Partial<Property> = {
+      last_confirmed_active: timestamp,
+      status: 'active',
+      freshness_status: 'fresh',
+      updatedAt: timestamp
+    };
+    setProperties(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    await updateProperty(id, updates);
+  }, [updateProperty]);
+
+  const reactivateListing = useCallback(async (id: string) => {
+    const timestamp = new Date().toISOString();
+    const updates: Partial<Property> = {
+      last_confirmed_active: timestamp,
+      reactivated_at: timestamp,
+      status: 'active',
+      freshness_status: 'fresh',
+      updatedAt: timestamp
+    };
+    setProperties(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    await updateProperty(id, updates);
+  }, [updateProperty]);
+
   const value = useMemo<PropertyContextType>(() => ({
     properties,
     vehicles: properties, // Backward compatibility alias
@@ -325,6 +352,8 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     getPropertyByReferenceId,
     searchByReferenceId,
     generateUniqueReferenceId,
+    confirmListingActive,
+    reactivateListing,
     loading,
     recentlyViewed,
     addToRecentlyViewed,
@@ -337,6 +366,8 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     getPropertyByReferenceId,
     searchByReferenceId,
     generateUniqueReferenceId,
+    confirmListingActive,
+    reactivateListing,
     loading,
     recentlyViewed,
     addToRecentlyViewed,

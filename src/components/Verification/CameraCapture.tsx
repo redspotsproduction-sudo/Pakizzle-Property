@@ -69,6 +69,7 @@ export default function CameraCapture({ label, expectedName, type, onVerified, o
       
       if (videoRef.current) {
         videoRef.current.srcObject = s;
+        videoRef.current.play().catch(() => {});
         videoRef.current.onloadedmetadata = () => {
           addLog("OPTICAL MATRIX ONLINE");
           setTimeout(() => setIsFocusing(false), 2000);
@@ -118,7 +119,11 @@ export default function CameraCapture({ label, expectedName, type, onVerified, o
         
         if (result.recommendation === 'APPROVE') {
           setStatus('matched');
-          onVerified(result);
+          onVerified({
+            ...result,
+            base64Image,
+            dataUrl: `data:image/jpeg;base64,${base64Image}`
+          });
           if (onSideComplete) onSideComplete(label.toLowerCase().includes('front') ? 'front' : 'back' as any);
         } else if (result.recommendation === 'NEED_CORRECTION') {
           setStatus('correction_needed');
@@ -159,9 +164,11 @@ export default function CameraCapture({ label, expectedName, type, onVerified, o
           <>
             <video 
               ref={videoRef} 
-              autoPlay 
               playsInline 
               muted
+              onError={(e) => {
+                e.preventDefault();
+              }}
               className={cn(
                 "w-full h-full object-cover transition-all duration-1000",
                 isVerifying ? "opacity-40 scale-105 blur-sm" : "opacity-100 scale-100"

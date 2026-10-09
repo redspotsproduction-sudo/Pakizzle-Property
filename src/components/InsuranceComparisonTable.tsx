@@ -193,9 +193,9 @@ export default function InsuranceComparisonTable() {
   const navigate = useNavigate();
 
   // COMPARATOR USER STATES (Dynamic quote calculation)
-  const [carMake, setCarMake] = useState<string>('Toyota');
-  const [carModel, setCarModel] = useState<string>('Corolla');
-  const [carValue, setCarValue] = useState<number>(35); // in Lakhs (e.g. 35 Lacs)
+  const [propertyCategory, setPropertyCategory] = useState<string>('House');
+  const [propertyType, setPropertyType] = useState<string>('Luxury Villa');
+  const [carValue, setCarValue] = useState<number>(350); // in Lakhs (e.g. 3.5 Crore)
   const [cityNode, setCityNode] = useState<'lhe' | 'khi' | 'isb'>('lhe');
 
   // Interactive Add-ons
@@ -212,13 +212,13 @@ export default function InsuranceComparisonTable() {
   const [comparedPlanIds, setComparedPlanIds] = useState<string[]>([]);
   const [showCompareModal, setShowCompareModal] = useState<boolean>(false);
 
-  // Presets of cars in Pakistan
+  // Presets of properties in Pakistan
   const CAR_PRESETS = [
-    { label: 'Suzuki Alto', make: 'Suzuki', model: 'Alto', value: 24 },
-    { label: 'Toyota Yaris', make: 'Toyota', model: 'Yaris', value: 48 },
-    { label: 'Honda Civic', make: 'Honda', model: 'Civic', value: 85 },
-    { label: 'Sportage AWD', make: 'Kia', model: 'Sportage', value: 78 },
-    { label: 'EV/Fortuner', make: 'Toyota', model: 'Fortuner', value: 160 }
+    { label: '5-Marla Villa', make: 'House', model: '5-Marla Luxury Villa', value: 180 },
+    { label: '10-Marla House', make: 'House', model: '10-Marla Contemporary House', value: 380 },
+    { label: '1-Kanal Mansion', make: 'House', model: '1-Kanal Designer Mansion', value: 750 },
+    { label: 'Luxury Flat', make: 'Apartment', model: '3-Bed Executive Flat', value: 240 },
+    { label: 'Commercial Plaza', make: 'Commercial', model: 'Multi-Story Plaza', value: 1500 }
   ];
 
   useEffect(() => {
@@ -261,8 +261,8 @@ export default function InsuranceComparisonTable() {
 
   // Preset click handler
   const applyPreset = (preset: typeof CAR_PRESETS[0]) => {
-    setCarMake(preset.make);
-    setCarModel(preset.model);
+    setPropertyCategory(preset.make);
+    setPropertyType(preset.model);
     setCarValue(preset.value);
     toast.success(`${preset.label} selected!`, {
       description: `Calibrated valuation to PKR ${preset.value} Lakhs.`
@@ -338,7 +338,7 @@ export default function InsuranceComparisonTable() {
 
   // Route to quote booking
   const handleRequestQuote = (company: InsuranceCompany) => {
-    navigate(`/insurance/book/car?provider=${company.id}&value=${carValue * 100000}&city=${cityNode}&make=${carMake}&model=${carModel}`);
+    navigate(`/insurance/book/property?provider=${company.id}&value=${carValue * 100000}&city=${cityNode}&category=${propertyCategory}&type=${propertyType}`);
   };
 
   if (loading) {
@@ -411,23 +411,25 @@ export default function InsuranceComparisonTable() {
             </div>
           </div>
 
-          {/* Car Specs Input */}
+          {/* Property Specs Input */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">Make</label>
+              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">Property Category</label>
               <input
                 type="text"
-                value={carMake}
-                onChange={(e) => setCarMake(e.target.value)}
+                value={propertyCategory}
+                onChange={(e) => setPropertyCategory(e.target.value)}
+                placeholder="e.g. House, Flat, Commercial"
                 className="w-full px-3.5 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[#1D1D1F] dark:text-white transition-all"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">Model</label>
+              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">Property Sub-Type</label>
               <input
                 type="text"
-                value={carModel}
-                onChange={(e) => setCarModel(e.target.value)}
+                value={propertyType}
+                onChange={(e) => setPropertyType(e.target.value)}
+                placeholder="e.g. Luxury Villa, Penthouse"
                 className="w-full px-3.5 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[#1D1D1F] dark:text-white transition-all"
               />
             </div>
@@ -768,7 +770,7 @@ export default function InsuranceComparisonTable() {
                   <div>
                     <h3 className="text-lg font-black tracking-tight">Insurance Coverage Matrix</h3>
                     <p className="text-[10px] text-[#86868B] font-mono uppercase tracking-wider">
-                      {carMake} {carModel} • PKR {carValue} Lacs Valuation Weight
+                      {propertyCategory} {propertyType} • PKR {carValue} Lacs Valuation Weight
                     </p>
                   </div>
                 </div>

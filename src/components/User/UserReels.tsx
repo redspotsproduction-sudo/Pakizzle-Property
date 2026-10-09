@@ -64,7 +64,7 @@ export default function UserReels() {
             } else {
               setLocalUrls(prev => ({ 
                 ...prev, 
-                [url]: 'https://assets.mixkit.co/videos/preview/mixkit-red-sports-car-parked-under-neon-lights-42289-large.mp4' 
+                [url]: '/videos/walkthrough_villa.mp4' 
               }));
             }
           } catch (e) {
@@ -246,6 +246,12 @@ export default function UserReels() {
                       muted 
                       playsInline 
                       controls
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src && !target.src.includes('/videos/walkthrough_')) {
+                          target.src = '/videos/walkthrough_villa.mp4';
+                        }
+                      }}
                       className="w-full h-full object-cover" 
                     />
                   );

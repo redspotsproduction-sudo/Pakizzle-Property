@@ -24,9 +24,9 @@ import {
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useProperties } from "@/context/PropertyContext";
 import { useLocation } from "@/context/LocationContext";
-import { Property, Vehicle, CategoryField } from "@/types";
+import { Property, CategoryField } from "@/types";
 import { PAKISTAN_LOCATIONS } from "../constants/locations";
-import PropertyCard, { VehicleCard } from "./PropertyCard";
+import PropertyCard from "./PropertyCard";
 import Header from "./Header";
 import { cn, formatPrice } from "@/lib/utils";
 import { extractReferenceId, formatPropertyUrl } from "@/lib/referenceId";
@@ -34,8 +34,9 @@ import { useIntelligence } from "@/hooks/useIntelligence";
 import { featureStore } from "@/services/intelligence/FeatureStore";
 import { intelligenceEngine } from "@/services/intelligence/IntelligenceEngine";
 import { categoryService } from "@/services/categoryService";
+import { listingFreshnessService } from "@/services/listingFreshnessService";
 
-import { CarSelector } from "./CarSelector/CarSelector";
+import PropertySelector from "./PropertySelector/PropertySelector";
 import ComparisonModal from "./Marketplace/ComparisonModal";
 import ComparisonDrawer from "./Marketplace/ComparisonDrawer";
 import SaveSearchModal from "./Marketplace/SaveSearchModal";
@@ -51,7 +52,7 @@ import { AnimatedCounter, SPRING_SNAPPY } from "./motion";
 export default function Marketplace() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { properties, vehicles } = useProperties();
+  const { properties } = useProperties();
   const { location: userLocation } = useLocation();
   const { trackSearch } = useIntelligence();
   const initialQuery = searchParams.get("q") || "";
@@ -69,7 +70,7 @@ export default function Marketplace() {
       return;
     }
 
-    const matched = vehicles.find(
+    const matched = properties.find(
       (v) => (v.reference_id && v.reference_id === extracted) || v.id === extracted
     );
 
@@ -178,7 +179,7 @@ export default function Marketplace() {
     }
   }, []);
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "price-low" | "price-high" | "mileage" | "mileage-low" | "mileage-high" | "year-high" | "year-low" | "ai">("ai");
-  const [compareList, setCompareList] = useState<Vehicle[]>([]);
+  const [compareList, setCompareList] = useState<Property[]>([]);
   const [selectedCondition, setSelectedCondition] = useState<string[]>([]);
   const [selectedFuel, setSelectedFuel] = useState<string[]>([]);
   const [selectedBodyType, setSelectedBodyType] = useState<string[]>([]);
@@ -256,7 +257,7 @@ export default function Marketplace() {
       setIdSearchError("Please enter a valid 6-8 digit Property ID");
       return;
     }
-    const matched = vehicles.find(
+    const matched = properties.find(
       (v) => (v.reference_id && v.reference_id === extracted) || v.id === extracted
     );
     if (matched) {
@@ -266,7 +267,7 @@ export default function Marketplace() {
     } else {
       setIdSearchError(`Property ID #${extracted} was not found. Please verify the ID.`);
     }
-  }, [vehicles, navigate]);
+  }, [properties, navigate]);
 
   useEffect(() => {
     const fetchFields = async () => {
@@ -381,12 +382,12 @@ export default function Marketplace() {
   const [isDataLoaded, setIsDataLoaded] = useState(true);
 
   useEffect(() => {
-    if (vehicles.length > 0) {
+    if (properties.length > 0) {
       setIsDataLoaded(true);
     }
-  }, [vehicles]);
+  }, [properties]);
 
-  const filteredVehicles = useMemo(() => {
+  const filteredProperties = useMemo(() => {
     if (!isDataLoaded) return [];
 
     // Track selections in FeatureStore in real-time to enhance AI personalization
@@ -406,10 +407,11 @@ export default function Marketplace() {
     }
 
     try {
-      let result = vehicles.filter((v) => {
+      let result = properties.filter((v) => {
         if (!v) return false;
-        // Only show active vehicles in marketplace
-        if (v.status === 'inactive') return false;
+        // Only show active listings in marketplace (exclude inactive, expired, drafts, or >67 days unconfirmed)
+        if (v.status === 'inactive' || v.status === 'expired' || v.status === 'draft' || v.status === 'rejected') return false;
+        if (listingFreshnessService.getFreshness(v).isExpired) return false;
 
         const queryRefId = extractReferenceId(searchQuery);
         const matchesSearch = !searchQuery ||
@@ -548,18 +550,18 @@ export default function Marketplace() {
         }
       });
     } catch (e) {
-      console.error("Error in filteredVehicles useMemo:", e);
-      return vehicles; // Guarded fallback path
+      console.error("Error in filteredProperties useMemo:", e);
+      return properties; // Guarded fallback path
     }
-  }, [searchQuery, selectedCondition, selectedFuel, selectedBodyType, onlyVerified, maxPrice, minPrice, minYear, maxYear, minMileage, maxMileage, selectedCities, userLocation, sortBy, vehicles, trackSearch, customFilters, selectedMake, selectedModel, selectedVariant, isDataLoaded, minBeds, minBaths, searchParams]);
+  }, [searchQuery, selectedCondition, selectedFuel, selectedBodyType, onlyVerified, maxPrice, minPrice, minYear, maxYear, minMileage, maxMileage, selectedCities, userLocation, sortBy, properties, trackSearch, customFilters, selectedMake, selectedModel, selectedVariant, isDataLoaded, minBeds, minBaths, searchParams]);
 
-  const toggleCompare = useCallback((vehicle: Vehicle) => {
+  const toggleCompare = useCallback((property: Property) => {
     setCompareList(prev => {
-      if (prev.find(v => v.id === vehicle.id)) {
-        return prev.filter(v => v.id !== vehicle.id);
+      if (prev.find(v => v.id === property.id)) {
+        return prev.filter(v => v.id !== property.id);
       }
       if (prev.length >= 3) return prev;
-      return [...prev, vehicle];
+      return [...prev, property];
     });
   }, []);
 
@@ -724,7 +726,7 @@ export default function Marketplace() {
                     <div className="text-xs text-apple-text-muted p-4 text-center">Please select a brand list to explore models.</div>
                   ) : (
                     <>
-                      {vehicles
+                      {properties
                         .filter(v => v.make === selectedMake)
                         .map(v => v.model)
                         .filter((value, index, self) => self.indexOf(value) === index)
@@ -866,7 +868,7 @@ export default function Marketplace() {
                 <select
                   value={minYear || ""}
                   onChange={(e) => setMinYear(e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-3 py-2.5 border border-apple-border/20 rounded-xl bg-apple-gray/50 dark:bg-[#1C1C1E] text-sm outline-none text-apple-text focus:border-apple-blue cursor-pointer"
+                  className="w-full px-3 py-2.5 border border-apple-border/20 rounded-xl bg-apple-gray/50 dark:bg-apple-card-bg text-sm outline-none text-apple-text focus:border-apple-blue cursor-pointer"
                 >
                   <option value="">Any Year</option>
                   {Array.from({ length: 37 }, (_, i) => 2026 - i).map(year => (
@@ -879,7 +881,7 @@ export default function Marketplace() {
                 <select
                   value={maxYear || ""}
                   onChange={(e) => setMaxYear(e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-3 py-2.5 border border-apple-border/20 rounded-xl bg-apple-gray/50 dark:bg-[#1C1C1E] text-sm outline-none text-apple-text focus:border-apple-blue cursor-pointer"
+                  className="w-full px-3 py-2.5 border border-apple-border/20 rounded-xl bg-apple-gray/50 dark:bg-apple-card-bg text-sm outline-none text-apple-text focus:border-apple-blue cursor-pointer"
                 >
                   <option value="">Any Year</option>
                   {Array.from({ length: 37 }, (_, i) => 2026 - i).map(year => (
@@ -1054,12 +1056,12 @@ export default function Marketplace() {
       </section>
 
       <section>
-        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-6">Property Category & Type</h3>
-        <CarSelector 
-          onSelect={(data) => {
-            setSelectedMake(data.make?.name || "");
-            setSelectedModel(data.model?.name || "");
-            setSelectedVariant(data.variant?.name || "");
+        <h3 className="text-[11px] font-semibold text-apple-text-muted uppercase tracking-[0.2em] mb-4">Property Category & Type</h3>
+        <PropertySelector 
+          selectedType={selectedMake || topFilters.propertyType}
+          onSelect={(selection) => {
+            handleTopFilterChange({ propertyType: selection.typeName });
+            setSelectedMake(selection.typeName);
             setViewMode("list");
           }}
         />
@@ -1340,7 +1342,7 @@ export default function Marketplace() {
             filters={topFilters}
             onChange={handleTopFilterChange}
             onReset={handleResetTopFilters}
-            resultCount={filteredVehicles.length}
+            resultCount={filteredProperties.length}
             activeCount={activeFiltersCount}
             onOpenMobileFilters={() => setIsFilterOpen(true)}
             onDirectIdSearch={handleDirectIdSearch}
@@ -1429,12 +1431,12 @@ export default function Marketplace() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: "100%" }}
                     transition={{ type: "spring", damping: 28, stiffness: 300 }}
-                    className="fixed inset-x-0 bottom-0 max-h-[88vh] bg-white dark:bg-[#1C1C1E] rounded-t-[32px] md:max-w-xl md:mx-auto md:bottom-6 md:rounded-[32px] shadow-[0_-25px_60px_rgba(0,0,0,0.35)] z-[90] flex flex-col overflow-hidden border border-black/10 dark:border-white/10 xl:hidden"
+                    className="fixed inset-x-0 bottom-0 max-h-[88vh] bg-white dark:bg-apple-card-bg rounded-t-[32px] md:max-w-xl md:mx-auto md:bottom-6 md:rounded-[32px] shadow-[0_-25px_60px_rgba(0,0,0,0.35)] z-[90] flex flex-col overflow-hidden border border-black/10 dark:border-white/10 xl:hidden"
                     style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}
                   >
                     {/* Grab handle indicator */}
                     <div className="pt-3 pb-1 cursor-grab active:cursor-grabbing flex justify-center shrink-0">
-                      <div className="w-12 h-1.5 rounded-full bg-slate-300 dark:bg-zinc-600" />
+                      <div className="w-12 h-1.5 rounded-full bg-apple-border" />
                     </div>
 
                     {/* Header */}
@@ -1477,7 +1479,7 @@ export default function Marketplace() {
                     </div>
 
                     {/* Sticky Bottom Actions Bar */}
-                    <div className="p-4 bg-white/90 dark:bg-[#1C1C1E]/90 backdrop-blur-xl border-t border-apple-border/20 dark:border-white/10 flex items-center gap-3 shrink-0">
+                    <div className="p-4 bg-white/90 dark:bg-apple-card-bg/90 backdrop-blur-xl border-t border-apple-border/20 dark:border-white/10 flex items-center gap-3 shrink-0">
                       <button
                         onClick={handleResetAllFilters}
                         className="px-4 py-3 rounded-2xl text-xs font-bold text-apple-text-muted hover:text-apple-red hover:bg-apple-red/10 transition-colors cursor-pointer min-h-[44px]"
@@ -1488,7 +1490,7 @@ export default function Marketplace() {
                         onClick={() => setIsFilterOpen(false)}
                         className="flex-1 apple-button-primary !h-12 text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-primary/20 cursor-pointer active:scale-98 transition-transform min-h-[48px]"
                       >
-                        Show Properties ({filteredVehicles.length})
+                        Show Properties ({filteredProperties.length})
                       </button>
                     </div>
                   </motion.div>
@@ -1631,7 +1633,7 @@ export default function Marketplace() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-10">
                 <div className="flex items-center gap-3">
                   <div className="text-[12px] md:text-[13px] font-medium text-apple-text-muted">
-                    Showing <span className="text-apple-text font-bold"><AnimatedCounter value={filteredVehicles.length} duration={0.6} once={false} /></span> Results
+                    Showing <span className="text-apple-text font-bold"><AnimatedCounter value={filteredProperties.length} duration={0.6} once={false} /></span> Results
                   </div>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -1654,7 +1656,7 @@ export default function Marketplace() {
                       "flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full border text-xs font-bold transition-all shadow-sm cursor-pointer h-[38px] xl:hidden touch-target",
                       activeFiltersCount > 0
                         ? "bg-apple-blue text-white border-apple-blue shadow-apple-blue/20"
-                        : "bg-white dark:bg-[#161618]/95 border-apple-border/40 text-apple-text hover:bg-apple-gray/50"
+                        : "bg-white dark:bg-apple-surface/95 border-apple-border/40 text-apple-text hover:bg-apple-gray/50"
                     )}
                   >
                     <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -1671,11 +1673,11 @@ export default function Marketplace() {
                       ref={sortRef as any}
                       onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                       className={cn(
-                        "flex items-center justify-between gap-3 px-5 py-2.5 bg-white dark:bg-[#1C1C1E] border border-apple-border/40 dark:border-white/10 shadow-md hover:shadow-apple-soft transition-all duration-300 relative group cursor-pointer text-left focus:outline-none rounded-full text-xs font-semibold h-[38px]",
+                        "flex items-center justify-between gap-3 px-5 py-2.5 bg-white dark:bg-apple-card-bg border border-apple-border/40 dark:border-white/10 shadow-md hover:shadow-apple-soft transition-all duration-300 relative group cursor-pointer text-left focus:outline-none rounded-full text-xs font-semibold h-[38px]",
                         isSortDropdownOpen ? "ring-2 ring-brand-primary/20 bg-apple-gray/50 dark:bg-white/10" : ""
                       )}
                     >
-                      <span className="text-apple-text dark:text-[#F5F5F7] truncate selection-none">
+                      <span className="text-apple-text text-apple-text truncate selection-none">
                         Sort: <span className="font-extrabold text-brand-primary">{([
                           { id: "ai", label: "Recommended" },
                           { id: "newest", label: "Newest First" },
@@ -1684,7 +1686,7 @@ export default function Marketplace() {
                           { id: "price-high", label: "Price: High to Low" },
                         ].find(option => option.id === sortBy)?.label) || "Recommended"}</span>
                       </span>
-                      <ChevronDown className={cn("w-3.5 h-3.5 text-apple-text-muted dark:text-[#8E8E93] transition-transform duration-300 shrink-0", isSortDropdownOpen ? "rotate-180 text-brand-primary" : "group-hover:translate-y-0.5")} />
+                      <ChevronDown className={cn("w-3.5 h-3.5 text-apple-text-muted text-apple-text-muted transition-transform duration-300 shrink-0", isSortDropdownOpen ? "rotate-180 text-brand-primary" : "group-hover:translate-y-0.5")} />
                     </button>
 
                     <FilterPopover
@@ -1715,7 +1717,7 @@ export default function Marketplace() {
                               "w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-between",
                               sortBy === option.id 
                                 ? "bg-brand-primary text-white shadow-xs" 
-                                : "text-slate-700 dark:text-[#F5F5F7] hover:bg-slate-100 dark:hover:bg-white/5"
+                                : "text-slate-700 text-apple-text hover:bg-slate-100 dark:hover:bg-white/5"
                             )}
                           >
                             <span>{option.label}</span>
@@ -1759,22 +1761,22 @@ export default function Marketplace() {
               </div>
               
               {/* Premium Google AdSense Leaderboard Slot */}
-              {isDataLoaded && filteredVehicles.length > 0 && (
+              {isDataLoaded && filteredProperties.length > 0 && (
                 <GoogleAdSenseSlot slotType="leaderboard" />
               )}
 
               <div className={cn(
-                "grid gap-3 sm:gap-4 lg:gap-5",
+                "grid items-stretch gap-3 sm:gap-4 lg:gap-5",
                 viewMode === "grid" 
                   ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" 
                   : "grid-cols-1"
               )}>
                 {!isDataLoaded ? (
                   Array.from({ length: 8 }).map((_, i) => (
-                    <VehicleCard key={`skeleton-${i}`} vehicle={{} as any} viewMode={viewMode} isLoading={true} />
+                    <PropertyCard key={`skeleton-${i}`} property={{} as any} viewMode={viewMode} isLoading={true} />
                   ))
-                ) : filteredVehicles.length > 0 ? (
-                  filteredVehicles.flatMap((vehicle, index) => {
+                ) : filteredProperties.length > 0 ? (
+                  filteredProperties.flatMap((property, index) => {
                     const elements = [];
                     
                     // Inject a Sponsored Full Width Leaderboard Banner Ad every 8th listing card (only in list view to maintain clean grid representation)
@@ -1805,17 +1807,17 @@ export default function Marketplace() {
                     // Core Product Card
                     elements.push(
                       <motion.div 
-                        key={vehicle.id}
+                        key={property.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: (index % 4) * 0.05 }}
                         className="h-full"
                       >
-                        <VehicleCard 
-                          vehicle={vehicle} 
+                        <PropertyCard 
+                          property={property} 
                           viewMode={viewMode} 
                           onCompare={toggleCompare}
-                          isCompared={!!compareList.find(v => v.id === vehicle.id)}
+                          isCompared={!!compareList.find(v => v.id === property.id)}
                         />
                       </motion.div>
                     );
@@ -1837,7 +1839,7 @@ export default function Marketplace() {
             </div>
 
             {/* Sticky Right Skyscraper Google Display Ad (just like dubizzle.com) */}
-            {isDataLoaded && filteredVehicles.length > 0 && (
+            {isDataLoaded && filteredProperties.length > 0 && (
               <div className="hidden xl:block shrink-0 w-[304px]">
                 <div className="sticky top-28 space-y-4">
                   <GoogleAdSenseSlot slotType="sidebar-tall" />

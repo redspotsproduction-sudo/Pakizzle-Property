@@ -19,7 +19,7 @@ interface MarketInsightBannerProps {
   onApplyInsight: (query: {
     city?: string;
     area?: string;
-    make?: string;
+    propertyType?: string;
     verifiedOnly?: boolean;
     minArea?: number;
     maxArea?: number;
@@ -149,7 +149,7 @@ export default function MarketInsightBanner({
     onApplyInsight({
       city: q.city || effectiveCity,
       area: q.area,
-      make: q.make,
+      propertyType: (q as any).propertyType || q.make,
       verifiedOnly: q.verifiedOnly,
       minArea,
       maxArea,

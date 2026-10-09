@@ -31,6 +31,7 @@ import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useChat } from "../../context/ChatContext";
+import SearchModal from "../SearchModal";
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -48,6 +49,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard, path: '/dashboard', category: 'Console' },
   { id: 'seller', label: 'Seller Console', icon: BarChart3, path: '/dashboard/seller', category: 'Console' },
+  { id: 'verification', label: 'Identity Verification', icon: ShieldCheck, path: '/dashboard/verification', category: 'Console' },
   { id: 'analytics', label: 'Performance', icon: Activity, path: '/dashboard/analytics', category: 'Console' },
   { id: 'credits', label: 'Credits & Upgrades', icon: Gem, path: '/dashboard/credits', category: 'Console' },
 
@@ -72,6 +74,25 @@ export default function UserLayout({ children }: UserLayoutProps) {
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
+  // Global 1-Tap Search & Cmd+K listeners for Dashboard
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setShowSearchModal((prev) => !prev);
+      }
+    };
+    const handleOpenSearch = () => setShowSearchModal(true);
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("pakizzle:open-search", handleOpenSearch);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pakizzle:open-search", handleOpenSearch);
+    };
+  }, []);
 
   const unreadMessagesCount = conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
 
@@ -220,14 +241,26 @@ export default function UserLayout({ children }: UserLayoutProps) {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="relative hidden sm:block group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-focus-within:text-apple-blue transition-colors duration-500" />
+            <div 
+              onClick={() => setShowSearchModal(true)}
+              className="relative hidden sm:block group cursor-pointer"
+            >
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-hover:text-apple-blue transition-colors duration-500" />
               <input
                 type="text"
-                placeholder="Search profile, ads, or help..."
-                className="pl-11 pr-4 py-3 bg-apple-gray/50 dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-2xl text-[13px] font-medium focus:ring-0 outline-none w-64 lg:w-96 transition-all duration-500 shadow-inner"
+                readOnly
+                placeholder="Search properties, areas, IDs... (⌘K)"
+                className="pl-11 pr-4 py-3 bg-apple-gray/50 dark:bg-white/5 border border-transparent hover:border-apple-blue/30 rounded-2xl text-[13px] font-medium focus:ring-0 outline-none w-64 lg:w-96 transition-all duration-500 shadow-inner cursor-pointer"
               />
             </div>
+
+            <button 
+              onClick={() => setShowSearchModal(true)}
+              className="sm:hidden w-11 h-11 flex items-center justify-center bg-apple-gray/50 dark:bg-white/5 rounded-2xl hover:scale-105 transition-all text-apple-text-muted hover:text-apple-blue cursor-pointer" 
+              title="Search (1-Tap)"
+            >
+              <Search className="w-5 h-5" />
+            </button>
             
             <div className="flex items-center gap-2">
               <button className="relative w-11 h-11 flex items-center justify-center bg-apple-gray/50 dark:bg-white/5 rounded-2xl hover:scale-105 transition-all group overflow-hidden">
@@ -386,6 +419,9 @@ export default function UserLayout({ children }: UserLayoutProps) {
           </>
         )}
       </AnimatePresence>
+
+      {/* Global 1-Tap Search Modal */}
+      <SearchModal isOpen={showSearchModal} onClose={() => setShowSearchModal(false)} />
     </div>
   );
 }

@@ -18,6 +18,7 @@ import {
   sendPasswordResetEmail
 } from 'firebase/auth';
 import { initializeFirestore, getFirestore, doc, getDoc, setDoc, collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, getDocFromServer, Timestamp } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 export { 
   signInWithPopup, 
@@ -52,6 +53,7 @@ export const db = initializeFirestore(app, {
 }, databaseId);
 
 export const auth = getAuth(app);
+export const storage = getStorage(app);
 
 // Lazy initialization of providers to avoid early instantiation issues
 let _googleProvider: GoogleAuthProvider | null = null;

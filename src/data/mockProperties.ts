@@ -96,8 +96,24 @@ const generateProperties = (count: number): Property[] => {
       engineSize: base.engine, // E.g., "5 Beds", "3 Beds", "1 Kanal"
       seller: agency as any,
       isFeatured: i % 4 === 0,
-      createdAt: new Date(Date.now() - (i * 3600000)).toISOString(),
-      status: "active",
+      createdAt: (() => {
+        // Stagger creation dates across the past 90 days
+        const daysAgo = (i * 2.5) % 85 + 2;
+        return new Date(Date.now() - (daysAgo * 86400000)).toISOString();
+      })(),
+      last_confirmed_active: (() => {
+        // Seed specific realistic freshness scenarios for verification:
+        if (i === 12) return new Date(Date.now() - (71 * 86400000)).toISOString(); // Expired (>67 days)
+        if (i === 15) return new Date(Date.now() - (63 * 86400000)).toISOString(); // Pending confirmation (60-67 days)
+        if (i === 18) return new Date(Date.now() - (56 * 86400000)).toISOString(); // Approaching threshold (50-59 days)
+        if (i === 24) return new Date(Date.now() - (65 * 86400000)).toISOString(); // Pending confirmation
+        if (i === 30) return new Date(Date.now() - (75 * 86400000)).toISOString(); // Expired
+        // Standard fresh confirmation: active within the last 1 to 25 days
+        const confirmedDaysAgo = (i % 22) + 1;
+        return new Date(Date.now() - (confirmedDaysAgo * 86400000)).toISOString();
+      })(),
+      freshness_status: i === 12 || i === 30 ? "expired" : (i === 15 || i === 24 ? "stale_pending_confirmation" : (i === 18 ? "approaching_stale" : "fresh")),
+      status: i === 12 || i === 30 ? "expired" : "active",
       description: description,
       features: [
         "LDA / CDA / RDA Approved",

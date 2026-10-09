@@ -436,11 +436,11 @@ export const FALLBACK_VERIFIED_VIDEOS: PropertyVideo[] = [
     creatorType: 'agency',
     title: 'Modern 1 Kanal Spanish Villa Walkthrough · DHA Phase 6 Lahore',
     caption: 'Full walkthrough of this brand new designer home in DHA Phase 6 Lahore. Featuring imported Italian marble, basement home theatre, infinity courtyard pool, and German kitchen appliances. Verified Shanakht™ title.',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4',
+    videoUrl: '/videos/walkthrough_villa.mp4',
     renditions: {
-      '360p': 'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-medium.mp4',
-      '480p': 'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4',
-      '720p': 'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-41484-large.mp4'
+      '360p': '/videos/walkthrough_villa.mp4',
+      '480p': '/videos/walkthrough_villa.mp4',
+      '720p': '/videos/walkthrough_villa.mp4'
     },
     thumbnailUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800',
     duration: 68,
@@ -491,11 +491,11 @@ export const FALLBACK_VERIFIED_VIDEOS: PropertyVideo[] = [
     creatorType: 'agent',
     title: 'Sunset View Duplex Penthouse · Sector F-7/2 Islamabad',
     caption: 'Step inside this 4,200 sq.ft. penthouse overlooking the Margalla Hills. Private elevator access, wrap-around rooftop terrace, and smart home climate automation.',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-large.mp4',
+    videoUrl: '/videos/walkthrough_penthouse.mp4',
     renditions: {
-      '360p': 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-medium.mp4',
-      '480p': 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-large.mp4',
-      '720p': 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-luxury-apartment-balcony-32869-large.mp4'
+      '360p': '/videos/walkthrough_penthouse.mp4',
+      '480p': '/videos/walkthrough_penthouse.mp4',
+      '720p': '/videos/walkthrough_penthouse.mp4'
     },
     thumbnailUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800',
     duration: 54,
@@ -546,11 +546,11 @@ export const FALLBACK_VERIFIED_VIDEOS: PropertyVideo[] = [
     creatorType: 'agency',
     title: 'Panoramic Waterfront Villa Tour · Clifton Block 4 Karachi',
     caption: 'Experience coastal living at its finest. Custom floor-to-ceiling double-glazed windows, private gym, and sun deck facing the Arabian Sea. Direct developer booking with verified registry documentation.',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-large.mp4',
+    videoUrl: '/videos/walkthrough_mansion.mp4',
     renditions: {
-      '360p': 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-medium.mp4',
-      '480p': 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-large.mp4',
-      '720p': 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-an-empty-balcony-42294-large.mp4'
+      '360p': '/videos/walkthrough_mansion.mp4',
+      '480p': '/videos/walkthrough_mansion.mp4',
+      '720p': '/videos/walkthrough_mansion.mp4'
     },
     thumbnailUrl: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=800',
     duration: 75,
@@ -601,11 +601,11 @@ export const FALLBACK_VERIFIED_VIDEOS: PropertyVideo[] = [
     creatorType: 'agency',
     title: 'Brand New 10 Marla Smart Home · Bahria Town Precinct 1',
     caption: '10 Marla designer house with complete solar panel backup, motorized curtains, CCTV security system, and contemporary wood finishes. Key in hand ready to move.',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-large.mp4',
+    videoUrl: '/videos/walkthrough_smart_home.mp4',
     renditions: {
-      '360p': 'https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-medium.mp4',
-      '480p': 'https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-large.mp4',
-      '720p': 'https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-in-an-expensive-house-41486-large.mp4'
+      '360p': '/videos/walkthrough_smart_home.mp4',
+      '480p': '/videos/walkthrough_smart_home.mp4',
+      '720p': '/videos/walkthrough_smart_home.mp4'
     },
     thumbnailUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=800',
     duration: 62,

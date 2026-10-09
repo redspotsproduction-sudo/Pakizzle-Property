@@ -27,26 +27,36 @@ interface SaveSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   filters: {
-    searchQuery: string;
-    make: string;
-    model: string;
-    variant: string;
-    bodyType: string[];
-    fuelType: string[];
-    condition: string[];
-    cities: string[];
-    minPrice: number | null;
-    maxPrice: number | null;
-    minYear: number | null;
-    maxYear: number | null;
-    minMileage: number | null;
-    maxMileage: number | null;
+    searchQuery?: string;
+    city?: string;
+    propertyType?: string;
+    society?: string;
+    minPrice?: number | null;
+    maxPrice?: number | null;
+    minArea?: number | null;
+    maxArea?: number | null;
+    areaUnit?: string;
+    beds?: number | null;
+    baths?: number | null;
+    furnishedStatus?: string;
+    purpose?: string;
+    make?: string;
+    model?: string;
+    variant?: string;
+    bodyType?: string[];
+    fuelType?: string[];
+    condition?: string[];
+    cities?: string[];
+    minYear?: number | null;
+    maxYear?: number | null;
+    minMileage?: number | null;
+    maxMileage?: number | null;
   };
 }
 
 export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearchModalProps) {
   const { user } = useAuth();
-  const { properties: vehicles } = useProperties();
+  const { properties } = useProperties();
   const [watcherName, setWatcherName] = useState("");
   const [frequency, setFrequency] = useState<"instant" | "daily">("instant");
   const [alertMethods, setAlertMethods] = useState({
@@ -60,46 +70,51 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
   useEffect(() => {
     if (isOpen) {
       const parts: string[] = [];
-      if (filters.condition && filters.condition.length > 0) {
-        parts.push(filters.condition.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join("/"));
-      }
-      if (filters.make) parts.push(filters.make);
-      if (filters.model) parts.push(filters.model);
+      if (filters.propertyType || filters.make) parts.push(filters.propertyType || filters.make || "");
+      if (filters.society) parts.push(filters.society);
+      if (filters.city) parts.push(filters.city);
+      if (filters.cities && filters.cities.length > 0) parts.push(filters.cities.join("/"));
       if (filters.searchQuery) parts.push(`"${filters.searchQuery}"`);
       
-      if (filters.bodyType && filters.bodyType.length > 0) {
-        parts.push(filters.bodyType.map(b => b.toUpperCase()).join("/"));
+      if (filters.beds) parts.push(`${filters.beds} Beds`);
+      if (filters.areaUnit && (filters.minArea || filters.maxArea)) {
+        parts.push(`${filters.maxArea || filters.minArea} ${filters.areaUnit}`);
       }
 
       if (filters.maxPrice) {
-        parts.push(`< $${(filters.maxPrice / 1000).toFixed(0)}k`);
+        parts.push(`< PKR ${(filters.maxPrice / 100000).toFixed(0)} Lakh`);
       }
 
-      const generatedName = parts.length > 0 ? `${parts.join(" ")} Watcher` : "All Vehicles Watcher";
+      const generatedName = parts.length > 0 ? `${parts.join(" ")} Watcher` : "All Properties Watcher";
       setWatcherName(generatedName);
 
       // Compute matching active listings
-      const count = vehicles.filter(v => {
-        return savedSearchService.doesVehicleMatch(v, {
+      const count = properties.filter(p => {
+        return savedSearchService.doesVehicleMatch(p as any, {
           searchQuery: filters.searchQuery,
+          city: filters.city,
+          propertyType: filters.propertyType,
+          society: filters.society,
+          minPrice: filters.minPrice ?? undefined,
+          maxPrice: filters.maxPrice ?? undefined,
+          beds: filters.beds ?? undefined,
+          baths: filters.baths ?? undefined,
           make: filters.make,
           model: filters.model,
           variant: filters.variant,
-          minPrice: filters.minPrice,
-          maxPrice: filters.maxPrice,
-          minYear: filters.minYear,
-          maxYear: filters.maxYear,
-          minMileage: filters.minMileage,
-          maxMileage: filters.maxMileage,
+          minYear: filters.minYear ?? undefined,
+          maxYear: filters.maxYear ?? undefined,
+          minMileage: filters.minMileage ?? undefined,
+          maxMileage: filters.maxMileage ?? undefined,
           bodyType: filters.bodyType,
           fuelType: filters.fuelType,
-          cities: filters.cities,
+          cities: filters.cities || (filters.city ? [filters.city] : undefined),
           condition: filters.condition
-        });
+        } as any);
       }).length;
       setMatchingCount(count);
     }
-  }, [isOpen, filters, vehicles]);
+  }, [isOpen, filters, properties]);
 
   if (!isOpen) return null;
 
@@ -217,7 +232,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                 <div>
                   <span className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider block">Watcher Configuration</span>
                   <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-white mt-0.5">Configure Watcher</h3>
-                  <p className="text-neutral-500 dark:text-neutral-400 text-xs mt-0.5 leading-relaxed">Get notified automatically when a matching vehicle is listed.</p>
+                  <p className="text-neutral-500 dark:text-neutral-400 text-xs mt-0.5 leading-relaxed">Get notified automatically when a matching property is listed.</p>
                 </div>
               </div>
 
@@ -239,32 +254,22 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                         <Tag className="w-3 h-3 text-neutral-400" /> "{filters.searchQuery}"
                       </div>
                     )}
-                    {filters.make && (
+                    {(filters.propertyType || filters.make) && (
                       <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
-                        <span className="font-bold">{filters.make}</span>
+                        <span className="font-bold">{filters.propertyType || filters.make}</span>
                       </div>
                     )}
-                    {filters.model && (
+                    {filters.society && (
                       <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
-                        <span className="font-medium text-neutral-500">Model:</span> <span className="font-bold">{filters.model}</span>
+                        <span className="font-medium text-neutral-500">Society:</span> <span className="font-bold">{filters.society}</span>
                       </div>
                     )}
-                    {filters.bodyType.map(b => (
-                      <div key={`body-${b}`} className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
-                        <span className="font-bold uppercase text-[9px]">{b}</span>
+                    {filters.city && (
+                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
+                        <MapPin className="w-3 h-3 text-apple-blue" /> <span>{filters.city}</span>
                       </div>
-                    ))}
-                    {filters.fuelType.map(f => (
-                      <div key={`fuel-${f}`} className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
-                        <span className="font-bold capitalize">{f}</span>
-                      </div>
-                    ))}
-                    {filters.condition.map(c => (
-                      <div key={`cond-${c}`} className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium font-mono">
-                        <span className="capitalize">{c}</span>
-                      </div>
-                    ))}
-                    {filters.cities.map(c => (
+                    )}
+                    {filters.cities && filters.cities.map(c => (
                       <div key={`city-${c}`} className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
                         <MapPin className="w-3 h-3 text-apple-blue" /> <span>{c}</span>
                       </div>
@@ -273,14 +278,9 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                       <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
                         <DollarSign className="w-2.5 h-2.5 text-emerald-500" />
                         <span>
-                          {filters.minPrice ? `$${(filters.minPrice/1000).toFixed(0)}k` : "$0"}-
-                          {filters.maxPrice ? `$${(filters.maxPrice/1000).toFixed(0)}k` : "Any"}
+                          {filters.minPrice ? `PKR ${(filters.minPrice/100000).toFixed(0)}L` : "PKR 0"}-
+                          {filters.maxPrice ? `PKR ${(filters.maxPrice/100000).toFixed(0)}L` : "Any"}
                         </span>
-                      </div>
-                    )}
-                    {(filters.minYear || filters.maxYear) && (
-                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
-                        <span>{filters.minYear || "Any"}-{filters.maxYear || "Any"}</span>
                       </div>
                     )}
                   </div>
@@ -299,7 +299,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                     required
                     value={watcherName}
                     onChange={(e) => setWatcherName(e.target.value)}
-                    placeholder="e.g. Budget SUVs Watcher"
+                    placeholder="e.g. 10-Marla DHA Lahore Watcher"
                     className="w-full text-sm font-semibold bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none rounded-xl px-4 py-2.5 text-neutral-900 dark:text-white"
                   />
                 </div>
@@ -338,7 +338,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                   </div>
                 </div>
 
-                {/* Alert Transmission Methods */}
+                {/* Alert Notification Channels */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 ml-0.5 block">Alert Channels</label>
                   <div className="space-y-2">

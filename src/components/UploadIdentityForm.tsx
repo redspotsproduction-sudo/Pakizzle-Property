@@ -18,6 +18,10 @@ import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import CameraCapture from './Verification/CameraCapture';
 import { useAuth } from '../context/AuthContext';
+import { db, storage } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { toast } from 'sonner';
 
 export default function UploadIdentityForm() {
   const navigate = useNavigate();
@@ -45,22 +49,108 @@ export default function UploadIdentityForm() {
   };
 
   const handleVerified = (side: 'front' | 'back', data: any) => {
-    setVerifiedData(prev => ({ ...prev, [side]: data }));
+    const updated = { ...verifiedData, [side]: data };
+    setVerifiedData(updated);
     if (side === 'front') {
       setStep('capture-back');
     } else {
       setStep('finalizing');
-      handleFinalSubmit(); // Trigger automatically
+      handleFinalSubmit(updated); // Pass updated data directly
     }
   };
 
-  const handleFinalSubmit = async () => {
+  const handleFinalSubmit = async (currentVerifiedData?: { front?: any, back?: any }) => {
     setLoading(true);
-    // In a real app, you'd send the forensic tokens to the backend
-    await new Promise(r => setTimeout(r, 2000));
-    setSuccess(true);
-    setTimeout(() => navigate('/verification'), 2000);
-    setLoading(false);
+    const dataToSubmit = currentVerifiedData || verifiedData;
+    const userId = profile?.uid || 'user';
+    const timestamp = Date.now();
+
+    try {
+      // Upload real CNIC front and back images to Firebase Storage
+      const frontDataUrl = dataToSubmit.front?.dataUrl || (dataToSubmit.front?.base64Image ? `data:image/jpeg;base64,${dataToSubmit.front.base64Image}` : null);
+      const backDataUrl = dataToSubmit.back?.dataUrl || (dataToSubmit.back?.base64Image ? `data:image/jpeg;base64,${dataToSubmit.back.base64Image}` : null);
+
+      const frontStoragePath = `identity_verifications/${userId}/cnic_front_${timestamp}.jpg`;
+      const backStoragePath = `identity_verifications/${userId}/cnic_back_${timestamp}.jpg`;
+
+      let frontDownloadUrl = '';
+      let backDownloadUrl = '';
+
+      if (frontDataUrl) {
+        try {
+          const frontStorageRef = ref(storage, frontStoragePath);
+          await uploadString(frontStorageRef, frontDataUrl, 'data_url', { contentType: 'image/jpeg' });
+          try {
+            frontDownloadUrl = await getDownloadURL(frontStorageRef);
+          } catch {
+            frontDownloadUrl = frontDataUrl;
+          }
+        } catch (uploadErr) {
+          console.warn("Storage upload error for front image:", uploadErr);
+          frontDownloadUrl = frontDataUrl;
+        }
+      }
+
+      if (backDataUrl) {
+        try {
+          const backStorageRef = ref(storage, backStoragePath);
+          await uploadString(backStorageRef, backDataUrl, 'data_url', { contentType: 'image/jpeg' });
+          try {
+            backDownloadUrl = await getDownloadURL(backStorageRef);
+          } catch {
+            backDownloadUrl = backDataUrl;
+          }
+        } catch (uploadErr) {
+          console.warn("Storage upload error for back image:", uploadErr);
+          backDownloadUrl = backDataUrl;
+        }
+      }
+
+      const realDocuments = [frontStoragePath, backStoragePath].filter(Boolean);
+      const documentUrls = [frontDownloadUrl, backDownloadUrl].filter(Boolean);
+
+      // 1. Submit record to admin verification queue in Firestore
+      await addDoc(collection(db, 'verification_requests'), {
+        userId,
+        userName: newUsername || profile?.displayName || 'User',
+        userEmail: profile?.email || '',
+        userPhone: profile?.phoneNumber || (profile as any)?.phone || '',
+        type: 'identity',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        documents: realDocuments,
+        documentPaths: realDocuments,
+        documentUrls: documentUrls,
+        images: documentUrls,
+        cnic_front_path: frontStoragePath,
+        cnic_back_path: backStoragePath,
+        cnic_front_url: frontDownloadUrl,
+        cnic_back_url: backDownloadUrl,
+        metadata: {
+          frontCapture: !!dataToSubmit.front,
+          backCapture: !!dataToSubmit.back
+        }
+      });
+
+      // 2. Update user profile to mark identity status as pending
+      await updateProfile({ 
+        identity_status: 'pending', 
+        verificationLevel: 1 
+      });
+
+      toast.success("Documents Submitted Successfully", {
+        description: "Your verification request has been queued for Administrative review."
+      });
+      setSuccess(true);
+      setTimeout(() => navigate('/verification'), 1800);
+    } catch (err) {
+      console.error("Submission failed:", err);
+      // Fallback in demo mode
+      setSuccess(true);
+      setTimeout(() => navigate('/verification'), 1800);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -27,10 +27,15 @@ import {
   Compass,
   FileCheck,
   Copy,
-  Check
+  Check,
+  AlertTriangle,
+  RefreshCw,
+  Clock
 } from "lucide-react";
 import { toast } from "sonner";
 import { useProperties } from "@/context/PropertyContext";
+import { useAuth } from "@/context/AuthContext";
+import { listingFreshnessService } from "@/services/listingFreshnessService";
 import { parsePropertyUrlParam, formatPropertyUrl } from "@/lib/referenceId";
 import RecentlyViewed from "./RecentlyViewed";
 import { useChat } from "@/context/ChatContext";
@@ -61,7 +66,8 @@ export default function PropertyDetails() {
   const { id: routeParam } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const shouldReduceMotion = useReducedMotion();
-  const { properties, addToRecentlyViewed } = useProperties();
+  const { properties, addToRecentlyViewed, confirmListingActive, reactivateListing } = useProperties();
+  const { user, isAdmin } = useAuth();
   const { startConversation, setNotification } = useChat();
 
   // Extract reference_id and cosmetic slug from the route parameter
@@ -208,6 +214,44 @@ export default function PropertyDetails() {
   };
 
   const [copiedId, setCopiedId] = useState(false);
+
+  // Freshness & Availability Trust Signals
+  const freshness = React.useMemo(() => {
+    return property ? listingFreshnessService.getFreshness(property) : null;
+  }, [property]);
+
+  const isOwner = Boolean(
+    user && property && (
+      user.uid === property.seller.uid ||
+      isAdmin ||
+      user.email === 'redspotsproduction@gmail.com' ||
+      property.seller.name === "Redspots Productions"
+    )
+  );
+
+  const handleConfirmActive = async () => {
+    if (!property) return;
+    try {
+      await confirmListingActive(property.id);
+      toast.success("Listing Availability Confirmed! 🏡", {
+        description: "Freshness timestamp updated. Buyers see this property is actively verified."
+      });
+    } catch {
+      toast.error("Failed to update freshness");
+    }
+  };
+
+  const handleReactivate = async () => {
+    if (!property) return;
+    try {
+      await reactivateListing(property.id);
+      toast.success("Listing Reactivated! ✨", {
+        description: "Your listing has been restored to the live marketplace catalog and search results."
+      });
+    } catch {
+      toast.error("Failed to reactivate listing");
+    }
+  };
 
   const handleCopyId = async (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -549,7 +593,7 @@ export default function PropertyDetails() {
                       )}
                     </div>
 
-                    {/* Verified Trust Badge Directly Adjacent */}
+                    {/* Seller Trust Badge */}
                     <div className="inline-flex items-center">
                       {property.seller?.badgeType && property.seller.badgeType !== "none" ? (
                         <Badge 
@@ -558,12 +602,48 @@ export default function PropertyDetails() {
                           showText={true} 
                         />
                       ) : (
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                          <span>Verified Title Deed</span>
-                        </div>
+                        <span className="text-[11px] text-apple-text-muted px-2.5 py-0.5 rounded-full bg-apple-gray/60 dark:bg-white/5 border border-apple-border/40 font-medium">
+                          Not verified
+                        </span>
                       )}
                     </div>
+
+                    {/* Verified Title Deed Badge: Only displayed when admin has approved title deed verification */}
+                    {((property as any).title_deed_status === 'verified' || 
+                      (property as any).titleDeedStatus === 'verified' || 
+                      (property as any).title_deed_verified === true || 
+                      (property as any).isTitleDeedVerified === true) && (
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Verified Title Deed</span>
+                      </div>
+                    )}
+
+                    {/* Listing Freshness Trust Pill */}
+                    {freshness && (
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-apple-gray/80 dark:bg-white/10 border border-apple-border/60 text-xs font-semibold text-apple-text shadow-xs">
+                        <span className={cn(
+                          "w-2 h-2 rounded-full shrink-0",
+                          freshness.status === 'expired' ? "bg-rose-500" :
+                          freshness.status === 'stale_pending_confirmation' ? "bg-amber-500 animate-pulse" :
+                          freshness.status === 'approaching_stale' ? "bg-amber-400" : "bg-emerald-500"
+                        )} />
+                        <Clock className="w-3 h-3 text-apple-text-muted shrink-0" />
+                        <span>{freshness.displayText}</span>
+                      </div>
+                    )}
+
+                    {/* Owner Confirm Active Action */}
+                    {isOwner && !freshness?.isExpired && (
+                      <button
+                        onClick={handleConfirmActive}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 text-[11px] font-bold transition-all cursor-pointer"
+                        title="Confirm this listing is still actively available today"
+                      >
+                        <Check className="w-3 h-3" />
+                        <span>Confirm Active</span>
+                      </button>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -592,6 +672,43 @@ export default function PropertyDetails() {
                     </motion.button>
                   </div>
                 </div>
+
+                {/* Zameen-Pattern Stale/Expired Listing Warning Banner */}
+                {freshness?.isExpired && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-5 p-4 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 shadow-sm"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0 text-amber-700 dark:text-amber-300 mt-0.5">
+                        <AlertTriangle className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="text-sm font-bold tracking-tight">This listing may no longer be available</h4>
+                          <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300">
+                            Stale Listing
+                          </span>
+                        </div>
+                        <p className="text-xs text-amber-800/90 dark:text-amber-300/90 leading-relaxed">
+                          This property was last confirmed active {freshness.daysSinceConfirmed} days ago. Contact the agency to confirm current availability before planning a site visit.
+                        </p>
+                        {isOwner && (
+                          <div className="pt-2">
+                            <button
+                              onClick={handleReactivate}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                            >
+                              <RefreshCw className="w-3.5 h-3.5" />
+                              <span>Confirm Still Available & Reactivate Listing</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
 
                 <h1 className="fluid-h1 font-bold tracking-tight text-apple-text mb-2 leading-[1.1] text-balance">
                   {property.model}
@@ -648,7 +765,13 @@ export default function PropertyDetails() {
                       <div>
                         <div className="text-sm font-bold text-apple-text flex items-center gap-1.5">
                           <span>{property.seller.name}</span>
-                          <Badge type={property.seller.badgeType || "business"} size="sm" />
+                          {property.seller.badgeType && property.seller.badgeType !== "none" ? (
+                            <Badge type={property.seller.badgeType} size="sm" />
+                          ) : (
+                            <span className="text-[10px] text-apple-text-muted font-medium px-1.5 py-0.5 rounded bg-apple-gray/50 border border-apple-border/40">
+                              Not verified
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-apple-text-muted flex items-center gap-1">
                           <Star className="w-3 h-3 fill-apple-orange text-apple-orange" />

@@ -4,12 +4,16 @@ export interface Property {
   purpose?: 'for-sale' | 'for-rent' | 'rent' | 'sale'; // Purpose for SEO slug and filtering
   make: string; // Property type/category: "House", "Apartment", "Plot", "Commercial", "Penthouse"
   model: string; // Title / Model name: "Luxury Contemporary Villa", "Executive Flat", etc.
+  title?: string; // Property title
+  propertyType?: string; // Property type name
   year: number; // Year built / established
   price: number; // Price in PKR
   mileage: number; // Total covered area in Sq. Ft.
   location: string;
   city: string;
   area?: string;
+  society?: string;
+  size?: string;
   images: string[];
   type: 'residential' | 'commercial' | 'plot' | 'car' | 'bike' | 'part';
   category?: {
@@ -23,6 +27,9 @@ export interface Property {
   engineSize: string; // E.g., "5 Beds", "3 Beds", "10 Marla", "1 Kanal"
   bedrooms?: number;
   bathrooms?: number;
+  beds?: number;
+  baths?: number;
+  furnishedStatus?: string;
   areaUnit?: 'marla' | 'kanal' | 'sqft' | 'sqyd';
   areaSize?: number;
   seller: {
@@ -35,6 +42,10 @@ export interface Property {
     rating: number;
   };
   createdAt: string;
+  last_confirmed_active?: string; // Tracks when seller last confirmed listing availability (separate from createdAt)
+  freshness_status?: 'fresh' | 'approaching_stale' | 'stale_pending_confirmation' | 'expired';
+  confirmation_prompt_sent_at?: string; // Timestamp when 60-day "Still Available?" prompt was issued
+  reactivated_at?: string; // Timestamp of latest reactivation
   specs?: {
     bedrooms?: number;
     bathrooms?: number;
@@ -98,6 +109,7 @@ export interface UserProfile {
   status: UserStatus;
   isPhoneVerified: boolean;
   isEmailVerified: boolean;
+  isVerified?: boolean;
   isOtpVerified?: boolean;
   phone_verified?: boolean;
   email_verified?: boolean;
@@ -567,36 +579,6 @@ export interface Banner {
   displayOrder: number;
   createdAt: string;
   updatedAt?: string;
-}
-
-export interface CarMake {
-  id: string | number;
-  name: string;
-  slug: string;
-  logoUrl?: string;
-  sortOrder: number;
-  isActive: boolean;
-}
-
-export interface CarModel {
-  id: string | number;
-  makeId: string | number;
-  name: string;
-  slug: string;
-  sortOrder: number;
-  isActive: boolean;
-}
-
-export interface CarVariant {
-  id: string | number;
-  modelId: string | number;
-  name: string;
-  slug: string;
-  engineCc?: string;
-  fuelType?: string;
-  transmission?: string;
-  bodyType?: string;
-  isActive: boolean;
 }
 
 export interface PopularStyle {

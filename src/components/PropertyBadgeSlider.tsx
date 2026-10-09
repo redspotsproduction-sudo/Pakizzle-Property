@@ -105,11 +105,11 @@ export default function PropertyBadgeSlider({ badges, className }: PropertyBadge
     <div
       ref={ref}
       className={cn(
-        "absolute bottom-3 right-3 z-20 pointer-events-none flex items-center justify-end select-none",
+        "absolute bottom-3 start-3 z-20 pointer-events-none flex items-center justify-start select-none max-w-[calc(100%-84px)] h-7",
         className
       )}
     >
-      <div className="relative overflow-hidden bg-black/65 backdrop-blur-md border border-white/15 px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1.5 min-h-[26px]">
+      <div className="relative overflow-hidden bg-black/75 backdrop-blur-md border border-white/20 px-2.5 h-7 rounded-full shadow-lg flex items-center gap-1.5 max-w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentBadge.label + currentIndex}
@@ -117,10 +117,10 @@ export default function PropertyBadgeSlider({ badges, className }: PropertyBadge
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-1.5 min-w-0"
           >
             <IconComponent className={cn("w-3.5 h-3.5 shrink-0", config.colorClass)} />
-            <span className="text-[11px] font-semibold text-white tracking-wide whitespace-nowrap">
+            <span className="text-[11px] font-semibold text-white tracking-wide truncate">
               {currentBadge.label}
             </span>
           </motion.div>

@@ -174,14 +174,15 @@ export default function PakStoryPlayer({
   };
 
   // Determine effective stream source based on quality selection
+  const fallbackUrl = '/videos/walkthrough_villa.mp4';
   const effectiveUrl =
-    selectedQuality === '360p' && video.renditions?.['360p']
+    (selectedQuality === '360p' && video.renditions?.['360p'])
       ? video.renditions['360p']
-      : selectedQuality === '480p' && video.renditions?.['480p']
+      : (selectedQuality === '480p' && video.renditions?.['480p'])
       ? video.renditions['480p']
-      : selectedQuality === '720p' && video.renditions?.['720p']
+      : (selectedQuality === '720p' && video.renditions?.['720p'])
       ? video.renditions['720p']
-      : video.videoUrl;
+      : (video.videoUrl || fallbackUrl);
 
   return (
     <div className="relative w-full h-full bg-black select-none overflow-hidden flex items-center justify-center">
@@ -193,10 +194,21 @@ export default function PakStoryPlayer({
         playsInline
         muted={isMuted}
         onClick={togglePlayPause}
-        onLoadedData={() => setIsLoadingVideo(false)}
-        onError={() => {
-          setVideoLoadError(true);
+        onLoadedData={() => {
           setIsLoadingVideo(false);
+          setVideoLoadError(false);
+        }}
+        onError={(e) => {
+          // If remote url failed, gracefully try local fallback video before giving up
+          const target = e.currentTarget;
+          if (target && target.src && !target.src.includes('/videos/walkthrough_')) {
+            target.src = fallbackUrl;
+            target.load();
+            target.play().catch(() => {});
+          } else {
+            setVideoLoadError(true);
+            setIsLoadingVideo(false);
+          }
         }}
         className="w-full h-full object-cover cursor-pointer"
         poster={video.thumbnailUrl}

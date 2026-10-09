@@ -26,7 +26,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import PakizzleLogo from './PakizzleLogo';
 
-export default function Footer({ onValuationClick }: { onValuationClick: () => void }) {
+export default function Footer({ onValuationClick }: { onValuationClick?: () => void }) {
   const currentYear = new Date().getFullYear();
 
   const footerSections = [

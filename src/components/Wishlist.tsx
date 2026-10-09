@@ -31,7 +31,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useWishlist } from "@/context/WishlistContext";
 import { MOCK_VEHICLES } from "@/data/mockVehicles";
-import VehicleCard from "./VehicleCard";
+import { VehicleCard } from "./PropertyCard";
 import Header from "./Header";
 import { cn } from "@/lib/utils";
 
