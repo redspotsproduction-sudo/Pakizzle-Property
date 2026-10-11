@@ -432,7 +432,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
       return (
         <div 
           className={cn(
-            "w-[304px] bg-[#0A0D14] text-white rounded-3xl border border-white/10 overflow-hidden relative transition-all duration-500 hover:border-amber-500/40 shadow-2xl flex flex-col p-5 shrink-0 select-none",
+            "w-[304px] bg-[var(--bg-surface)] text-white rounded-3xl border border-white/10 overflow-hidden relative transition-all duration-500 hover:border-gold-decoration/40 shadow-2xl flex flex-col p-5 shrink-0 select-none",
             className
           )}
           style={{ height: "640px" }}
@@ -444,19 +444,19 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
         >
           {/* Top Google Adsense Label Controls */}
           <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
-            <span className="text-[7px] font-black tracking-widest text-zinc-500 uppercase">Google Ad</span>
+            <span className="text-[7px] font-black tracking-widest text-apple-text-muted uppercase">Google Ad</span>
             <div className="flex items-center bg-black/60 backdrop-blur-md rounded-full px-1.5 py-0.5 border border-white/5">
               <button 
                 onClick={() => setShowAdInfo(!showAdInfo)}
-                className="text-[8px] font-bold text-zinc-400 hover:text-amber-400 transition-colors cursor-pointer"
+                className="text-[8px] font-bold text-apple-text-muted hover:text-gold-decoration transition-colors cursor-pointer"
                 title="Ad Info"
               >
-                <Info className="w-3 h-3 text-zinc-400" />
+                <Info className="w-3 h-3 text-apple-text-muted" />
               </button>
               <span className="w-[1px] h-2 bg-white/10 mx-1" />
               <button 
                 onClick={() => setIsVisible(false)}
-                className="text-zinc-400 hover:text-red-500 transition-all cursor-pointer"
+                className="text-apple-text-muted hover:text-red-500 transition-all cursor-pointer"
                 title="Hide Ad"
               >
                 <X className="w-3 h-3" />
@@ -471,18 +471,18 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-black/95 text-zinc-100 z-25 p-5 flex flex-col justify-center rounded-3xl border border-white/10"
+                className="absolute inset-0 bg-black/95 text-apple-gray z-25 p-5 flex flex-col justify-center rounded-3xl border border-white/10"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-amber-500">Live AdSense Skyscraper Slot</h4>
+                  <h4 className="text-xs font-black uppercase tracking-widest text-gold-decoration">Live AdSense Skyscraper Slot</h4>
                   <button onClick={() => setShowAdInfo(false)} className="p-1 rounded-full hover:bg-white/10">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <p className="text-[11px] text-zinc-400 leading-relaxed mb-4">
+                <p className="text-[11px] text-apple-text-muted leading-relaxed mb-4">
                   This 300x600 High-Impact Skyscraper is the highest CTR unit on Dubizzle. Integrate in your dashboard to start monetizing premium inventory.
                 </p>
-                <div className="text-[10px] font-mono bg-zinc-900/80 p-2 rounded text-amber-400 overflow-x-auto whitespace-pre">
+                <div className="text-[10px] font-mono bg-apple-text/80 p-2 rounded text-gold-decoration overflow-x-auto whitespace-pre">
                   {`AdClient: ${publisherId}\nAdSlot: ${slotId}`}
                 </div>
                 <button 
@@ -500,8 +500,8 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
             <h1 className="text-xl font-black tracking-[0.2em] text-white font-sans uppercase">
               {selectedAd.badge || "SPONSORED"}
             </h1>
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-zinc-700 to-transparent w-3/4 my-1.5" />
-            <p className="text-[9px] font-black tracking-[0.12em] text-zinc-400 uppercase">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-apple-text-muted to-transparent w-3/4 my-1.5" />
+            <p className="text-[9px] font-black tracking-[0.12em] text-apple-text-muted uppercase">
               {selectedAd.title}
             </p>
           </div>
@@ -509,39 +509,39 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
           {/* The Large Dynamic Highlight Banner Group */}
           <div className="text-center space-y-1 mb-4 flex-1 flex flex-col justify-center">
             {selectedAd.highlightPill && (
-              <div className="inline-block bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent px-3 py-1 rounded-full border border-amber-500/20 mx-auto">
-                <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">{selectedAd.highlightPill}</span>
+              <div className="inline-block bg-gradient-to-r from-gold-decoration/15 via-gold-decoration/5 to-transparent px-3 py-1 rounded-full border border-gold-decoration/20 mx-auto">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gold-decoration">{selectedAd.highlightPill}</span>
               </div>
             )}
             
             <div className="pt-2">
-              <p className="text-[10px] uppercase font-black tracking-wider text-zinc-400">{selectedAd.startPriceText || "Special Campaign offer"}</p>
-              <h2 className="text-2xl font-black text-amber-400 tracking-tight mt-0.5">{selectedAd.startPriceValue || "Tap to Learn More"}</h2>
+              <p className="text-[10px] uppercase font-black tracking-wider text-apple-text-muted">{selectedAd.startPriceText || "Special Campaign offer"}</p>
+              <h2 className="text-2xl font-black text-gold-decoration tracking-tight mt-0.5">{selectedAd.startPriceValue || "Tap to Learn More"}</h2>
             </div>
 
             {/* Campaign Promise details */}
             <div className="pt-4 space-y-2 text-center bg-white/5 p-3 rounded-2xl border border-white/5 shadow-inner">
-              <p className="text-[9px] font-black uppercase tracking-wider text-zinc-300 leading-tight">
+              <p className="text-[9px] font-black uppercase tracking-wider text-apple-border leading-tight">
                 {selectedAd.description}
               </p>
               
               <div className="grid grid-cols-3 gap-1.5 pt-1">
                 {selectedAd.spec1Value && (
-                  <div className="flex flex-col p-1.5 bg-zinc-900/60 rounded-xl border border-white/5">
-                    <span className="text-amber-400 text-[10px] font-black">{selectedAd.spec1Value}</span>
-                    <span className="text-[7px] text-zinc-400 font-bold uppercase leading-none mt-1">{selectedAd.spec1Title}</span>
+                  <div className="flex flex-col p-1.5 bg-apple-text/60 rounded-xl border border-white/5">
+                    <span className="text-gold-decoration text-[10px] font-black">{selectedAd.spec1Value}</span>
+                    <span className="text-[7px] text-apple-text-muted font-bold uppercase leading-none mt-1">{selectedAd.spec1Title}</span>
                   </div>
                 )}
                 {selectedAd.spec2Value && (
-                  <div className="flex flex-col p-1.5 bg-zinc-900/60 rounded-xl border border-white/5">
-                    <span className="text-amber-400 text-[10px] font-black">{selectedAd.spec2Value}</span>
-                    <span className="text-[7px] text-zinc-400 font-bold uppercase leading-none mt-1">{selectedAd.spec2Title}</span>
+                  <div className="flex flex-col p-1.5 bg-apple-text/60 rounded-xl border border-white/5">
+                    <span className="text-gold-decoration text-[10px] font-black">{selectedAd.spec2Value}</span>
+                    <span className="text-[7px] text-apple-text-muted font-bold uppercase leading-none mt-1">{selectedAd.spec2Title}</span>
                   </div>
                 )}
                 {selectedAd.spec3Value && (
-                  <div className="flex flex-col p-1.5 bg-zinc-900/60 rounded-xl border border-white/5">
-                    <span className="text-amber-400 text-[10px] font-black">{selectedAd.spec3Value}</span>
-                    <span className="text-[7px] text-zinc-400 font-bold uppercase leading-none mt-1">{selectedAd.spec3Title}</span>
+                  <div className="flex flex-col p-1.5 bg-apple-text/60 rounded-xl border border-white/5">
+                    <span className="text-gold-decoration text-[10px] font-black">{selectedAd.spec3Value}</span>
+                    <span className="text-[7px] text-apple-text-muted font-bold uppercase leading-none mt-1">{selectedAd.spec3Title}</span>
                   </div>
                 )}
               </div>
@@ -549,7 +549,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
           </div>
 
           {/* Luxury Property Photo Gallery Section */}
-          <div className="relative rounded-2xl overflow-hidden h-[210px] border border-white/10 shadow-lg group bg-zinc-900 flex items-center justify-center">
+          <div className="relative rounded-2xl overflow-hidden h-[210px] border border-white/10 shadow-lg group bg-apple-text flex items-center justify-center">
             {selectedAd.imageUrl ? (
               <img 
                 src={selectedAd.imageUrl} 
@@ -564,10 +564,10 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
               <div>
-                <p className="text-[8px] font-extrabold uppercase tracking-widest text-zinc-400">Featured Placement</p>
+                <p className="text-[8px] font-extrabold uppercase tracking-widest text-apple-text-muted">Featured Placement</p>
                 <h3 className="text-xs font-black text-white truncate drop-shadow-md">{selectedAd.badge}</h3>
               </div>
-              <Sparkles className="w-4.5 h-4.5 text-amber-400 animate-pulse" />
+              <Sparkles className="w-4.5 h-4.5 text-gold-decoration animate-pulse" />
             </div>
           </div>
 
@@ -577,7 +577,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
             <a 
               href={selectedAd.link} 
               onClick={handleAdClick}
-              className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black text-[11px] font-black uppercase py-2.5 px-3 rounded-xl flex items-center justify-center gap-1 transition-all duration-300 active:scale-95 shadow-lg shadow-amber-500/10 text-center"
+              className="flex-1 bg-gradient-to-r from-gold-decoration to-gold-decoration hover:from-gold-decoration hover:to-amber-700 text-black text-[11px] font-black uppercase py-2.5 px-3 rounded-xl flex items-center justify-center gap-1 transition-all duration-300 active:scale-95 shadow-lg shadow-gold-decoration/10 text-center"
             >
               <span>{selectedAd.cta}</span>
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5px]" />
@@ -608,14 +608,14 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
                 <div className="bg-black rounded-xs" />
               </div>
               {/* Tooltip on hover */}
-              <div className="absolute right-0 bottom-12 bg-black border border-white/10 text-[8px] font-extrabold text-amber-400 py-1 px-1.5 rounded uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl">
+              <div className="absolute right-0 bottom-12 bg-black border border-white/10 text-[8px] font-extrabold text-gold-decoration py-1 px-1.5 rounded uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl">
                 Scan for VIP Access
               </div>
             </div>
           </div>
 
           {/* Real Estate Audit Credentials Disclaimer text in extremely small type sizes to resemble professional dubizzle ads */}
-          <p className="text-[7px] text-zinc-500 text-center leading-none mt-3 tracking-tighter uppercase">
+          <p className="text-[7px] text-apple-text-muted text-center leading-none mt-3 tracking-tighter uppercase">
             {selectedAd.disclaimer || "*T&C APPLY | DYNAMIC MONETIZATION ACTIVE"}
           </p>
         </div>
@@ -781,7 +781,7 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 bg-apple-text text-apple-bg dark:bg-apple-bg dark:text-apple-text z-25 p-5 flex flex-col justify-center rounded-3xl"
               >
-                <h4 className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">In-Feed Google Ad Slot</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-gold-decoration mb-1">In-Feed Google Ad Slot</h4>
                 <p className="text-[11px] text-apple-text-muted/80 leading-relaxed mb-3">
                   This responsive native slot adapts automatically to match the height and styling of neighbor vehicle listings. It boosts your overall CTR by 45%.
                 </p>
@@ -813,13 +813,13 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
                   referrerPolicy="no-referrer"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-zinc-805 dark:to-zinc-900/60 flex flex-col items-center justify-center p-4 relative group-hover:scale-105 transition-transform duration-[1000ms]">
+                <div className="w-full h-full bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-zinc-805 dark:to-apple-text/60 flex flex-col items-center justify-center p-4 relative group-hover:scale-105 transition-transform duration-[1000ms]">
                   <Car className="w-10 h-10 text-apple-blue/30 dark:text-apple-blue/20 mb-1.5 animate-pulse" />
                   <span className="text-[9px] font-black tracking-widest text-apple-text-muted/65 uppercase">{selectedAd.badge} Premium</span>
                 </div>
               )}
               
-              <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-amber-500/90 dark:bg-amber-600/95 backdrop-blur-md text-[8px] font-black text-white uppercase tracking-wider flex items-center gap-1 z-10 transition-all duration-300">
+              <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-gold-decoration/90 dark:bg-gold-decoration/95 backdrop-blur-md text-[8px] font-black text-white uppercase tracking-wider flex items-center gap-1 z-10 transition-all duration-300">
                 <Sparkles className="w-2.5 h-2.5 text-white animate-pulse" />
                 <span>Sponsored Partner</span>
               </div>
@@ -836,8 +836,8 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
             <div>
               {/* Header Sponsor info matching dealValue layout */}
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/25">
-                  <Sparkles className="w-2.5 h-2.5 text-amber-500 animate-pulse" />
+                <span className="px-2.5 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1 bg-gold-decoration/10 text-gold-decoration dark:text-gold-decoration border-gold-decoration/25">
+                  <Sparkles className="w-2.5 h-2.5 text-gold-decoration animate-pulse" />
                   Featured Partner
                 </span>
                 <span className="text-[10px] text-apple-text-muted truncate">
@@ -873,8 +873,8 @@ export const GoogleAdSenseSlot: React.FC<GoogleAdSenseSlotProps> = ({
             {/* Footer with buttons and certified indicator */}
             <div className="mt-auto pt-3 border-t border-apple-border/10 flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 text-apple-text-muted font-bold text-[10px] uppercase shrink-0">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                <span className="text-emerald-500 text-[9px]">Verified Ad</span>
+                <ShieldCheck className="w-4 h-4 text-apple-green" />
+                <span className="text-apple-green text-[9px]">Verified Ad</span>
               </div>
               <a 
                 href={selectedAd.link}

@@ -156,16 +156,16 @@ export default function BannerManagement() {
             <Megaphone className="w-3.5 h-3.5" />
             Media & Graphics Shard
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Banner Management
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Deploy promotional assets, organize home screen sliders, and customize geo-targeted graphics campaigns.
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
-          <Badge className="rounded-lg h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-[#F5F5F7] dark:bg-white/5 text-[#86868B] border-none shadow-sm">
+          <Badge className="rounded-lg h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)] border-none shadow-sm">
             {banners.length} Active Nodes
           </Badge>
         </div>
@@ -178,15 +178,15 @@ export default function BannerManagement() {
           animate={{ opacity: 1, x: 0 }}
           className="w-full lg:w-[450px] shrink-0"
         >
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 p-8">
+          <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 p-8">
             <div className="space-y-4">
               <div className="w-12 h-12 bg-apple-blue/10 rounded-2xl flex items-center justify-center mb-4">
                 <Plus className="w-6 h-6 text-apple-blue" />
               </div>
-              <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-2xl font-semibold tracking-tight text-apple-text dark:text-apple-gray">
                 {formData.id ? 'Edit Banner' : 'Create Banner'}
               </h2>
-              <p className="text-zinc-500 text-xs">
+              <p className="text-apple-text-muted text-xs">
                 Configure your promotional canvas with high-precision targeting.
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function BannerManagement() {
               {/* Image Pipeline */}
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Banner Asset</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Banner Asset</label>
                   <button 
                     type="button" 
                     onClick={() => fileInputRef.current?.click()}
@@ -218,7 +218,7 @@ export default function BannerManagement() {
                 <div className="group relative">
                   <div className={cn(
                     "w-full aspect-[21/9] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all duration-500 overflow-hidden",
-                    formData.image && !imageError ? "border-transparent" : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900"
+                    formData.image && !imageError ? "border-transparent" : "border-apple-border dark:border-apple-surface bg-apple-surface dark:bg-apple-text"
                   )}>
                     {formData.image && !imageError ? (
                       <>
@@ -253,14 +253,14 @@ export default function BannerManagement() {
                       </>
                     ) : (
                       <div className="flex flex-col items-center gap-3 p-4 text-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                        <div className="w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center">
-                          <ImageIcon className="w-6 h-6 text-zinc-400" />
+                        <div className="w-12 h-12 bg-apple-gray dark:bg-apple-surface rounded-2xl flex items-center justify-center">
+                          <ImageIcon className="w-6 h-6 text-apple-text-muted" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-zinc-600 dark:text-zinc-400">
+                          <p className="text-xs font-bold text-apple-text-muted dark:text-apple-text-muted">
                             {imageError ? 'Invalid format/URL' : 'Drop creative asset or click to upload'}
                           </p>
-                          <p className="text-[10px] text-zinc-400 mt-1">Recommended: 21:9 ratio</p>
+                          <p className="text-[10px] text-apple-text-muted mt-1">Recommended: 21:9 ratio</p>
                         </div>
                       </div>
                     )}
@@ -269,7 +269,7 @@ export default function BannerManagement() {
                 
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                    <LinkIcon className="w-3.5 h-3.5 text-zinc-400" />
+                    <LinkIcon className="w-3.5 h-3.5 text-apple-text-muted" />
                   </div>
                   <Input 
                     placeholder="Or paste external URL..." 
@@ -278,7 +278,7 @@ export default function BannerManagement() {
                       setFormData(prev => ({ ...prev, image: e.target.value }));
                       setImageError(false);
                     }}
-                    className="pl-10 h-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                    className="pl-10 h-11 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface"
                   />
                 </div>
               </div>
@@ -286,23 +286,23 @@ export default function BannerManagement() {
               {/* Identity & Logic */}
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Creative Name</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Creative Name</label>
                   <Input 
                     placeholder="E.g. Summer Collection 2024" 
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="h-12 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                    className="h-12 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Interaction Type</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Interaction Type</label>
                     <Select 
                       value={formData.type} 
                       onValueChange={(v: any) => setFormData(prev => ({ ...prev, type: v, targetId: '', externalLink: '' }))}
                     >
-                      <SelectTrigger className="h-12 rounded-xl border-zinc-200 dark:border-zinc-800">
+                      <SelectTrigger className="h-12 rounded-xl border-apple-border dark:border-apple-surface">
                         <SelectValue placeholder="Type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -314,12 +314,12 @@ export default function BannerManagement() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Status</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Status</label>
                     <Select 
                       value={formData.status} 
                       onValueChange={(v: any) => setFormData(prev => ({ ...prev, status: v }))}
                     >
-                      <SelectTrigger className="h-12 rounded-xl border-zinc-200 dark:border-zinc-800">
+                      <SelectTrigger className="h-12 rounded-xl border-apple-border dark:border-apple-surface">
                         <SelectValue placeholder="Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -340,12 +340,12 @@ export default function BannerManagement() {
                       exit={{ opacity: 0, height: 0 }}
                       className="space-y-2"
                     >
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Target Category</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Target Category</label>
                       <Select 
                         value={formData.targetId} 
                         onValueChange={(v) => setFormData(prev => ({ ...prev, targetId: v }))}
                       >
-                        <SelectTrigger className="h-12 rounded-xl border-zinc-200 dark:border-zinc-800">
+                        <SelectTrigger className="h-12 rounded-xl border-apple-border dark:border-apple-surface">
                           <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
                         <SelectContent className="max-h-60">
@@ -365,42 +365,42 @@ export default function BannerManagement() {
                       exit={{ opacity: 0, height: 0 }}
                       className="space-y-2"
                     >
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Destination URL</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Destination URL</label>
                       <Input 
                         placeholder="https://example.com" 
                         value={formData.externalLink}
                         onChange={(e) => setFormData(prev => ({ ...prev, externalLink: e.target.value }))}
-                        className="h-12 rounded-xl border-zinc-200 dark:border-zinc-800"
+                        className="h-12 rounded-xl border-apple-border dark:border-apple-surface"
                       />
                     </motion.div>
                   )}
                 </AnimatePresence>
 
                 {/* Geo-Targeting */}
-                <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 space-y-4">
+                <div className="p-4 rounded-2xl bg-apple-surface dark:bg-apple-text/50 border border-apple-border dark:border-apple-surface space-y-4">
                   <div className="flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-zinc-400" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Geo-Targeting Engine</span>
+                    <Globe className="w-4 h-4 text-apple-text-muted" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Geo-Targeting Engine</span>
                   </div>
                   <div className="grid grid-cols-1 gap-4">
                     <Input 
                       placeholder="Country" 
                       value={formData.country}
                       onChange={(e) => setFormData(p => ({ ...p, country: e.target.value }))}
-                      className="h-10 rounded-xl border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                      className="h-10 rounded-xl border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <Input 
                         placeholder="State" 
                         value={formData.state}
                         onChange={(e) => setFormData(p => ({ ...p, state: e.target.value }))}
-                        className="h-10 rounded-xl border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                        className="h-10 rounded-xl border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                       />
                       <Input 
                         placeholder="City" 
                         value={formData.city}
                         onChange={(e) => setFormData(p => ({ ...p, city: e.target.value }))}
-                        className="h-10 rounded-xl border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                        className="h-10 rounded-xl border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                       />
                     </div>
                   </div>
@@ -419,10 +419,10 @@ export default function BannerManagement() {
                   <Button 
                     type="button"
                     variant="outline"
-                    className="h-14 w-14 p-0 rounded-2xl border-zinc-200 dark:border-zinc-800"
+                    className="h-14 w-14 p-0 rounded-2xl border-apple-border dark:border-apple-surface"
                     onClick={resetForm}
                   >
-                    <X className="w-5 h-5 text-zinc-400" />
+                    <X className="w-5 h-5 text-apple-text-muted" />
                   </Button>
                 )}
               </div>
@@ -436,13 +436,13 @@ export default function BannerManagement() {
           {/* Search bar for banners */}
           <div className="flex items-center justify-between gap-4">
             <div className="relative group min-w-[200px] sm:w-64">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
               <input 
                 type="text"
                 placeholder="Search creative..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           </div>
@@ -461,7 +461,7 @@ export default function BannerManagement() {
                   transition={{ delay: index * 0.05 }}
                   className="group relative"
                 >
-                  <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+                  <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                     <div className="aspect-[21/9] relative overflow-hidden">
                       <img 
                         src={banner.image} 
@@ -507,21 +507,21 @@ export default function BannerManagement() {
                       
                       <div className="absolute top-4 right-4 flex gap-2">
                         {banner.status === 'active' ? (
-                          <Badge className="bg-emerald-500/10 text-emerald-500 border-none rounded-lg text-[9px] font-black uppercase">Active</Badge>
+                          <Badge className="bg-apple-green/10 text-apple-green border-none rounded-lg text-[9px] font-black uppercase">Active</Badge>
                         ) : (
-                          <Badge variant="outline" className="text-zinc-400 border-zinc-200 dark:border-zinc-800 rounded-lg text-[9px] font-black uppercase">Inactive</Badge>
+                          <Badge variant="outline" className="text-apple-text-muted border-apple-border dark:border-apple-surface rounded-lg text-[9px] font-black uppercase">Inactive</Badge>
                         )}
                       </div>
                     </div>
                     
                     <div className="p-6">
                       <div className="flex flex-wrap items-center gap-4 text-xs">
-                        <div className="flex items-center gap-1.5 text-zinc-500">
+                        <div className="flex items-center gap-1.5 text-apple-text-muted">
                           <GripVertical className="w-4 h-4" />
                           <span className="font-mono">#{banner.displayOrder}</span>
                         </div>
                         {banner.country && (
-                          <div className="flex items-center gap-1.5 text-zinc-500">
+                          <div className="flex items-center gap-1.5 text-apple-text-muted">
                             <Globe className="w-3.5 h-3.5" />
                             <span>{banner.country}</span>
                           </div>
@@ -541,11 +541,11 @@ export default function BannerManagement() {
 
             {filteredBanners.length === 0 && !isLoading && (
               <div className="col-span-full py-24 text-center">
-                <div className="w-20 h-20 bg-zinc-50 dark:bg-zinc-900 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <Megaphone className="w-8 h-8 text-zinc-300" />
+                <div className="w-20 h-20 bg-apple-surface dark:bg-apple-text rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <Megaphone className="w-8 h-8 text-apple-border" />
                 </div>
-                <h3 className="text-xl font-bold text-zinc-400">The stage is empty.</h3>
-                <p className="text-zinc-500 mt-2">Start by creating your first promotional narrative.</p>
+                <h3 className="text-xl font-bold text-apple-text-muted">The stage is empty.</h3>
+                <p className="text-apple-text-muted mt-2">Start by creating your first promotional narrative.</p>
               </div>
             )}
           </div>

@@ -223,31 +223,31 @@ export default function PakStoriesUploadModal({
         initial={{ opacity: 0, scale: 0.96, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 15 }}
-        className="relative w-full max-w-4xl bg-white dark:bg-[#161618] rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[92vh] z-10"
+        className="relative w-full max-w-4xl bg-white dark:bg-[var(--bg-surface)] rounded-3xl shadow-2xl border border-apple-border dark:border-white/10 overflow-hidden flex flex-col max-h-[92vh] z-10"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-[#1A1A1D]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-apple-border dark:border-white/10 bg-apple-surface/80 dark:bg-[var(--bg-surface)]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#5B2A86] to-[#8A3DB8] flex items-center justify-center shadow-md">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--accent)] to-[var(--accent)] flex items-center justify-center shadow-md">
               <VideoIcon className="w-4 h-4 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-extrabold text-slate-900 dark:text-white">
+                <h2 className="text-base font-extrabold text-apple-text dark:text-white">
                   PakStories™ Walkthrough Creator
                 </h2>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#5B2A86]/10 text-[#5B2A86] dark:bg-[#C9A227]/15 dark:text-[#C9A227]">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[var(--accent)]/10 text-[var(--accent)] dark:bg-[#C9A227]/15 dark:text-[#C9A227]">
                   Verified Only
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-[#8E8E93]">
+              <p className="text-xs text-apple-text-muted dark:text-[var(--text-secondary)]">
                 Upload 9:16 vertical walkthroughs linked directly to your active listings
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/10 transition-colors"
+            className="p-2 rounded-xl text-apple-text-muted hover:text-apple-text-muted dark:text-apple-text-muted dark:hover:text-white hover:bg-apple-border/50 dark:hover:bg-white/10 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -257,34 +257,34 @@ export default function PakStoriesUploadModal({
         <div className="flex-1 overflow-y-auto p-6">
           {loadingEligibility ? (
             <div className="py-20 flex flex-col items-center justify-center gap-3">
-              <RefreshCw className="w-8 h-8 text-[#5B2A86] dark:text-[#C9A227] animate-spin" />
-              <p className="text-xs font-semibold text-slate-500">Verifying Shanakht™ permission layer...</p>
+              <RefreshCw className="w-8 h-8 text-[var(--accent)] dark:text-[#C9A227] animate-spin" />
+              <p className="text-xs font-semibold text-apple-text-muted">Verifying Shanakht™ permission layer...</p>
             </div>
           ) : !eligibility?.canUpload ? (
             /* ================= GATED UNVERIFIED STATE ================= */
             <div className="py-12 px-4 max-w-lg mx-auto text-center flex flex-col items-center">
-              <div className="w-16 h-16 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4">
-                <Lock className="w-8 h-8 text-amber-500" />
+              <div className="w-16 h-16 rounded-3xl bg-gold-decoration/10 border border-gold-decoration/20 flex items-center justify-center mb-4">
+                <Lock className="w-8 h-8 text-gold-decoration" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+              <h3 className="text-xl font-bold text-apple-text dark:text-white mb-2">
                 Verified Creator Privilege Required
               </h3>
-              <p className="text-sm text-slate-600 dark:text-[#8E8E93] mb-6 leading-relaxed">
+              <p className="text-sm text-apple-text-muted dark:text-[var(--text-secondary)] mb-6 leading-relaxed">
                 {eligibility?.videoSuspended
                   ? `Your video upload privilege is currently suspended: ${eligibility?.suspensionReason || 'Violation of guidelines'}. Contact administration for reinstatement.`
                   : 'To protect buyers against spam and unverified listings, PakStories™ property walkthroughs are strictly restricted to identity-verified sellers and registered real estate agencies.'}
               </p>
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-left w-full mb-6 space-y-2">
+              <div className="p-4 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-left w-full mb-6 space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-slate-500">Identity Status:</span>
-                  <span className="font-bold capitalize text-amber-500">
+                  <span className="font-semibold text-apple-text-muted">Identity Status:</span>
+                  <span className="font-bold capitalize text-gold-decoration">
                     {eligibility?.identityStatus || 'Unverified'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-slate-500">Business Agency Status:</span>
-                  <span className="font-bold capitalize text-amber-500">
+                  <span className="font-semibold text-apple-text-muted">Business Agency Status:</span>
+                  <span className="font-bold capitalize text-gold-decoration">
                     {eligibility?.businessStatus || 'Unverified'}
                   </span>
                 </div>
@@ -294,13 +294,13 @@ export default function PakStoriesUploadModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5"
+                  className="px-5 py-2.5 rounded-xl border border-apple-border dark:border-white/10 text-xs font-bold text-apple-text-muted dark:text-apple-border hover:bg-apple-gray dark:hover:bg-white/5"
                 >
                   Close
                 </button>
                 <a
                   href="/verification"
-                  className="px-6 py-2.5 rounded-xl bg-[#5B2A86] hover:bg-[#48206C] text-white text-xs font-bold shadow-md flex items-center gap-1.5"
+                  className="px-6 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent)] text-white text-xs font-bold shadow-md flex items-center gap-1.5"
                 >
                   <ShieldCheck className="w-4 h-4" />
                   <span>Submit Shanakht™ Verification</span>
@@ -314,39 +314,39 @@ export default function PakStoriesUploadModal({
               <div className="lg:col-span-7 space-y-5">
                 {/* 1. Mandatory Listing Attachment */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-500 dark:text-[#8E8E93] mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-apple-text-muted dark:text-[var(--text-secondary)] mb-1.5">
                     1. Attach to Verified Listing <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={selectedListingId}
                     onChange={(e) => handleListingSelect(e.target.value)}
                     required
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-[#5B2A86] dark:focus:border-[#C9A227]"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold text-apple-text dark:text-white outline-none focus:border-[var(--accent)] dark:focus:border-[#C9A227]"
                   >
                     <option value="" disabled>Select listing to showcase...</option>
                     {eligibility.eligibleListings?.map(l => (
-                      <option key={l.id} value={l.id} className="text-black dark:text-white dark:bg-[#1E1E20]">
+                      <option key={l.id} value={l.id} className="text-black dark:text-white dark:bg-[var(--bg-surface)]">
                         #{l.referenceId} · {l.title} ({l.location}, {l.city})
                       </option>
                     ))}
                   </select>
-                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
-                    <Info className="w-3 h-3 text-[#5B2A86] dark:text-[#C9A227]" />
+                  <p className="text-[11px] text-apple-text-muted mt-1 flex items-center gap-1">
+                    <Info className="w-3 h-3 text-[var(--accent)] dark:text-[#C9A227]" />
                     Every video walkthrough must be attached to a verified listing to prevent lifestyle spam.
                   </p>
                 </div>
 
                 {/* 2. File Upload Dropzone */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-500 dark:text-[#8E8E93] mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-apple-text-muted dark:text-[var(--text-secondary)] mb-1.5">
                     2. Vertical Video File (9:16) <span className="text-red-500">*</span>
                   </label>
-                  <label className="border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-[#5B2A86] dark:hover:border-[#C9A227] rounded-2xl p-5 flex flex-col items-center justify-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-white/[0.02]">
-                    <Upload className="w-8 h-8 text-[#5B2A86] dark:text-[#C9A227] mb-2" />
-                    <span className="text-xs font-bold text-slate-800 dark:text-white mb-0.5">
+                  <label className="border-2 border-dashed border-apple-border dark:border-white/15 hover:border-[var(--accent)] dark:hover:border-[#C9A227] rounded-2xl p-5 flex flex-col items-center justify-center cursor-pointer transition-colors bg-apple-surface/50 dark:bg-white/[0.02]">
+                    <Upload className="w-8 h-8 text-[var(--accent)] dark:text-[#C9A227] mb-2" />
+                    <span className="text-xs font-bold text-apple-surface dark:text-white mb-0.5">
                       {videoFile ? videoFile.name : 'Choose 9:16 Video File'}
                     </span>
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-apple-text-muted">
                       MP4 or MOV · Max 90 seconds · Max 75MB
                     </span>
                     <input
@@ -359,38 +359,38 @@ export default function PakStoriesUploadModal({
                 </div>
 
                 {/* 3. Lightweight Built-in Trim Tool */}
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
+                <div className="p-4 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
-                      <Scissors className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />
+                    <span className="text-xs font-bold text-apple-surface dark:text-white flex items-center gap-1.5">
+                      <Scissors className="w-3.5 h-3.5 text-[var(--accent)] dark:text-[#C9A227]" />
                       Built-in Trim Tool
                     </span>
-                    <span className="text-xs font-bold text-[#5B2A86] dark:text-[#C9A227]">
+                    <span className="text-xs font-bold text-[var(--accent)] dark:text-[#C9A227]">
                       {trimRange.endSec - trimRange.startSec}s selected (Max 90s)
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <span className="text-[10px] text-slate-400 font-semibold block mb-1">Start Cut (sec)</span>
+                      <span className="text-[10px] text-apple-text-muted font-semibold block mb-1">Start Cut (sec)</span>
                       <input
                         type="number"
                         min="0"
                         max={trimRange.endSec - 1}
                         value={trimRange.startSec}
                         onChange={(e) => setTrimRange({ ...trimRange, startSec: Number(e.target.value) })}
-                        className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-[#1E1E20] border border-slate-200 dark:border-white/10 text-xs font-bold"
+                        className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-[var(--bg-surface)] border border-apple-border dark:border-white/10 text-xs font-bold"
                       />
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 font-semibold block mb-1">End Cut (sec)</span>
+                      <span className="text-[10px] text-apple-text-muted font-semibold block mb-1">End Cut (sec)</span>
                       <input
                         type="number"
                         min={trimRange.startSec + 1}
                         max={Math.max(90, duration)}
                         value={trimRange.endSec}
                         onChange={(e) => setTrimRange({ ...trimRange, endSec: Number(e.target.value) })}
-                        className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-[#1E1E20] border border-slate-200 dark:border-white/10 text-xs font-bold"
+                        className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-[var(--bg-surface)] border border-apple-border dark:border-white/10 text-xs font-bold"
                       />
                     </div>
                   </div>
@@ -398,47 +398,47 @@ export default function PakStoriesUploadModal({
 
                 {/* 4. On-Screen Caption & Specs Overlays */}
                 <div className="space-y-3">
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-500 dark:text-[#8E8E93]">
+                  <label className="block text-xs font-black uppercase tracking-wider text-apple-text-muted dark:text-[var(--text-secondary)]">
                     3. On-Screen Captions & Baked Overlays
                   </label>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[10px] font-bold text-slate-400 block mb-1">Price Badge</label>
+                      <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Price Badge</label>
                       <input
                         type="text"
                         value={overlayPrice}
                         onChange={(e) => setOverlayPrice(e.target.value)}
                         placeholder="PKR 8.5 Crore"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                        className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                       />
                     </div>
                     <div>
-                      <label className="text-[10px] font-bold text-slate-400 block mb-1">Location Label</label>
+                      <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Location Label</label>
                       <input
                         type="text"
                         value={overlayLocation}
                         onChange={(e) => setOverlayLocation(e.target.value)}
                         placeholder="DHA Phase 6 · Lahore"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                        className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                       />
                     </div>
                   </div>
 
                   {/* Key spec chips */}
                   <div>
-                    <label className="text-[10px] font-bold text-slate-400 block mb-1">Key Specs Chips</label>
+                    <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Key Specs Chips</label>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {overlaySpecs.map((s, idx) => (
                         <span
                           key={idx}
-                          className="px-2.5 py-1 rounded-lg bg-[#5B2A86]/10 text-[#5B2A86] dark:bg-[#C9A227]/15 dark:text-[#C9A227] text-xs font-bold flex items-center gap-1.5"
+                          className="px-2.5 py-1 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] dark:bg-[#C9A227]/15 dark:text-[#C9A227] text-xs font-bold flex items-center gap-1.5"
                         >
                           {s}
                           <button
                             type="button"
                             onClick={() => handleRemoveSpec(idx)}
-                            className="text-slate-400 hover:text-red-500"
+                            className="text-apple-text-muted hover:text-red-500"
                           >
                             ×
                           </button>
@@ -451,7 +451,7 @@ export default function PakStoriesUploadModal({
                         value={specInput}
                         onChange={(e) => setSpecInput(e.target.value)}
                         placeholder="Add spec (e.g. 'Basement', 'Corner Plot')..."
-                        className="flex-1 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold"
+                        className="flex-1 px-3 py-1.5 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-semibold"
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
                             e.preventDefault();
@@ -462,7 +462,7 @@ export default function PakStoriesUploadModal({
                       <button
                         type="button"
                         onClick={handleAddSpec}
-                        className="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-white/10 text-xs font-bold hover:bg-slate-300"
+                        className="px-3 py-1.5 rounded-xl bg-apple-border dark:bg-white/10 text-xs font-bold hover:bg-apple-border"
                       >
                         Add
                       </button>
@@ -473,12 +473,12 @@ export default function PakStoriesUploadModal({
 
               {/* Right Column: Live 9:16 Video Preview & Processing Safeguards */}
               <div className="lg:col-span-5 flex flex-col items-center">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                <span className="text-xs font-black uppercase tracking-wider text-apple-text-muted mb-2">
                   Live Vertical Preview (9:16)
                 </span>
 
                 {/* Vertical Phone Screen Mockup */}
-                <div className="relative w-[240px] h-[426px] bg-black rounded-[36px] overflow-hidden shadow-2xl border-4 border-slate-800 flex flex-col justify-between p-3.5 text-white">
+                <div className="relative w-[240px] h-[426px] bg-black rounded-[36px] overflow-hidden shadow-2xl border-4 border-apple-surface flex flex-col justify-between p-3.5 text-white">
                   {/* Background Video / Placeholder */}
                   {previewUrl ? (
                     <video
@@ -494,8 +494,8 @@ export default function PakStoriesUploadModal({
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-b from-neutral-900 to-black flex flex-col items-center justify-center p-4 text-center">
-                      <VideoIcon className="w-10 h-10 text-slate-600 mb-2" />
-                      <span className="text-[11px] font-bold text-slate-400">Select a video file to preview vertical rendering</span>
+                      <VideoIcon className="w-10 h-10 text-apple-text-muted mb-2" />
+                      <span className="text-[11px] font-bold text-apple-text-muted">Select a video file to preview vertical rendering</span>
                     </div>
                   )}
 
@@ -504,7 +504,7 @@ export default function PakStoriesUploadModal({
 
                   {/* Top Header Overlay */}
                   <div className="relative z-10 flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-black/50 backdrop-blur-md border border-white/20 text-[#F0A830]">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-black/50 backdrop-blur-md border border-white/20 text-[var(--gold-decoration)]">
                       {overlayCustomTag || 'Walkthrough'}
                     </span>
                     <span className="text-[10px] font-bold text-white/80 bg-black/40 px-2 py-0.5 rounded-full">
@@ -514,12 +514,12 @@ export default function PakStoriesUploadModal({
 
                   {/* Bottom Information Overlay (Baked brand typography) */}
                   <div className="relative z-10 space-y-1.5">
-                    <div className="inline-block px-2.5 py-1 rounded-xl bg-[#5B2A86] text-white text-xs font-black shadow-md">
+                    <div className="inline-block px-2.5 py-1 rounded-xl bg-[var(--accent)] text-white text-xs font-black shadow-md">
                       {overlayPrice || 'PKR Price'}
                     </div>
 
                     <div className="flex items-center gap-1 text-[11px] font-bold text-white drop-shadow-md">
-                      <MapPin className="w-3 h-3 text-[#F0A830] shrink-0" />
+                      <MapPin className="w-3 h-3 text-[var(--gold-decoration)] shrink-0" />
                       <span className="truncate">{overlayLocation || 'Location & City'}</span>
                     </div>
 
@@ -542,49 +542,49 @@ export default function PakStoriesUploadModal({
                 </div>
 
                 {/* Safeguards Summary */}
-                <div className="w-full mt-4 space-y-1.5 text-[11px] text-slate-500">
+                <div className="w-full mt-4 space-y-1.5 text-[11px] text-apple-text-muted">
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-apple-green" />
                       Multi-tier Transcoding:
                     </span>
-                    <span className="font-bold text-slate-700 dark:text-zinc-300">360p · 480p · 720p</span>
+                    <span className="font-bold text-apple-text-muted dark:text-apple-border">360p · 480p · 720p</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1">
-                      <FileCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      <FileCheck className="w-3.5 h-3.5 text-apple-green" />
                       Security Virus / Format Scan:
                     </span>
-                    <span className="font-bold text-emerald-500">Clean / Passed</span>
+                    <span className="font-bold text-apple-green">Clean / Passed</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 text-[#5B2A86] dark:text-[#C9A227]" />
+                      <Sparkles className="w-3.5 h-3.5 text-[var(--accent)] dark:text-[#C9A227]" />
                       AI Content Pre-Screening:
                     </span>
-                    <span className="font-bold text-slate-700 dark:text-zinc-300">Enabled</span>
+                    <span className="font-bold text-apple-text-muted dark:text-apple-border">Enabled</span>
                   </div>
                 </div>
               </div>
 
               {/* Form Footer Action */}
-              <div className="lg:col-span-12 pt-4 border-t border-slate-200 dark:border-white/10 flex items-center justify-between">
-                <span className="text-xs text-slate-400">
-                  Submitted videos enter <span className="font-bold text-amber-500">pending_review</span> status before public broadcast.
+              <div className="lg:col-span-12 pt-4 border-t border-apple-border dark:border-white/10 flex items-center justify-between">
+                <span className="text-xs text-apple-text-muted">
+                  Submitted videos enter <span className="font-bold text-gold-decoration">pending_review</span> status before public broadcast.
                 </span>
 
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5"
+                    className="px-5 py-2.5 rounded-xl border border-apple-border dark:border-white/10 text-xs font-bold text-apple-text-muted dark:text-apple-border hover:bg-apple-gray dark:hover:bg-white/5"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting || !selectedListingId}
-                    className="px-6 py-2.5 rounded-xl bg-[#5B2A86] hover:bg-[#48206C] text-white text-xs font-extrabold shadow-md hover:shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent)] text-white text-xs font-extrabold shadow-md hover:shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
                   >
                     {submitting ? (
                       <>

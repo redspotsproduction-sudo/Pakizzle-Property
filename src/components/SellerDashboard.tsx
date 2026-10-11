@@ -202,7 +202,7 @@ export default function SellerDashboard() {
         change: "+5.1%", 
         icon: MessageSquare,
         trend: [2, 4, 3, 7, 6, 9, 8, 12],
-        accentColor: "text-emerald-500 bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/10"
+        accentColor: "text-apple-green bg-apple-green/5 dark:bg-apple-green/10 border-apple-green/10"
       },
       { 
         label: "Favorites Added", 
@@ -218,7 +218,7 @@ export default function SellerDashboard() {
         change: "+1.2%", 
         icon: TrendingUp,
         trend: [100, 101, 100.8, 102, 103, 102.5, 103.8, 104.2],
-        accentColor: "text-amber-500 bg-amber-500/5 dark:bg-amber-500/10 border-amber-500/10"
+        accentColor: "text-gold-decoration bg-gold-decoration/5 dark:bg-gold-decoration/10 border-gold-decoration/10"
       },
     ];
   }, [myVehicles, wishlist]);
@@ -283,7 +283,7 @@ export default function SellerDashboard() {
   };
 
   return (
-    <div className={cn("text-[#1D1D1F] dark:text-[#F5F5F7] antialiased transition-colors duration-500 selection:bg-apple-blue/10 selection:text-apple-blue", !isNestedInDashboard && "min-h-screen bg-[#F5F5F7] dark:bg-[#000000]")}>
+    <div className={cn("text-[var(--text-primary)] dark:text-[var(--text-primary)] antialiased transition-colors duration-500 selection:bg-apple-blue/10 selection:text-apple-blue", !isNestedInDashboard && "min-h-screen bg-[var(--text-primary)] dark:bg-[var(--bg-page)]")}>
       {!isNestedInDashboard && <Header />}
       
       {/* Sleek, precise iOS-style push notification banner with fluid spring mechanics */}
@@ -294,7 +294,7 @@ export default function SellerDashboard() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -24, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 380, damping: 28 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-[150] px-5 py-3.5 bg-white/80 dark:bg-[#161617]/80 backdrop-blur-2xl text-[#1D1D1F] dark:text-white text-xs font-semibold rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex items-center gap-3 border border-black/[0.04] dark:border-white/[0.06]"
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-[150] px-5 py-3.5 bg-white/80 dark:bg-[var(--bg-surface)]/80 backdrop-blur-2xl text-[var(--text-primary)] dark:text-white text-xs font-semibold rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex items-center gap-3 border border-black/[0.04] dark:border-white/[0.06]"
           >
             <div className="w-5 h-5 rounded-full bg-apple-blue/10 dark:bg-apple-blue/20 flex items-center justify-center text-apple-blue shrink-0">
               <Sparkles className="w-3.5 h-3.5" />
@@ -314,10 +314,10 @@ export default function SellerDashboard() {
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Verified Merchant Console
               </div>
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
                 Seller Dashboard
               </h1>
-              <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+              <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
                 A bespoke, hardware-accelerated command center with real-time conversion statistics, neural-network pricing suggestions, and verified security rules.
               </p>
             </div>
@@ -342,11 +342,11 @@ export default function SellerDashboard() {
             const Icon = stat.icon;
             // Map individual stats to brand-matching gradient indices for sparkline/border glow
             const colorMapping = [
-              { stroke: "#0071e3", bg: "rgba(0, 113, 227, 0.05)" }, // Blue
-              { stroke: "#34c759", bg: "rgba(52, 199, 89, 0.05)" },  // Green
-              { stroke: "#ff3b30", bg: "rgba(255, 59, 48, 0.05)" },  // Red
-              { stroke: "#ff9500", bg: "rgba(255, 149, 0, 0.05)" }   // Amber
-            ][i] || { stroke: "#0071e3", bg: "rgba(0, 113, 227, 0.05)" };
+              { stroke: "var(--accent)", bg: "rgba(0, 113, 227, 0.05)" }, // Blue
+              { stroke: "var(--success)", bg: "rgba(52, 199, 89, 0.05)" },  // Green
+              { stroke: "var(--danger)", bg: "rgba(255, 59, 48, 0.05)" },  // Red
+              { stroke: "var(--warning)", bg: "rgba(255, 149, 0, 0.05)" }   // Amber
+            ][i] || { stroke: "var(--accent)", bg: "rgba(0, 113, 227, 0.05)" };
 
             return (
               <motion.div
@@ -354,7 +354,7 @@ export default function SellerDashboard() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04, type: "spring", stiffness: 140, damping: 15 }}
-                className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col justify-between hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:border-black/[0.08] dark:hover:border-white/[0.08] transition-all duration-300 relative overflow-hidden group"
+                className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col justify-between hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:border-black/[0.08] dark:hover:border-white/[0.08] transition-all duration-300 relative overflow-hidden group"
               >
                 {/* Subtle visual matching highlight at the bottom of the card */}
                 <div 
@@ -373,8 +373,8 @@ export default function SellerDashboard() {
                 </div>
                 
                 <div className="space-y-0.5">
-                  <div className="text-[9px] font-bold text-[#86868B] uppercase tracking-[0.1em]">{stat.label}</div>
-                  <div className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-[#1D1D1F] dark:text-[#FFFFFF] leading-none">{stat.value}</div>
+                  <div className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{stat.label}</div>
+                  <div className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-[var(--text-primary)] dark:text-[#FFFFFF] leading-none">{stat.value}</div>
                 </div>
 
                 {/* Micro-sparklines with smooth curves, continuous bezier paths, and area fills */}
@@ -409,19 +409,19 @@ export default function SellerDashboard() {
         <motion.div 
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] p-4.5 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]"
+          className="mb-8 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] p-4.5 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]"
         >
           <div className="flex-1 space-y-1.5">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4.5 h-4.5 text-apple-blue shrink-0" />
-              <h3 className="text-xs font-semibold tracking-tight text-[#1D1D1F] dark:text-white">Seller Identity Validation</h3>
+              <h3 className="text-xs font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">Seller Identity Validation</h3>
             </div>
-            <p className="text-[11px] text-[#86868B] max-w-lg leading-relaxed font-normal">
+            <p className="text-[11px] text-[var(--text-secondary)] max-w-lg leading-relaxed font-normal">
               Authenticate credentials to unlock verified search placement, badge endorsements, and boost listing exposure score by up to 2.4x.
             </p>
             {/* Minimal line progress */}
             <div className="flex items-center gap-3 pt-1 max-w-xs">
-              <div className="flex-1 bg-[#E5E5E7] dark:bg-white/10 h-1 rounded-full overflow-hidden">
+              <div className="flex-1 bg-[var(--border)] dark:bg-white/10 h-1 rounded-full overflow-hidden">
                 <div className="bg-apple-blue h-full rounded-full w-1/3" />
               </div>
               <span className="text-[9px] font-bold font-mono text-apple-blue shrink-0">1 of 3 Verified</span>
@@ -429,14 +429,14 @@ export default function SellerDashboard() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <div className="px-3 py-1.5 rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1.5">
-              <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-500">Phone Linked</span>
+            <div className="px-3 py-1.5 rounded-xl bg-apple-green/5 dark:bg-apple-green/10 border border-apple-green/20 flex items-center gap-1.5">
+              <CheckCircle2 className="w-3 h-3 text-apple-green" />
+              <span className="text-[10px] font-semibold text-apple-green dark:text-apple-green">Phone Linked</span>
             </div>
 
             <button 
               onClick={() => setIsVerificationModalOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+              className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
             >
               <AlertCircle className="w-3 h-3" />
               <span>Verify ID</span>
@@ -444,7 +444,7 @@ export default function SellerDashboard() {
 
             <button 
               onClick={() => setIsVerificationModalOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+              className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
             >
               <AlertCircle className="w-3 h-3" />
               <span>Business Account</span>
@@ -457,9 +457,9 @@ export default function SellerDashboard() {
           {/* Main Listings Stream */}
           <div className="lg:col-span-2 space-y-6">
             
-            <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 relative overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+            <section className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 relative overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+                <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                   <BarChart3 className="w-3.5 h-3.5 text-apple-blue" />
                   Inventory Console
                 </h2>
@@ -469,7 +469,7 @@ export default function SellerDashboard() {
               </div>
 
               {/* iOS-Style Sleek segmented Tab Bar with Spring-animated background slider */}
-              <div className="flex items-center gap-1 p-1 bg-[#F5F5F7] dark:bg-white/5 rounded-xl overflow-x-auto scrollbar-hide mb-5 border border-[#E5E5E7]/60 dark:border-white/5 relative">
+              <div className="flex items-center gap-1 p-1 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl overflow-x-auto scrollbar-hide mb-5 border border-[var(--border)]/60 dark:border-white/5 relative">
                 {tabs.map((tab) => {
                   const count = getStatusCount(tab.id);
                   const isTabSelected = activeTab === tab.id;
@@ -480,14 +480,14 @@ export default function SellerDashboard() {
                       className={cn(
                         "relative px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-colors duration-200 z-10",
                         isTabSelected
-                          ? "text-[#1D1D1F] dark:text-white"
-                          : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                          ? "text-[var(--text-primary)] dark:text-white"
+                          : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                       )}
                     >
                       {isTabSelected && (
                         <motion.div
                           layoutId="activeTabPill"
-                          className="absolute inset-0 bg-white dark:bg-[#2C2C2E] rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.1)] z-[-1]"
+                          className="absolute inset-0 bg-white dark:bg-[var(--bg-inset)] rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.1)] z-[-1]"
                           transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         />
                       )}
@@ -501,25 +501,25 @@ export default function SellerDashboard() {
               
               <div className="space-y-3.5">
                 {paginatedVehicles.length === 0 ? (
-                  <div className="text-center py-16 px-6 border border-dashed border-[#E5E5E7] dark:border-white/10 rounded-2xl bg-[#F5F5F7]/30 dark:bg-white/[0.005]">
-                    <div className="w-14 h-14 rounded-full bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center mx-auto mb-4 text-[#86868B]">
+                  <div className="text-center py-16 px-6 border border-dashed border-[var(--border)] dark:border-white/10 rounded-2xl bg-[var(--text-primary)]/30 dark:bg-white/[0.005]">
+                    <div className="w-14 h-14 rounded-full bg-[var(--text-primary)] dark:bg-white/5 flex items-center justify-center mx-auto mb-4 text-[var(--text-secondary)]">
                       <Building2 className="w-7 h-7" />
                     </div>
-                    <h3 className="text-sm font-semibold mb-1 text-[#1D1D1F] dark:text-white">No listings match selection</h3>
-                    <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-6 leading-relaxed">
+                    <h3 className="text-sm font-semibold mb-1 text-[var(--text-primary)] dark:text-white">No listings match selection</h3>
+                    <p className="text-xs text-[var(--text-secondary)] max-w-xs mx-auto mb-6 leading-relaxed">
                       {activeTab === 'active' 
                         ? "List a property now to broadcast it across our high-intent buyer grid." 
                         : `No listings are flagged in "${tabLabel(activeTab)}" state right now.`}
                     </p>
                     {activeTab === 'active' && (
-                      <Link to="/sell" className="px-4.5 py-2 bg-white dark:bg-[#2C2C2E] border border-[#E5E5E7] dark:border-white/10 hover:border-apple-blue rounded-full inline-flex items-center gap-1.5 text-xs font-semibold transition-colors shadow-sm">
+                      <Link to="/sell" className="px-4.5 py-2 bg-white dark:bg-[var(--bg-inset)] border border-[var(--border)] dark:border-white/10 hover:border-apple-blue rounded-full inline-flex items-center gap-1.5 text-xs font-semibold transition-colors shadow-sm">
                         <Plus className="w-3.5 h-3.5 text-apple-blue" />
                         Add First Ad
                       </Link>
                     )}
                   </div>
                 ) : (
-                  <div className="divide-y divide-[#E5E5E7]/50 dark:divide-white/5">
+                  <div className="divide-y divide-[var(--border)]/50 dark:divide-white/5">
                     {paginatedVehicles.map((vehicle, index) => {
                       const healthScore = vehicle.images.length > 2 ? 98 : 75;
                       const views = 142 + (index * 47);
@@ -534,7 +534,7 @@ export default function SellerDashboard() {
                           transition={{ delay: index * 0.03 }}
                           className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 py-4 first:pt-0 last:pb-0 group relative"
                         >
-                          <Link to={formatPropertyUrl(vehicle)} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[#1C1C1E] flex items-center justify-center border border-black/5 dark:border-white/10">
+                          <Link to={formatPropertyUrl(vehicle)} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[var(--bg-raised)] flex items-center justify-center border border-black/5 dark:border-white/10">
                             {vehicle.images?.[0] ? (
                               <img 
                                 src={vehicle.images[0]} 
@@ -549,7 +549,7 @@ export default function SellerDashboard() {
                           
                           <div className="flex-1 min-w-0 flex flex-col justify-between">
                             <div className="flex items-start justify-between gap-3">
-                              <Link to={formatPropertyUrl(vehicle)} className="text-sm font-semibold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors truncate block">
+                              <Link to={formatPropertyUrl(vehicle)} className="text-sm font-semibold text-[var(--text-primary)] dark:text-white hover:text-apple-blue transition-colors truncate block">
                                 {vehicle.year} {vehicle.make} {vehicle.model}
                               </Link>
                               <span className="text-xs font-semibold font-mono text-apple-blue shrink-0">
@@ -557,26 +557,26 @@ export default function SellerDashboard() {
                               </span>
                             </div>
                             
-                            <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#86868B] mt-1 font-normal">
+                            <div className="flex flex-wrap items-center gap-2 text-[11px] text-[var(--text-secondary)] mt-1 font-normal">
                               <span className="font-mono">{vehicle.mileage ? vehicle.mileage.toLocaleString() : (vehicle.engineSize || "1 Kanal")} Sq.Ft.</span>
                               <span className="opacity-30">/</span>
                               <span className="capitalize">{vehicle.transmission || "Furnished"}</span>
                               <span className="opacity-30">/</span>
                               <span className={cn(
                                 "text-[9px] font-bold uppercase tracking-wider",
-                                vehicle.status === 'active' ? "text-apple-green" : (vehicle.status === 'expired' ? "text-rose-500" : "text-[#86868B]")
+                                vehicle.status === 'active' ? "text-apple-green" : (vehicle.status === 'expired' ? "text-apple-red" : "text-[var(--text-secondary)]")
                               )}>
                                 {vehicle.status || "active"}
                               </span>
                               <span className="opacity-30">•</span>
-                              <span className="text-[10px] text-slate-500 font-medium">
+                              <span className="text-[10px] text-apple-text-muted font-medium">
                                 {freshness.displayText}
                               </span>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-4 text-[10px] font-semibold font-mono text-[#86868B] mt-2.5">
-                              <span className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5 text-[#86868B]/70" /> {views} views</span>
-                              <span className="flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-[#86868B]/70" /> {inquiries} chats</span>
+                            <div className="flex flex-wrap items-center gap-4 text-[10px] font-semibold font-mono text-[var(--text-secondary)] mt-2.5">
+                              <span className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5 text-[var(--text-secondary)]/70" /> {views} views</span>
+                              <span className="flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-[var(--text-secondary)]/70" /> {inquiries} chats</span>
                               <span className="flex items-center gap-1.5 text-apple-blue"><Sparkles className="w-3.5 h-3.5" /> {healthScore}% ranking</span>
                               <button
                                 onClick={() => setAnalyticsProperty(vehicle)}
@@ -589,9 +589,9 @@ export default function SellerDashboard() {
 
                             {/* Freshness Grace Period 1-Tap Prompt */}
                             {freshness.isGracePeriod && (
-                              <div className="mt-2.5 p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                                <div className="flex items-center gap-1.5 text-xs text-amber-800 dark:text-amber-200 font-semibold">
-                                  <AlertTriangle className="w-3.5 h-3.5 text-amber-500 animate-pulse shrink-0" />
+                              <div className="mt-2.5 p-2 rounded-xl bg-gold-decoration/10 border border-gold-decoration/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5 text-xs text-amber-800 dark:text-gold-decoration/30 font-semibold">
+                                  <AlertTriangle className="w-3.5 h-3.5 text-gold-decoration animate-pulse shrink-0" />
                                   <span>Still Available? Action needed within {Math.max(1, 67 - freshness.daysSinceConfirmed)} days.</span>
                                 </div>
                                 <button
@@ -599,7 +599,7 @@ export default function SellerDashboard() {
                                     await confirmListingActive(vehicle.id);
                                     triggerToast(`Listing "${vehicle.model}" confirmed active today!`);
                                   }}
-                                  className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors shrink-0 cursor-pointer"
+                                  className="px-3 py-1 bg-gold-decoration hover:bg-amber-700 text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors shrink-0 cursor-pointer"
                                 >
                                   Yes, Still Available
                                 </button>
@@ -608,9 +608,9 @@ export default function SellerDashboard() {
 
                             {/* Expired Listing 1-Click Reactivation */}
                             {(freshness.isExpired || vehicle.status === 'expired') && (
-                              <div className="mt-2.5 p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                              <div className="mt-2.5 p-2 rounded-xl bg-apple-red/10 border border-apple-red/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                                 <div className="flex items-center gap-1.5 text-xs text-rose-800 dark:text-rose-200 font-semibold">
-                                  <AlertCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                                  <AlertCircle className="w-3.5 h-3.5 text-apple-red shrink-0" />
                                   <span>Delisted from search ({freshness.daysSinceConfirmed} days unconfirmed).</span>
                                 </div>
                                 <button
@@ -618,7 +618,7 @@ export default function SellerDashboard() {
                                     await reactivateListing(vehicle.id);
                                     triggerToast(`Listing "${vehicle.model}" reactivated and live!`);
                                   }}
-                                  className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors shrink-0 cursor-pointer flex items-center gap-1"
+                                  className="px-3 py-1 bg-apple-green hover:bg-apple-green text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors shrink-0 cursor-pointer flex items-center gap-1"
                                 >
                                   <RefreshCw className="w-3 h-3" />
                                   <span>Reactivate Listing</span>
@@ -629,10 +629,10 @@ export default function SellerDashboard() {
                           
                           {/* Compact actions rail */}
                           <div className="flex sm:flex-col justify-end items-center gap-1.5 shrink-0 pt-2 sm:pt-0">
-                            <div className="flex items-center gap-1 bg-[#F5F5F7]/80 dark:bg-white/5 p-1 rounded-xl border border-[#E5E5E7]/40 dark:border-white/5 w-full sm:w-auto justify-around sm:justify-start">
+                            <div className="flex items-center gap-1 bg-[var(--text-primary)]/80 dark:bg-white/5 p-1 rounded-xl border border-[var(--border)]/40 dark:border-white/5 w-full sm:w-auto justify-around sm:justify-start">
                               <button
                                 onClick={() => setAnalyticsProperty(vehicle)}
-                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-purple-600 dark:text-purple-400 transition-all flex items-center justify-center cursor-pointer touch-target"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[var(--bg-inset)] hover:shadow-sm text-purple-600 dark:text-purple-400 transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="View 30-Day Analytics & Comparative Benchmark"
                               >
                                 <BarChart3 className="w-3.5 h-3.5" />
@@ -640,7 +640,7 @@ export default function SellerDashboard() {
 
                               <button
                                 onClick={() => triggerToast(`Campaign metrics expanded for ${vehicle.model}!`)}
-                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[var(--bg-inset)] hover:shadow-sm text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="Boost Ads"
                               >
                                 <Sparkles className="w-3.5 h-3.5" />
@@ -648,7 +648,7 @@ export default function SellerDashboard() {
 
                               <Link 
                                 to={`/edit/${vehicle.id}`}
-                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-[#86868B] hover:text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[var(--bg-inset)] hover:shadow-sm text-[var(--text-secondary)] hover:text-apple-blue transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="Edit listing"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -657,7 +657,7 @@ export default function SellerDashboard() {
                               <button
                                 onClick={() => updateVehicle(vehicle.id, { status: vehicle.status === 'inactive' ? 'active' : 'inactive' })}
                                 className={cn(
-                                  "w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm transition-all flex items-center justify-center cursor-pointer touch-target",
+                                  "w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[var(--bg-inset)] hover:shadow-sm transition-all flex items-center justify-center cursor-pointer touch-target",
                                   vehicle.status === 'inactive' ? "text-apple-green" : "text-apple-red"
                                 )}
                                 title={vehicle.status === 'inactive' ? "Activate" : "Deactivate"}
@@ -667,7 +667,7 @@ export default function SellerDashboard() {
 
                               <button
                                 onClick={() => setVehicleToDelete(vehicle.id)}
-                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[#2C2C2E] hover:shadow-sm text-apple-red transition-all flex items-center justify-center cursor-pointer touch-target"
+                                className="w-8 h-8 rounded-lg hover:bg-white dark:hover:bg-[var(--bg-inset)] hover:shadow-sm text-apple-red transition-all flex items-center justify-center cursor-pointer touch-target"
                                 title="Remove"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -682,15 +682,15 @@ export default function SellerDashboard() {
               </div>
 
               {totalPages > 1 && (
-                <div className="mt-6 pt-4 border-t border-[#E5E5E7] dark:border-white/5 flex items-center justify-between">
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-widest font-mono">
+                <div className="mt-6 pt-4 border-t border-[var(--border)] dark:border-white/5 flex items-center justify-between">
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest font-mono">
                     Page {currentPage} of {totalPages}
                   </div>
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                       disabled={currentPage === 1}
-                      className="w-7.5 h-7.5 rounded-lg border border-[#E5E5E7] dark:border-white/5 flex items-center justify-center disabled:opacity-30 hover:bg-[#F5F5F7] dark:hover:bg-white/5 transition-colors"
+                      className="w-7.5 h-7.5 rounded-lg border border-[var(--border)] dark:border-white/5 flex items-center justify-center disabled:opacity-30 hover:bg-[var(--text-primary)] dark:hover:bg-white/5 transition-colors"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
@@ -698,7 +698,7 @@ export default function SellerDashboard() {
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                       disabled={currentPage === totalPages}
-                      className="w-7.5 h-7.5 rounded-lg border border-[#E5E5E7] dark:border-white/5 flex items-center justify-center disabled:opacity-30 hover:bg-[#F5F5F7] dark:hover:bg-white/5 transition-colors"
+                      className="w-7.5 h-7.5 rounded-lg border border-[var(--border)] dark:border-white/5 flex items-center justify-center disabled:opacity-30 hover:bg-[var(--text-primary)] dark:hover:bg-white/5 transition-colors"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -709,7 +709,7 @@ export default function SellerDashboard() {
  
             {/* Premium AI Smart Insights cockpit - styled like Apple Intelligence glow dashboard */}
             {myVehicles.length > 0 && optimizationVehicle && (
-              <section className="bg-[#1D1D1F] dark:bg-[#111112] text-white p-5 sm:p-6 rounded-2xl relative overflow-hidden shadow-xl border border-white/5">
+              <section className="bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] text-white p-5 sm:p-6 rounded-2xl relative overflow-hidden shadow-xl border border-white/5">
                 {/* Subtle siri glow radial gradient in the corner */}
                 <div className="absolute top-0 right-0 w-80 h-80 bg-apple-blue/10 dark:bg-apple-blue/15 rounded-full blur-[90px] pointer-events-none -mr-20 -mt-20" />
                 
@@ -720,13 +720,13 @@ export default function SellerDashboard() {
                         <Sparkles className="w-4.5 h-4.5 text-white animate-pulse" />
                       </div>
                       <div>
-                        <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#86868B]">Automated Intelligence</span>
+                        <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--text-secondary)]">Automated Intelligence</span>
                         <h3 className="text-xs font-semibold tracking-tight text-white mt-0.5">Neural Optimization Engine</h3>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[10px] text-[#86868B] font-medium">Select Ad:</span>
+                      <span className="text-[10px] text-[var(--text-secondary)] font-medium">Select Ad:</span>
                       <select
                         className="bg-white/10 border border-white/15 rounded-lg px-2.5 py-1 text-[11px] font-semibold text-white outline-none focus:border-apple-blue cursor-pointer transition-colors"
                         value={selectedOptimizeId}
@@ -771,19 +771,19 @@ export default function SellerDashboard() {
                         <h4 className="font-semibold text-xs text-white">
                           {neuralInsights[activeInsightIndex]?.title}
                         </h4>
-                        <p className="text-[11px] text-[#86868B] leading-relaxed">
+                        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                           {neuralInsights[activeInsightIndex]?.description}
                         </p>
                       </div>
  
                       <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-3 flex-wrap">
-                        <div className="flex items-center gap-1.5 text-[9px] font-mono text-emerald-500 font-semibold">
+                        <div className="flex items-center gap-1.5 text-[9px] font-mono text-apple-green font-semibold">
                           <Lock className="w-3 h-3" /> Core VM Active
                         </div>
                         <button
                           onClick={() => handleApplyInsight(neuralInsights[activeInsightIndex].type)}
                           disabled={isOptimizing}
-                          className="px-3.5 py-1.5 bg-white hover:bg-[#F5F5F7] text-black dark:text-black rounded-full flex items-center justify-center gap-1.5 text-xs font-semibold transition-all shadow-sm"
+                          className="px-3.5 py-1.5 bg-white hover:bg-[var(--text-primary)] text-black dark:text-black rounded-full flex items-center justify-center gap-1.5 text-xs font-semibold transition-all shadow-sm"
                         >
                           {isOptimizing ? (
                             <div className="w-3 h-3 border-2 border-black/30 border-t-black rounded-full animate-spin" />
@@ -804,8 +804,8 @@ export default function SellerDashboard() {
           {/* Mini-Sidebar layout (Direct Command feed and lists) */}
           <div className="space-y-5 lg:sticky lg:top-28">
             
-            <section className="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-[#E5E5E7] dark:border-white/5 p-4.5">
-              <h2 className="text-xs font-semibold mb-4 tracking-tight flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+            <section className="bg-white dark:bg-[var(--bg-raised)] rounded-2xl border border-[var(--border)] dark:border-white/5 p-4.5">
+              <h2 className="text-xs font-semibold mb-4 tracking-tight flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                 <Clock className="w-4 h-4 text-apple-blue" />
                 Live Feed
               </h2>
@@ -814,38 +814,38 @@ export default function SellerDashboard() {
                 {recentActivity.length > 0 ? (
                   recentActivity.map((item, i) => (
                     <div key={item.id} className="flex gap-2.5 relative group">
-                      {i !== recentActivity.length - 1 && <div className="absolute left-2 top-5 bottom-[-18px] w-px bg-[#E5E5E7] dark:bg-white/10" />}
+                      {i !== recentActivity.length - 1 && <div className="absolute left-2 top-5 bottom-[-18px] w-px bg-[var(--border)] dark:bg-white/10" />}
                       <div className={cn(
                         "w-4 h-4 rounded-full border mt-0.5 shrink-0 flex items-center justify-center",
                         item.type === 'message' 
                           ? "bg-apple-blue/5 border-apple-blue/20 text-apple-blue" 
-                          : "bg-amber-500/5 border-amber-500/20 text-amber-500"
+                          : "bg-gold-decoration/5 border-gold-decoration/20 text-gold-decoration"
                       )}>
                         {item.type === 'message' ? <MessageSquare className="w-2 h-2" /> : <Star className="w-2 h-2" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white leading-tight truncate">
+                          <span className="text-xs font-semibold text-[var(--text-primary)] dark:text-white leading-tight truncate">
                             {item.title}
                           </span>
                           {item.isNew && <span className="w-1.5 h-1.5 rounded-full bg-apple-blue animate-pulse" />}
                         </div>
-                        <p className="text-[11px] text-[#86868B] mt-0.5 leading-relaxed">{item.desc}</p>
-                        <span className="text-[9px] font-semibold text-[#86868B]/40 uppercase tracking-wider mt-1 block font-mono">{item.timeStr}</span>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">{item.desc}</p>
+                        <span className="text-[9px] font-semibold text-[var(--text-secondary)]/40 uppercase tracking-wider mt-1 block font-mono">{item.timeStr}</span>
                       </div>
                     </div>
                   ))
                 ) : (
                   <div className="text-center py-6">
-                    <Compass className="w-5 h-5 text-[#86868B]/60 mx-auto mb-2 animate-spin" style={{ animationDuration: '8s' }} />
-                    <div className="text-[10px] font-semibold text-[#86868B]">Listening for incoming inquiries...</div>
+                    <Compass className="w-5 h-5 text-[var(--text-secondary)]/60 mx-auto mb-2 animate-spin" style={{ animationDuration: '8s' }} />
+                    <div className="text-[10px] font-semibold text-[var(--text-secondary)]">Listening for incoming inquiries...</div>
                   </div>
                 )}
               </div>
             </section>
  
-            <section className="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-[#E5E5E7] dark:border-white/5 p-4.5">
-              <h2 className="text-xs font-semibold mb-4 tracking-tight flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+            <section className="bg-white dark:bg-[var(--bg-raised)] rounded-2xl border border-[var(--border)] dark:border-white/5 p-4.5">
+              <h2 className="text-xs font-semibold mb-4 tracking-tight flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                 <Heart className="w-4 h-4 text-apple-red" />
                 Wishlist Analytics
               </h2>
@@ -855,8 +855,8 @@ export default function SellerDashboard() {
                     const v = vehicles.find(veh => veh.id === id);
                     if (!v) return null;
                     return (
-                      <Link key={id} to={formatPropertyUrl(v)} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-[#F5F5F7] dark:hover:bg-white/5 transition-all group border border-transparent hover:border-[#E5E5E7]/50 dark:hover:border-white/5">
-                        <div className="w-11 h-8 rounded-lg bg-[#1C1C1E] shrink-0 overflow-hidden relative border border-black/5 dark:border-white/10 flex items-center justify-center">
+                      <Link key={id} to={formatPropertyUrl(v)} className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-[var(--text-primary)] dark:hover:bg-white/5 transition-all group border border-transparent hover:border-[var(--border)]/50 dark:hover:border-white/5">
+                        <div className="w-11 h-8 rounded-lg bg-[var(--bg-raised)] shrink-0 overflow-hidden relative border border-black/5 dark:border-white/10 flex items-center justify-center">
                           {v.images?.[0] ? (
                             <img 
                               src={v.images[0]} 
@@ -869,7 +869,7 @@ export default function SellerDashboard() {
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-[11px] font-semibold text-[#1D1D1F] dark:text-white truncate group-hover:text-apple-blue transition-colors">
+                          <div className="text-[11px] font-semibold text-[var(--text-primary)] dark:text-white truncate group-hover:text-apple-blue transition-colors">
                             {v.make} {v.model}
                           </div>
                           <div className="text-[10px] font-bold text-apple-blue font-mono mt-0.5">
@@ -881,7 +881,7 @@ export default function SellerDashboard() {
                   })
                 ) : (
                   <div className="text-center py-6">
-                    <p className="text-[11px] text-[#86868B] mb-2">No bookmarks on your classified ads yet.</p>
+                    <p className="text-[11px] text-[var(--text-secondary)] mb-2">No bookmarks on your classified ads yet.</p>
                     <Link to="/marketplace" className="text-[10px] font-bold text-apple-blue uppercase tracking-wider hover:underline transition-all">Marketplace Catalog</Link>
                   </div>
                 )}

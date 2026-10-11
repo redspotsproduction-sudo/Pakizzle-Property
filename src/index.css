@@ -23,21 +23,21 @@
   --animate-spin-slow: spin 3s linear infinite;
 
   /* PAKIZZLE CORE BRAND PALETTE */
-  --color-brand-purple-light: #5B2A86;
-  --color-brand-purple-dark: #1A1526;
-  --color-brand-indigo: #4B2C82;
+  --color-brand-purple-light: var(--accent);
+  --color-brand-purple-dark: var(--text-primary);
+  --color-brand-indigo: var(--accent);
 
   /* 5-Color Flame Mark Spectrum */
-  --color-accent-blue: #4A90D2;
-  --color-accent-green: #5FA84C;
-  --color-accent-gold: #F0A830;
-  --color-accent-red: #D93A45;
-  --color-accent-magenta: #7A1E5E;
+  --color-accent-blue: var(--apple-blue);
+  --color-accent-green: var(--success);
+  --color-accent-gold: var(--gold-decoration);
+  --color-accent-red: var(--danger);
+  --color-accent-magenta: var(--accent);
 
   /* Neutral & Background System */
-  --color-bg-cream: #FAF3E6;
-  --color-bg-deep-purple: #241238;
-  --color-accent-gold-line: #C9A227;
+  --color-bg-cream: var(--bg-page);
+  --color-bg-deep-purple: var(--bg-surface);
+  --color-accent-gold-line: var(--gold-decoration);
 
   /* Pakizzle Semantic UI tokens */
   --color-bg-page: var(--bg-page);
@@ -104,40 +104,6 @@
 }
 
 :root {
-  /* PAKIZZLE CORE BRAND PALETTE */
-  --brand-purple-light: #5B2A86;
-  --brand-purple-dark: #1A1526;
-  --brand-primary-gradient: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%);
-  --brand-primary-gradient-hover: linear-gradient(135deg, #6E32A0 0%, #251D36 100%);
-
-  /* Flame Spectrum Accent Palette */
-  --accent-blue: #4A90D2;
-  --accent-green: #5FA84C;
-  --accent-gold: #F0A830;
-  --accent-red: #D93A45;
-  --accent-magenta: #7A1E5E;
-
-  /* Supporting Tone */
-  --brand-indigo: #4B2C82;
-
-  /* Neutral / Background System (Warm Cream Light Mode) */
-  --bg-cream: #FAF3E6;
-  --bg-deep-purple: #241238;
-  --accent-gold-line: #C9A227;
-
-  /* Semantic UI mappings */
-  --apple-gray: #F2EBE0;
-  --apple-text: #1A1526;
-  --apple-text-muted: #5C5468;
-  --apple-border: rgba(91, 42, 134, 0.12);
-  --apple-bg: #FAF3E6;
-  --apple-surface: #FFFFFF;
-  --apple-card-bg: rgba(255, 255, 255, 0.90);
-  --apple-blue: #5B2A86;
-  --apple-green: #5FA84C;
-  --apple-red: #D93A45;
-  --apple-orange: #F0A830;
-
   /* Centrally defined breakpoint values */
   --bp-xs: 360px;
   --bp-sm: 480px;
@@ -228,24 +194,6 @@
   --apple-shadow-hover: 0px 20px 50px rgba(91, 42, 134, 0.12);
   --apple-shadow-glass: 0 8px 32px 0 rgba(91, 42, 134, 0.08);
 
-  --background: #FAF3E6;
-  --foreground: #1A1526;
-  --card: #FFFFFF;
-  --card-foreground: #1A1526;
-  --popover: #FFFFFF;
-  --popover-foreground: #1A1526;
-  --primary: #5B2A86;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F2EBE0;
-  --secondary-foreground: #1A1526;
-  --muted: #F2EBE0;
-  --muted-foreground: #5C5468;
-  --accent: #F0A830;
-  --accent-foreground: #1A1526;
-  --destructive: #D93A45;
-  --border: rgba(91, 42, 134, 0.12);
-  --input: rgba(91, 42, 134, 0.12);
-  --ring: #5B2A86;
   --radius: 0.875rem;
 
   --bg-base: var(--bg-page);
@@ -259,32 +207,9 @@
   --bg-surface: var(--bg-surface);
   --bg-elevated: var(--bg-raised);
 
-  --bg-cream: var(--bg-page);
-  --bg-deep-purple: var(--bg-page);
-  --accent-gold-line: var(--gold-decoration);
-
   --apple-shadow-soft: none;
   --apple-shadow-hover: 0px 8px 24px rgba(0, 0, 0, 0.50);
   --apple-shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.65);
-
-  --background: #0A0A0A;
-  --foreground: #F5F5F7;
-  --card: #161618;
-  --card-foreground: #F5F5F7;
-  --popover: #1E1E20;
-  --popover-foreground: #F5F5F7;
-  --primary: #5B2A86;
-  --primary-foreground: #FFFFFF;
-  --secondary: #1E1E20;
-  --secondary-foreground: #F5F5F7;
-  --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: #8E8E93;
-  --accent: #F0A830;
-  --accent-foreground: #F5F5F7;
-  --destructive: #E25B65;
-  --border: rgba(255, 255, 255, 0.10);
-  --input: rgba(255, 255, 255, 0.10);
-  --ring: #5B2A86;
 }
 
 @keyframes marquee {
@@ -502,8 +427,8 @@
     padding-left: 1.75rem;
     padding-right: 1.75rem;
     border-radius: 9999px;
-    background: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%) !important;
-    color: #FFFFFF !important;
+    background: var(--btn-primary-gradient) !important;
+    color: white !important;
     font-weight: 700;
     font-size: 0.875rem;
     letter-spacing: 0.01em;
@@ -515,7 +440,7 @@
 
   .apple-button-primary:hover,
   .pakizzle-button-primary:hover {
-    background: linear-gradient(135deg, #6E32A0 0%, #251D36 100%) !important;
+    background: var(--btn-primary-gradient-hover) !important;
     box-shadow: 0 12px 30px rgba(91, 42, 134, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
     border-color: rgba(201, 162, 39, 0.6) !important;
     transform: translateY(-1px);
@@ -535,8 +460,8 @@
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.90);
-    color: #1A1526;
+    background: var(--bg-surface);
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 0.875rem;
     border: 1px solid rgba(91, 42, 134, 0.18);
@@ -547,24 +472,24 @@
 
   .dark .apple-button-secondary,
   .dark .pakizzle-button-secondary {
-    background: rgba(46, 25, 71, 0.65);
-    color: #FAF3E6;
-    border-color: rgba(201, 162, 39, 0.25);
+    background: var(--bg-inset);
+    color: var(--text-primary);
+    border-color: var(--border);
   }
 
   .apple-button-secondary:hover,
   .pakizzle-button-secondary:hover {
-    background: #FAF3E6;
-    border-color: #5B2A86;
-    color: #5B2A86;
+    background: var(--bg-inset);
+    border-color: var(--accent);
+    color: var(--accent-text);
     transform: translateY(-1px);
   }
 
   .dark .apple-button-secondary:hover,
   .dark .pakizzle-button-secondary:hover {
-    background: rgba(75, 44, 130, 0.5);
-    border-color: #C9A227;
-    color: #FFFFFF;
+    background: var(--bg-raised);
+    border-color: var(--accent);
+    color: var(--text-primary);
   }
 
   .apple-button-glass {
@@ -749,7 +674,7 @@
     opacity: 0.85;
   }
   .fade-scroll-wrapper.dark::after {
-    background: linear-gradient(to right, transparent, #000000);
+    background: linear-gradient(to right, transparent, var(--bg-page));
   }
 
   /* 4. Touch Device Adaptations (44px min touch areas) */
@@ -1129,17 +1054,17 @@
    ========================================================================== */
 
 .pakizzle-gradient-bg {
-  background: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%) !important;
+  background: var(--btn-primary-gradient) !important;
 }
 
 .pakizzle-gradient-text {
-  background: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%);
+  background: var(--btn-primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .dark .pakizzle-gradient-text {
-  background: linear-gradient(135deg, #FAF3E6 0%, #C9A227 100%);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--gold-decoration) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -1147,63 +1072,63 @@
 /* Gold Accent Framing for Featured/Premium elements */
 .border-gold-accent,
 .featured-gold-border {
-  border: 1px solid #C9A227 !important;
-  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.25), 0 10px 25px -5px rgba(91, 42, 134, 0.12) !important;
+  border: 1px solid var(--gold-decoration) !important;
+  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.25), var(--shadow-card) !important;
 }
 
 /* Flame Mark Color-Coded Pills */
 .pakizzle-pill-blue {
-  background: rgba(74, 144, 210, 0.12);
-  color: #1E5C96;
-  border: 1px solid rgba(74, 144, 210, 0.35);
+  background: rgba(91, 42, 134, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(91, 42, 134, 0.25);
 }
 .dark .pakizzle-pill-blue {
-  background: rgba(74, 144, 210, 0.18);
-  color: #8CC0F0;
-  border-color: rgba(74, 144, 210, 0.45);
+  background: rgba(177, 140, 230, 0.15);
+  color: var(--accent);
+  border-color: rgba(177, 140, 230, 0.35);
 }
 
 .pakizzle-pill-green {
-  background: rgba(95, 168, 76, 0.12);
-  color: #2F6A20;
-  border: 1px solid rgba(95, 168, 76, 0.35);
+  background: rgba(30, 122, 56, 0.12);
+  color: var(--success);
+  border: 1px solid rgba(30, 122, 56, 0.25);
 }
 .dark .pakizzle-pill-green {
-  background: rgba(95, 168, 76, 0.20);
-  color: #92E27D;
-  border-color: rgba(95, 168, 76, 0.45);
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--success);
+  border-color: rgba(74, 222, 128, 0.35);
 }
 
 .pakizzle-pill-gold {
-  background: rgba(240, 168, 48, 0.12);
-  color: #9A6208;
-  border: 1px solid rgba(201, 162, 39, 0.40);
+  background: rgba(154, 72, 0, 0.10);
+  color: var(--warning);
+  border: 1px solid rgba(201, 162, 39, 0.30);
 }
 .dark .pakizzle-pill-gold {
-  background: rgba(240, 168, 48, 0.18);
-  color: #F8C366;
-  border-color: rgba(201, 162, 39, 0.50);
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--warning);
+  border-color: rgba(201, 162, 39, 0.40);
 }
 
 .pakizzle-pill-red {
-  background: rgba(217, 58, 69, 0.12);
-  color: #A31D27;
-  border: 1px solid rgba(217, 58, 69, 0.35);
+  background: rgba(197, 48, 48, 0.12);
+  color: var(--danger);
+  border: 1px solid rgba(197, 48, 48, 0.25);
 }
 .dark .pakizzle-pill-red {
-  background: rgba(217, 58, 69, 0.20);
-  color: #F38B92;
-  border-color: rgba(217, 58, 69, 0.45);
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--danger);
+  border-color: rgba(248, 113, 113, 0.35);
 }
 
 .pakizzle-pill-magenta {
-  background: rgba(122, 30, 94, 0.12);
-  color: #5C1045;
-  border: 1px solid rgba(122, 30, 94, 0.35);
+  background: rgba(91, 42, 134, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(91, 42, 134, 0.25);
 }
 .dark .pakizzle-pill-magenta {
-  background: rgba(122, 30, 94, 0.22);
-  color: #E282C1;
-  border-color: rgba(122, 30, 94, 0.45);
+  background: rgba(177, 140, 230, 0.15);
+  color: var(--accent);
+  border-color: rgba(177, 140, 230, 0.35);
 }
 

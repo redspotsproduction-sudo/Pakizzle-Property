@@ -278,10 +278,10 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             <Sparkles className="w-3.5 h-3.5 animate-pulse" />
             Next-Gen Discovery Admin Suite
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Search & Generative AI Hub
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Optimize, simulate, and audit Pakizzle automotive listings for traditional search engines (SEO), conversational voice answers (AEO), and modern RAG-based Generative AI platforms (GEO).
           </p>
         </div>
@@ -300,10 +300,10 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                 "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                 isActive
                   ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                  : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
-              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
             </button>
           );
         })}
@@ -323,14 +323,14 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               
               {/* Scorecard 1: Health Score */}
-              <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">SEO Health Score</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">SEO Health Score</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl font-bold font-mono text-[#1D1D1F] dark:text-white">{currentHealthScore}%</span>
+                    <span className="text-2xl font-bold font-mono text-[var(--text-primary)] dark:text-white">{currentHealthScore}%</span>
                     <span className="text-[10px] text-apple-green font-semibold">({currentHealthScore >= 95 ? "Excellent" : currentHealthScore >= 90 ? "Optimal" : "Needs Work"})</span>
                   </div>
-                  <p className="text-[10px] text-[#86868B] font-medium flex items-center gap-1">
+                  <p className="text-[10px] text-[var(--text-secondary)] font-medium flex items-center gap-1">
                     <TrendingUp className="w-3 h-3 text-apple-green" /> +3.2% vs last crawl
                   </p>
                 </div>
@@ -355,24 +355,24 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold font-mono text-[#1D1D1F] dark:text-white">
+                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold font-mono text-[var(--text-primary)] dark:text-white">
                     {currentHealthScore}
                   </div>
                 </div>
               </div>
 
               {/* Scorecard 2: Page Load Speed */}
-              <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Average Speed (FCP)</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Average Speed (FCP)</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl font-bold font-mono text-[#1D1D1F] dark:text-white">{avgLoadSpeed}s</span>
-                    <span className={`text-[10px] font-semibold ${avgLoadSpeed <= 0.8 ? "text-apple-green" : avgLoadSpeed <= 1.1 ? "text-apple-blue" : "text-amber-500"}`}>
+                    <span className="text-2xl font-bold font-mono text-[var(--text-primary)] dark:text-white">{avgLoadSpeed}s</span>
+                    <span className={`text-[10px] font-semibold ${avgLoadSpeed <= 0.8 ? "text-apple-green" : avgLoadSpeed <= 1.1 ? "text-apple-blue" : "text-gold-decoration"}`}>
                       ({avgLoadSpeed <= 0.8 ? "A+ Superb" : avgLoadSpeed <= 1.1 ? "A Excellent" : "B Average"})
                     </span>
                   </div>
-                  <p className="text-[10px] text-[#86868B] font-medium flex items-center gap-1">
-                    <Zap className="w-3 h-3 text-amber-500" /> TTFB: ~140ms
+                  <p className="text-[10px] text-[var(--text-secondary)] font-medium flex items-center gap-1">
+                    <Zap className="w-3 h-3 text-gold-decoration" /> TTFB: ~140ms
                   </p>
                 </div>
                 <div className="w-10 h-10 bg-apple-green/5 dark:bg-apple-green/10 rounded-xl flex items-center justify-center shrink-0">
@@ -381,14 +381,14 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
               </div>
 
               {/* Scorecard 3: Keyword Density */}
-              <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Keyword Coverage</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Keyword Coverage</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl font-bold font-mono text-[#1D1D1F] dark:text-white">{keywordDensityScore}%</span>
+                    <span className="text-2xl font-bold font-mono text-[var(--text-primary)] dark:text-white">{keywordDensityScore}%</span>
                     <span className="text-[10px] text-purple-500 font-semibold">(Matched)</span>
                   </div>
-                  <p className="text-[10px] text-[#86868B] font-medium flex items-center gap-1">
+                  <p className="text-[10px] text-[var(--text-secondary)] font-medium flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3 text-purple-500" /> 6 core phrase targets
                   </p>
                 </div>
@@ -398,14 +398,14 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
               </div>
 
               {/* Scorecard 4: Link Integrity */}
-              <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Link Integrity</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Link Integrity</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl font-bold font-mono text-[#1D1D1F] dark:text-white">{brokenLinksCount}</span>
-                    <span className="text-[10px] text-[#86868B] font-semibold">Broken Links</span>
+                    <span className="text-2xl font-bold font-mono text-[var(--text-primary)] dark:text-white">{brokenLinksCount}</span>
+                    <span className="text-[10px] text-[var(--text-secondary)] font-semibold">Broken Links</span>
                   </div>
-                  <p className="text-[10px] text-[#86868B] font-medium flex items-center gap-1">
+                  <p className="text-[10px] text-[var(--text-secondary)] font-medium flex items-center gap-1">
                     <ShieldCheck className="w-3 h-3 text-apple-blue" /> 100% Secure routing
                   </p>
                 </div>
@@ -420,13 +420,13 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* Main Chart: SEO Health & Load Speed Audit Trend */}
-              <div className="lg:col-span-2 bg-white dark:bg-[#161617] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-4">
+              <div className="lg:col-span-2 bg-white dark:bg-[var(--bg-surface)] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-1.5">
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-1.5">
                       <Activity className="w-4 h-4 text-apple-blue" /> SEO Health & Speed Index Trend
                     </h3>
-                    <p className="text-xs text-[#86868B] font-normal mt-0.5">Historical audit metrics charting the correlation between site health scores and response speed.</p>
+                    <p className="text-xs text-[var(--text-secondary)] font-normal mt-0.5">Historical audit metrics charting the correlation between site health scores and response speed.</p>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="inline-flex items-center gap-1 text-[9px] font-bold bg-apple-blue/10 text-apple-blue px-2 py-0.5 rounded">
@@ -450,29 +450,29 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     ]} margin={{ top: 10, right: -15, left: -25, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorHealth" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.25}/>
-                          <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.01}/>
+                          <stop offset="5%" stopColor="var(--apple-blue)" stopOpacity={0.25}/>
+                          <stop offset="95%" stopColor="var(--apple-blue)" stopOpacity={0.01}/>
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" className="dark:stroke-white/10" />
-                      <XAxis dataKey="date" stroke="#9CA3AF" fontSize={10} tickLine={false} />
-                      <YAxis yAxisId="left" stroke="#3B82F6" fontSize={10} tickLine={false} axisLine={false} domain={[50, 100]} />
-                      <YAxis yAxisId="right" orientation="right" stroke="#10B981" fontSize={10} tickLine={false} axisLine={false} domain={[0, 2.5]} />
-                      <Tooltip contentStyle={{ borderRadius: 12, background: "rgba(255,255,255,0.95)", border: "1px solid #E5E7EB", boxShadow: "0 10px 15px -3px rgba(0,0,0,0.05)" }} />
-                      <Area yAxisId="left" type="monotone" dataKey="healthScore" fill="url(#colorHealth)" stroke="#3B82F6" strokeWidth={3.5} name="Health Score %" />
-                      <Line yAxisId="right" type="monotone" dataKey="loadSpeed" stroke="#10B981" strokeWidth={3} dot={{ r: 4, fill: "#10B981" }} name="Speed (s)" />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--apple-border)" className="dark:stroke-white/10" />
+                      <XAxis dataKey="date" stroke="var(--apple-text-muted)" fontSize={10} tickLine={false} />
+                      <YAxis yAxisId="left" stroke="var(--apple-blue)" fontSize={10} tickLine={false} axisLine={false} domain={[50, 100]} />
+                      <YAxis yAxisId="right" orientation="right" stroke="var(--apple-green)" fontSize={10} tickLine={false} axisLine={false} domain={[0, 2.5]} />
+                      <Tooltip contentStyle={{ borderRadius: 12, background: "rgba(255,255,255,0.95)", border: "1px solid var(--apple-border)", boxShadow: "0 10px 15px -3px rgba(0,0,0,0.05)" }} />
+                      <Area yAxisId="left" type="monotone" dataKey="healthScore" fill="url(#colorHealth)" stroke="var(--apple-blue)" strokeWidth={3.5} name="Health Score %" />
+                      <Line yAxisId="right" type="monotone" dataKey="loadSpeed" stroke="var(--apple-green)" strokeWidth={3} dot={{ r: 4, fill: "var(--apple-green)" }} name="Speed (s)" />
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
               </div>
 
               {/* Side Chart: Top Keyword Densities OR Error stack */}
-              <div className="bg-white dark:bg-[#161617] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full space-y-4">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full space-y-4">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-1.5">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-1.5">
                     <FileText className="w-4 h-4 text-purple-500" /> Target Keyword Densities
                   </h3>
-                  <p className="text-xs text-[#86868B] font-normal mt-0.5">Primary local search phrases matched across Pakizzle indexable routes.</p>
+                  <p className="text-xs text-[var(--text-secondary)] font-normal mt-0.5">Primary local search phrases matched across Pakizzle indexable routes.</p>
                 </div>
 
                 <div className="w-full h-fit py-2">
@@ -485,20 +485,20 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       { name: "auto sedan", density: 1.9 },
                       { name: "toyota corolla", density: 1.5 }
                     ]} layout="vertical" margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" className="dark:stroke-white/10" />
-                      <XAxis type="number" stroke="#9CA3AF" fontSize={10} tickLine={false} domain={[0, 6]} />
-                      <YAxis dataKey="name" type="category" stroke="#9CA3AF" fontSize={10} tickLine={false} width={80} />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--apple-border)" className="dark:stroke-white/10" />
+                      <XAxis type="number" stroke="var(--apple-text-muted)" fontSize={10} tickLine={false} domain={[0, 6]} />
+                      <YAxis dataKey="name" type="category" stroke="var(--apple-text-muted)" fontSize={10} tickLine={false} width={80} />
                       <Tooltip contentStyle={{ borderRadius: 12, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }} />
-                      <Bar dataKey="density" radius={[0, 6, 6, 0]} fill="#8B5CF6">
+                      <Bar dataKey="density" radius={[0, 6, 6, 0]} fill="var(--accent)">
                         {[4.8, 3.6, 3.2, 2.8, 1.9, 1.5].map((val, idx) => (
-                          <Cell key={`cell-${idx}`} fill={val >= 2.5 ? "#8B5CF6" : "#F59E0B"} />
+                          <Cell key={`cell-${idx}`} fill={val >= 2.5 ? "var(--accent)" : "var(--warning)"} />
                         ))}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
 
-                <div className="pt-3 border-t border-black/[0.04] dark:border-white/[0.04] flex justify-between text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                <div className="pt-3 border-t border-black/[0.04] dark:border-white/[0.04] flex justify-between text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                   <span>Target Range: 2.0% - 5.0%</span>
                   <span className="text-apple-blue">Avg: 2.97%</span>
                 </div>
@@ -510,20 +510,20 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* Crawler Simulator Box */}
-              <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] lg:col-span-1 space-y-5 flex flex-col justify-between">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] lg:col-span-1 space-y-5 flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-blue/10 text-[9px] font-bold text-apple-blue uppercase tracking-wider">
                       Spider Controller
                     </span>
-                    <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white">Crawl & Index Simulator</h3>
-                    <p className="text-[11px] text-[#86868B] font-normal leading-relaxed">Simulate a multi-threaded search spider scan across route registries.</p>
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">Crawl & Index Simulator</h3>
+                    <p className="text-[11px] text-[var(--text-secondary)] font-normal leading-relaxed">Simulate a multi-threaded search spider scan across route registries.</p>
                   </div>
 
                   <div className="space-y-4">
                     {/* Select Depth */}
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase text-[#86868B] tracking-wider">Target Crawl Depth</label>
+                      <label className="text-[9px] font-bold uppercase text-[var(--text-secondary)] tracking-wider">Target Crawl Depth</label>
                       <div className="grid grid-cols-3 gap-2">
                         {[100, 250, 500].map((depth) => (
                           <button
@@ -534,7 +534,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                               "py-1.5 px-3 rounded-xl text-xs font-semibold transition-all border",
                               crawlDepth === depth 
                                 ? "bg-apple-blue text-white border-apple-blue shadow" 
-                                : "bg-white dark:bg-white/5 border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                                : "bg-white dark:bg-white/5 border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                             )}
                           >
                             {depth} Pages
@@ -556,15 +556,15 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                             style={{ width: `${crawlProgress}%` }}
                           ></div>
                         </div>
-                        <p className="text-[10px] text-[#86868B] font-medium italic truncate">
+                        <p className="text-[10px] text-[var(--text-secondary)] font-medium italic truncate">
                           {crawlStatusText}
                         </p>
                       </div>
                     ) : (
-                      <div className="p-3.5 bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] rounded-xl">
+                      <div className="p-3.5 bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] rounded-xl">
                         <div className="flex gap-2 items-start">
-                          <Zap className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                          <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">
+                          <Zap className="w-4 h-4 text-gold-decoration shrink-0 mt-0.5" />
+                          <p className="text-[10px] text-[var(--text-secondary)] font-normal leading-relaxed">
                             A deep crawl checks broken anchor tags, Schema microdata structures, canonical consistency, and TTFB scores. Launching a crawl updates sitemap files and signals search indexing servers.
                           </p>
                         </div>
@@ -593,18 +593,18 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
               </div>
 
               {/* Actionable Issue List */}
-              <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] lg:col-span-2 space-y-5 flex flex-col justify-between">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] lg:col-span-2 space-y-5 flex flex-col justify-between">
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-[9px] font-bold text-amber-500 uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold-decoration/10 text-[9px] font-bold text-gold-decoration uppercase tracking-wider">
                       Index Recommendations
                     </span>
-                    <span className="text-[10px] font-bold text-[#86868B]">
+                    <span className="text-[10px] font-bold text-[var(--text-secondary)]">
                       Issues Resolved: {issues.filter(i => i.resolved).length} of {issues.length}
                     </span>
                   </div>
-                  <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white">Search Engine Recommendations Log</h3>
-                  <p className="text-[11px] text-[#86868B] font-normal">Perform automatic fixes to satisfy Google crawl standards and ChatGPT RAG retrieval filters.</p>
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">Search Engine Recommendations Log</h3>
+                  <p className="text-[11px] text-[var(--text-secondary)] font-normal">Perform automatic fixes to satisfy Google crawl standards and ChatGPT RAG retrieval filters.</p>
                 </div>
 
                 <div className="space-y-2.5 my-2">
@@ -616,14 +616,14 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                         "p-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3",
                         issue.resolved 
                           ? "border-apple-green/30 bg-apple-green/[0.01] opacity-60" 
-                          : "border-black/[0.04] dark:border-white/[0.04] bg-[#F5F5F7] dark:bg-white/5 hover:bg-black/[0.04]"
+                          : "border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-white/5 hover:bg-black/[0.04]"
                       )}
                     >
                       <div className={cn(
                         "w-4.5 h-4.5 rounded border flex items-center justify-center shrink-0 mt-0.5 transition-colors",
                         issue.resolved 
                           ? "border-apple-green bg-apple-green text-white" 
-                          : "border-black/10 dark:border-white/10 bg-white dark:bg-[#161617]"
+                          : "border-black/10 dark:border-white/10 bg-white dark:bg-[var(--bg-surface)]"
                       )}>
                         {issue.resolved && <Check className="w-3 h-3 stroke-[3]" />}
                       </div>
@@ -635,16 +635,16 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                             issue.priority === "High" 
                               ? "bg-red-500/10 text-red-500" 
                               : issue.priority === "Medium" 
-                                ? "bg-amber-500/10 text-amber-500" 
+                                ? "bg-gold-decoration/10 text-gold-decoration" 
                                 : "bg-apple-blue/10 text-apple-blue"
                           )}>
                             {issue.priority} Priority
                           </span>
-                          <span className="text-[9px] text-[#86868B] font-semibold">Impact: +{issue.impact}% Score</span>
+                          <span className="text-[9px] text-[var(--text-secondary)] font-semibold">Impact: +{issue.impact}% Score</span>
                         </div>
                         <p className={cn(
                           "text-xs font-medium leading-relaxed",
-                          issue.resolved ? "line-through text-[#86868B]" : "text-[#1D1D1F] dark:text-white"
+                          issue.resolved ? "line-through text-[var(--text-secondary)]" : "text-[var(--text-primary)] dark:text-white"
                         )}>
                           {issue.text}
                         </p>
@@ -653,7 +653,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   ))}
                 </div>
 
-                <div className="pt-3 border-t border-black/[0.04] dark:border-white/[0.04] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-[#86868B] font-semibold">
+                <div className="pt-3 border-t border-black/[0.04] dark:border-white/[0.04] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-[var(--text-secondary)] font-semibold">
                   <span className="flex items-center gap-1">
                     <ShieldCheck className="w-3.5 h-3.5 text-apple-green" /> Automatic verification active
                   </span>
@@ -664,16 +664,16 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             </div>
 
             {/* Simulated Live URL Audit List */}
-            <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-4">
+            <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white">Sample Crawl Index Registry</h3>
-                <p className="text-xs text-[#86868B] font-normal">Real-time status of catalog pages served from the Pakizzle router.</p>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">Sample Crawl Index Registry</h3>
+                <p className="text-xs text-[var(--text-secondary)] font-normal">Real-time status of catalog pages served from the Pakizzle router.</p>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-black/[0.04] dark:border-white/[0.04] text-[9px] text-[#86868B] font-bold uppercase tracking-wider">
+                    <tr className="border-b border-black/[0.04] dark:border-white/[0.04] text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-wider">
                       <th className="py-2.5 px-3">Route Page URL</th>
                       <th className="py-2.5 px-3">Status</th>
                       <th className="py-2.5 px-3">Response Speed</th>
@@ -681,7 +681,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       <th className="py-2.5 px-3 text-right">Schema Validity</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04] font-medium text-[#86868B]">
+                  <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04] font-medium text-[var(--text-secondary)]">
                     {[
                       { url: "https://pakizzle.com/", type: "Homepage", code: "200 OK", load: "0.24s", kw: "4.8% (Optimal)", schema: "JSON-LD & OpenGraph OK" },
                       { url: "https://pakizzle.com/listings", type: "Catalog", code: "200 OK", load: "0.41s", kw: "3.2% (Optimal)", schema: "Breadcrumb & ItemList OK" },
@@ -690,15 +690,15 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       { url: "https://pakizzle.com/admin/seo-aeo-geo", type: "Search Engine Control Panel", code: "200 OK", load: "0.18s", kw: "4.1% (Optimal)", schema: "Admin Restricted" }
                     ].map((row, idx) => (
                       <tr key={idx} className="hover:bg-black/[0.01] dark:hover:bg-white/[0.005]">
-                        <td className="py-2.5 px-3 font-mono text-[10px] text-[#1D1D1F] dark:text-white">
-                          {row.url} <span className="text-[9px] text-[#86868B] font-sans font-bold ml-1.5">({row.type})</span>
+                        <td className="py-2.5 px-3 font-mono text-[10px] text-[var(--text-primary)] dark:text-white">
+                          {row.url} <span className="text-[9px] text-[var(--text-secondary)] font-sans font-bold ml-1.5">({row.type})</span>
                         </td>
                         <td className="py-2.5 px-3">
                           <span className="inline-flex items-center gap-1 text-apple-green text-[10px]">
                             <span className="w-1.2 h-1.2 rounded-full bg-apple-green"></span> {row.code}
                           </span>
                         </td>
-                        <td className="py-2.5 px-3 font-mono text-[10px] text-[#1D1D1F] dark:text-white">{row.load}</td>
+                        <td className="py-2.5 px-3 font-mono text-[10px] text-[var(--text-primary)] dark:text-white">{row.load}</td>
                         <td className="py-2.5 px-3 text-[10px]">{row.kw}</td>
                         <td className="py-2.5 px-3 text-right font-sans text-apple-blue font-bold text-[10px]">
                           {row.schema}
@@ -725,91 +725,91 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               
               {/* Pillar 1: SEO */}
-              <div className="bg-white dark:bg-[#161617] p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-xl bg-apple-blue/5 dark:bg-apple-blue/10 flex items-center justify-center">
                     <Globe className="w-6 h-6 text-apple-blue" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white">SEO</h3>
+                    <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">SEO</h3>
                     <p className="text-[10px] font-bold text-apple-blue uppercase tracking-wider mt-0.5">Search Engine Optimization</p>
                   </div>
-                  <p className="text-xs text-[#86868B] leading-relaxed font-normal">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
                     The traditional backbone of web traffic. SEO focuses on indexing pages for web crawler bots (like Googlebot) using keyword densities, server speed, structured schema, and secure crawl architecture.
                   </p>
                 </div>
                 <div className="mt-6 pt-4 border-t border-black/[0.04] dark:border-white/[0.04] space-y-2.5">
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Target Interface:</span>
-                    <span className="text-[#1D1D1F] dark:text-white">Google Search, Bing</span>
+                    <span className="text-[var(--text-secondary)]">Target Interface:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white">Google Search, Bing</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Core Technology:</span>
-                    <span className="text-[#1D1D1F] dark:text-white font-mono text-[10px]">JSON-LD, Meta, Sitemap</span>
+                    <span className="text-[var(--text-secondary)]">Core Technology:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white font-mono text-[10px]">JSON-LD, Meta, Sitemap</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Primary Metric:</span>
-                    <span className="text-[#1D1D1F] dark:text-white">Organic Clicks & SERP Rank</span>
+                    <span className="text-[var(--text-secondary)]">Primary Metric:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white">Organic Clicks & SERP Rank</span>
                   </div>
                 </div>
               </div>
 
               {/* Pillar 2: AEO */}
-              <div className="bg-white dark:bg-[#161617] p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-xl bg-apple-green/5 dark:bg-apple-green/10 flex items-center justify-center">
                     <Volume2 className="w-6 h-6 text-apple-green" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white">AEO</h3>
+                    <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">AEO</h3>
                     <p className="text-[10px] font-bold text-apple-green uppercase tracking-wider mt-0.5">Answer Engine Optimization</p>
                   </div>
-                  <p className="text-xs text-[#86868B] leading-relaxed font-normal">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
                     Optimizing for conversational questions and direct answers. Instead of giving users a list of blue links, answer engines (like voice search and featured snippets) extract a single, crisp answer.
                   </p>
                 </div>
                 <div className="mt-6 pt-4 border-t border-black/[0.04] dark:border-white/[0.04] space-y-2.5">
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Target Interface:</span>
-                    <span className="text-[#1D1D1F] dark:text-white">Siri, Alexa, Assistant</span>
+                    <span className="text-[var(--text-secondary)]">Target Interface:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white">Siri, Alexa, Assistant</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Core Technology:</span>
-                    <span className="text-[#1D1D1F] dark:text-white font-mono text-[10px]">Q&A Schema, Snippets</span>
+                    <span className="text-[var(--text-secondary)]">Core Technology:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white font-mono text-[10px]">Q&A Schema, Snippets</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Primary Metric:</span>
-                    <span className="text-[#1D1D1F] dark:text-white">Featured Snippet Share</span>
+                    <span className="text-[var(--text-secondary)]">Primary Metric:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white">Featured Snippet Share</span>
                   </div>
                 </div>
               </div>
 
               {/* Pillar 3: GEO */}
-              <div className="bg-white dark:bg-[#161617] p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+              <div className="bg-white dark:bg-[var(--bg-surface)] p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-between h-full relative overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-xl bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center">
                     <Brain className="w-6 h-6 text-purple-500" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white">GEO</h3>
+                    <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">GEO</h3>
                     <p className="text-[10px] font-bold text-purple-500 uppercase tracking-wider mt-0.5">Generative Engine Optimization</p>
                   </div>
-                  <p className="text-xs text-[#86868B] leading-relaxed font-normal">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
                     The new paradigm of discoverability. GEO targets large language model (LLM) engines that synthesize answers using Retrieval-Augmented Generation (RAG). Optimization requires factual richness, authority, and citation hooks.
                   </p>
                 </div>
                 <div className="mt-6 pt-4 border-t border-black/[0.04] dark:border-white/[0.04] space-y-2.5">
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Target Interface:</span>
-                    <span className="text-[#1D1D1F] dark:text-white">Gemini, ChatGPT, Perplexity</span>
+                    <span className="text-[var(--text-secondary)]">Target Interface:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white">Gemini, ChatGPT, Perplexity</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Core Technology:</span>
-                    <span className="text-[#1D1D1F] dark:text-white font-mono text-[10px]">Factual Density, RAG Hooks</span>
+                    <span className="text-[var(--text-secondary)]">Core Technology:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white font-mono text-[10px]">Factual Density, RAG Hooks</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-medium">
-                    <span className="text-[#86868B]">Primary Metric:</span>
-                    <span className="text-[#1D1D1F] dark:text-white">Citation & Recommend Rate</span>
+                    <span className="text-[var(--text-secondary)]">Primary Metric:</span>
+                    <span className="text-[var(--text-primary)] dark:text-white">Citation & Recommend Rate</span>
                   </div>
                 </div>
               </div>
@@ -817,50 +817,50 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             </div>
 
             {/* Deep Technical Deep-Dive */}
-            <div className="bg-white dark:bg-[#161617] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-6">
+            <div className="bg-white dark:bg-[var(--bg-surface)] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-6">
               <div>
-                <h2 className="text-base font-semibold text-[#1D1D1F] dark:text-white">The Mechanics of Search Innovation</h2>
-                <p className="text-xs text-[#86868B] font-normal mt-0.5">How discovery evolved from simple index matching to cognitive generative synthesis.</p>
+                <h2 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">The Mechanics of Search Innovation</h2>
+                <p className="text-xs text-[var(--text-secondary)] font-normal mt-0.5">How discovery evolved from simple index matching to cognitive generative synthesis.</p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="p-4 bg-[#F5F5F7] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
+                  <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-lg bg-apple-blue/5 dark:bg-apple-blue/10 flex items-center justify-center shrink-0">
                         <span className="font-bold text-xs text-apple-blue">1</span>
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">Crawlable Architecture & Semantic Layout (SEO)</h4>
-                        <p className="text-[11px] text-[#86868B] leading-relaxed font-normal">
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Crawlable Architecture & Semantic Layout (SEO)</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-normal">
                           Traditional search engines rely heavily on clean tags. By writing structured schema feeds (like Vehicle specifications, prices, and location), search crawlers catalog inventory with perfect metadata precision.
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[#F5F5F7] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
+                  <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-lg bg-apple-green/5 dark:bg-apple-green/10 flex items-center justify-center shrink-0">
                         <span className="font-bold text-xs text-apple-green">2</span>
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">FAQ Structured Markup for Conversational UI (AEO)</h4>
-                        <p className="text-[11px] text-[#86868B] leading-relaxed font-normal">
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">FAQ Structured Markup for Conversational UI (AEO)</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-normal">
                           Voice assistants pull discrete facts rather than lists. To win voice queries like "Where can I buy a certified hybrid car in Islamabad?", listing systems must provide direct QA mappings, specific location coordinates, and transparent pricing.
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[#F5F5F7] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
+                  <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-lg bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center shrink-0">
                         <span className="font-bold text-xs text-purple-500">3</span>
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">RAG hook formulation & Credential Citation (GEO)</h4>
-                        <p className="text-[11px] text-[#86868B] leading-relaxed font-normal">
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">RAG hook formulation & Credential Citation (GEO)</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-normal">
                           AI systems synthesize reports from across the web. To rank high in recommendations, content must include high factual density (exact mileage, inspection grade, dealer status) and authoritative statistics. Generative engines cite the source that proves the highest context alignment.
                         </p>
                       </div>
@@ -868,18 +868,18 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   </div>
                 </div>
 
-                <div className="flex flex-col justify-center bg-[#F5F5F7] dark:bg-[#1E1E1F] p-5 rounded-2xl border border-black/[0.02] dark:border-white/[0.02] space-y-4">
+                <div className="flex flex-col justify-center bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.02] dark:border-white/[0.02] space-y-4">
                   <div className="space-y-1 text-center">
                     <span className="px-2 py-0.5 bg-apple-blue/10 rounded text-[9px] font-bold uppercase text-apple-blue tracking-wider">Optimization Paradigm</span>
-                    <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">Comparison of Visibility Drivers</h4>
+                    <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Comparison of Visibility Drivers</h4>
                   </div>
                   
                   {/* Progress bars to illustrate focus */}
                   <div className="space-y-3">
                     <div className="space-y-1">
-                      <div className="flex justify-between text-[10px] font-bold text-[#86868B]">
+                      <div className="flex justify-between text-[10px] font-bold text-[var(--text-secondary)]">
                         <span>SEO: Keyword Match & Indexing</span>
-                        <span className="text-[#1D1D1F] dark:text-white font-mono">95% (Critical)</span>
+                        <span className="text-[var(--text-primary)] dark:text-white font-mono">95% (Critical)</span>
                       </div>
                       <div className="w-full h-1.5 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
                         <div className="h-full bg-apple-blue rounded-full" style={{ width: "95%" }}></div>
@@ -887,9 +887,9 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     </div>
 
                     <div className="space-y-1">
-                      <div className="flex justify-between text-[10px] font-bold text-[#86868B]">
+                      <div className="flex justify-between text-[10px] font-bold text-[var(--text-secondary)]">
                         <span>AEO: Direct Conversational Match</span>
-                        <span className="text-[#1D1D1F] dark:text-white font-mono">85% (Essential)</span>
+                        <span className="text-[var(--text-primary)] dark:text-white font-mono">85% (Essential)</span>
                       </div>
                       <div className="w-full h-1.5 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
                         <div className="h-full bg-apple-green rounded-full" style={{ width: "85%" }}></div>
@@ -897,9 +897,9 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     </div>
 
                     <div className="space-y-1">
-                      <div className="flex justify-between text-[10px] font-bold text-[#86868B]">
+                      <div className="flex justify-between text-[10px] font-bold text-[var(--text-secondary)]">
                         <span>GEO: Factual Density & Citation Index</span>
-                        <span className="text-[#1D1D1F] dark:text-white font-mono">92% (New Frontier)</span>
+                        <span className="text-[var(--text-primary)] dark:text-white font-mono">92% (New Frontier)</span>
                       </div>
                       <div className="w-full h-1.5 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
                         <div className="h-full bg-purple-500 rounded-full" style={{ width: "92%" }}></div>
@@ -907,7 +907,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     </div>
                   </div>
                   
-                  <p className="text-[9px] text-[#86868B] font-medium text-center leading-relaxed">
+                  <p className="text-[9px] text-[var(--text-secondary)] font-medium text-center leading-relaxed">
                     *Based on 2026 enterprise research data. Modern multi-agent web environments reward portals that supply rich structured data endpoints over simple keyword stuffing.
                   </p>
                 </div>
@@ -928,13 +928,13 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             className="grid grid-cols-1 lg:grid-cols-3 gap-6"
           >
             {/* Listing Selector Sidebar */}
-            <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-5 lg:col-span-1 flex flex-col h-fit">
+            <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-5 lg:col-span-1 flex flex-col h-fit">
               <div className="space-y-1">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-blue/10 text-[9px] font-bold text-apple-blue uppercase tracking-wider">
                   Target Selection
                 </span>
-                <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white">Select Listing</h3>
-                <p className="text-xs text-[#86868B] font-normal leading-relaxed">Choose a vehicle listing to test and optimize its discoverability indices.</p>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">Select Listing</h3>
+                <p className="text-xs text-[var(--text-secondary)] font-normal leading-relaxed">Choose a vehicle listing to test and optimize its discoverability indices.</p>
               </div>
 
               <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
@@ -949,16 +949,16 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       "w-full p-3.5 rounded-xl flex items-center justify-between text-left border transition-all duration-200",
                       selectedVehicleId === v.id 
                         ? "border-apple-blue bg-apple-blue/[0.02] dark:bg-apple-blue/10" 
-                        : "border-black/[0.04] dark:border-white/[0.04] bg-[#F5F5F7] dark:bg-white/5 hover:bg-black/[0.04]"
+                        : "border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-white/5 hover:bg-black/[0.04]"
                     )}
                   >
                     <div className="space-y-1 truncate">
-                      <p className="text-xs font-semibold text-[#1D1D1F] dark:text-white truncate">{v.year} {v.make} {v.model}</p>
-                      <p className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                      <p className="text-xs font-semibold text-[var(--text-primary)] dark:text-white truncate">{v.year} {v.make} {v.model}</p>
+                      <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                         PKR {v.price.toLocaleString()} • {v.city}
                       </p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-[#86868B] shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-[var(--text-secondary)] shrink-0" />
                   </button>
                 ))}
               </div>
@@ -989,64 +989,64 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   {/* Top Scorecard Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* SEO Score Card */}
-                    <div className="bg-white dark:bg-[#161617] p-4 rounded-xl border border-black/[0.04] dark:border-white/[0.04] flex items-center gap-3">
+                    <div className="bg-white dark:bg-[var(--bg-surface)] p-4 rounded-xl border border-black/[0.04] dark:border-white/[0.04] flex items-center gap-3">
                       <div className="w-10 h-10 bg-apple-blue/5 dark:bg-apple-blue/10 rounded-lg flex items-center justify-center shrink-0">
                         <Globe className="w-5 h-5 text-apple-blue" />
                       </div>
                       <div className="space-y-0.5">
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">SEO Index</p>
-                        <p className="text-sm font-semibold text-[#1D1D1F] dark:text-white">98% Optimal</p>
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">SEO Index</p>
+                        <p className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">98% Optimal</p>
                         <p className="text-[9px] text-apple-green font-bold">Schema Validated</p>
                       </div>
                     </div>
 
                     {/* AEO Voice Score Card */}
-                    <div className="bg-white dark:bg-[#161617] p-4 rounded-xl border border-black/[0.04] dark:border-white/[0.04] flex items-center gap-3">
+                    <div className="bg-white dark:bg-[var(--bg-surface)] p-4 rounded-xl border border-black/[0.04] dark:border-white/[0.04] flex items-center gap-3">
                       <div className="w-10 h-10 bg-apple-green/5 dark:bg-apple-green/10 rounded-lg flex items-center justify-center shrink-0">
                         <Volume2 className="w-5 h-5 text-apple-green" />
                       </div>
                       <div className="space-y-0.5">
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">AEO Answers</p>
-                        <p className="text-sm font-semibold text-[#1D1D1F] dark:text-white">92% Answer Rate</p>
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">AEO Answers</p>
+                        <p className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">92% Answer Rate</p>
                         <p className="text-[9px] text-apple-blue font-bold">Conversational Mapped</p>
                       </div>
                     </div>
 
                     {/* GEO AI Citation Score Card */}
-                    <div className="bg-white dark:bg-[#161617] p-4 rounded-xl border border-black/[0.04] dark:border-white/[0.04] flex items-center gap-3">
+                    <div className="bg-white dark:bg-[var(--bg-surface)] p-4 rounded-xl border border-black/[0.04] dark:border-white/[0.04] flex items-center gap-3">
                       <div className="w-10 h-10 bg-purple-500/5 dark:bg-purple-500/10 rounded-lg flex items-center justify-center shrink-0">
                         <Brain className="w-5 h-5 text-purple-500" />
                       </div>
                       <div className="space-y-0.5">
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">GEO Retrieval</p>
-                        <p className="text-sm font-semibold text-[#1D1D1F] dark:text-white">{optimizationData.geoCitationScore}% Chance</p>
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">GEO Retrieval</p>
+                        <p className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">{optimizationData.geoCitationScore}% Chance</p>
                         <p className="text-[9px] text-purple-500 font-bold">Factual Hook Ready</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Detail Tabs inside optimizer */}
-                  <div className="bg-white dark:bg-[#161617] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-6">
+                  <div className="bg-white dark:bg-[var(--bg-surface)] p-5 md:p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-6">
                     {/* Pillar 1: SEO keyword density & structured schema code */}
                     <div className="space-y-4">
                       <div className="flex items-center gap-2 border-b border-black/[0.04] dark:border-white/[0.04] pb-3">
                         <Globe className="w-4 h-4 text-apple-blue" />
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">Traditional SEO Google Crawl Mockup</h4>
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Traditional SEO Google Crawl Mockup</h4>
                       </div>
                       
                       {/* Search Snippet Preview */}
-                      <div className="p-4 bg-[#F5F5F7] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02] space-y-1">
-                        <div className="flex items-center gap-1 text-[10px] text-[#86868B] font-medium">
+                      <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02] space-y-1">
+                        <div className="flex items-center gap-1 text-[10px] text-[var(--text-secondary)] font-medium">
                           <span className="font-semibold">pakizzle.com</span>
                           <span>›</span>
                           <span>listings</span>
                           <span>›</span>
                           <span className="truncate">{selectedVehicle?.make?.toLowerCase() || ""}-{selectedVehicle?.model?.toLowerCase() || ""}</span>
                         </div>
-                        <h5 className="text-xs font-semibold text-[#1A0DAB] dark:text-[#8AB4F8] hover:underline cursor-pointer">
+                        <h5 className="text-xs font-semibold text-[var(--accent)] dark:text-[var(--accent)] hover:underline cursor-pointer">
                           Verified {selectedVehicle?.year} {selectedVehicle?.make} {selectedVehicle?.model} For Sale in {selectedVehicle?.city} | Pakizzle
                         </h5>
-                        <p className="text-[11px] text-[#86868B] leading-relaxed font-normal">
+                        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-normal">
                           Buy used {selectedVehicle?.year} {selectedVehicle?.make} {selectedVehicle?.model} in {selectedVehicle?.city} at best price. Features: {selectedVehicle?.features?.slice(0, 3).join(", ") || "Certified specs"}. Certified Inspection Grade available...
                         </p>
                       </div>
@@ -1054,13 +1054,13 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       {/* Keyword densities & Schema structured code */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="space-y-2.5">
-                          <h5 className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Local SEO Keyword Targets</h5>
+                          <h5 className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Local SEO Keyword Targets</h5>
                           <div className="space-y-1.5">
                             {optimizationData.seoKeywordDensity.map((kw, idx) => (
-                              <div key={idx} className="flex items-center justify-between p-2.5 bg-[#F5F5F7] dark:bg-[#1E1E1F] border border-black/[0.02] dark:border-white/[0.02] rounded-xl text-xs font-medium">
-                                <span className="text-[#1D1D1F] dark:text-white truncate">{kw.keyword}</span>
+                              <div key={idx} className="flex items-center justify-between p-2.5 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl text-xs font-medium">
+                                <span className="text-[var(--text-primary)] dark:text-white truncate">{kw.keyword}</span>
                                 <div className="flex items-center gap-2 shrink-0">
-                                  <span className="text-[#86868B] font-mono">{kw.count}x</span>
+                                  <span className="text-[var(--text-secondary)] font-mono">{kw.count}x</span>
                                   <span className="px-1.5 py-0.5 rounded bg-apple-green/10 text-apple-green text-[8px] font-bold uppercase tracking-wider">{kw.status}</span>
                                 </div>
                               </div>
@@ -1070,11 +1070,11 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
 
                         <div className="space-y-2.5">
                           <div className="flex items-center justify-between">
-                            <h5 className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">JSON-LD Structured Schema</h5>
+                            <h5 className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">JSON-LD Structured Schema</h5>
                             <span className="text-[8px] bg-apple-blue/10 text-apple-blue px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Valid Schema</span>
                           </div>
                           <div className="relative">
-                            <pre className="text-[9px] font-mono text-[#86868B] bg-black/5 dark:bg-black p-3 rounded-xl max-h-[150px] overflow-y-auto border border-black/[0.04] dark:border-white/[0.04] leading-normal">
+                            <pre className="text-[9px] font-mono text-[var(--text-secondary)] bg-black/5 dark:bg-black p-3 rounded-xl max-h-[150px] overflow-y-auto border border-black/[0.04] dark:border-white/[0.04] leading-normal">
                               {optimizationData.schemaMarkup}
                             </pre>
                           </div>
@@ -1086,7 +1086,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     <div className="space-y-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.04]">
                       <div className="flex items-center gap-2 border-b border-black/[0.04] dark:border-white/[0.04] pb-3">
                         <Volume2 className="w-4 h-4 text-apple-green" />
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">AEO Alexa, Siri & Featured Snippets Answers</h4>
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">AEO Alexa, Siri & Featured Snippets Answers</h4>
                       </div>
 
                       <div className="space-y-3">
@@ -1094,13 +1094,13 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                           <div key={idx} className="p-4 bg-apple-green/[0.01] border border-apple-green/10 rounded-xl space-y-1.5 relative">
                             <div className="flex items-center gap-2">
                               <span className="w-4 h-4 rounded-full bg-apple-green/10 flex items-center justify-center text-[8px] font-bold text-apple-green">Q</span>
-                              <h5 className="text-[11px] font-semibold text-[#1D1D1F] dark:text-white">{qa.question}</h5>
+                              <h5 className="text-[11px] font-semibold text-[var(--text-primary)] dark:text-white">{qa.question}</h5>
                             </div>
                             <div className="flex gap-2">
                               <span className="w-4 h-4 rounded-full bg-apple-blue/10 flex items-center justify-center text-[8px] font-bold text-apple-blue shrink-0">A</span>
-                              <p className="text-[11px] text-[#86868B] leading-relaxed font-normal">{qa.answer}</p>
+                              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-normal">{qa.answer}</p>
                             </div>
-                            <span className="absolute bottom-2 right-3 text-[8px] font-semibold uppercase tracking-wider text-[#86868B]">Source: {qa.source}</span>
+                            <span className="absolute bottom-2 right-3 text-[8px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Source: {qa.source}</span>
                           </div>
                         ))}
                       </div>
@@ -1110,15 +1110,15 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     <div className="space-y-4 pt-4 border-t border-black/[0.04] dark:border-white/[0.04]">
                       <div className="flex items-center gap-2 border-b border-black/[0.04] dark:border-white/[0.04] pb-3">
                         <Brain className="w-4 h-4 text-purple-500" />
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">GEO Chat-Engine RAG Hook Alignment</h4>
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">GEO Chat-Engine RAG Hook Alignment</h4>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="space-y-2.5">
-                          <h5 className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">AI Optimization Recommendations</h5>
+                          <h5 className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">AI Optimization Recommendations</h5>
                           <div className="space-y-1.5">
                             {optimizationData.geoRecommendations.map((rec, idx) => (
-                              <div key={idx} className="flex gap-2 p-3 bg-purple-500/[0.01] border border-purple-500/5 rounded-xl text-[11px] font-normal text-[#86868B] leading-relaxed">
+                              <div key={idx} className="flex gap-2 p-3 bg-purple-500/[0.01] border border-purple-500/5 rounded-xl text-[11px] font-normal text-[var(--text-secondary)] leading-relaxed">
                                 <span className="text-purple-500 shrink-0">✦</span>
                                 <span>{rec}</span>
                               </div>
@@ -1127,8 +1127,8 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                         </div>
 
                         <div className="space-y-2.5">
-                          <h5 className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">AI Engine Generated Recommendation Snippet</h5>
-                          <div className="p-4 bg-purple-500/[0.02] border border-purple-500/10 rounded-xl text-[11px] leading-relaxed font-normal text-[#86868B] space-y-2">
+                          <h5 className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">AI Engine Generated Recommendation Snippet</h5>
+                          <div className="p-4 bg-purple-500/[0.02] border border-purple-500/10 rounded-xl text-[11px] leading-relaxed font-normal text-[var(--text-secondary)] space-y-2">
                             <p>{optimizationData.geoRecommendationDraft}</p>
                             <div className="pt-2.5 border-t border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between text-[8px] text-purple-500 font-bold uppercase tracking-wider">
                               <span>Simulated ChatGPT & Perplexity Synthesis</span>
@@ -1145,12 +1145,12 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   </div>
                 </div>
               ) : (
-                <div className="bg-white dark:bg-[#161617] p-8 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col items-center justify-center text-center h-[460px]">
+                <div className="bg-white dark:bg-[var(--bg-surface)] p-8 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col items-center justify-center text-center h-[460px]">
                   <div className="w-12 h-12 bg-apple-blue/5 dark:bg-apple-blue/10 rounded-xl flex items-center justify-center mb-5 text-apple-blue">
                     <Sliders className="w-6 h-6" />
                   </div>
-                  <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1.5">No Active Metadata Audit</h3>
-                  <p className="text-xs text-[#86868B] max-w-sm leading-relaxed font-normal mb-6">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white mb-1.5">No Active Metadata Audit</h3>
+                  <p className="text-xs text-[var(--text-secondary)] max-w-sm leading-relaxed font-normal mb-6">
                     Select a listing from the sidebar catalog to examine structured keyword status, Schema.org mappings, AEO speech triggers, and RAG index rankings.
                   </p>
                   <Button
@@ -1179,32 +1179,32 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             className="grid grid-cols-1 lg:grid-cols-3 gap-6"
           >
             {/* Context Sidebar */}
-            <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-5 lg:col-span-1 h-fit">
+            <div className="bg-white dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] space-y-5 lg:col-span-1 h-fit">
               <div className="space-y-1">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-500/10 text-[9px] font-bold text-purple-500 uppercase tracking-wider">
                   GEO RAG Hook
                 </span>
-                <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white">AI Retrieval Playground</h3>
-                <p className="text-xs text-[#86868B] font-normal leading-relaxed">
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">AI Retrieval Playground</h3>
+                <p className="text-xs text-[var(--text-secondary)] font-normal leading-relaxed">
                   Test how LLM crawlers query, retrieve, filter, and cite Pakizzle inventory items based on natural semantic inputs.
                 </p>
               </div>
 
               <div className="space-y-4">
-                <div className="p-4 bg-[#F5F5F7] dark:bg-[#1E1E1F] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-2">
-                  <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">Try these prompt formats:</h4>
-                  <ul className="text-[11px] text-[#86868B] font-medium space-y-1.5 list-disc pl-4 leading-relaxed">
+                <div className="p-4 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-2">
+                  <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Try these prompt formats:</h4>
+                  <ul className="text-[11px] text-[var(--text-secondary)] font-medium space-y-1.5 list-disc pl-4 leading-relaxed">
                     <li>"Sedans in Lahore under 30 Lakhs"</li>
                     <li>"Best hybrid vehicle with key safety packages"</li>
                     <li>"Verified car in Islamabad with automatic gearbox"</li>
                   </ul>
                 </div>
 
-                <div className="p-4 bg-[#F5F5F7] dark:bg-[#1E1E1F] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase text-[#86868B] tracking-wider">
+                <div className="p-4 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase text-[var(--text-secondary)] tracking-wider">
                     <Sparkles className="w-3.5 h-3.5 text-purple-500" /> Grounding Signal
                   </div>
-                  <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">
+                  <p className="text-[10px] text-[var(--text-secondary)] font-normal leading-relaxed">
                     Unlike standard databases, a GEO-optimized site supplies factual density anchors. If your listings have complete specifications, LLMs can ingest them as structured facts to recommend your cars over competitors.
                   </p>
                 </div>
@@ -1212,16 +1212,16 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             </div>
 
             {/* Sandbox Chat Window */}
-            <div className="lg:col-span-2 bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col h-[560px]">
+            <div className="lg:col-span-2 bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col h-[560px]">
               {/* Chat Title bar */}
-              <div className="p-4 border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between bg-[#F5F5F7] dark:bg-[#1E1E1F]">
+              <div className="p-4 border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between bg-[var(--text-primary)] dark:bg-[var(--bg-surface)]">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center">
                     <Brain className="w-5 h-5 text-purple-500" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">GEO Cognitive Simulator Node</h4>
-                    <p className="text-[9px] text-[#86868B] font-bold uppercase tracking-wider">Retrieval-Augmented Generation (RAG) Mode</p>
+                    <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">GEO Cognitive Simulator Node</h4>
+                    <p className="text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-wider">Retrieval-Augmented Generation (RAG) Mode</p>
                   </div>
                 </div>
                 <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse"></span>
@@ -1238,26 +1238,26 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                         msg.role === 'user' ? 'items-end' : 'items-start'
                       )}
                     >
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] px-1">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] px-1">
                         {msg.role === 'user' ? 'Local Admin' : 'Generative RAG Node'}
                       </span>
                       <div className={cn(
                         "p-4 rounded-xl max-w-[85%] text-xs font-medium leading-relaxed border shadow-sm",
                         msg.role === 'user' 
                           ? 'bg-apple-blue border-apple-blue text-white rounded-tr-none' 
-                          : 'bg-[#F5F5F7] dark:bg-[#1E1E1F] border-black/[0.02] dark:border-white/[0.02] text-[#86868B] rounded-tl-none space-y-3'
+                          : 'bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border-black/[0.02] dark:border-white/[0.02] text-[var(--text-secondary)] rounded-tl-none space-y-3'
                       )}>
                         {msg.role === 'user' ? (
                           msg.content
                         ) : (
                           <>
-                            <p className="whitespace-pre-line text-[#1D1D1F] dark:text-white">{msg.content}</p>
+                            <p className="whitespace-pre-line text-[var(--text-primary)] dark:text-white">{msg.content}</p>
                             {msg.citations && msg.citations.length > 0 && (
                               <div className="pt-2.5 border-t border-black/[0.04] dark:border-white/[0.04] space-y-1.5">
                                 <p className="text-[9px] font-bold uppercase text-purple-500 tracking-wider">Citations Retrieved ({msg.citations.length})</p>
                                 <div className="space-y-1">
                                   {msg.citations.map((cite, cIdx) => (
-                                    <div key={cIdx} className="flex gap-2 text-[10px] text-[#86868B] font-mono leading-relaxed bg-black/5 dark:bg-black/25 p-2 rounded border border-black/[0.04] dark:border-white/[0.04]">
+                                    <div key={cIdx} className="flex gap-2 text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed bg-black/5 dark:bg-black/25 p-2 rounded border border-black/[0.04] dark:border-white/[0.04]">
                                       <span className="text-purple-500 font-bold">[{cIdx + 1}]</span>
                                       <span>{cite}</span>
                                     </div>
@@ -1273,8 +1273,8 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
 
                   {isSandboxTyping && (
                     <div className="flex flex-col items-start gap-1.5">
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] px-1">Generative RAG Node</span>
-                      <div className="p-3 bg-[#F5F5F7] dark:bg-[#1E1E1F] border border-black/[0.02] dark:border-white/[0.02] rounded-xl rounded-tl-none flex items-center gap-1.5">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] px-1">Generative RAG Node</span>
+                      <div className="p-3 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl rounded-tl-none flex items-center gap-1.5">
                         <span className="w-1.2 h-1.2 rounded-full bg-purple-500 animate-bounce"></span>
                         <span className="w-1.2 h-1.2 rounded-full bg-purple-500 animate-bounce delay-100"></span>
                         <span className="w-1.2 h-1.2 rounded-full bg-purple-500 animate-bounce delay-200"></span>
@@ -1285,11 +1285,11 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
               </ScrollArea>
 
               {/* Chat Input */}
-              <form onSubmit={handleSandboxSubmit} className="p-3.5 border-t border-black/[0.04] dark:border-white/[0.04] bg-[#F5F5F7] dark:bg-[#1E1E1F] flex gap-3">
+              <form onSubmit={handleSandboxSubmit} className="p-3.5 border-t border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] flex gap-3">
                 <input
                   type="text"
                   placeholder="Ask the AI simulator to search for vehicles..."
-                  className="flex-1 px-4 py-2 bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] focus:border-apple-blue/40 outline-none rounded-xl text-xs font-semibold text-[#1D1D1F] dark:text-white placeholder-[#86868B]"
+                  className="flex-1 px-4 py-2 bg-white dark:bg-[var(--bg-surface)] border border-black/[0.04] dark:border-white/[0.04] focus:border-apple-blue/40 outline-none rounded-xl text-xs font-semibold text-[var(--text-primary)] dark:text-white placeholder-[var(--text-secondary)]"
                   value={sandboxPrompt}
                   onChange={(e) => setSandboxPrompt(e.target.value)}
                 />

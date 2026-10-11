@@ -162,7 +162,7 @@ export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const { location: userLocation } = useAppLocation();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   // Scroll-linked cinematic parallax:
   // Background moves at ~0.5x scroll speed, foreground content moves at ~1x speed
@@ -196,11 +196,11 @@ export default function Hero() {
   const handleSearchSubmit = () => {
     const params = new URLSearchParams();
     if (activeTab === "rent") params.set("purpose", "rent");
-    else if (activeTab === "plots") params.set("make", "Plot");
+    else if (activeTab === "plots") params.set("propertyType", "Plot");
     else params.set("purpose", "buy");
 
     if (selectedCity && selectedCity !== "All Pakistan") params.set("city", selectedCity);
-    if (selectedType) params.set("make", selectedType);
+    if (selectedType) params.set("propertyType", selectedType);
 
     const price = PRICE_PRESETS[selectedPriceIdx];
     if (price.min) params.set("priceMin", price.min.toString());
@@ -243,8 +243,10 @@ export default function Hero() {
               className="w-full h-full object-cover object-center animate-ken-burns"
             />
           </AnimatePresence>
-          {/* Certified High-Contrast Photo Scrim (Part 5: >= 4.5:1 text, >= 3:1 headline highlight) */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/65 to-black/50 pointer-events-none" />
+          {/* Lightest passing overlay: ~50% behind text column fading to ~25% on the right, heavier only behind bottom cards */}
+          <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-full lg:w-3/5 bg-gradient-to-r from-black/45 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent pointer-events-none" />
         </motion.div>
 
         {/* 
@@ -1005,7 +1007,9 @@ export default function Hero() {
 
           <h1 className="phi-h1 font-extrabold text-white tracking-tight drop-shadow-md text-balance">
             Architectural Sanctuaries. <br />
-            <span className="text-[#C9A227]">
+            <span className={cn(
+              activeHero.id === "h-4" ? "text-white" : "text-[#C9A227]"
+            )}>
               Title Guaranteed.
             </span>
           </h1>

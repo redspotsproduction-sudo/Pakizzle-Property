@@ -85,7 +85,7 @@ export default function UserAds() {
             <Car className="w-3.5 h-3.5" />
             Inventory & Showroom
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Inventory Matrix
           </h1>
           <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
@@ -134,7 +134,7 @@ export default function UserAds() {
                 "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                 isActive
                   ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                  : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
               {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
@@ -157,7 +157,7 @@ export default function UserAds() {
                 className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4 flex flex-col md:flex-row items-stretch md:items-center gap-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300"
               >
                 {/* Vehicle Image with Stats Overlay */}
-                <div className="relative w-full md:w-36 aspect-[4/3] rounded-xl overflow-hidden shrink-0 bg-[#1C1C1E] border border-black/5 dark:border-white/10 group">
+                <div className="relative w-full md:w-36 aspect-[4/3] rounded-xl overflow-hidden shrink-0 bg-[var(--bg-raised)] border border-black/5 dark:border-white/10 group">
                   {vehicle.images?.[0] ? (
                     <img 
                       src={vehicle.images[0]} 
@@ -190,7 +190,7 @@ export default function UserAds() {
                        <Zap className="w-3 h-3 text-apple-blue" />
                        Asset Log #{vehicle.id.slice(-8).toUpperCase()}
                     </div>
-                    <h2 className="text-sm font-semibold text-[#1D1D1F] dark:text-white truncate block">
+                    <h2 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white truncate block">
                        {vehicle.year} {vehicle.make} {vehicle.model}
                     </h2>
                     <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[#86868B] font-normal">
@@ -206,15 +206,15 @@ export default function UserAds() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
                      <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                         <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Views (7d)</p>
-                        <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">428 <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">↑ 12%</span></p>
+                        <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">428 <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">↑ 12%</span></p>
                      </div>
                      <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                         <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Inquiries</p>
-                        <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">14 <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">↑ 2</span></p>
+                        <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">14 <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">↑ 2</span></p>
                      </div>
                      <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
                         <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Conversion</p>
-                        <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">3.2% <span className="text-[9px] text-apple-red font-semibold font-sans ml-0.5">↓ 0.4%</span></p>
+                        <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">3.2% <span className="text-[9px] text-apple-red font-semibold font-sans ml-0.5">↓ 0.4%</span></p>
                      </div>
                      <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
                         <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Market Rank</p>
@@ -228,7 +228,7 @@ export default function UserAds() {
                   <div className="flex flex-wrap items-center gap-1.5 justify-end">
                     <Link 
                       to={`/edit/${vehicle.id}`}
-                      className="w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 flex items-center justify-center text-[#1D1D1F] dark:text-white transition-colors"
+                      className="w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 flex items-center justify-center text-[var(--text-primary)] dark:text-white transition-colors"
                       title="Edit Deployment"
                     >
                       <Edit2 className="w-4 h-4" />
@@ -271,7 +271,7 @@ export default function UserAds() {
               className="py-16 text-center bg-[#F5F5F7]/30 dark:bg-white/[0.005] rounded-2xl border border-dashed border-black/[0.06] dark:border-white/[0.06]"
             >
               <BarChart3 className="w-10 h-10 text-[#86868B]/40 mx-auto mb-3" />
-              <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">No Matching Entities</h3>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white mb-1">No Matching Entities</h3>
               <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
                 Archive query returned zero results under the current filter protocol. Consider adjusting parameters.
               </p>
@@ -299,7 +299,7 @@ export default function UserAds() {
                <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 text-center sm:text-left min-w-0">
-               <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white mb-0.5">Automated Fraud Detection Active</h4>
+               <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white mb-0.5">Automated Fraud Detection Active</h4>
                <p className="text-[11px] text-[#86868B] font-normal leading-relaxed">Your listings are currently protected by our high-level neural security protocols. Every inquiry is verified before decryption.</p>
                <div className="flex items-center justify-center sm:justify-start gap-3 mt-2">
                   <div className="flex items-center gap-1.5">
@@ -316,8 +316,8 @@ export default function UserAds() {
 
          <div className="bg-white dark:bg-[#161617] p-5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex flex-col justify-center items-center text-center shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
             <TrendingUp className="w-6 h-6 text-apple-green mb-2" />
-            <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white">Inventory Velocity</h4>
-            <div className="text-2xl font-bold text-[#1D1D1F] dark:text-white font-mono mt-1 mb-0.5">4.2x</div>
+            <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Inventory Velocity</h4>
+            <div className="text-2xl font-bold text-[var(--text-primary)] dark:text-white font-mono mt-1 mb-0.5">4.2x</div>
             <p className="text-[9px] font-bold text-apple-green uppercase tracking-widest">Target Met</p>
          </div>
       </div>

@@ -534,11 +534,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
     if (isOperationNotAllowed) {
       return (
-        <div className="p-5 rounded-2xl bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 text-neutral-800 dark:text-neutral-200 text-sm flex flex-col gap-4 shadow-md leading-relaxed mb-6 animate-fadeIn">
+        <div className="p-5 rounded-2xl bg-gold-decoration/10 dark:bg-gold-decoration/5 border border-gold-decoration/20 text-neutral-800 dark:text-neutral-200 text-sm flex flex-col gap-4 shadow-md leading-relaxed mb-6 animate-fadeIn">
           <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <Info className="w-5 h-5 mt-0.5 shrink-0 text-gold-decoration dark:text-gold-decoration" />
             <div className="space-y-1">
-              <h4 className="font-bold text-amber-800 dark:text-amber-300 text-sm">
+              <h4 className="font-bold text-amber-800 dark:text-gold-decoration/40 text-sm">
                 Firebase Authentication Setup Required
               </h4>
               <p className="text-xs text-neutral-600 dark:text-neutral-400">
@@ -547,7 +547,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             </div>
           </div>
 
-          <div className="bg-white/50 dark:bg-zinc-900/60 rounded-xl p-3.5 border border-neutral-100 dark:border-zinc-800 space-y-2.5 text-xs">
+          <div className="bg-white/50 dark:bg-apple-text/60 rounded-xl p-3.5 border border-neutral-100 dark:border-apple-surface space-y-2.5 text-xs">
             <p className="font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider text-[9px]">
               How to enable in 30 seconds:
             </p>
@@ -562,7 +562,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             href="https://console.firebase.google.com/project/gen-lang-client-0545637581/authentication/providers"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer active:scale-[0.99] hover:shadow-md"
+            className="w-full bg-gold-decoration hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer active:scale-[0.99] hover:shadow-md"
           >
             Open Firebase Console
             <Globe className="w-4 h-4" />
@@ -611,7 +611,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           type="button"
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 py-3 rounded-xl font-bold text-xs uppercase tracking-widest text-neutral-800 dark:text-white hover:bg-neutral-50 dark:hover:bg-zinc-800/80 transition-all h-12 shadow-sm"
+          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-apple-text border border-neutral-200 dark:border-apple-surface py-3 rounded-xl font-bold text-xs uppercase tracking-widest text-neutral-800 dark:text-white hover:bg-neutral-50 dark:hover:bg-apple-surface/80 transition-all h-12 shadow-sm"
         >
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><GoogleIcon /> Continue with Google</>}
         </button>
@@ -628,7 +628,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
         <button
           type="button"
           onClick={() => setView('email-login')}
-          className="w-full flex items-center justify-center gap-3 bg-neutral-100 dark:bg-zinc-800/50 text-neutral-700 dark:text-zinc-200 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-neutral-200 dark:hover:bg-zinc-800 transition-all h-12"
+          className="w-full flex items-center justify-center gap-3 bg-neutral-100 dark:bg-apple-surface/50 text-neutral-700 dark:text-apple-border py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-neutral-200 dark:hover:bg-apple-surface transition-all h-12"
         >
           <Mail className="w-4.5 h-4.5" /> Continue with Email
         </button>
@@ -636,13 +636,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
         <button
           type="button"
           onClick={() => setView('phone-entry')}
-          className="w-full flex items-center justify-center gap-3 bg-neutral-100 dark:bg-zinc-800/50 text-neutral-700 dark:text-zinc-200 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-neutral-200 dark:hover:bg-zinc-800 transition-all h-12"
+          className="w-full flex items-center justify-center gap-3 bg-neutral-100 dark:bg-apple-surface/50 text-neutral-700 dark:text-apple-border py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-neutral-200 dark:hover:bg-apple-surface transition-all h-12"
         >
           <Smartphone className="w-4.5 h-4.5" /> Continue with Phone
         </button>
       </div>
 
-      <div className="pt-5 border-t border-neutral-100 dark:border-zinc-800/80 space-y-2 text-center">
+      <div className="pt-5 border-t border-neutral-100 dark:border-apple-surface/80 space-y-2 text-center">
         <p className="text-xs text-neutral-500 dark:text-neutral-400">
           Forgot your password?{' '}
           <button
@@ -669,8 +669,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
   const renderEmailLogin = () => (
     <form onSubmit={handleEmailLogin} className="space-y-4 pt-1">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
-        <button type="button" onClick={() => setView('selection')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
+      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80">
+        <button type="button" onClick={() => setView('selection')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
           <ChevronLeft className="w-4.5 h-4.5" />
         </button>
         <div>
@@ -687,7 +687,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm text-stone-900 dark:text-white"
             placeholder="john@example.com"
           />
         </div>
@@ -710,13 +710,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-10 pr-10 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm text-stone-900 dark:text-white"
               placeholder="••••••••"
             />
             <button
               type="button"
               onClick={() => setShowPassword(prev => !prev)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-zinc-200 p-1 rounded-md transition-colors"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-apple-border p-1 rounded-md transition-colors"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -761,25 +761,25 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
     // Determine strength tier labels & tailwind coloring
     let strengthLabel = "Not Entered";
-    let strengthColorClass = "bg-neutral-200 dark:bg-zinc-800";
-    let strengthTextClass = "text-neutral-400 dark:text-zinc-500";
+    let strengthColorClass = "bg-neutral-200 dark:bg-apple-surface";
+    let strengthTextClass = "text-neutral-400 dark:text-apple-text-muted";
 
     if (strengthScore === 1) {
       strengthLabel = "Weak";
-      strengthColorClass = "bg-rose-500";
-      strengthTextClass = "text-rose-500 font-bold";
+      strengthColorClass = "bg-apple-red";
+      strengthTextClass = "text-apple-red font-bold";
     } else if (strengthScore === 2) {
       strengthLabel = "Fair";
-      strengthColorClass = "bg-amber-500";
-      strengthTextClass = "text-amber-500 font-bold";
+      strengthColorClass = "bg-gold-decoration";
+      strengthTextClass = "text-gold-decoration font-bold";
     } else if (strengthScore === 3) {
       strengthLabel = "Strong";
       strengthColorClass = "bg-apple-blue";
       strengthTextClass = "text-apple-blue font-bold";
     } else if (strengthScore === 4) {
       strengthLabel = "Apple Secure";
-      strengthColorClass = "bg-emerald-500 animate-pulse";
-      strengthTextClass = "text-emerald-500 font-bold";
+      strengthColorClass = "bg-apple-green animate-pulse";
+      strengthTextClass = "text-apple-green font-bold";
     }
 
     // Determine button state
@@ -787,11 +787,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
     return (
       <form onSubmit={handleEmailSignup} className="space-y-4 pt-1">
-        <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
+        <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80">
           <button 
             type="button" 
             onClick={() => setView('selection')} 
-            className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors"
+            className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors"
           >
             <ChevronLeft className="w-4.5 h-4.5" />
           </button>
@@ -811,7 +811,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 Full Name
               </label>
               {nameTrimmed.length > 0 && !signupErrors.name && (
-                <span className={`text-[10px] font-semibold transition-all ${isNameValid ? 'text-emerald-500' : 'text-amber-500'}`}>
+                <span className={`text-[10px] font-semibold transition-all ${isNameValid ? 'text-apple-green' : 'text-gold-decoration'}`}>
                   {isNameValid ? 'Perfect format' : 'Enter first & last name'}
                 </span>
               )}
@@ -819,9 +819,9 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             <div className="relative">
               <User className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${
                 signupErrors.name && showSignupValidation
-                  ? 'text-rose-500' 
+                  ? 'text-apple-red' 
                   : isNameValid 
-                    ? 'text-emerald-500' 
+                    ? 'text-apple-green' 
                     : 'text-neutral-400'
               }`} />
               <input
@@ -834,23 +834,23 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     setSignupErrors(prev => ({ ...prev, name: undefined }));
                   }
                 }}
-                className={`w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border outline-none text-sm text-stone-900 dark:text-white transition-all ${
+                className={`w-full pl-10 pr-10 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border outline-none text-sm text-stone-900 dark:text-white transition-all ${
                   signupErrors.name && showSignupValidation
-                    ? 'border-rose-500/70 focus:border-rose-500 ring-1 ring-rose-500/15'
+                    ? 'border-apple-red/70 focus:border-apple-red ring-1 ring-apple-red/15'
                     : nameTrimmed.length === 0 
-                      ? 'border-gray-200 dark:border-zinc-800 focus:border-apple-blue' 
+                      ? 'border-apple-border dark:border-apple-surface focus:border-apple-blue' 
                       : isNameValid 
-                        ? 'border-emerald-500/50 dark:border-emerald-500/35 focus:border-emerald-500' 
-                        : 'border-amber-400/70 dark:border-amber-400/40 focus:border-amber-500'
+                        ? 'border-apple-green/50 dark:border-apple-green/35 focus:border-apple-green' 
+                        : 'border-gold-decoration/70 dark:border-gold-decoration/40 focus:border-gold-decoration'
                 }`}
                 placeholder="John Doe"
               />
               {isNameValid && !signupErrors.name && (
-                <Check className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
+                <Check className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-green" />
               )}
             </div>
             {showSignupValidation && signupErrors.name && (
-              <p className="text-[11px] text-rose-500 font-semibold mt-1 flex items-center gap-1.5 animate-pulse">
+              <p className="text-[11px] text-apple-red font-semibold mt-1 flex items-center gap-1.5 animate-pulse">
                 <AlertCircle className="w-3.5 h-3.5" /> {signupErrors.name}
               </p>
             )}
@@ -863,7 +863,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 Email Address
               </label>
               {email.length > 0 && !signupErrors.email && (
-                <span className={`text-[10px] font-semibold transition-all ${isEmailValid ? 'text-emerald-500' : 'text-rose-500'}`}>
+                <span className={`text-[10px] font-semibold transition-all ${isEmailValid ? 'text-apple-green' : 'text-apple-red'}`}>
                   {isEmailValid ? 'Valid format' : 'Invalid email structure'}
                 </span>
               )}
@@ -871,9 +871,9 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             <div className="relative">
               <Mail className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${
                 signupErrors.email && showSignupValidation
-                  ? 'text-rose-500'
+                  ? 'text-apple-red'
                   : isEmailValid 
-                    ? 'text-emerald-500' 
+                    ? 'text-apple-green' 
                     : 'text-neutral-400'
               }`} />
               <input
@@ -886,23 +886,23 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     setSignupErrors(prev => ({ ...prev, email: undefined }));
                   }
                 }}
-                className={`w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border outline-none text-sm text-stone-900 dark:text-white transition-all ${
+                className={`w-full pl-10 pr-10 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border outline-none text-sm text-stone-900 dark:text-white transition-all ${
                   signupErrors.email && showSignupValidation
-                    ? 'border-rose-500/70 focus:border-rose-500 ring-1 ring-rose-500/15'
+                    ? 'border-apple-red/70 focus:border-apple-red ring-1 ring-apple-red/15'
                     : email.length === 0 
-                      ? 'border-gray-200 dark:border-zinc-800 focus:border-apple-blue' 
+                      ? 'border-apple-border dark:border-apple-surface focus:border-apple-blue' 
                       : isEmailValid 
-                        ? 'border-emerald-500/50 dark:border-emerald-500/35 focus:border-emerald-500' 
-                        : 'border-rose-400/70 dark:border-rose-400/40 focus:border-rose-500'
+                        ? 'border-apple-green/50 dark:border-apple-green/35 focus:border-apple-green' 
+                        : 'border-rose-400/70 dark:border-rose-400/40 focus:border-apple-red'
                 }`}
                 placeholder="john@example.com"
               />
               {isEmailValid && !signupErrors.email && (
-                <Check className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
+                <Check className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-green" />
               )}
             </div>
             {showSignupValidation && signupErrors.email && (
-              <p className="text-[11px] text-rose-500 font-semibold mt-1 flex items-center gap-1.5 animate-pulse">
+              <p className="text-[11px] text-apple-red font-semibold mt-1 flex items-center gap-1.5 animate-pulse">
                 <AlertCircle className="w-3.5 h-3.5" /> {signupErrors.email}
               </p>
             )}
@@ -923,9 +923,9 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             <div className="relative">
               <Lock className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${
                 signupErrors.password && showSignupValidation
-                  ? 'text-rose-500'
+                  ? 'text-apple-red'
                   : strengthScore >= 3 
-                    ? 'text-emerald-500' 
+                    ? 'text-apple-green' 
                     : 'text-neutral-400'
               }`} />
               <input
@@ -938,41 +938,41 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     setSignupErrors(prev => ({ ...prev, password: undefined }));
                   }
                 }}
-                className={`w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border outline-none text-sm text-stone-900 dark:text-white transition-all ${
+                className={`w-full pl-10 pr-10 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border outline-none text-sm text-stone-900 dark:text-white transition-all ${
                   signupErrors.password && showSignupValidation
-                    ? 'border-rose-500/70 focus:border-rose-500 ring-1 ring-rose-500/15'
+                    ? 'border-apple-red/70 focus:border-apple-red ring-1 ring-apple-red/15'
                     : password.length === 0 
-                      ? 'border-gray-200 dark:border-zinc-800 focus:border-apple-blue' 
+                      ? 'border-apple-border dark:border-apple-surface focus:border-apple-blue' 
                       : strengthScore >= 3 
-                        ? 'border-emerald-500/50 dark:border-emerald-500/35 focus:border-emerald-500' 
-                        : 'border-amber-400/70 dark:border-amber-400/40 focus:border-amber-500'
+                        ? 'border-apple-green/50 dark:border-apple-green/35 focus:border-apple-green' 
+                        : 'border-gold-decoration/70 dark:border-gold-decoration/40 focus:border-gold-decoration'
                 }`}
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowSignupPassword(prev => !prev)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-zinc-200 p-1 rounded-md transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-apple-border p-1 rounded-md transition-colors"
               >
                 {showSignupPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
             {showSignupValidation && signupErrors.password && (
-              <p className="text-[11px] text-rose-500 font-semibold mt-1 flex items-center gap-1.5 animate-pulse">
+              <p className="text-[11px] text-apple-red font-semibold mt-1 flex items-center gap-1.5 animate-pulse">
                 <AlertCircle className="w-3.5 h-3.5" /> {signupErrors.password}
               </p>
             )}
 
             {/* Password Segmented Strength Indicator */}
             {password.length > 0 && (
-              <div className="space-y-2 mt-2 p-3 rounded-xl bg-neutral-50 dark:bg-zinc-900/40 border border-neutral-100 dark:border-zinc-800/50">
+              <div className="space-y-2 mt-2 p-3 rounded-xl bg-neutral-50 dark:bg-apple-text/40 border border-neutral-100 dark:border-apple-surface/50">
                 {/* 4 horizontal bars representing password strength */}
                 <div className="grid grid-cols-4 gap-1.5 h-1">
                   {[1, 2, 3, 4].map((index) => (
                     <div 
                       key={index}
                       className={`h-full rounded-full transition-all duration-300 ${
-                        strengthScore >= index ? strengthColorClass : 'bg-neutral-200 dark:bg-zinc-800'
+                        strengthScore >= index ? strengthColorClass : 'bg-neutral-200 dark:bg-apple-surface'
                       }`}
                     />
                   ))}
@@ -980,31 +980,31 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
                 {/* Password Criteria Checklist */}
                 <div className="space-y-1.5 pt-1 text-[11px]">
-                  <div className="flex items-center gap-1.5 text-neutral-600 dark:text-zinc-400">
+                  <div className="flex items-center gap-1.5 text-neutral-600 dark:text-apple-text-muted">
                     <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-bold ${
-                      hasMinLength ? 'bg-emerald-500 text-white' : 'bg-neutral-200 dark:bg-zinc-800 text-neutral-500'
+                      hasMinLength ? 'bg-apple-green text-white' : 'bg-neutral-200 dark:bg-apple-surface text-neutral-500'
                     }`}>
                       {hasMinLength ? '✓' : '●'}
                     </span>
-                    <span className={hasMinLength ? 'text-emerald-500 font-medium' : ''}>At least 6 characters</span>
+                    <span className={hasMinLength ? 'text-apple-green font-medium' : ''}>At least 6 characters</span>
                   </div>
                   
-                  <div className="flex items-center gap-1.5 text-neutral-600 dark:text-zinc-400">
+                  <div className="flex items-center gap-1.5 text-neutral-600 dark:text-apple-text-muted">
                     <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-bold ${
-                      (hasUppercase && hasLowercase) ? 'bg-emerald-500 text-white' : 'bg-neutral-200 dark:bg-zinc-800 text-neutral-500'
+                      (hasUppercase && hasLowercase) ? 'bg-apple-green text-white' : 'bg-neutral-200 dark:bg-apple-surface text-neutral-500'
                     }`}>
                       {(hasUppercase && hasLowercase) ? '✓' : '●'}
                     </span>
-                    <span className={(hasUppercase && hasLowercase) ? 'text-emerald-500 font-medium' : ''}>Mix of uppercase & lowercase letters</span>
+                    <span className={(hasUppercase && hasLowercase) ? 'text-apple-green font-medium' : ''}>Mix of uppercase & lowercase letters</span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-neutral-600 dark:text-zinc-400">
+                  <div className="flex items-center gap-1.5 text-neutral-600 dark:text-apple-text-muted">
                     <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-bold ${
-                      hasNumber ? 'bg-emerald-500 text-white' : 'bg-neutral-200 dark:bg-zinc-800 text-neutral-500'
+                      hasNumber ? 'bg-apple-green text-white' : 'bg-neutral-200 dark:bg-apple-surface text-neutral-500'
                     }`}>
                       {hasNumber ? '✓' : '●'}
                     </span>
-                    <span className={hasNumber ? 'text-emerald-500 font-medium' : ''}>Contains at least 1 number</span>
+                    <span className={hasNumber ? 'text-apple-green font-medium' : ''}>Contains at least 1 number</span>
                   </div>
                 </div>
               </div>
@@ -1031,8 +1031,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
   const renderPhoneEntry = () => (
     <form onSubmit={handlePhoneSubmit} className="space-y-4 pt-1">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
-        <button type="button" onClick={() => setView('selection')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
+      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80">
+        <button type="button" onClick={() => setView('selection')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
           <ChevronLeft className="w-4.5 h-4.5" />
         </button>
         <div>
@@ -1051,7 +1051,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm text-stone-900 dark:text-white"
               placeholder="03XXXXXXXXX or +92XXXXXXXXX"
             />
           </div>
@@ -1074,8 +1074,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
   const renderOtpVerify = () => (
     <form onSubmit={handleOtpVerify} className="space-y-4 pt-1">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
-        <button type="button" onClick={() => setView('phone-entry')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
+      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80">
+        <button type="button" onClick={() => setView('phone-entry')} className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200">
           <ChevronLeft className="w-4.5 h-4.5" />
         </button>
         <div>
@@ -1093,7 +1093,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             maxLength={6}
             value={otp}
             onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
-            className="w-full px-4 py-3.5 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-base text-stone-900 dark:text-white font-mono tracking-[0.6em] text-center"
+            className="w-full px-4 py-3.5 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-base text-stone-900 dark:text-white font-mono tracking-[0.6em] text-center"
             placeholder="123456"
           />
         </div>
@@ -1111,11 +1111,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
   const renderForgotPassword = () => (
     <div className="pt-1">
-      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-apple-surface/80">
         <button 
           type="button" 
           onClick={() => setView('selection')} 
-          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
+          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
         >
           <ChevronLeft className="w-4.5 h-4.5" />
         </button>
@@ -1171,7 +1171,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             title: 'Automotive Enterprise',
             icon: Building2,
             desc: 'Manufacturers, importers, insurance brokers, auto banks.',
-            color: 'from-purple-500 to-indigo-600',
+            color: 'from-purple-500 to-apple-blue',
             features: ['Corporate Administration Panel', 'Brand Page Customization', 'Department routing', 'Official Industry Verification Badge']
           }
         ].map((item) => {
@@ -1185,7 +1185,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               className={`p-5 rounded-[24px] border cursor-pointer transition-all duration-300 relative overflow-hidden group ${
                 isSelected 
                   ? 'border-apple-blue bg-apple-blue/[0.03] dark:bg-apple-blue/[0.05] shadow-[0_12px_32px_rgba(0,122,255,0.12)]' 
-                  : 'border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 hover:border-neutral-350 dark:hover:border-zinc-700'
+                  : 'border-neutral-200 dark:border-apple-surface bg-white dark:bg-apple-text/60 hover:border-neutral-350 dark:hover:border-apple-text-muted'
               }`}
             >
               <div className="flex items-start gap-4">
@@ -1198,7 +1198,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                       {item.title}
                     </h3>
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected ? 'border-apple-blue bg-apple-blue text-white' : 'border-neutral-300 dark:border-zinc-700'
+                      isSelected ? 'border-apple-blue bg-apple-blue text-white' : 'border-neutral-300 dark:border-apple-text-muted'
                     }`}>
                       {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                     </div>
@@ -1210,7 +1210,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   {/* Subtle hover detail */}
                   <div className="flex flex-wrap gap-1.5 pt-3">
                     {item.features.map((feat, idx) => (
-                      <span key={idx} className="text-[9.5px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400">
+                      <span key={idx} className="text-[9.5px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-apple-surface text-neutral-500 dark:text-neutral-400">
                         {feat}
                       </span>
                     ))}
@@ -1230,7 +1230,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             auth.signOut();
             setView('selection');
           }}
-          className="px-6 py-4 rounded-xl border border-neutral-200 dark:border-zinc-800 text-xs font-bold uppercase tracking-widest text-neutral-500 hover:bg-neutral-50 dark:hover:bg-zinc-800/50 transition-colors"
+          className="px-6 py-4 rounded-xl border border-neutral-200 dark:border-apple-surface text-xs font-bold uppercase tracking-widest text-neutral-500 hover:bg-neutral-50 dark:hover:bg-apple-surface/50 transition-colors"
         >
           Sign Out
         </button>
@@ -1253,8 +1253,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   // 2. USER ONBOARDING FORM
   const renderOnboardingFormUser = () => (
     <form onSubmit={submitOnboardingUser} className="space-y-6 pt-1">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
-        <button type="button" onClick={() => setView('onboarding-type')} className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-300 hover:bg-neutral-200">
+      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80">
+        <button type="button" onClick={() => setView('onboarding-type')} className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-apple-border hover:bg-neutral-200">
           <ChevronLeft className="w-5 h-5" />
         </button>
         <div>
@@ -1266,7 +1266,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
       {renderErrorBanner()}
 
       {/* Profile Picture Grid */}
-      <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-200/50 dark:border-zinc-800/50 space-y-3">
+      <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-apple-text/50 border border-neutral-200/50 dark:border-apple-surface/50 space-y-3">
         <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Select Profile Picture Preset</span>
         <div className="flex flex-wrap items-center gap-3">
           {USER_AVATARS.map((av, idx) => (
@@ -1279,13 +1279,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 }`} 
               />
               {userPhoto === av && (
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-apple-blue text-white flex items-center justify-center border border-white dark:border-[#121214]">
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-apple-blue text-white flex items-center justify-center border border-white dark:border-[var(--bg-surface)]">
                   <Check className="w-3 h-3 stroke-[3]" />
                 </div>
               )}
             </div>
           ))}
-          <div className="relative w-14 h-14 rounded-full border border-dashed border-neutral-350 dark:border-zinc-700 flex flex-col items-center justify-center cursor-pointer hover:border-apple-blue transition-all bg-white dark:bg-zinc-900 group">
+          <div className="relative w-14 h-14 rounded-full border border-dashed border-neutral-350 dark:border-apple-text-muted flex flex-col items-center justify-center cursor-pointer hover:border-apple-blue transition-all bg-white dark:bg-apple-text group">
             <Camera className="w-5.5 h-5.5 text-neutral-400 group-hover:text-apple-blue transition-colors" />
             <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => {
               if (e.target.files?.[0]) {
@@ -1307,7 +1307,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={userFirstName}
             onChange={(e) => setUserFirstName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Mohammad"
           />
         </div>
@@ -1320,7 +1320,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={userLastName}
             onChange={(e) => setUserLastName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Zaid"
           />
         </div>
@@ -1334,7 +1334,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={userUsername}
               onChange={(e) => setUserUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))}
-              className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white font-mono"
+              className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white font-mono"
               placeholder="zaid_pkizzle"
             />
           </div>
@@ -1361,7 +1361,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={userDob}
               onChange={(e) => setUserDob(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
             />
           </div>
         </div>
@@ -1372,7 +1372,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           <select
             value={userGender}
             onChange={(e) => setUserGender(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -1389,7 +1389,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               type="text"
               readOnly
               value={userCountry}
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-100 dark:bg-zinc-800/80 border border-transparent outline-none text-sm text-stone-600 dark:text-stone-400"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-apple-gray dark:bg-apple-surface/80 border border-transparent outline-none text-sm text-stone-600 dark:text-stone-400"
             />
           </div>
         </div>
@@ -1404,7 +1404,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={userCity}
               onChange={(e) => setUserCity(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white"
               placeholder="Karachi, Lahore, Islamabad"
             />
           </div>
@@ -1417,7 +1417,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             type="text"
             value={userReferralCode}
             onChange={(e) => setUserReferralCode(e.target.value.toUpperCase())}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white font-mono tracking-widest uppercase"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none text-sm text-stone-900 dark:text-white font-mono tracking-widest uppercase"
             placeholder="PKZ-9921"
           />
         </div>
@@ -1462,8 +1462,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   // 3. DEALER ONBOARDING FORM
   const renderOnboardingFormDealer = () => (
     <form onSubmit={submitOnboardingDealer} className="space-y-6 pt-1 max-h-[75vh] overflow-y-auto px-1 custom-scrollbar">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80 sticky top-0 bg-white dark:bg-[#121214] z-10">
-        <button type="button" onClick={() => setView('onboarding-type')} className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-300 hover:bg-neutral-200">
+      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80 sticky top-0 bg-white dark:bg-[var(--bg-surface)] z-10">
+        <button type="button" onClick={() => setView('onboarding-type')} className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-apple-border hover:bg-neutral-200">
           <ChevronLeft className="w-5 h-5" />
         </button>
         <div>
@@ -1492,7 +1492,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={dealerBusinessName}
               onChange={(e) => setDealerBusinessName(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-11 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
               placeholder="Showroom Name (e.g. Premium Motors Lahore)"
             />
           </div>
@@ -1506,7 +1506,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerName}
             onChange={(e) => setDealerName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Zaid Butt"
           />
         </div>
@@ -1519,7 +1519,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerOwnerName}
             onChange={(e) => setDealerOwnerName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Al-Haj Mohammad Zaid"
           />
         </div>
@@ -1542,7 +1542,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   className={`px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border transition-all ${
                     isChecked 
                       ? 'bg-apple-blue border-apple-blue text-white shadow-md' 
-                      : 'border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50'
+                      : 'border-neutral-200 dark:border-apple-surface text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50'
                   }`}
                 >
                   {type}
@@ -1560,7 +1560,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerRegNumber}
             onChange={(e) => setDealerRegNumber(e.target.value.toUpperCase())}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white font-mono"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white font-mono"
             placeholder="LHR-DLR-9921"
           />
         </div>
@@ -1573,7 +1573,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerTaxNumber}
             onChange={(e) => setDealerTaxNumber(e.target.value.toUpperCase())}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white font-mono"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white font-mono"
             placeholder="NTN-77239-1"
           />
         </div>
@@ -1586,7 +1586,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerEmail}
             onChange={(e) => setDealerEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="showroom@domain.pk"
           />
         </div>
@@ -1599,7 +1599,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerPhone}
             onChange={(e) => setDealerPhone(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="0213-XXXXXXX"
           />
         </div>
@@ -1612,7 +1612,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerWhatsapp}
             onChange={(e) => setDealerWhatsapp(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="03XXXXXXXXX"
           />
         </div>
@@ -1625,7 +1625,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={dealerCity}
             onChange={(e) => setDealerCity(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Lahore, Karachi, Rawalpindi"
           />
         </div>
@@ -1640,7 +1640,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               rows={2}
               value={dealerAddress}
               onChange={(e) => setDealerAddress(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-11 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
               placeholder="Main Jail Road, Opposite FC College, Lahore"
             />
           </div>
@@ -1655,7 +1655,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               type="text"
               value={dealerWebsite}
               onChange={(e) => setDealerWebsite(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-11 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
               placeholder="31.5204, 74.3587"
             />
           </div>
@@ -1670,7 +1670,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               min={1}
               value={dealerYearsInBusiness}
               onChange={(e) => setDealerYearsInBusiness(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
             />
           </div>
           <div className="space-y-1">
@@ -1680,7 +1680,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               min={1}
               value={dealerEmployeesCount}
               onChange={(e) => setDealerEmployeesCount(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
             />
           </div>
           <div className="space-y-1">
@@ -1690,13 +1690,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               min={1}
               value={dealerInventorySize}
               onChange={(e) => setDealerInventorySize(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
             />
           </div>
         </div>
 
         {/* Interactive Drag and Drop Document Upload */}
-        <div className="md:col-span-2 space-y-3.5 p-5 rounded-[22px] bg-neutral-50 dark:bg-zinc-900/40 border border-neutral-200/60 dark:border-zinc-800/80">
+        <div className="md:col-span-2 space-y-3.5 p-5 rounded-[22px] bg-neutral-50 dark:bg-apple-text/40 border border-neutral-200/60 dark:border-apple-surface/80">
           <span className="text-[10px] font-black uppercase tracking-wider text-neutral-500">Commercial Verification Dossier</span>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1705,9 +1705,9 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               { label: "Owner National ID", state: dealerNationalId, setter: setDealerNationalId },
               { label: "Business Docs", state: dealerBizDocs, setter: setDealerBizDocs }
             ].map((docItem, idx) => (
-              <div key={idx} className="relative p-4 rounded-xl border border-dashed border-neutral-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col items-center justify-center text-center cursor-pointer group hover:border-apple-blue transition-all">
+              <div key={idx} className="relative p-4 rounded-xl border border-dashed border-neutral-300 dark:border-apple-surface bg-white dark:bg-apple-text flex flex-col items-center justify-center text-center cursor-pointer group hover:border-apple-blue transition-all">
                 <UploadCloud className={`w-6 h-6 mb-1.5 ${docItem.state ? 'text-apple-green' : 'text-neutral-400 group-hover:text-apple-blue'} transition-colors`} />
-                <span className="text-[10px] font-bold text-neutral-800 dark:text-zinc-300 leading-none">{docItem.label}</span>
+                <span className="text-[10px] font-bold text-neutral-800 dark:text-apple-border leading-none">{docItem.label}</span>
                 <span className="text-[8px] text-neutral-400 mt-1 font-semibold">{docItem.state ? "Dossier Attached" : "Drag & Drop PDF/JPG"}</span>
                 <input 
                   type="file" 
@@ -1720,7 +1720,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   }} 
                 />
                 {docItem.state && (
-                  <div className="absolute top-2 right-2 w-4.5 h-4.5 rounded-full bg-apple-green text-white flex items-center justify-center border border-white dark:border-[#121214]">
+                  <div className="absolute top-2 right-2 w-4.5 h-4.5 rounded-full bg-apple-green text-white flex items-center justify-center border border-white dark:border-[var(--bg-surface)]">
                     <Check className="w-2.5 h-2.5 stroke-[3]" />
                   </div>
                 )}
@@ -1736,7 +1736,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             rows={3}
             value={dealerDescription}
             onChange={(e) => setDealerDescription(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Describe your showroom, customer philosophy, premium warranties, etc."
           />
         </div>
@@ -1755,8 +1755,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   // 4. COMPANY ONBOARDING FORM
   const renderOnboardingFormCompany = () => (
     <form onSubmit={submitOnboardingCompany} className="space-y-6 pt-1 max-h-[75vh] overflow-y-auto px-1 custom-scrollbar">
-      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-zinc-800/80 sticky top-0 bg-white dark:bg-[#121214] z-10">
-        <button type="button" onClick={() => setView('onboarding-type')} className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-300 hover:bg-neutral-200">
+      <div className="flex items-center gap-3 pb-3 border-b border-neutral-100 dark:border-apple-surface/80 sticky top-0 bg-white dark:bg-[var(--bg-surface)] z-10">
+        <button type="button" onClick={() => setView('onboarding-type')} className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-apple-border hover:bg-neutral-200">
           <ChevronLeft className="w-5 h-5" />
         </button>
         <div>
@@ -1785,7 +1785,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-11 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
               placeholder="Toyota Indus Motors Pakistan"
             />
           </div>
@@ -1799,7 +1799,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyLegalName}
             onChange={(e) => setCompanyLegalName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Indus Motor Company Limited"
           />
         </div>
@@ -1812,7 +1812,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyBrand}
             onChange={(e) => setCompanyBrand(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Toyota"
           />
         </div>
@@ -1823,7 +1823,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           <select
             value={companyCategory}
             onChange={(e) => setCompanyCategory(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
           >
             <option value="Manufacturer">OEM Manufacturer</option>
             <option value="Importer">Official Importer</option>
@@ -1843,7 +1843,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyCeoName}
             onChange={(e) => setCompanyCeoName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Ali Asghar Jamali"
           />
         </div>
@@ -1856,7 +1856,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyContactName}
             onChange={(e) => setCompanyContactName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Mohammad Zaid"
           />
         </div>
@@ -1869,7 +1869,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyEmail}
             onChange={(e) => setCompanyEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="corporate@toyota-indus.com"
           />
         </div>
@@ -1882,7 +1882,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyPhone}
             onChange={(e) => setCompanyPhone(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="021-111-869-682"
           />
         </div>
@@ -1895,7 +1895,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             required
             value={companyWhatsapp}
             onChange={(e) => setCompanyWhatsapp(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="03XXXXXXXXX"
           />
         </div>
@@ -1910,7 +1910,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={companyWebsite}
               onChange={(e) => setCompanyWebsite(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+              className="w-full pl-11 pr-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
               placeholder="https://www.toyota-indus.com"
             />
           </div>
@@ -1925,7 +1925,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={companyCity}
               onChange={(e) => setCompanyCity(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
               placeholder="Karachi"
             />
           </div>
@@ -1936,7 +1936,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               required
               value={companyState}
               onChange={(e) => setCompanyState(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
               placeholder="Sindh"
             />
           </div>
@@ -1950,7 +1950,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             rows={2}
             value={companyAddress}
             onChange={(e) => setCompanyAddress(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Plot No. NWZ/1/P-1, Port Qasim Industrial Zone, Bin Qasim, Karachi"
           />
         </div>
@@ -1963,7 +1963,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               type="text"
               value={companyDepartments}
               onChange={(e) => setCompanyDepartments(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
               placeholder="Sales, Marketing, Logistics, CSR"
             />
           </div>
@@ -1974,13 +1974,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               min={1}
               value={companyBranches}
               onChange={(e) => setCompanyBranches(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 outline-none text-sm"
+              className="w-full px-3 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface outline-none text-sm"
             />
           </div>
         </div>
 
         {/* Enterprise Dossier Uploads */}
-        <div className="md:col-span-2 space-y-3.5 p-5 rounded-[22px] bg-neutral-50 dark:bg-zinc-900/40 border border-neutral-200/60 dark:border-zinc-800/80">
+        <div className="md:col-span-2 space-y-3.5 p-5 rounded-[22px] bg-neutral-50 dark:bg-apple-text/40 border border-neutral-200/60 dark:border-apple-surface/80">
           <span className="text-[10px] font-black uppercase tracking-wider text-neutral-500">Legal Enterprise Dossier</span>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1989,9 +1989,9 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               { label: "NTN Certificate", state: companyTaxCertificate, setter: setCompanyTaxCertificate },
               { label: "Registration Doc", state: companyRegistrationDoc, setter: setCompanyRegistrationDoc }
             ].map((docItem, idx) => (
-              <div key={idx} className="relative p-4 rounded-xl border border-dashed border-neutral-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col items-center justify-center text-center cursor-pointer group hover:border-apple-blue transition-all">
+              <div key={idx} className="relative p-4 rounded-xl border border-dashed border-neutral-300 dark:border-apple-surface bg-white dark:bg-apple-text flex flex-col items-center justify-center text-center cursor-pointer group hover:border-apple-blue transition-all">
                 <FileText className={`w-6 h-6 mb-1.5 ${docItem.state ? 'text-apple-green' : 'text-neutral-400 group-hover:text-apple-blue'} transition-colors`} />
-                <span className="text-[10px] font-bold text-neutral-800 dark:text-zinc-300 leading-none">{docItem.label}</span>
+                <span className="text-[10px] font-bold text-neutral-800 dark:text-apple-border leading-none">{docItem.label}</span>
                 <span className="text-[8px] text-neutral-400 mt-1 font-semibold">{docItem.state ? "Credentials Configured" : "Attach Legal PDF"}</span>
                 <input 
                   type="file" 
@@ -2004,7 +2004,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   }} 
                 />
                 {docItem.state && (
-                  <div className="absolute top-2 right-2 w-4.5 h-4.5 rounded-full bg-apple-green text-white flex items-center justify-center border border-white dark:border-[#121214]">
+                  <div className="absolute top-2 right-2 w-4.5 h-4.5 rounded-full bg-apple-green text-white flex items-center justify-center border border-white dark:border-[var(--bg-surface)]">
                     <Check className="w-2.5 h-2.5 stroke-[3]" />
                   </div>
                 )}
@@ -2020,7 +2020,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             rows={3}
             value={companyDescription}
             onChange={(e) => setCompanyDescription(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
+            className="w-full px-4 py-3 rounded-xl bg-apple-surface dark:bg-apple-text border border-apple-border dark:border-apple-surface focus:ring-2 focus:ring-apple-blue focus:border-transparent outline-none text-sm text-stone-900 dark:text-white"
             placeholder="Official OEM brand bio, national market goals, custom automotive developments."
           />
         </div>
@@ -2048,7 +2048,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
       { label: "Ecosystem Access", desc: "Finalize credentials" }
     ];
     return (
-      <div className="px-6 py-4 bg-neutral-50/60 dark:bg-zinc-900/30 border-b border-neutral-100 dark:border-zinc-850">
+      <div className="px-6 py-4 bg-neutral-50/60 dark:bg-apple-text/30 border-b border-neutral-100 dark:border-zinc-850">
         <div className="flex items-center justify-between max-w-lg mx-auto relative">
           {steps.map((step, idx) => {
             const stepNum = idx + 1;
@@ -2059,16 +2059,16 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 <div className="flex items-center gap-2">
                   <div className={`w-7.5 h-7.5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                     isCompleted 
-                      ? 'bg-emerald-500 text-white ring-4 ring-emerald-500/15' 
+                      ? 'bg-apple-green text-white ring-4 ring-apple-green/15' 
                       : isActive 
                         ? 'bg-apple-blue text-white ring-4 ring-apple-blue/15 shadow-sm' 
-                        : 'bg-neutral-200 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-450'
+                        : 'bg-neutral-200 dark:bg-apple-surface text-neutral-500 dark:text-zinc-450'
                   }`}>
                     {isCompleted ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : stepNum}
                   </div>
                   <div className="text-left hidden sm:block">
                     <p className={`text-[10px] font-black uppercase tracking-wider leading-none ${
-                      isActive ? 'text-apple-blue' : isCompleted ? 'text-emerald-500' : 'text-neutral-400 dark:text-zinc-500'
+                      isActive ? 'text-apple-blue' : isCompleted ? 'text-apple-green' : 'text-neutral-400 dark:text-apple-text-muted'
                     }`}>
                       {step.label}
                     </p>
@@ -2080,7 +2080,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 {idx < steps.length - 1 && (
                   <div className="flex-1 h-[2px] mx-2 hidden sm:block">
                     <div className={`h-full rounded-full transition-all duration-500 ${
-                      isCompleted ? 'bg-emerald-500' : 'bg-neutral-250 dark:bg-zinc-800'
+                      isCompleted ? 'bg-apple-green' : 'bg-neutral-250 dark:bg-apple-surface'
                     }`} />
                   </div>
                 )}
@@ -2132,14 +2132,14 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: "spring", damping: 28, stiffness: 380 }}
-            className={`relative my-auto w-full ${getModalSizeClass()} bg-white dark:bg-[#121214] border border-neutral-100 dark:border-zinc-800/80 rounded-[32px] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden z-[10000]`}
+            className={`relative my-auto w-full ${getModalSizeClass()} bg-white dark:bg-[var(--bg-surface)] border border-neutral-100 dark:border-apple-surface/80 rounded-[32px] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden z-[10000]`}
           >
             {/* Close Button (Hidden during mandatory onboarding to protect ecosystem flow integrity) */}
             {(!user || !profile?.isPendingOnboarding) && (
               <div className="absolute top-5 right-5 z-[10010]">
                 <button 
                   onClick={onClose}
-                  className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800/60 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700/80 transition-colors border border-neutral-200/40 dark:border-zinc-700/40 text-neutral-500 dark:text-zinc-400"
+                  className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface/60 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-apple-text-muted/80 transition-colors border border-neutral-200/40 dark:border-apple-text-muted/40 text-neutral-500 dark:text-apple-text-muted"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -2163,11 +2163,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   {view === 'selection' && renderSelection()}
                   {view === 'email-login' && (
                     <div className="pt-1">
-                      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+                      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-apple-surface/80">
                         <button 
                           type="button" 
                           onClick={() => setView('selection')} 
-                          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
+                          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
                         >
                           <ChevronLeft className="w-4.5 h-4.5" />
                         </button>
@@ -2186,11 +2186,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                   )}
                   {view === 'email-signup' && (
                     <div className="pt-1">
-                      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+                      <div className="flex items-center gap-3 pb-3 mb-4 border-b border-neutral-100 dark:border-apple-surface/80">
                         <button 
                           type="button" 
                           onClick={() => setView('selection')} 
-                          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
+                          className="w-8.5 h-8.5 rounded-full bg-neutral-100 dark:bg-apple-surface flex items-center justify-center text-neutral-600 dark:text-zinc-350 hover:bg-neutral-200 transition-colors cursor-pointer"
                         >
                           <ChevronLeft className="w-4.5 h-4.5" />
                         </button>

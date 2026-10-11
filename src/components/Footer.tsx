@@ -34,18 +34,18 @@ export default function Footer({ onValuationClick }: { onValuationClick?: () => 
       title: "Properties",
       links: [
         { name: "All Properties", path: "/marketplace" },
-        { name: "Luxury Villas", path: "/marketplace?make=House" },
-        { name: "Apartments & Flats", path: "/marketplace?make=Apartment" },
-        { name: "Penthouses", path: "/marketplace?make=Penthouse" },
-        { name: "Plots & Land", path: "/marketplace?make=Plot" },
-        { name: "Commercial Plazas", path: "/marketplace?make=Commercial" },
+        { name: "Luxury Villas", path: "/marketplace?propertyType=House" },
+        { name: "Apartments & Flats", path: "/marketplace?propertyType=Apartment" },
+        { name: "Penthouses", path: "/marketplace?propertyType=Penthouse" },
+        { name: "Plots & Land", path: "/marketplace?propertyType=Plot" },
+        { name: "Commercial Plazas", path: "/marketplace?propertyType=Commercial" },
       ]
     },
     {
       title: "Solutions",
       links: [
         { name: "AI Property Valuation", action: onValuationClick },
-        { name: "Shanakht™ Title Verification", path: "/auction-verification" },
+        { name: "Shanakht™ Title Verification", path: "/verification" },
         { name: "Islamic Home Financing", path: "/financing" },
         { name: "FBR Property Tax Engine", path: "/marketplace" },
         { name: "Sector Plot Finder", path: "/marketplace" },

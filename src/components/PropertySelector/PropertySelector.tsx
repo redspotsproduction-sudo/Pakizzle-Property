@@ -100,11 +100,11 @@ export function PropertySelector({
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer",
                 isActive
-                  ? "bg-white dark:bg-[#2C2C2E] text-slate-900 dark:text-white shadow-xs"
-                  : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-white dark:bg-[#2C2C2E] text-apple-text dark:text-white shadow-xs"
+                  : "text-apple-text-muted dark:text-apple-text-muted hover:text-apple-text dark:hover:text-white"
               )}
             >
-              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-apple-blue" : "text-slate-400")} />
+              <Icon className={cn("w-3.5 h-3.5", isActive ? "text-apple-blue" : "text-apple-text-muted")} />
               <span>{cat.label}</span>
             </button>
           );
@@ -132,7 +132,7 @@ export function PropertySelector({
                 "flex items-center justify-between p-3 rounded-2xl border text-left transition-all cursor-pointer group",
                 isSelected
                   ? "bg-apple-blue/10 border-apple-blue text-apple-blue dark:bg-apple-blue/20 dark:border-apple-blue shadow-xs"
-                  : "bg-white dark:bg-[#1C1C1E] border-black/[0.06] dark:border-white/[0.06] text-slate-800 dark:text-slate-200 hover:border-black/20 dark:hover:border-white/20"
+                  : "bg-white dark:bg-[#1C1C1E] border-black/[0.06] dark:border-white/[0.06] text-apple-text dark:text-apple-text hover:border-black/20 dark:hover:border-white/20"
               )}
             >
               <div className="flex items-center gap-3 min-w-0">
@@ -141,14 +141,14 @@ export function PropertySelector({
                     "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors",
                     isSelected
                       ? "bg-apple-blue text-white"
-                      : "bg-black/[0.04] dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 group-hover:text-apple-blue"
+                      : "bg-black/[0.04] dark:bg-white/[0.06] text-apple-text-muted dark:text-apple-text group-hover:text-apple-blue"
                   )}
                 >
                   <Icon className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold truncate">{type.name}</div>
-                  <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[170px]">
+                  <div className="text-[10px] text-apple-text-muted dark:text-apple-text-muted truncate max-w-[170px]">
                     {type.description}
                   </div>
                 </div>
@@ -159,7 +159,7 @@ export function PropertySelector({
                     <Check className="w-3 h-3 stroke-[3]" />
                   </div>
                 ) : (
-                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-slate-500 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-apple-border dark:text-apple-text-muted group-hover:text-apple-text-muted transition-colors" />
                 )}
               </div>
             </button>

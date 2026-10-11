@@ -170,8 +170,8 @@ export default function InsuranceManagement() {
       case 'quote_sent': return 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
       case 'payment_received': return 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
       case 'expired': return 'bg-red-500/10 text-red-600 dark:text-red-400';
-      case 'cancelled': return 'bg-gray-500/10 text-gray-600 dark:text-gray-400';
-      default: return 'bg-gray-500/10 text-gray-600 dark:text-gray-400';
+      case 'cancelled': return 'bg-apple-text-muted/10 text-apple-text-muted dark:text-apple-text-muted';
+      default: return 'bg-apple-text-muted/10 text-apple-text-muted dark:text-apple-text-muted';
     }
   };
 
@@ -365,24 +365,24 @@ export default function InsuranceManagement() {
             <Shield className="w-3.5 h-3.5" />
             Verified Administration Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Insurance Protocol
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Manage risk assessment, premium underwriting, and integrated policy providers from this terminal.
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {/* Tab Switcher modeled after standard segment controls */}
-          <div className="flex p-0.5 bg-[#F5F5F7] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
+          <div className="flex p-0.5 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
             <button
               onClick={() => setActiveTab('requests')}
               className={cn(
                 "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
                 activeTab === 'requests'
-                  ? "bg-white dark:bg-[#1C1C1E] shadow-sm text-[#1D1D1F] dark:text-white"
-                  : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  ? "bg-white dark:bg-[var(--bg-raised)] shadow-sm text-[var(--text-primary)] dark:text-white"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
               Policy Requests
@@ -392,8 +392,8 @@ export default function InsuranceManagement() {
               className={cn(
                 "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
                 activeTab === 'companies'
-                  ? "bg-white dark:bg-[#1C1C1E] shadow-sm text-[#1D1D1F] dark:text-white"
-                  : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  ? "bg-white dark:bg-[var(--bg-raised)] shadow-sm text-[var(--text-primary)] dark:text-white"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
               Providers
@@ -402,13 +402,13 @@ export default function InsuranceManagement() {
 
           {activeTab === 'requests' && (
             <div className="relative group min-w-[200px] sm:w-64">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Search policies, vehicles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           )}
@@ -419,7 +419,7 @@ export default function InsuranceManagement() {
                 <button 
                   onClick={seedProviders}
                   disabled={isUpdating}
-                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[#F5F5F7] dark:hover:bg-white/5 text-[#1D1D1F] dark:text-white transition-all flex items-center justify-center"
+                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[var(--text-primary)] dark:hover:bg-white/5 text-[var(--text-primary)] dark:text-white transition-all flex items-center justify-center"
                 >
                   <Activity className="w-3.5 h-3.5 mr-1.5 text-apple-blue" /> Seed Providers
                 </button>
@@ -449,18 +449,18 @@ export default function InsuranceManagement() {
               { label: 'Active Coverage', value: requests.filter(r => r.status === 'active').length.toString(), change: 'Active Policies', icon: Shield, color: 'text-apple-green', bg: 'bg-apple-green/10' },
               { label: 'Awaiting Payment', value: requests.filter(r => r.status === 'quote_sent').length.toString(), change: 'Payments Due', icon: CreditCard, color: 'text-purple-500', bg: 'bg-purple-500/10' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+              <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                 <div className="flex items-start justify-between">
                   <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                     <stat.icon className={cn("w-5 h-5", stat.color)} />
                   </div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                      {stat.change}
                   </div>
                 </div>
                 <div className="mt-4">
-                  <div className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider mt-1.5">{stat.label}</div>
+                  <div className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1.5">{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -481,26 +481,26 @@ export default function InsuranceManagement() {
                     "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                     isActive
                       ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                      : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                      : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Table List - EXACT border, background and hover transition as Approval Center card */}
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+          <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div className="overflow-x-auto custom-scrollbar">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-black/[0.04] dark:border-white/[0.04]">
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] pl-6">Vehicle & Value</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Insured Profile</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Policy Details</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Status</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] text-right pr-6">Command</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] pl-6">Vehicle & Value</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Insured Profile</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Policy Details</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Status</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] text-right pr-6">Command</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/[0.03] dark:divide-white/[0.03]">
@@ -515,7 +515,7 @@ export default function InsuranceManagement() {
                     ))
                   ) : filteredRequests.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-20 text-center text-[#86868B] font-medium text-xs">
+                      <td colSpan={5} className="px-6 py-20 text-center text-[var(--text-secondary)] font-medium text-xs">
                         No policy records found in the encrypted database.
                       </td>
                     </tr>
@@ -524,7 +524,7 @@ export default function InsuranceManagement() {
                       <tr 
                         key={request.id} 
                         onClick={() => openEditModal(request)}
-                        className="group border-b border-black/[0.03] dark:border-white/[0.03] last:border-b-0 hover:bg-[#F5F5F7]/40 dark:hover:bg-white/[0.01] transition-all cursor-pointer"
+                        className="group border-b border-black/[0.03] dark:border-white/[0.03] last:border-b-0 hover:bg-[var(--text-primary)]/40 dark:hover:bg-white/[0.01] transition-all cursor-pointer"
                       >
                         <td className="px-6 py-4.5 pl-6">
                           <div className="flex items-center gap-4">
@@ -532,10 +532,10 @@ export default function InsuranceManagement() {
                               <Car className="w-5 h-5" />
                             </div>
                             <div>
-                              <div className="font-semibold text-sm tracking-tight text-[#1D1D1F] dark:text-white">
+                              <div className="font-semibold text-sm tracking-tight text-[var(--text-primary)] dark:text-white">
                                 {request.vehicleYear} {request.vehicleMake}
                               </div>
-                              <div className="text-[10px] font-medium text-[#86868B] mt-0.5">
+                              <div className="text-[10px] font-medium text-[var(--text-secondary)] mt-0.5">
                                 {formatPrice(request.vehicleValue)} Value
                               </div>
                             </div>
@@ -543,17 +543,17 @@ export default function InsuranceManagement() {
                         </td>
                         <td className="px-6 py-4.5">
                           <div>
-                            <div className="font-semibold text-sm text-[#1D1D1F] dark:text-white">{request.phone}</div>
-                            <div className="text-[10px] font-medium text-[#86868B] mt-0.5">{request.email}</div>
+                            <div className="font-semibold text-sm text-[var(--text-primary)] dark:text-white">{request.phone}</div>
+                            <div className="text-[10px] font-medium text-[var(--text-secondary)] mt-0.5">{request.email}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4.5">
                           <div className="flex flex-col gap-1.5">
-                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#1D1D1F] dark:text-white">
+                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--text-primary)] dark:text-white">
                               <Target className="w-3.5 h-3.5 text-apple-blue" />
                               {request.policyNumber || 'NOT ISSUED'}
                             </div>
-                            <div className="text-[10px] font-medium text-[#86868B]">
+                            <div className="text-[10px] font-medium text-[var(--text-secondary)]">
                               {request.status === 'active' ? `Exp: ${new Date(request.expiryDate!).toLocaleDateString()}` : 'Awaiting Issue'}
                             </div>
                           </div>
@@ -569,7 +569,7 @@ export default function InsuranceManagement() {
                         <td className="px-6 py-4.5 pr-6 text-right" onClick={(e) => e.stopPropagation()}>
                           <button 
                             onClick={() => openEditModal(request)}
-                            className="h-9 w-9 rounded-xl flex items-center justify-center transition-all hover:bg-[#F5F5F7] dark:hover:bg-white/10 text-[#86868B] active:scale-95 shadow-none"
+                            className="h-9 w-9 rounded-xl flex items-center justify-center transition-all hover:bg-[var(--text-primary)] dark:hover:bg-white/10 text-[var(--text-secondary)] active:scale-95 shadow-none"
                           >
                             <MoreVertical className="w-4 h-4" />
                           </button>
@@ -587,22 +587,22 @@ export default function InsuranceManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {companiesLoading ? (
               Array(6).fill(0).map((_, i) => (
-                <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] h-64 animate-pulse" />
+                <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] h-64 animate-pulse" />
               ))
             ) : companies.length === 0 ? (
-              <div className="col-span-full py-20 text-center bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
-                <p className="text-[#86868B] font-medium text-xs">No insurance providers registered.</p>
+              <div className="col-span-full py-20 text-center bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
+                <p className="text-[var(--text-secondary)] font-medium text-xs">No insurance providers registered.</p>
               </div>
             ) : (
               companies.map((company) => (
                 <motion.div
                   key={company.id}
                   layoutId={company.id}
-                  className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group"
+                  className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group"
                 >
                   <div className="p-6 flex-1 space-y-6">
                     <div className="flex justify-between items-start">
-                      <div className="w-16 h-16 rounded-xl bg-[#F5F5F7] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                      <div className="w-16 h-16 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                         <img 
                           src={company.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=007AFF&color=fff`} 
                           alt={company.name}
@@ -618,7 +618,7 @@ export default function InsuranceManagement() {
                         )}
                         <span className={cn(
                           "px-2 py-0.5 rounded-lg text-[9px] font-bold uppercase tracking-wider",
-                          company.status === 'active' ? "bg-[#34C759]/10 text-[#34C759]" : "bg-[#FF3B30]/10 text-[#FF3B30]"
+                          company.status === 'active' ? "bg-[var(--success)]/10 text-[var(--success)]" : "bg-[var(--danger)]/10 text-[var(--danger)]"
                         )}>
                           {company.status}
                         </span>
@@ -626,14 +626,14 @@ export default function InsuranceManagement() {
                     </div>
 
                     <div>
-                      <h3 className="text-base font-semibold tracking-tight text-[#1D1D1F] dark:text-white mb-1.5">{company.name}</h3>
-                      <p className="text-xs text-[#86868B] dark:text-[#86868B]/80 line-clamp-2 leading-relaxed mb-4">{company.description}</p>
-                      <div className="flex items-center gap-4 text-[#86868B]">
+                      <h3 className="text-base font-semibold tracking-tight text-[var(--text-primary)] dark:text-white mb-1.5">{company.name}</h3>
+                      <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)]/80 line-clamp-2 leading-relaxed mb-4">{company.description}</p>
+                      <div className="flex items-center gap-4 text-[var(--text-secondary)]">
                         <div className="flex items-center gap-1.5 text-xs font-semibold text-apple-blue">
                           <Percent className="w-4 h-4" />
                           {company.rate}
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#34C759]">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--success)]">
                           <Activity className="w-4 h-4" />
                           Tracker: {company.trackerFee}
                         </div>
@@ -641,7 +641,7 @@ export default function InsuranceManagement() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[#F5F5F7]/40 dark:bg-white/[0.02] border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
+                  <div className="p-4 bg-[var(--text-primary)]/40 dark:bg-white/[0.02] border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
                     <button 
                       onClick={() => {
                         setEditingCompany(company);
@@ -659,13 +659,13 @@ export default function InsuranceManagement() {
                         });
                         setIsCompanyModalOpen(true);
                       }}
-                      className="flex-1 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-[10px] font-bold uppercase tracking-wider hover:bg-[#F5F5F7] dark:hover:bg-white/10 text-[#1D1D1F] dark:text-white transition-all"
+                      className="flex-1 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-[10px] font-bold uppercase tracking-wider hover:bg-[var(--text-primary)] dark:hover:bg-white/10 text-[var(--text-primary)] dark:text-white transition-all"
                     >
                       Edit Protocol
                     </button>
                     <button 
                       onClick={() => handleDeleteCompany(company.id)}
-                      className="w-9 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-red-500 flex items-center justify-center hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-all border-none"
+                      className="w-9 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-red-500 flex items-center justify-center hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] transition-all border-none"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

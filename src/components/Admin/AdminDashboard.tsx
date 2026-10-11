@@ -149,7 +149,7 @@ export default function AdminDashboard() {
             <Activity className="w-3.5 h-3.5" />
             Verified Administration Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Ecosystem Pulse
           </h1>
           <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
@@ -206,7 +206,7 @@ export default function AdminDashboard() {
               <p className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">
                 {stat.label}
               </p>
-              <h3 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white font-sans">{stat.value}</h3>
+              <h3 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] dark:text-white font-sans">{stat.value}</h3>
               <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">{stat.description}</p>
             </div>
 
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-6 flex flex-col">
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4 pb-6 mb-6 border-b border-black/[0.04] dark:border-white/[0.04]">
               <div className="space-y-1">
-                <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white">Atmospheric Velocity</h3>
+                <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">Atmospheric Velocity</h3>
                 <p className="text-xs text-[#86868B]">Dynamic throughput of car enquiries & VAS revenue.</p>
               </div>
               <div className="flex bg-[#F5F5F7] dark:bg-white/5 p-1 rounded-xl">
@@ -258,8 +258,8 @@ export default function AdminDashboard() {
                     className={cn(
                       "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap",
                       activeMetric === tab.toLowerCase() 
-                        ? "bg-white dark:bg-[#2C2C2E] shadow-sm text-[#1D1D1F] dark:text-white" 
-                        : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                        ? "bg-white dark:bg-[#2C2C2E] shadow-sm text-[var(--text-primary)] dark:text-white" 
+                        : "text-[#86868B] hover:text-[var(--text-primary)] dark:hover:text-white"
                     )}
                   >
                     {tab}
@@ -332,7 +332,7 @@ export default function AdminDashboard() {
           {/* Geo Density */}
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-6 flex flex-col justify-between">
             <div>
-              <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-2 pb-4 mb-4 border-b border-black/[0.04] dark:border-white/[0.04]">
+              <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-2 pb-4 mb-4 border-b border-black/[0.04] dark:border-white/[0.04]">
                 <MapPin className="w-5 h-5 text-apple-red" />
                 Geo Density
               </h3>
@@ -340,7 +340,7 @@ export default function AdminDashboard() {
                 {regionalData.map((data, idx) => (
                   <div key={data.region} className="p-3.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-all duration-300">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="font-semibold text-xs text-[#1D1D1F] dark:text-white">{data.region}</span>
+                        <span className="font-semibold text-xs text-[var(--text-primary)] dark:text-white">{data.region}</span>
                         <Badge className="bg-apple-green/10 text-apple-green border-none rounded-md font-bold text-[9px] hover:bg-apple-green/10">{data.liquidity}</Badge>
                     </div>
                     <div className="flex items-center justify-between gap-3">
@@ -352,7 +352,7 @@ export default function AdminDashboard() {
                           className="h-full bg-apple-blue rounded-full"
                         />
                       </div>
-                      <span className="text-[11px] font-semibold text-[#1D1D1F] dark:text-white font-mono shrink-0">{data.volume}</span>
+                      <span className="text-[11px] font-semibold text-[var(--text-primary)] dark:text-white font-mono shrink-0">{data.volume}</span>
                     </div>
                   </div>
                 ))}
@@ -396,7 +396,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-3">
               <Activity className="w-6 h-6 text-apple-green" />
-              <h2 className="text-xl font-bold tracking-tight text-[#1D1D1F] dark:text-white">Atmospheric Pulse</h2>
+              <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] dark:text-white">Atmospheric Pulse</h2>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
@@ -422,7 +422,7 @@ export default function AdminDashboard() {
                     <span className="text-[9px] font-semibold text-[#86868B]">{lead.time}</span>
                   </div>
                   <div>
-                    <h6 className="font-semibold text-sm text-[#1D1D1F] dark:text-white truncate"> {lead.user}</h6>
+                    <h6 className="font-semibold text-sm text-[var(--text-primary)] dark:text-white truncate"> {lead.user}</h6>
                     <p className="text-[11px] text-[#86868B] truncate mt-0.5">{lead.car}</p>
                   </div>
                 </div>
@@ -435,7 +435,7 @@ export default function AdminDashboard() {
         <div className="lg:col-span-4 flex flex-col gap-4">
           <div className="flex items-center gap-3 px-1">
             <Award className="w-6 h-6 text-apple-orange" />
-            <h2 className="text-xl font-bold tracking-tight text-[#1D1D1F] dark:text-white">Alpha Shards</h2>
+            <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] dark:text-white">Alpha Shards</h2>
           </div>
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between flex-1">
             <div className="space-y-4">
@@ -446,12 +446,12 @@ export default function AdminDashboard() {
                       #{i+1}
                     </div>
                     <div>
-                      <h6 className="font-semibold text-xs tracking-tight text-[#1D1D1F] dark:text-white group-hover:text-apple-blue transition-colors">{dealer.name}</h6>
+                      <h6 className="font-semibold text-xs tracking-tight text-[var(--text-primary)] dark:text-white group-hover:text-apple-blue transition-colors">{dealer.name}</h6>
                       <span className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">{dealer.conversion} CV</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-sm text-[#1D1D1F] dark:text-white font-mono">{dealer.leads}</span>
+                    <span className="font-bold text-sm text-[var(--text-primary)] dark:text-white font-mono">{dealer.leads}</span>
                     <p className="text-[8px] font-bold text-apple-green uppercase tracking-wider mt-[-2px]">Leads</p>
                   </div>
                 </div>
@@ -468,7 +468,7 @@ export default function AdminDashboard() {
       <motion.section 
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl bg-black dark:bg-[#1C1C1E] text-white p-8 lg:p-12 overflow-hidden relative shadow-lg border border-white/5 mt-6"
+        className="rounded-2xl bg-black dark:bg-[var(--bg-raised)] text-white p-8 lg:p-12 overflow-hidden relative shadow-lg border border-white/5 mt-6"
       >
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-apple-blue/20 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#AF52DE]/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none" />

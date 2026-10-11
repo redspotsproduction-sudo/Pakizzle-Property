@@ -30,7 +30,7 @@ const PROPERTY_CONDITIONS = [
     id: "brand_new",
     title: "Brand New / Completed",
     desc: "Newly constructed structure, unused, built to modern layout standards.",
-    color: "border-emerald-500 text-emerald-500 bg-emerald-500/5 dark:bg-emerald-500/10"
+    color: "border-apple-green text-apple-green bg-apple-green/5 dark:bg-apple-green/10"
   },
   {
     id: "excellent",
@@ -42,7 +42,7 @@ const PROPERTY_CONDITIONS = [
     id: "good",
     title: "Good / Standard",
     desc: "Standard Pakistani brick/concrete layout, regular maintenance, fully ready.",
-    color: "border-indigo-500 text-indigo-500 bg-indigo-500/5 dark:bg-indigo-500/10"
+    color: "border-apple-blue text-apple-blue bg-apple-blue/5 dark:bg-apple-blue/10"
   },
   {
     id: "renovated",
@@ -54,7 +54,7 @@ const PROPERTY_CONDITIONS = [
     id: "fair",
     title: "Fair / Needs Repair",
     desc: "Has visible cosmetic or structural issues, paint updates, or damp checks needed.",
-    color: "border-amber-500 text-amber-500 bg-amber-500/5 dark:bg-amber-500/10"
+    color: "border-gold-decoration text-gold-decoration bg-gold-decoration/5 dark:bg-gold-decoration/10"
   }
 ];
 
@@ -223,13 +223,13 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-2xl bg-white dark:bg-[#1C1C1E] rounded-[32px] shadow-2xl border border-neutral-200/50 dark:border-neutral-800/60 overflow-hidden flex flex-col max-h-[90vh]"
+            className="relative w-full max-w-2xl bg-white dark:bg-[var(--bg-raised)] rounded-[32px] shadow-2xl border border-neutral-200/50 dark:border-neutral-800/60 overflow-hidden flex flex-col max-h-[90vh]"
             id="valuation-modal-container"
           >
             {/* Elegant Header */}
             <div className="p-5 sm:p-6 flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/20">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400">
+                <div className="p-2.5 rounded-2xl bg-apple-green/10 dark:bg-apple-green/25 text-apple-green dark:text-apple-green">
                   <Calculator className="w-5 h-5" />
                 </div>
                 <div>
@@ -250,7 +250,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
             {step !== "loading" && step !== "result" && (
               <div className="w-full h-1 bg-neutral-100 dark:bg-neutral-800 relative">
                 <div
-                  className="absolute left-0 top-0 h-full bg-emerald-500 transition-all duration-500 ease-out"
+                  className="absolute left-0 top-0 h-full bg-apple-green transition-all duration-500 ease-out"
                   style={{ width: step === 1 ? "50%" : "100%" }}
                 />
               </div>
@@ -266,8 +266,8 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                   className="space-y-6"
                 >
                   {/* Top Banner Info */}
-                  <div className="bg-emerald-500/[0.04] border border-emerald-500/15 p-4 rounded-2xl flex gap-3 items-start">
-                    <Sparkles className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                  <div className="bg-apple-green/[0.04] border border-apple-green/15 p-4 rounded-2xl flex gap-3 items-start">
+                    <Sparkles className="w-5 h-5 text-apple-green shrink-0 mt-0.5" />
                     <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-medium">
                       Estimate any residential, plot, or commercial valuation. Our valuation engine utilizes real localized listings, regional inflation curves, and FBR tax multipliers.
                     </p>
@@ -286,12 +286,12 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                             className={cn(
                               "text-left p-3.5 rounded-xl border-2 transition-all flex flex-col justify-between h-20",
                               isSelected
-                                ? "border-emerald-500 bg-emerald-500/[0.03] dark:bg-emerald-500/10 shadow-sm"
+                                ? "border-apple-green bg-apple-green/[0.03] dark:bg-apple-green/10 shadow-sm"
                                 : "border-neutral-200/50 dark:border-neutral-800 hover:border-neutral-300 hover:bg-neutral-50/40 dark:hover:bg-neutral-900/30"
                             )}
                             id={`val-type-${type.id}`}
                           >
-                            <span className={cn("font-bold text-xs", isSelected ? "text-emerald-600 dark:text-emerald-400" : "text-neutral-800 dark:text-neutral-200")}>
+                            <span className={cn("font-bold text-xs", isSelected ? "text-apple-green dark:text-apple-green" : "text-neutral-800 dark:text-neutral-200")}>
                               {type.title}
                             </span>
                             <span className="text-[9px] text-neutral-500 dark:text-neutral-400 leading-tight">
@@ -348,7 +348,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                             className={cn(
                               "px-2.5 py-1 text-[10px] font-bold rounded-md transition-all",
                               sizeUnit === unit
-                                ? "bg-white dark:bg-[#2C2C2E] shadow-sm text-emerald-600 dark:text-emerald-400"
+                                ? "bg-white dark:bg-[var(--bg-inset)] shadow-sm text-apple-green dark:text-apple-green"
                                 : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700"
                             )}
                           >
@@ -363,7 +363,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                         type="number"
                         min="1"
                         max="100000"
-                        className="apple-input font-mono font-bold text-center w-28 text-emerald-600 dark:text-emerald-400 text-lg py-2.5 dark:bg-neutral-800"
+                        className="apple-input font-mono font-bold text-center w-28 text-apple-green dark:text-apple-green text-lg py-2.5 dark:bg-neutral-800"
                         value={size}
                         onChange={(e) => setSize(Math.max(1, Number(e.target.value)))}
                         id="val-size-input"
@@ -467,8 +467,8 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-amber-500/5 border border-amber-500/15 p-4 rounded-xl flex gap-3 items-center">
-                      <Info className="w-5 h-5 text-amber-500 shrink-0" />
+                    <div className="bg-gold-decoration/5 border border-gold-decoration/15 p-4 rounded-xl flex gap-3 items-center">
+                      <Info className="w-5 h-5 text-gold-decoration shrink-0" />
                       <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-semibold">
                         Empty plot valuation automatically omits bedroom, bathroom, and building structure filters. Value is computed strictly as raw land plotting equity.
                       </p>
@@ -489,16 +489,16 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                               className={cn(
                                 "text-left p-3.5 rounded-2xl border-2 transition-all flex items-start gap-3",
                                 isSelected
-                                  ? "border-emerald-500 bg-emerald-500/[0.02] dark:bg-emerald-500/10 shadow-sm"
+                                  ? "border-apple-green bg-apple-green/[0.02] dark:bg-apple-green/10 shadow-sm"
                                   : "border-neutral-200/50 dark:border-neutral-800/60 hover:border-neutral-300 hover:bg-neutral-50/40 dark:hover:bg-neutral-900/20"
                               )}
                               id={`val-cond-${cond.id}`}
                             >
                               <div className={cn(
                                 "w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5",
-                                isSelected ? "border-emerald-500" : "border-neutral-400"
+                                isSelected ? "border-apple-green" : "border-neutral-400"
                               )}>
-                                {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />}
+                                {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-apple-green" />}
                               </div>
                               <div>
                                 <span className="font-bold text-xs text-neutral-800 dark:text-neutral-200 block">{cond.title}</span>
@@ -524,13 +524,13 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                             className={cn(
                               "text-left p-3 rounded-xl border transition-all flex items-start gap-3",
                               isSelected
-                                ? "border-emerald-500 bg-emerald-500/[0.02] dark:bg-emerald-500/5 shadow-sm"
+                                ? "border-apple-green bg-apple-green/[0.02] dark:bg-apple-green/5 shadow-sm"
                                 : "border-neutral-200/60 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700"
                             )}
                           >
                             <div className={cn(
                               "w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5",
-                              isSelected ? "border-emerald-500 bg-emerald-500 text-white" : "border-neutral-400"
+                              isSelected ? "border-apple-green bg-apple-green text-white" : "border-neutral-400"
                             )}>
                               {isSelected && <span className="text-[9px] font-bold">✓</span>}
                             </div>
@@ -556,7 +556,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                     </button>
                     <button
                       onClick={handleValuate}
-                      className="apple-button-primary bg-emerald-500 hover:bg-emerald-600 border-emerald-500 dark:border-emerald-500 hover:border-emerald-600 text-white py-2.5 px-6 flex items-center gap-2"
+                      className="apple-button-primary bg-apple-green hover:bg-apple-green border-apple-green dark:border-apple-green hover:border-apple-green text-white py-2.5 px-6 flex items-center gap-2"
                       id="val-btn-generate"
                     >
                       <Sparkles className="w-4 h-4" />
@@ -573,9 +573,9 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                   className="py-12 flex flex-col items-center justify-center text-center space-y-6"
                 >
                   <div className="relative flex items-center justify-center">
-                    <div className="absolute w-20 h-20 rounded-full border-4 border-emerald-500/20 animate-pulse" />
-                    <div className="w-16 h-16 rounded-full border-4 border-t-emerald-500 border-r-emerald-500/40 border-b-emerald-500/10 border-l-emerald-500/60 animate-spin flex items-center justify-center" />
-                    <Home className="absolute w-6 h-6 text-emerald-500 animate-bounce" />
+                    <div className="absolute w-20 h-20 rounded-full border-4 border-apple-green/20 animate-pulse" />
+                    <div className="w-16 h-16 rounded-full border-4 border-t-apple-green border-r-apple-green/40 border-b-apple-green/10 border-l-apple-green/60 animate-spin flex items-center justify-center" />
+                    <Home className="absolute w-6 h-6 text-apple-green animate-bounce" />
                   </div>
                   <div className="space-y-2 max-w-md">
                     <h3 className="font-bold text-lg text-neutral-800 dark:text-white">Analyzing Real Estate Metrics...</h3>
@@ -587,7 +587,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.3 }}
-                          className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase font-mono"
+                          className="text-xs font-semibold text-apple-green dark:text-apple-green tracking-wide uppercase font-mono"
                         >
                           {loadingTexts[loadingPhase]}
                         </motion.p>
@@ -595,7 +595,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                     </div>
                     <div className="w-64 bg-neutral-100 dark:bg-neutral-800 h-1.5 rounded-full mx-auto overflow-hidden mt-4">
                       <motion.div
-                        className="bg-emerald-500 h-full rounded-full"
+                        className="bg-apple-green h-full rounded-full"
                         initial={{ width: "0%" }}
                         animate={{ width: "100%" }}
                         transition={{ duration: 3, ease: "linear" }}
@@ -613,8 +613,8 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                 >
                   {/* Property Specifications Summary Header Card */}
                   <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-900/30 border border-neutral-100 dark:border-neutral-800/80">
-                    <div className="p-3 bg-white dark:bg-[#2C2C2E] rounded-xl text-emerald-500 shrink-0 shadow-sm border border-neutral-100 dark:border-neutral-800">
-                      <Home className="w-5 h-5 text-emerald-500" />
+                    <div className="p-3 bg-white dark:bg-[var(--bg-inset)] rounded-xl text-apple-green shrink-0 shadow-sm border border-neutral-100 dark:border-neutral-800">
+                      <Home className="w-5 h-5 text-apple-green" />
                     </div>
                     <div>
                       <h4 className="font-extrabold text-base text-neutral-900 dark:text-white leading-tight">
@@ -635,9 +635,9 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                   </div>
 
                   {/* Main Estimation Hero Box */}
-                  <div className="relative text-center p-7 bg-gradient-to-br from-emerald-500/[0.04] to-sky-500/[0.04] dark:from-emerald-950/20 dark:to-sky-950/10 border border-emerald-500/10 dark:border-emerald-500/20 rounded-[24px] overflow-hidden">
+                  <div className="relative text-center p-7 bg-gradient-to-br from-apple-green/[0.04] to-sky-500/[0.04] dark:from-apple-surface/20 dark:to-sky-950/10 border border-apple-green/10 dark:border-apple-green/20 rounded-[24px] overflow-hidden">
                     <div className="absolute top-0 right-0 p-3">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 animate-pulse">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold text-apple-green bg-apple-green/10 border border-apple-green/20 animate-pulse">
                         <CheckCircle2 className="w-3 h-3" /> AI Validated
                       </span>
                     </div>
@@ -645,7 +645,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                     <div className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 mb-1 uppercase tracking-widest">
                       Estimated Market Valuation
                     </div>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 leading-none tracking-tight my-1">
+                    <div className="text-3xl sm:text-4xl font-extrabold text-apple-green dark:text-apple-green leading-none tracking-tight my-1">
                       {formatLacsCrores(result.estimatedValue)}
                     </div>
                     <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-mono uppercase tracking-widest mt-1">
@@ -672,7 +672,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                             className={cn(
                               "flex items-center gap-2 px-3 py-2 text-xs font-bold border-b-2 whitespace-nowrap transition-all",
                               isActive
-                                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                                ? "border-apple-green text-apple-green dark:text-apple-green"
                                 : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:border-neutral-200"
                             )}
                           >
@@ -701,9 +701,9 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                             <div className="relative pt-3 pb-2">
                               {/* Range bar */}
                               <div className="w-full h-3 bg-neutral-100 dark:bg-neutral-800 rounded-full relative">
-                                <div className="absolute left-[15%] right-[15%] h-full bg-gradient-to-r from-emerald-500/70 to-sky-500/70 rounded-full" />
+                                <div className="absolute left-[15%] right-[15%] h-full bg-gradient-to-r from-apple-green/70 to-sky-500/70 rounded-full" />
                                 <div
-                                  className="absolute w-4.5 h-4.5 bg-emerald-500 border-2 border-white dark:border-[#1C1C1E] rounded-full top-1/2 -translate-y-1/2 shadow-md -translate-x-1/2 z-10 flex items-center justify-center cursor-pointer"
+                                  className="absolute w-4.5 h-4.5 bg-apple-green border-2 border-white dark:border-[var(--bg-raised)] rounded-full top-1/2 -translate-y-1/2 shadow-md -translate-x-1/2 z-10 flex items-center justify-center cursor-pointer"
                                   style={{ left: "50%" }}
                                 >
                                   <div className="w-1.5 h-1.5 bg-white rounded-full" />
@@ -717,8 +717,8 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                                   <span className="text-neutral-700 dark:text-neutral-300 font-mono">{formatLacsCrores(result.marketRange.low)}</span>
                                 </div>
                                 <div className="text-center">
-                                  <span className="text-emerald-500 text-[8px] block uppercase font-mono tracking-wider">Exact Valuation</span>
-                                  <span className="text-emerald-500 font-mono font-extrabold">{formatLacsCrores(result.estimatedValue)}</span>
+                                  <span className="text-apple-green text-[8px] block uppercase font-mono tracking-wider">Exact Valuation</span>
+                                  <span className="text-apple-green font-mono font-extrabold">{formatLacsCrores(result.estimatedValue)}</span>
                                 </div>
                                 <div className="text-right">
                                   <span className="text-[8px] text-neutral-400 block uppercase font-mono tracking-wider">High Range Resale</span>
@@ -732,10 +732,10 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                           <div className="p-4.5 border border-neutral-150 dark:border-neutral-800/80 rounded-[20px] bg-neutral-50/50 dark:bg-neutral-900/10 space-y-2.5">
                             <div className="flex justify-between items-center">
                               <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
-                                <TrendingUp className="w-4 h-4 text-emerald-500" />
+                                <TrendingUp className="w-4 h-4 text-apple-green" />
                                 Local Market Trend Analysis
                               </span>
-                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold bg-apple-green/10 text-apple-green dark:text-apple-green uppercase tracking-wide">
                                 Price Trend: {result.priceTrend}
                               </span>
                             </div>
@@ -773,7 +773,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                               <div className="p-4.5 bg-neutral-50/30 dark:bg-neutral-900/10 border border-neutral-100 dark:border-neutral-800 rounded-2xl flex flex-col justify-between space-y-4">
                                 <div>
                                   <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">Gross Rental Yield (Annual)</span>
-                                  <span className="text-2xl font-extrabold text-emerald-500 block mt-1">
+                                  <span className="text-2xl font-extrabold text-apple-green block mt-1">
                                     {result.investmentYield.grossYield}%
                                   </span>
                                   <span className="text-[10px] text-neutral-500 block mt-1 font-mono">
@@ -804,8 +804,8 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                           animate={{ opacity: 1, y: 0 }}
                           className="space-y-4"
                         >
-                          <div className="bg-amber-500/[0.03] border border-amber-500/15 p-4 rounded-xl flex gap-3 items-start">
-                            <Info className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                          <div className="bg-gold-decoration/[0.03] border border-gold-decoration/15 p-4 rounded-xl flex gap-3 items-start">
+                            <Info className="w-4 h-4 text-gold-decoration shrink-0 mt-0.5" />
                             <p className="text-[10px] text-neutral-600 dark:text-neutral-400 leading-relaxed font-semibold">
                               Pakistan Government property transfer taxes are determined by tax residency status (FBR Active Filer vs Non-Filer). Rates vary according to budget modifications in 2024-2026.
                             </p>
@@ -813,10 +813,10 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {/* ACTIVE FILER CARD */}
-                            <div className="p-4.5 bg-emerald-500/[0.02] dark:bg-emerald-950/5 border border-emerald-500/10 dark:border-emerald-500/20 rounded-2xl space-y-3.5">
-                              <div className="flex justify-between items-center border-b border-emerald-500/10 pb-2">
-                                <span className="font-extrabold text-xs text-emerald-600 dark:text-emerald-400">Active Taxpayer (Filer)</span>
-                                <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-emerald-500/10 text-emerald-500 uppercase tracking-widest">Optimized</span>
+                            <div className="p-4.5 bg-apple-green/[0.02] dark:bg-apple-surface/5 border border-apple-green/10 dark:border-apple-green/20 rounded-2xl space-y-3.5">
+                              <div className="flex justify-between items-center border-b border-apple-green/10 pb-2">
+                                <span className="font-extrabold text-xs text-apple-green dark:text-apple-green">Active Taxpayer (Filer)</span>
+                                <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-apple-green/10 text-apple-green uppercase tracking-widest">Optimized</span>
                               </div>
                               <div className="space-y-2 text-xs font-semibold">
                                 <div className="flex justify-between">
@@ -833,7 +833,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                                 </div>
                                 <div className="flex justify-between border-t border-neutral-100 dark:border-neutral-800 pt-2 font-bold text-neutral-900 dark:text-white">
                                   <span>Total Transfer Cost</span>
-                                  <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                                  <span className="font-mono text-apple-green dark:text-apple-green">
                                     {formatLacsCrores(result.taxBreakdown.filerFbrTax + result.taxBreakdown.stampDuty + result.taxBreakdown.transferFee)}
                                   </span>
                                 </div>
@@ -841,10 +841,10 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                             </div>
 
                             {/* NON FILER CARD */}
-                            <div className="p-4.5 bg-rose-500/[0.02] dark:bg-rose-950/5 border border-rose-500/10 dark:border-rose-500/20 rounded-2xl space-y-3.5">
-                              <div className="flex justify-between items-center border-b border-rose-500/10 pb-2">
-                                <span className="font-extrabold text-xs text-rose-600 dark:text-rose-400">Non-Taxpayer (Non-Filer)</span>
-                                <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-rose-500/10 text-rose-500 uppercase tracking-widest">Penalty Rate</span>
+                            <div className="p-4.5 bg-apple-red/[0.02] dark:bg-rose-950/5 border border-apple-red/10 dark:border-apple-red/20 rounded-2xl space-y-3.5">
+                              <div className="flex justify-between items-center border-b border-apple-red/10 pb-2">
+                                <span className="font-extrabold text-xs text-apple-red dark:text-rose-400">Non-Taxpayer (Non-Filer)</span>
+                                <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-apple-red/10 text-apple-red uppercase tracking-widest">Penalty Rate</span>
                               </div>
                               <div className="space-y-2 text-xs font-semibold">
                                 <div className="flex justify-between">
@@ -861,7 +861,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                                 </div>
                                 <div className="flex justify-between border-t border-neutral-100 dark:border-neutral-800 pt-2 font-bold text-neutral-900 dark:text-white">
                                   <span>Total Transfer Cost</span>
-                                  <span className="font-mono text-rose-600 dark:text-rose-400">
+                                  <span className="font-mono text-apple-red dark:text-rose-400">
                                     {formatLacsCrores(result.taxBreakdown.nonFilerFbrTax + result.taxBreakdown.stampDuty + result.taxBreakdown.transferFee)}
                                   </span>
                                 </div>
@@ -896,7 +896,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                                       {comp.title}
                                     </td>
                                     <td className="p-3 font-mono">{comp.size}</td>
-                                    <td className="p-3 text-right font-mono text-emerald-600 dark:text-emerald-400">{formatLacsCrores(comp.price)}</td>
+                                    <td className="p-3 text-right font-mono text-apple-green dark:text-apple-green">{formatLacsCrores(comp.price)}</td>
                                     <td className="p-3 text-right">
                                       <span className="px-1.5 py-0.5 rounded text-[8px] bg-neutral-100 dark:bg-neutral-800 text-neutral-500 font-bold">
                                         {comp.source}
@@ -918,17 +918,17 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                   {/* Trust indicator */}
                   <div className="flex items-center justify-between p-4 border border-neutral-100 dark:border-neutral-800 rounded-[20px] bg-neutral-50/35 dark:bg-neutral-900/10">
                     <div className="flex items-center gap-2.5">
-                      <ShieldCheck className="w-4.5 h-4.5 text-emerald-500 shrink-0" />
+                      <ShieldCheck className="w-4.5 h-4.5 text-apple-green shrink-0" />
                       <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">AI Estimation Confidence Matrix</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-24 bg-neutral-200 dark:bg-neutral-800 h-1.5 rounded-full overflow-hidden shrink-0">
                         <div
-                          className="bg-emerald-500 h-full rounded-full"
+                          className="bg-apple-green h-full rounded-full"
                           style={{ width: `${result.confidence * 100}%` }}
                         />
                       </div>
-                      <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                      <span className="text-xs font-extrabold text-apple-green dark:text-apple-green font-mono">
                         {(result.confidence * 100).toFixed(0)}%
                       </span>
                     </div>
@@ -946,7 +946,7 @@ export default function ValuationModal({ isOpen, onClose }: { isOpen: boolean; o
                     </button>
                     <button
                       onClick={onClose}
-                      className="apple-button-primary bg-emerald-500 hover:bg-emerald-600 border-emerald-500 hover:border-emerald-600 text-white py-2.5 rounded-2xl font-bold flex-1"
+                      className="apple-button-primary bg-apple-green hover:bg-apple-green border-apple-green hover:border-apple-green text-white py-2.5 rounded-2xl font-bold flex-1"
                       id="val-btn-result-close"
                     >
                       Done & Close

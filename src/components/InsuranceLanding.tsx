@@ -115,14 +115,14 @@ export default function InsuranceLanding() {
   };
 
   return (
-    <div className="text-[#1D1D1F] dark:text-[#F5F5F7] antialiased min-h-screen bg-[#F5F5F7] dark:bg-[#000000] transition-colors duration-500 selection:bg-apple-blue/10 selection:text-apple-blue">
+    <div className="text-[var(--text-primary)] dark:text-[var(--text-primary)] antialiased min-h-screen bg-[var(--text-primary)] dark:bg-[var(--bg-page)] transition-colors duration-500 selection:bg-apple-blue/10 selection:text-apple-blue">
       <Header />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 sm:pb-28 overflow-hidden bg-gradient-to-b from-white to-[#F5F5F7] dark:from-[#111112] dark:to-[#000000] border-b border-black/[0.04] dark:border-white/[0.04]">
+      <section className="relative pt-32 pb-20 sm:pb-28 overflow-hidden bg-gradient-to-b from-white to-[var(--text-primary)] dark:from-[var(--bg-surface)] dark:to-[var(--bg-page)] border-b border-black/[0.04] dark:border-white/[0.04]">
         {/* Abstract vector backgrounds */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-apple-blue/5 dark:bg-apple-blue/10 rounded-full blur-[100px] pointer-events-none -mr-40 -mt-20" />
-        <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-amber-500/5 dark:bg-amber-500/5 rounded-full blur-[80px] pointer-events-none -ml-40 -mb-20" />
+        <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-gold-decoration/5 dark:bg-gold-decoration/5 rounded-full blur-[80px] pointer-events-none -ml-40 -mb-20" />
 
         <div className="max-w-[1024px] mx-auto px-6 sm:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -134,11 +134,11 @@ export default function InsuranceLanding() {
                 Pakistan’s Smartest AI-Assisted Car Insurance
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.1]">
+              <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-[1.1]">
                 Secure your vehicle with <span className="text-apple-blue font-bold">100% peace of mind</span>.
               </h1>
               
-              <p className="text-sm sm:text-base text-[#86868B] leading-relaxed max-w-xl">
+              <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed max-w-xl">
                 Protect your masterpiece. Pakizzle partners with leading underwriters to provide zero-depreciation coverage, free satellite tracking, interest-free monthly installments, and 120-second instant claims.
               </p>
 
@@ -153,7 +153,7 @@ export default function InsuranceLanding() {
                 
                 <a 
                   href="#how-it-works"
-                  className="text-xs font-bold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors flex items-center gap-1"
+                  className="text-xs font-bold text-[var(--text-primary)] dark:text-white hover:text-apple-blue transition-colors flex items-center gap-1"
                 >
                   See Coverage Breakdown
                   <ChevronDown className="w-4 h-4 animate-bounce" />
@@ -164,31 +164,31 @@ export default function InsuranceLanding() {
               <div className="grid grid-cols-3 gap-6 pt-6 border-t border-black/[0.05] dark:border-white/5 max-w-lg">
                 <div>
                   <span className="block text-xl sm:text-2xl font-bold text-apple-blue font-mono">120s</span>
-                  <span className="text-[10px] text-[#86868B] uppercase tracking-wider font-bold">Claim Approvals</span>
+                  <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-bold">Claim Approvals</span>
                 </div>
                 <div>
-                  <span className="block text-xl sm:text-2xl font-bold text-[#1D1D1F] dark:text-white font-mono">Free</span>
-                  <span className="text-[10px] text-[#86868B] uppercase tracking-wider font-bold">GPS Tracker Unit</span>
+                  <span className="block text-xl sm:text-2xl font-bold text-[var(--text-primary)] dark:text-white font-mono">Free</span>
+                  <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-bold">GPS Tracker Unit</span>
                 </div>
                 <div>
-                  <span className="block text-xl sm:text-2xl font-bold text-emerald-500 font-mono">100%</span>
-                  <span className="text-[10px] text-[#86868B] uppercase tracking-wider font-bold">Zero-Depreciation</span>
+                  <span className="block text-xl sm:text-2xl font-bold text-apple-green font-mono">100%</span>
+                  <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-bold">Zero-Depreciation</span>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Interactive Quick Quote Widget */}
             <div className="lg:col-span-5">
-              <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_15px_40px_rgba(0,0,0,0.03)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative overflow-hidden">
+              <div className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_15px_40px_rgba(0,0,0,0.03)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-apple-blue to-cyan-500" />
                 
-                <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-[#86868B] mb-1">Get an Instant Premium Quote</h3>
-                <h2 className="text-lg font-semibold text-[#1D1D1F] dark:text-white leading-tight mb-5">Select Policy Parameters</h2>
+                <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1">Get an Instant Premium Quote</h3>
+                <h2 className="text-lg font-semibold text-[var(--text-primary)] dark:text-white leading-tight mb-5">Select Policy Parameters</h2>
 
                 <div className="space-y-4">
                   {/* City Selector */}
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider block">City Hub Node</label>
+                    <label className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block">City Hub Node</label>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         { id: 'lhe' as const, label: 'Lahore' },
@@ -202,7 +202,7 @@ export default function InsuranceLanding() {
                             "py-2 text-[10px] font-bold rounded-xl border text-center transition-all",
                             estCity === city.id
                               ? "bg-apple-blue border-apple-blue text-white shadow-sm"
-                              : "bg-[#F5F5F7] dark:bg-white/5 border-transparent text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                              : "bg-[var(--text-primary)] dark:bg-white/5 border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                           )}
                         >
                           {city.label}
@@ -213,7 +213,7 @@ export default function InsuranceLanding() {
 
                   {/* Vehicle Class */}
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider block">Vehicle Category</label>
+                    <label className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block">Vehicle Category</label>
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         { id: 'hatch' as const, label: 'Hatchback', desc: 'Alto, Vitz, Picanto' },
@@ -227,11 +227,11 @@ export default function InsuranceLanding() {
                             "p-2 text-left rounded-xl border transition-all flex flex-col justify-between min-h-[56px]",
                             estCarType === classItem.id
                               ? "bg-apple-blue border-apple-blue text-white shadow-sm"
-                              : "bg-[#F5F5F7] dark:bg-white/5 border-transparent text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                              : "bg-[var(--text-primary)] dark:bg-white/5 border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                           )}
                         >
                           <span className="text-[10px] font-bold block">{classItem.label}</span>
-                          <span className={cn("text-[7px] block truncate", estCarType === classItem.id ? "text-white/80" : "text-[#86868B]")}>
+                          <span className={cn("text-[7px] block truncate", estCarType === classItem.id ? "text-white/80" : "text-[var(--text-secondary)]")}>
                             {classItem.desc}
                           </span>
                         </button>
@@ -241,13 +241,13 @@ export default function InsuranceLanding() {
 
                   {/* Vehicle Value */}
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider block">Estimated Car Value (PKR)</label>
+                    <label className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block">Estimated Car Value (PKR)</label>
                     <input 
                       type="number"
                       placeholder="e.g. 3,500,000"
                       value={estValue}
                       onChange={(e) => setEstValue(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-xl text-xs font-bold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white font-mono"
+                      className="w-full px-3 py-2.5 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-xl text-xs font-bold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white font-mono"
                     />
                   </div>
 
@@ -255,8 +255,8 @@ export default function InsuranceLanding() {
                   <div className="bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/15 rounded-2xl p-4 flex justify-between items-center mt-5">
                     <div>
                       <span className="text-[8px] font-extrabold text-apple-blue uppercase tracking-wider block">ESTIMATED ANNUAL PREMIUM</span>
-                      <span className="text-xl font-bold font-mono text-[#1D1D1F] dark:text-white">PKR {calculatedPremium.toLocaleString()}</span>
-                      <span className="text-[8px] text-[#86868B] block mt-0.5">Free tracker installation included.</span>
+                      <span className="text-xl font-bold font-mono text-[var(--text-primary)] dark:text-white">PKR {calculatedPremium.toLocaleString()}</span>
+                      <span className="text-[8px] text-[var(--text-secondary)] block mt-0.5">Free tracker installation included.</span>
                     </div>
 
                     <button
@@ -285,10 +285,10 @@ export default function InsuranceLanding() {
           <span className="text-[10px] font-extrabold text-apple-blue uppercase tracking-[0.2em] block">
             ACCIDENT RISK INSIGHTS IN PAKISTAN
           </span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Avoid Massive Accident Expense Shockwaves
           </h2>
-          <p className="text-xs sm:text-sm text-[#86868B]">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
             In Pakistan, standard auto repair parts have surged over 250% in cost. A simple fender collision can leave you with hundreds of thousands in immediate repair bills.
           </p>
         </div>
@@ -314,14 +314,14 @@ export default function InsuranceLanding() {
               metric: "Factory Genuine Spares"
             }
           ].map((item, idx) => (
-            <div key={idx} className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 space-y-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+            <div key={idx} className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 space-y-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
               <div className="w-10 h-10 rounded-xl bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/10 flex items-center justify-center text-apple-blue">
                 <item.icon className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <span className="text-[8px] font-black uppercase text-[#86868B] tracking-widest block font-mono">{item.metric}</span>
-                <h3 className="text-sm font-bold text-[#1D1D1F] dark:text-white">{item.title}</h3>
-                <p className="text-xs text-[#86868B] leading-relaxed">{item.desc}</p>
+                <span className="text-[8px] font-black uppercase text-[var(--text-secondary)] tracking-widest block font-mono">{item.metric}</span>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] dark:text-white">{item.title}</h3>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
               </div>
             </div>
           ))}
@@ -349,10 +349,10 @@ export default function InsuranceLanding() {
           <span className="text-[10px] font-extrabold text-apple-blue uppercase tracking-[0.2em] block">
             COMMON INQUIRIES
           </span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Frequently Asked Questions
           </h2>
-          <p className="text-xs text-[#86868B]">
+          <p className="text-xs text-[var(--text-secondary)]">
             All you need to know about our comprehensive insurance shields, tracking devices, and claim dispatch loops.
           </p>
         </div>
@@ -363,14 +363,14 @@ export default function InsuranceLanding() {
             return (
               <div 
                 key={idx} 
-                className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden transition-all duration-300"
+                className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden transition-all duration-300"
               >
                 <button
                   onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                  className="w-full p-5 text-left flex justify-between items-center gap-4 text-sm font-semibold text-[#1D1D1F] dark:text-white"
+                  className="w-full p-5 text-left flex justify-between items-center gap-4 text-sm font-semibold text-[var(--text-primary)] dark:text-white"
                 >
                   <span>{faq.question}</span>
-                  <ChevronDown className={cn("w-4 h-4 text-[#86868B] transition-transform duration-300 shrink-0", isOpen ? "rotate-180 text-apple-blue" : "")} />
+                  <ChevronDown className={cn("w-4 h-4 text-[var(--text-secondary)] transition-transform duration-300 shrink-0", isOpen ? "rotate-180 text-apple-blue" : "")} />
                 </button>
                 
                 <AnimatePresence initial={false}>
@@ -381,7 +381,7 @@ export default function InsuranceLanding() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="px-5 pb-5 pt-1 text-xs text-[#86868B] leading-relaxed border-t border-black/[0.02] dark:border-white/[0.02]">
+                      <div className="px-5 pb-5 pt-1 text-xs text-[var(--text-secondary)] leading-relaxed border-t border-black/[0.02] dark:border-white/[0.02]">
                         {faq.answer}
                       </div>
                     </motion.div>

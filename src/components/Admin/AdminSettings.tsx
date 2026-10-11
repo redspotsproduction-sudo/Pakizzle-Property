@@ -39,7 +39,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const Label = ({ children, className, ...props }: any) => (
-  <label className={cn("text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5 block", className)} {...props}>
+  <label className={cn("text-[10px] font-bold uppercase tracking-wider text-apple-text-muted mb-1.5 block", className)} {...props}>
     {children}
   </label>
 );
@@ -55,7 +55,7 @@ export default function AdminSettings() {
       setIsSaving(false);
       toast.success("Configuration Synced", {
         description: "Global system parameters have been updated across all nodes.",
-        icon: <ShieldCheck className="w-4 h-4 text-[#34C759]" />
+        icon: <ShieldCheck className="w-4 h-4 text-[var(--success)]" />
       });
     }, 1500);
   };
@@ -81,10 +81,10 @@ export default function AdminSettings() {
             <Settings className="w-3.5 h-3.5 text-apple-blue" />
             Governance & System Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             System Settings
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Configure high-level system orchestration, security protocols, and visual sensory archetypes.
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function AdminSettings() {
           <Button 
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-[#0071E3] hover:bg-[#0077ED] text-white rounded-xl font-bold text-xs uppercase tracking-widest px-8 h-10 shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-xl font-bold text-xs uppercase tracking-widest px-8 h-10 shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2"
           >
             {isSaving ? (
               <>
@@ -115,16 +115,16 @@ export default function AdminSettings() {
         {/* Left Sidebar Navigation Panel */}
         <aside className="w-full lg:w-72 shrink-0 space-y-6">
           <div className="relative group">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
             <input 
               placeholder="Search sections..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
             />
           </div>
 
-          <nav className="p-1.5 bg-[#F5F5F7] dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex lg:flex-col overflow-x-auto no-scrollbar gap-1">
+          <nav className="p-1.5 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex lg:flex-col overflow-x-auto no-scrollbar gap-1">
             {filteredNavItems.map((item) => (
               <button
                 key={item.id}
@@ -132,30 +132,30 @@ export default function AdminSettings() {
                 className={cn(
                   "flex items-center gap-3 rounded-xl lg:w-full text-left py-2.5 px-4 transition-all duration-300 shrink-0 text-xs font-semibold uppercase tracking-wider",
                   activeTab === item.id 
-                    ? "bg-white dark:bg-[#1D1D1F] text-[#0071E3] shadow-sm" 
-                    : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    ? "bg-white dark:bg-[var(--text-primary)] text-[var(--accent)] shadow-sm" 
+                    : "text-apple-text-muted hover:text-apple-text dark:hover:text-apple-gray"
                 )}
               >
-                <item.icon className={cn("w-4 h-4", activeTab === item.id ? "text-[#0071E3]" : "text-zinc-400")} />
+                <item.icon className={cn("w-4 h-4", activeTab === item.id ? "text-[var(--accent)]" : "text-apple-text-muted")} />
                 <span>{item.label}</span>
               </button>
             ))}
           </nav>
 
-          <div className="p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] space-y-4 hidden lg:block">
+          <div className="p-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] space-y-4 hidden lg:block">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#34C759] animate-pulse" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">System Stability</span>
+              <div className="w-2 h-2 rounded-full bg-[var(--success)] animate-pulse" />
+              <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted">System Stability</span>
             </div>
-            <p className="text-[11px] text-[#86868B] leading-relaxed">
+            <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
               All system nodes are operating within optimal latency parameters. Sync status: 100%
             </p>
-            <div className="h-1 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-1 w-full bg-apple-gray dark:bg-apple-surface rounded-full overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 2, ease: "easeOut" }}
-                className="h-full bg-[#34C759]" 
+                className="h-full bg-[var(--success)]" 
               />
             </div>
           </div>
@@ -170,14 +170,14 @@ export default function AdminSettings() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-8 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300"
+              className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-8 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300"
             >
               {/* Governance Section */}
               {activeTab === 'general' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#1D1D1F] dark:text-zinc-100">Platform Governance</h2>
-                    <p className="text-xs text-[#86868B] mt-1">Define platform identity parameters and default currencies.</p>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] dark:text-apple-gray">Platform Governance</h2>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">Define platform identity parameters and default currencies.</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
@@ -186,16 +186,16 @@ export default function AdminSettings() {
                       <input 
                         type="text"
                         defaultValue="AutoHedge Pakistan" 
-                        className="w-full h-10 px-4 bg-[#F5F5F7] dark:bg-zinc-900 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
+                        className="w-full h-10 px-4 bg-[var(--text-primary)] dark:bg-apple-text border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
                       />
                     </div>
                     <div className="space-y-1.5">
                       <Label>Sovereign Base Currency</Label>
                       <Select defaultValue="pkr">
-                        <SelectTrigger className="h-10 rounded-xl bg-[#F5F5F7] dark:bg-zinc-900 border-transparent text-xs font-semibold">
+                        <SelectTrigger className="h-10 rounded-xl bg-[var(--text-primary)] dark:bg-apple-text border-transparent text-xs font-semibold">
                           <SelectValue placeholder="Select Base Currency" />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl border-black/[0.04] bg-white dark:bg-[#1D1D1F]">
+                        <SelectContent className="rounded-xl border-black/[0.04] bg-white dark:bg-[var(--text-primary)]">
                           <SelectItem value="pkr" className="text-xs py-2">PKR (Pakistani Rupee)</SelectItem>
                           <SelectItem value="usd" className="text-xs py-2">USD (United States Dollar)</SelectItem>
                           <SelectItem value="aed" className="text-xs py-2">AED (UAE Dirham)</SelectItem>
@@ -204,14 +204,14 @@ export default function AdminSettings() {
                     </div>
                   </div>
 
-                  <div className="p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-black/[0.02] dark:border-white/[0.02] flex items-center justify-between gap-6">
+                  <div className="p-5 rounded-2xl bg-apple-surface dark:bg-apple-text border border-black/[0.02] dark:border-white/[0.02] flex items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                      <div className="p-3 bg-[#0071E3]/10 rounded-xl text-[#0071E3]">
+                      <div className="p-3 bg-[var(--accent)]/10 rounded-xl text-[var(--accent)]">
                         <Globe className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-zinc-100">Maintenance Protocol</h4>
-                        <p className="text-[10px] text-zinc-400 mt-0.5">Broadcast platform updates and restrict general public access.</p>
+                        <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-apple-gray">Maintenance Protocol</h4>
+                        <p className="text-[10px] text-apple-text-muted mt-0.5">Broadcast platform updates and restrict general public access.</p>
                       </div>
                     </div>
                     <Switch />
@@ -222,7 +222,7 @@ export default function AdminSettings() {
                     <input 
                       type="email"
                       defaultValue="governance@autohedge.pk" 
-                      className="w-full h-10 px-4 bg-[#F5F5F7] dark:bg-zinc-900 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
+                      className="w-full h-10 px-4 bg-[var(--text-primary)] dark:bg-apple-text border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -232,8 +232,8 @@ export default function AdminSettings() {
               {activeTab === 'security' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#1D1D1F] dark:text-zinc-100">Hardened Security Protocols</h2>
-                    <p className="text-xs text-[#86868B] mt-1">Configure advanced authorization gates and multi-factor validation.</p>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] dark:text-apple-gray">Hardened Security Protocols</h2>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">Configure advanced authorization gates and multi-factor validation.</p>
                   </div>
 
                   <div className="space-y-4 pt-2">
@@ -242,14 +242,14 @@ export default function AdminSettings() {
                       { title: 'Temporal Session Hardening', desc: 'Auto-expire admin sessions after 4 hours of idle operations.', icon: Lock, enabled: true },
                       { title: 'Regional Geo-Fencing', desc: 'Strictly white-list designated geographic subnets for backend execution.', icon: Globe, enabled: false },
                     ].map((item, i) => (
-                      <div key={i} className="p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-black/[0.02] dark:border-white/[0.02] flex items-center justify-between gap-6">
+                      <div key={i} className="p-5 rounded-2xl bg-apple-surface dark:bg-apple-text border border-black/[0.02] dark:border-white/[0.02] flex items-center justify-between gap-6">
                         <div className="flex items-center gap-4">
-                          <div className="p-3 bg-zinc-200/50 dark:bg-zinc-800 rounded-xl text-zinc-600 dark:text-zinc-300">
+                          <div className="p-3 bg-apple-border/50 dark:bg-apple-surface rounded-xl text-apple-text-muted dark:text-apple-border">
                             <item.icon className="w-5 h-5" />
                           </div>
                           <div>
-                            <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-zinc-100">{item.title}</h4>
-                            <p className="text-[10px] text-zinc-400 mt-0.5 max-w-md leading-normal">{item.desc}</p>
+                            <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-apple-gray">{item.title}</h4>
+                            <p className="text-[10px] text-apple-text-muted mt-0.5 max-w-md leading-normal">{item.desc}</p>
                           </div>
                         </div>
                         <Switch defaultChecked={item.enabled} />
@@ -258,10 +258,10 @@ export default function AdminSettings() {
                   </div>
 
                   <div className="pt-4 border-t border-black/[0.04] dark:border-white/[0.04] flex flex-col sm:flex-row gap-3">
-                    <Button variant="outline" className="flex-1 h-10 rounded-xl text-xs font-bold uppercase tracking-wider border-zinc-200 dark:border-zinc-800 hover:bg-red-500/5 hover:text-red-500 hover:border-red-500/10 transition-all">
+                    <Button variant="outline" className="flex-1 h-10 rounded-xl text-xs font-bold uppercase tracking-wider border-apple-border dark:border-apple-surface hover:bg-red-500/5 hover:text-red-500 hover:border-red-500/10 transition-all">
                       Reset Credentials
                     </Button>
-                    <Button className="flex-1 bg-[#0071E3] hover:bg-[#0077ED] text-white h-10 rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm transition-all">
+                    <Button className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white h-10 rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm transition-all">
                       Rotate Master Tokens
                     </Button>
                   </div>
@@ -272,15 +272,15 @@ export default function AdminSettings() {
               {activeTab === 'interface' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#1D1D1F] dark:text-zinc-100">Sensory Archetypes</h2>
-                    <p className="text-xs text-[#86868B] mt-1">Configure user interface preferences and graphic acceleration systems.</p>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] dark:text-apple-gray">Sensory Archetypes</h2>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">Configure user interface preferences and graphic acceleration systems.</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     {[
-                      { id: 'light', label: 'Luminous', icon: Sun, color: 'bg-white text-zinc-900 border-zinc-200 dark:bg-zinc-800 dark:text-white dark:border-zinc-700' },
-                      { id: 'dark', label: 'Nocturnal', icon: Moon, color: 'bg-[#1D1D1F] text-white border-zinc-800' },
-                      { id: 'system', label: 'Adaptive', icon: Monitor, color: 'bg-gradient-to-br from-white to-[#1D1D1F] text-zinc-600 border-zinc-200 dark:border-zinc-800' },
+                      { id: 'light', label: 'Luminous', icon: Sun, color: 'bg-white text-apple-text border-apple-border dark:bg-apple-surface dark:text-white dark:border-apple-text-muted' },
+                      { id: 'dark', label: 'Nocturnal', icon: Moon, color: 'bg-[var(--text-primary)] text-white border-apple-surface' },
+                      { id: 'system', label: 'Adaptive', icon: Monitor, color: 'bg-gradient-to-br from-white to-[var(--text-primary)] text-apple-text-muted border-apple-border dark:border-apple-surface' },
                     ].map((theme) => (
                       <button
                         key={theme.id}
@@ -297,26 +297,26 @@ export default function AdminSettings() {
                   </div>
 
                   <div className="space-y-4 pt-2">
-                    <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900 rounded-2xl">
+                    <div className="flex items-center justify-between p-4 bg-apple-surface dark:bg-apple-text rounded-2xl">
                       <div className="flex items-center gap-4">
                         <div className="p-3 bg-purple-500/10 rounded-xl text-purple-500">
                           <RotateCcw className="w-5 h-5 animate-spin duration-1000" />
                         </div>
                         <div>
-                          <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-zinc-100">Dynamic Motion</h4>
-                          <p className="text-[10px] text-zinc-400 mt-0.5">Toggle fluid transitions and state change visualizers globally.</p>
+                          <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-apple-gray">Dynamic Motion</h4>
+                          <p className="text-[10px] text-apple-text-muted mt-0.5">Toggle fluid transitions and state change visualizers globally.</p>
                         </div>
                       </div>
                       <Switch defaultChecked />
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900 rounded-2xl">
+                    <div className="flex items-center justify-between p-4 bg-apple-surface dark:bg-apple-text rounded-2xl">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-[#0071E3]/10 rounded-xl text-[#0071E3]">
+                        <div className="p-3 bg-[var(--accent)]/10 rounded-xl text-[var(--accent)]">
                           <Sparkles className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-zinc-100">Crystalline Layering</h4>
-                          <p className="text-[10px] text-zinc-400 mt-0.5">Activate delicate glassmorphism backdrops on overlays and drawers.</p>
+                          <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-apple-gray">Crystalline Layering</h4>
+                          <p className="text-[10px] text-apple-text-muted mt-0.5">Activate delicate glassmorphism backdrops on overlays and drawers.</p>
                         </div>
                       </div>
                       <Switch />
@@ -329,8 +329,8 @@ export default function AdminSettings() {
               {activeTab === 'infrastructure' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#1D1D1F] dark:text-zinc-100">System Nodes & Edge Engines</h2>
-                    <p className="text-xs text-[#86868B] mt-1">Review active database and high-performance cloud storage instances.</p>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] dark:text-apple-gray">System Nodes & Edge Engines</h2>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">Review active database and high-performance cloud storage instances.</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -342,16 +342,16 @@ export default function AdminSettings() {
                     ].map((node, i) => (
                       <div 
                         key={i} 
-                        className="p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-black/[0.02] dark:border-white/[0.02] flex items-center gap-4"
+                        className="p-5 rounded-2xl bg-apple-surface dark:bg-apple-text border border-black/[0.02] dark:border-white/[0.02] flex items-center gap-4"
                       >
-                        <div className="p-3.5 bg-white dark:bg-zinc-800 rounded-xl text-zinc-700 dark:text-zinc-200 shadow-sm shrink-0">
+                        <div className="p-3.5 bg-white dark:bg-apple-surface rounded-xl text-apple-text-muted dark:text-apple-border shadow-sm shrink-0">
                           <node.icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <div className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider mb-0.5">{node.label}</div>
-                          <div className="font-semibold text-xs text-[#1D1D1F] dark:text-white">{node.value}</div>
-                          <div className="text-[9px] font-bold text-[#34C759] flex items-center gap-1.5 mt-1 uppercase tracking-wider">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#34C759] animate-pulse" />
+                          <div className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider mb-0.5">{node.label}</div>
+                          <div className="font-semibold text-xs text-[var(--text-primary)] dark:text-white">{node.value}</div>
+                          <div className="text-[9px] font-bold text-[var(--success)] flex items-center gap-1.5 mt-1 uppercase tracking-wider">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--success)] animate-pulse" />
                             {node.sub}
                           </div>
                         </div>
@@ -369,7 +369,7 @@ export default function AdminSettings() {
                         <h4 className="text-[9px] font-bold uppercase tracking-wider text-red-500">Danger Shard Purge</h4>
                       </div>
                       <h3 className="text-sm font-semibold text-red-600 dark:text-red-400">Atomic Shard Purge Protocol</h3>
-                      <p className="text-xs text-zinc-500 leading-normal max-w-xl">
+                      <p className="text-xs text-apple-text-muted leading-normal max-w-xl">
                         Executing this command will instantly flush all temporary records, logs, and sandbox testing instances back to genesis defaults. This is a non-reversible action.
                       </p>
                       <Button variant="outline" className="h-9 px-6 rounded-xl border-red-500/20 text-red-500 font-bold text-xs uppercase tracking-wider hover:bg-red-500 hover:text-white transition-all duration-500">
@@ -384,8 +384,8 @@ export default function AdminSettings() {
               {activeTab === 'notifications' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-[#1D1D1F] dark:text-zinc-100">Relay Systems & Alert Dispatch</h2>
-                    <p className="text-xs text-[#86868B] mt-1">Coordinate how critical operational alerts are routed to your staff.</p>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] dark:text-apple-gray">Relay Systems & Alert Dispatch</h2>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">Coordinate how critical operational alerts are routed to your staff.</p>
                   </div>
 
                   <div className="space-y-4 pt-2">
@@ -395,14 +395,14 @@ export default function AdminSettings() {
                       { title: 'System Push Relays', desc: 'Direct secure system warnings via Apple Push Notifications.', status: 'Active', icon: Smartphone },
                       { title: 'SMS Failover Service', desc: 'Direct emergency notification channel via cellular fallback.', status: 'Standby', icon: Phone },
                     ].map((item, i) => (
-                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-black/[0.02] dark:border-white/[0.02] group hover:border-black/[0.06] dark:hover:border-white/[0.06] transition-all duration-500">
+                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-apple-surface dark:bg-apple-text border border-black/[0.02] dark:border-white/[0.02] group hover:border-black/[0.06] dark:hover:border-white/[0.06] transition-all duration-500">
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 flex items-center justify-center text-zinc-500 group-hover:text-apple-blue transition-all shadow-sm">
+                          <div className="w-10 h-10 rounded-xl bg-white dark:bg-apple-surface flex items-center justify-center text-apple-text-muted group-hover:text-apple-blue transition-all shadow-sm">
                             <item.icon className="w-5 h-5" />
                           </div>
                           <div>
-                            <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-zinc-100">{item.title}</h4>
-                            <p className="text-[10px] text-zinc-400 mt-0.5 max-w-sm leading-normal">{item.desc}</p>
+                            <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-apple-gray">{item.title}</h4>
+                            <p className="text-[10px] text-apple-text-muted mt-0.5 max-w-sm leading-normal">{item.desc}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">

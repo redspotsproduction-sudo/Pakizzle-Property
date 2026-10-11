@@ -198,10 +198,10 @@ export default function InsuranceBookingFlow() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F5F5F7] dark:bg-[#000000] flex flex-col md:flex-row overflow-hidden text-[#1D1D1F] dark:text-[#F5F5F7] antialiased">
+    <div className="fixed inset-0 z-50 bg-[var(--text-primary)] dark:bg-[var(--bg-page)] flex flex-col md:flex-row overflow-hidden text-[var(--text-primary)] dark:text-[var(--text-primary)] antialiased">
       
       {/* Sidebar - Desktop Only with Luxury Blue Grid & Live Hotspot HUD */}
-      <div className="hidden md:flex w-[400px] bg-white dark:bg-[#111112] border-r border-black/[0.05] dark:border-white/[0.05] flex-col p-8 relative overflow-hidden select-none shrink-0">
+      <div className="hidden md:flex w-[400px] bg-white dark:bg-[var(--bg-surface)] border-r border-black/[0.05] dark:border-white/[0.05] flex-col p-8 relative overflow-hidden select-none shrink-0">
         
         {/* Subtle background blue grid matching the insurance theme */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.4] dark:opacity-[0.2]" style={{
@@ -215,22 +215,22 @@ export default function InsuranceBookingFlow() {
             <Shield className="w-5 h-5 text-white" />
           </div>
           <div>
-            <span className="text-lg font-black tracking-tight block leading-none text-[#1D1D1F] dark:text-white">PAKIZZLE</span>
+            <span className="text-lg font-black tracking-tight block leading-none text-[var(--text-primary)] dark:text-white">PAKIZZLE</span>
             <span className="text-[9px] font-bold text-apple-blue uppercase tracking-widest block mt-0.5">Secure™ Terminal</span>
           </div>
         </div>
 
         {/* Live Step HUD Display */}
-        <div className="mb-8 relative z-10 bg-[#FAFAFA] dark:bg-[#1C1C1E] rounded-2xl p-4 border border-black/[0.03] dark:border-white/[0.03]">
+        <div className="mb-8 relative z-10 bg-[var(--bg-surface)] dark:bg-[var(--bg-raised)] rounded-2xl p-4 border border-black/[0.03] dark:border-white/[0.03]">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-black uppercase text-[#86868B] tracking-wider">Dynamic Vehicle HUD</span>
+            <span className="text-[10px] font-black uppercase text-[var(--text-secondary)] tracking-wider">Dynamic Vehicle HUD</span>
             <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-apple-blue/10 text-apple-blue border border-apple-blue/20 animate-pulse uppercase">
               {currentStep === 'confirmation' ? 'Policy Approved' : 'Active Telemetry'}
             </span>
           </div>
           
           {/* Miniature side profile vehicle with responsive blips */}
-          <div className="relative py-4 bg-[#F2F7FC] dark:bg-[#15191E] rounded-xl overflow-hidden border border-apple-blue/10 flex justify-center items-center">
+          <div className="relative py-4 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] rounded-xl overflow-hidden border border-apple-blue/10 flex justify-center items-center">
             
             {/* Grid pattern inner */}
             <div className="absolute inset-0 pointer-events-none opacity-50" style={{
@@ -278,7 +278,7 @@ export default function InsuranceBookingFlow() {
             </div>
           </div>
 
-          <div className="mt-3 flex items-center justify-between text-[9px] font-bold text-[#86868B] font-mono">
+          <div className="mt-3 flex items-center justify-between text-[9px] font-bold text-[var(--text-secondary)] font-mono">
             <span>ACTIVE SECURITY LAYER:</span>
             <span className="text-apple-blue font-extrabold uppercase tracking-wide">
               {currentStep === 'vehicle' && 'ACCIDENTAL RISK CALIBRATION'}
@@ -306,7 +306,7 @@ export default function InsuranceBookingFlow() {
                   ? "border-apple-blue text-apple-blue bg-apple-blue/5 dark:bg-apple-blue/10 scale-110 font-bold" 
                   : steps.findIndex(s => s.id === currentStep) > idx 
                     ? "bg-apple-blue border-apple-blue text-white shadow-md shadow-apple-blue/10" 
-                    : "border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
+                    : "border-black/[0.08] dark:border-white/[0.08] text-[var(--text-secondary)]"
               )}>
                 {steps.findIndex(s => s.id === currentStep) > idx ? <CheckCircle2 className="w-5 h-5" /> : <step.icon className="w-4 h-4" />}
               </div>
@@ -315,7 +315,7 @@ export default function InsuranceBookingFlow() {
                 currentStep === step.id ? "opacity-100 translate-x-1" : "opacity-40"
               )}>
                 <p className="text-[8px] font-black uppercase tracking-widest mb-0.5 text-apple-blue font-mono">Phase 0{idx + 1}</p>
-                <h4 className="text-xs font-bold tracking-tight text-[#1D1D1F] dark:text-white">{step.label}</h4>
+                <h4 className="text-xs font-bold tracking-tight text-[var(--text-primary)] dark:text-white">{step.label}</h4>
               </div>
             </div>
           ))}
@@ -323,12 +323,12 @@ export default function InsuranceBookingFlow() {
 
         {/* Secure end-to-end policy notice */}
         <div className="mt-auto relative z-10">
-          <div className="bg-[#FAFAFA] dark:bg-[#1C1C1E] border border-black/[0.04] dark:border-white/[0.04] p-5 rounded-2xl space-y-3.5">
+          <div className="bg-[var(--bg-surface)] dark:bg-[var(--bg-raised)] border border-black/[0.04] dark:border-white/[0.04] p-5 rounded-2xl space-y-3.5">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              <p className="text-xs font-bold text-[#1D1D1F] dark:text-white">Bank-Grade Policy Shield</p>
+              <ShieldCheck className="w-5 h-5 text-apple-green" />
+              <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white">Bank-Grade Policy Shield</p>
             </div>
-            <p className="text-[10px] text-[#86868B] font-medium leading-relaxed">
+            <p className="text-[10px] text-[var(--text-secondary)] font-medium leading-relaxed">
               Your sensitive data is protected by military-grade end-to-end encryption. Risk assessment factors and dynamic GPS node telemetry are kept confidential.
             </p>
           </div>
@@ -358,7 +358,7 @@ export default function InsuranceBookingFlow() {
         {/* Desktop Close Button */}
         <button 
            onClick={() => navigate('/insurance')}
-           className="hidden md:flex absolute top-6 right-6 p-2 bg-[#F5F5F7] dark:bg-[#1C1C1E] hover:bg-black/[0.05] dark:hover:bg-white/[0.05] rounded-full text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white transition-all z-20 group"
+           className="hidden md:flex absolute top-6 right-6 p-2 bg-[var(--text-primary)] dark:bg-[var(--bg-raised)] hover:bg-black/[0.05] dark:hover:bg-white/[0.05] rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white transition-all z-20 group"
         >
           <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
         </button>
@@ -376,19 +376,19 @@ export default function InsuranceBookingFlow() {
                 className="space-y-8"
               >
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">Asset Identification</h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">Asset Identification</h2>
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Define the vehicle you wish to secure. Precision in technical specifications ensures 100% accurate underwriter premium rates.
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Manufacturer / Brand</label>
+                    <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Manufacturer / Brand</label>
                     <input 
                       type="text" 
                       placeholder="e.g. Honda, Toyota, Suzuki" 
-                      className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white"
+                      className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white"
                       value={formData.vehicleMake}
                       onChange={(e) => setFormData({...formData, vehicleMake: e.target.value})}
                     />
@@ -396,21 +396,21 @@ export default function InsuranceBookingFlow() {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Model</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Model</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Civic, Corolla" 
-                        className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white"
+                        className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white"
                         value={formData.vehicleModel}
                         onChange={(e) => setFormData({...formData, vehicleModel: e.target.value})}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Variant</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Variant</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Oriel, Altis" 
-                        className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white"
+                        className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white"
                         value={formData.vehicleVariant}
                         onChange={(e) => setFormData({...formData, vehicleVariant: e.target.value})}
                       />
@@ -419,21 +419,21 @@ export default function InsuranceBookingFlow() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Manufacture Year</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Manufacture Year</label>
                       <input 
                         type="number" 
                         placeholder="2024" 
-                        className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white"
+                        className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white"
                         value={formData.vehicleYear}
                         onChange={(e) => setFormData({...formData, vehicleYear: e.target.value})}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Car Value (PKR)</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Car Value (PKR)</label>
                       <input 
                         type="number" 
                         placeholder="e.g. 3,500,000" 
-                        className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-bold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white font-mono"
+                        className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-bold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white font-mono"
                         value={formData.vehicleValue}
                         onChange={(e) => setFormData({...formData, vehicleValue: e.target.value})}
                       />
@@ -453,8 +453,8 @@ export default function InsuranceBookingFlow() {
                 className="space-y-8"
               >
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">Risk Mitigation</h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">Risk Mitigation</h2>
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Select your desired level of protection. Comprehensive policies include a free satellite tracking device unit and full accident damage recovery.
                   </p>
                 </div>
@@ -486,8 +486,8 @@ export default function InsuranceBookingFlow() {
                     >
                       <div className="flex justify-between items-start w-full">
                         <div className="space-y-1">
-                          <h3 className="text-sm font-bold text-[#1D1D1F] dark:text-white">{plan.label}</h3>
-                          <p className="text-[11px] text-[#86868B] leading-relaxed pr-6">{plan.desc}</p>
+                          <h3 className="text-sm font-bold text-[var(--text-primary)] dark:text-white">{plan.label}</h3>
+                          <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed pr-6">{plan.desc}</p>
                         </div>
                         <div className={cn(
                           "w-5 h-5 rounded-full border flex items-center justify-center transition-all shrink-0 mt-0.5",
@@ -499,7 +499,7 @@ export default function InsuranceBookingFlow() {
 
                       <div className="flex flex-wrap gap-1.5 pt-1">
                         {plan.tags.map(tag => (
-                          <span key={tag} className="px-2 py-0.5 bg-black/[0.03] dark:bg-white/[0.04] rounded-md text-[8px] font-bold uppercase tracking-wider text-[#86868B]">
+                          <span key={tag} className="px-2 py-0.5 bg-black/[0.03] dark:bg-white/[0.04] rounded-md text-[8px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
                             {tag}
                           </span>
                         ))}
@@ -520,19 +520,19 @@ export default function InsuranceBookingFlow() {
                 className="space-y-8"
               >
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">Human Coordinates</h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">Human Coordinates</h2>
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Provide precise communication credentials for tracker installation and policy dispatch.
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Residency Address</label>
+                    <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Residency Address</label>
                     <input 
                       type="text" 
                       placeholder="e.g. House #10, Street 2, Sector DHA" 
-                      className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white"
+                      className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-semibold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white"
                       value={formData.address}
                       onChange={(e) => setFormData({...formData, address: e.target.value})}
                     />
@@ -540,21 +540,21 @@ export default function InsuranceBookingFlow() {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">City</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">City</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Lahore, Karachi, Islamabad" 
-                        className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-bold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white"
+                        className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-bold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white"
                         value={formData.city}
                         onChange={(e) => setFormData({...formData, city: e.target.value})}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-[#86868B] ml-2">Target Phone</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] ml-2">Target Phone</label>
                       <input 
                         type="tel" 
                         placeholder="+92 300 1234567" 
-                        className="w-full px-4 py-3 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-bold outline-none transition-all shadow-inner text-[#1D1D1F] dark:text-white font-mono"
+                        className="w-full px-4 py-3 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black rounded-2xl text-xs font-bold outline-none transition-all shadow-inner text-[var(--text-primary)] dark:text-white font-mono"
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       />
@@ -574,13 +574,13 @@ export default function InsuranceBookingFlow() {
                 className="space-y-8"
               >
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">Policy Manifest</h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">Policy Manifest</h2>
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Verify coverage parameters prior to deployment of active risk coverage.
                   </p>
                 </div>
 
-                <div className="bg-[#F5F5F7] dark:bg-[#111112] p-6 rounded-3xl space-y-6 border border-black/[0.04] dark:border-white/[0.04] shadow-sm relative overflow-hidden">
+                <div className="bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] p-6 rounded-3xl space-y-6 border border-black/[0.04] dark:border-white/[0.04] shadow-sm relative overflow-hidden">
                      <div className="absolute top-0 right-0 w-48 h-48 bg-apple-blue/5 blur-[80px] rounded-full pointer-events-none" />
                      
                      {selectedProvider && (
@@ -590,16 +590,16 @@ export default function InsuranceBookingFlow() {
                                  {selectedProvider.logoUrl ? (
                                    <img src={selectedProvider.logoUrl} alt={selectedProvider.name} className="w-full h-full object-contain" />
                                  ) : (
-                                   <span className="font-bold text-xs text-slate-700">{selectedProvider.name?.[0] || 'I'}</span>
+                                   <span className="font-bold text-xs text-apple-text-muted">{selectedProvider.name?.[0] || 'I'}</span>
                                  )}
                               </div>
                               <div>
-                                 <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Underwriter Node</p>
-                                 <p className="text-sm font-bold text-[#1D1D1F] dark:text-white leading-tight">{selectedProvider.name}</p>
+                                 <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Underwriter Node</p>
+                                 <p className="text-sm font-bold text-[var(--text-primary)] dark:text-white leading-tight">{selectedProvider.name}</p>
                               </div>
                            </div>
                            <div className="text-right">
-                              <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Plan Layer</p>
+                              <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Plan Layer</p>
                               <p className="text-sm font-bold text-apple-blue capitalize">{formData.insuranceType.replace('_', ' ')}</p>
                            </div>
                         </div>
@@ -607,30 +607,30 @@ export default function InsuranceBookingFlow() {
 
                      <div className="grid grid-cols-2 gap-y-6 gap-x-8">
                         <div>
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider mb-0.5">Asset Spec</p>
-                            <p className="text-sm font-bold text-[#1D1D1F] dark:text-white leading-tight">{formData.vehicleYear} {formData.vehicleMake} {formData.vehicleModel}</p>
-                            <span className="text-[10px] text-[#86868B]">{formData.vehicleVariant || 'Standard Trim'}</span>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Asset Spec</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] dark:text-white leading-tight">{formData.vehicleYear} {formData.vehicleMake} {formData.vehicleModel}</p>
+                            <span className="text-[10px] text-[var(--text-secondary)]">{formData.vehicleVariant || 'Standard Trim'}</span>
                         </div>
                         <div className="text-right">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider mb-0.5">Car Value Weight</p>
-                            <p className="text-sm font-black text-[#1D1D1F] dark:text-white font-mono">{formatPrice(Number(formData.vehicleValue))}</p>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Car Value Weight</p>
+                            <p className="text-sm font-black text-[var(--text-primary)] dark:text-white font-mono">{formatPrice(Number(formData.vehicleValue))}</p>
                         </div>
                         <div className="col-span-2">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider mb-0.5">Physical Node Destination</p>
-                            <p className="text-xs font-semibold text-[#1D1D1F] dark:text-white/85 leading-relaxed">{formData.address}, {formData.city}</p>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Physical Node Destination</p>
+                            <p className="text-xs font-semibold text-[var(--text-primary)] dark:text-white/85 leading-relaxed">{formData.address}, {formData.city}</p>
                         </div>
                      </div>
 
                      <div className="h-[1px] bg-black/[0.05] dark:bg-white/5" />
 
-                     <div className="space-y-2.5 text-xs text-[#86868B]">
+                     <div className="space-y-2.5 text-xs text-[var(--text-secondary)]">
                         <div className="flex justify-between items-center font-medium">
                            <span>Annual Comprehensive Premium</span>
-                           <span className="font-bold text-[#1D1D1F] dark:text-white font-mono">{formatPrice(totals.yearlyPremium)}</span>
+                           <span className="font-bold text-[var(--text-primary)] dark:text-white font-mono">{formatPrice(totals.yearlyPremium)}</span>
                         </div>
                         <div className="flex justify-between items-center font-medium">
                            <span>GPS Telemetry Tracker Hardware</span>
-                           <span className="font-bold text-emerald-500">{totals.trackerFee > 0 ? formatPrice(totals.trackerFee) : 'Complimentary'}</span>
+                           <span className="font-bold text-apple-green">{totals.trackerFee > 0 ? formatPrice(totals.trackerFee) : 'Complimentary'}</span>
                         </div>
                      </div>
 
@@ -638,17 +638,17 @@ export default function InsuranceBookingFlow() {
 
                      <div className="flex justify-between items-end">
                         <div className="space-y-1">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Total Policy Amount (PKR)</p>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Total Policy Amount (PKR)</p>
                             <p className="text-3xl font-black text-apple-blue tracking-tight leading-none font-mono">{formatPrice(totals.total)}</p>
                         </div>
                         <div className="text-right">
-                            <span className="text-[9px] font-extrabold text-[#86868B] uppercase tracking-wider block">Billed Annually</span>
-                            <span className="text-[8px] text-emerald-500 block mt-0.5 font-bold">Installment options available</span>
+                            <span className="text-[9px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider block">Billed Annually</span>
+                            <span className="text-[8px] text-apple-green block mt-0.5 font-bold">Installment options available</span>
                         </div>
                      </div>
                 </div>
 
-                <p className="text-[9px] text-center text-[#86868B] font-medium leading-relaxed px-6">
+                <p className="text-[9px] text-center text-[var(--text-secondary)] font-medium leading-relaxed px-6">
                   By executing this form, you authorize Pakizzle underwriter nodes to initiate verification loops and agree to our standard <span className="underline cursor-pointer hover:text-apple-blue">Terms of Service</span>.
                 </p>
               </motion.div>
@@ -674,16 +674,16 @@ export default function InsuranceBookingFlow() {
                 </div>
 
                 <div className="space-y-3">
-                    <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white">Request Dispatched</h2>
-                    <p className="text-sm text-[#86868B] max-w-sm mx-auto leading-relaxed">
+                    <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">Request Dispatched</h2>
+                    <p className="text-sm text-[var(--text-secondary)] max-w-sm mx-auto leading-relaxed">
                        Your car insurance request is successfully logged. Pakizzle agents are locking with underwriters to issue your final coverage certificate.
                     </p>
                 </div>
 
-                <div className="bg-[#F5F5F7] dark:bg-[#111112] border border-black/[0.04] dark:border-white/[0.04] p-5 rounded-2xl inline-block">
+                <div className="bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.04] dark:border-white/[0.04] p-5 rounded-2xl inline-block">
                     <div className="flex items-center gap-4 text-xs">
                         <div className="text-left">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider mb-0.5">Security Token ID</p>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Security Token ID</p>
                             <p className="text-sm font-black font-mono uppercase text-apple-blue">{`PKZ-SECURE-${Math.floor(Date.now()/1000)}`}</p>
                         </div>
                     </div>
@@ -709,7 +709,7 @@ export default function InsuranceBookingFlow() {
              <button 
                 onClick={handleBack}
                 disabled={currentStep === 'vehicle'}
-                className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white disabled:opacity-0 transition-all active:scale-95"
+                className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white disabled:opacity-0 transition-all active:scale-95"
              >
                 <div className="w-7 h-7 rounded-full border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-center">
                     <ChevronLeft className="w-3.5 h-3.5" />

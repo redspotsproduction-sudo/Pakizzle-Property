@@ -81,20 +81,20 @@ const TESTIMONIALS = [
 
 export default function SocialProofSection() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 dark:border-slate-800">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-apple-border dark:border-apple-surface">
       {/* 1. Live Market Activity Stream */}
       <RevealOnScroll direction="up" distance={30} duration={0.6} className="mb-14">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0F766E] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#0F766E]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--apple-green)] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--apple-green)]"></span>
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-apple-surface dark:text-apple-border">
               Live Verified Market Activity
             </span>
           </div>
-          <span className="text-xs text-slate-500 font-medium">Real-time registry updates</span>
+          <span className="text-xs text-apple-text-muted font-medium">Real-time registry updates</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -103,34 +103,34 @@ export default function SocialProofSection() {
               key={act.id}
               whileHover={{ y: -3, scale: 1.01 }}
               transition={{ duration: 0.2, ease: REVEAL_EASE }}
-              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between"
+              className="p-3 rounded-xl border border-apple-border dark:border-apple-surface bg-white dark:bg-apple-text shadow-sm flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
                     act.type === "sold"
-                      ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
+                      ? "bg-apple-green/10 dark:bg-apple-surface/40 text-apple-green dark:text-apple-green border border-apple-green/30 dark:border-apple-green"
                       : act.type === "rented"
                       ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800"
-                      : "bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 border border-teal-200 dark:border-teal-800"
+                      : "bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-apple-green border border-teal-200 dark:border-teal-800"
                   }`}>
                     {act.type === "sold" ? "Sold" : act.type === "rented" ? "Rented" : "Title Verified"}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-medium">{act.timeAgo}</span>
+                  <span className="text-[10px] text-apple-text-muted font-medium">{act.timeAgo}</span>
                 </div>
-                <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-100 line-clamp-1">
+                <h4 className="text-xs font-semibold text-apple-text dark:text-apple-gray line-clamp-1">
                   {act.title}
                 </h4>
-                <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                <p className="text-[11px] text-apple-text-muted line-clamp-1 mt-0.5">
                   {act.location}
                 </p>
               </div>
 
-              <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <span className="text-xs font-bold text-[#0F766E] dark:text-teal-400">
+              <div className="mt-2 pt-2 border-t border-apple-gray dark:border-apple-surface flex items-center justify-between">
+                <span className="text-xs font-bold text-[var(--apple-green)] dark:text-apple-green">
                   {act.amount}
                 </span>
-                <ShieldCheck className="w-3.5 h-3.5 text-[#0F766E]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[var(--apple-green)]" />
               </div>
             </motion.div>
           ))}
@@ -139,13 +139,13 @@ export default function SocialProofSection() {
 
       {/* 2. Scale Credentials Banner with Eased Animated Counters */}
       <RevealOnScroll direction="up" distance={40} duration={0.65}>
-        <div className="rounded-2xl bg-slate-900 text-white p-6 md:p-8 mb-14 shadow-lg border border-white/5">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-800">
+        <div className="rounded-2xl bg-apple-text text-white p-6 md:p-8 mb-14 shadow-lg border border-white/5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-apple-surface">
             <div className="pt-4 md:pt-0">
-              <div className="text-2xl md:text-3xl font-extrabold text-teal-400 font-mono">
+              <div className="text-2xl md:text-3xl font-extrabold text-apple-green font-mono">
                 <AnimatedCounter value={180} prefix="Rs " suffix="+ Cr" duration={1.2} />
               </div>
-              <div className="text-xs text-slate-400 font-medium mt-1">
+              <div className="text-xs text-apple-text-muted font-medium mt-1">
                 Title-Verified Volume Facilitated
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function SocialProofSection() {
               <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">
                 <AnimatedCounter value={14500} suffix="+" duration={1.2} />
               </div>
-              <div className="text-xs text-slate-400 font-medium mt-1">
+              <div className="text-xs text-apple-text-muted font-medium mt-1">
                 Genuine Active Properties
               </div>
             </div>
@@ -161,15 +161,15 @@ export default function SocialProofSection() {
               <div className="text-2xl md:text-3xl font-extrabold text-white font-mono">
                 <AnimatedCounter value={1450} suffix="+" duration={1.2} />
               </div>
-              <div className="text-xs text-slate-400 font-medium mt-1">
+              <div className="text-xs text-apple-text-muted font-medium mt-1">
                 Certified Owners & Licensed Agencies
               </div>
             </div>
             <div className="pt-4 md:pt-0">
-              <div className="text-2xl md:text-3xl font-extrabold text-amber-400 font-mono">
+              <div className="text-2xl md:text-3xl font-extrabold text-gold-decoration font-mono">
                 0%
               </div>
-              <div className="text-xs text-slate-400 font-medium mt-1">
+              <div className="text-xs text-apple-text-muted font-medium mt-1">
                 Tolerated Duplicate / Spam Listings
               </div>
             </div>
@@ -181,11 +181,11 @@ export default function SocialProofSection() {
       <div>
         <RevealOnScroll direction="up" distance={30} duration={0.6}>
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2 border border-amber-200 dark:border-amber-800">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-decoration/10 dark:bg-amber-950/40 text-amber-700 dark:text-gold-decoration text-xs font-semibold uppercase tracking-wider mb-2 border border-gold-decoration/30 dark:border-amber-800">
               <Award className="w-3.5 h-3.5" />
               Verified Customer Experiences
             </div>
-            <h3 className="type-h3 font-semibold text-slate-900 dark:text-slate-100">
+            <h3 className="type-h3 font-semibold text-apple-text dark:text-apple-gray">
               Trusted by Overseas Pakistanis & Domestic Investors
             </h3>
           </div>
@@ -204,33 +204,33 @@ export default function SocialProofSection() {
               <motion.div
                 whileHover={{ y: -4, scale: 1.01 }}
                 transition={{ duration: 0.25, ease: REVEAL_EASE }}
-                className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between h-full"
+                className="p-6 rounded-2xl border border-apple-border dark:border-apple-surface bg-white dark:bg-apple-text shadow-sm flex flex-col justify-between h-full"
               >
                 <div>
-                  <div className="flex items-center gap-1 text-amber-500 mb-3">
+                  <div className="flex items-center gap-1 text-gold-decoration mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic mb-4">
+                  <p className="text-xs sm:text-sm text-apple-text-muted dark:text-apple-border leading-relaxed italic mb-4">
                     "{t.quote}"
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="pt-4 border-t border-apple-gray dark:border-apple-surface">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/60 text-[#0F766E] dark:text-teal-300 flex items-center justify-center font-bold text-xs">
+                    <div className="w-8 h-8 rounded-full bg-apple-green/20 dark:bg-apple-green/30 text-[var(--apple-green)] dark:text-teal-300 flex items-center justify-center font-bold text-xs">
                       {t.name.split(" ").map(n => n[0]).join("")}
                     </div>
                     <div>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.name}</span>
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#0F766E]" />
+                        <span className="text-xs font-bold text-apple-text dark:text-apple-gray">{t.name}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--apple-green)]" />
                       </div>
-                      <span className="text-[11px] text-slate-500 block">{t.role}</span>
+                      <span className="text-[11px] text-apple-text-muted block">{t.role}</span>
                     </div>
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-2 font-medium">
+                  <div className="text-[11px] text-apple-text-muted mt-2 font-medium">
                     {t.property}
                   </div>
                 </div>

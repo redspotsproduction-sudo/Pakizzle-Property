@@ -99,15 +99,15 @@ export default function MarketInsightBanner({
     switch (type) {
       case "price_index":
         return (
-          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-apple-green/15 text-apple-green dark:text-apple-green border border-apple-green/30/20">
             <TrendingUp className="w-3.5 h-3.5" />
             <span>Price Trend {change}</span>
           </span>
         );
       case "demand_signal":
         return (
-          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-brand-primary/15 text-brand-primary dark:text-amber-400 border border-brand-primary/20">
-            <Flame className="w-3.5 h-3.5 text-amber-500" />
+          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-brand-primary/15 text-brand-primary dark:text-apple-orange border border-brand-primary/20">
+            <Flame className="w-3.5 h-3.5 text-apple-orange" />
             <span>Demand Surge {change}</span>
           </span>
         );
@@ -166,31 +166,31 @@ export default function MarketInsightBanner({
       <motion.div
         layout
         onClick={handleClick}
-        className="w-full p-4 rounded-3xl bg-gradient-to-r from-emerald-500/10 via-brand-primary/5 to-emerald-500/5 dark:from-emerald-950/30 dark:via-slate-900/60 dark:to-emerald-950/20 border border-emerald-500/20 dark:border-emerald-500/30 shadow-sm hover:shadow-md hover:border-emerald-500/40 transition-all cursor-pointer overflow-hidden backdrop-blur-md"
+        className="w-full p-4 rounded-3xl bg-gradient-to-r from-apple-green/10 via-brand-primary/5 to-apple-green/5 dark:from-emerald-950/30 dark:via-apple-text/60 dark:to-emerald-950/20 border border-apple-green/30/20 dark:border-apple-green/30/30 shadow-sm hover:shadow-md hover:border-apple-green/30/40 transition-all cursor-pointer overflow-hidden backdrop-blur-md"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           {/* Left section: Icon + Content */}
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-white dark:bg-white/5 shadow-sm border border-apple-green/30/20 text-apple-green dark:text-apple-green flex items-center justify-center shrink-0">
               {currentInsight.metricType === "new_listings" ? (
-                <ShieldCheck className="w-6 h-6 text-emerald-500" />
+                <ShieldCheck className="w-6 h-6 text-apple-green" />
               ) : currentInsight.metricType === "demand_signal" ? (
-                <Flame className="w-6 h-6 text-amber-500" />
+                <Flame className="w-6 h-6 text-apple-orange" />
               ) : (
-                <TrendingUp className="w-6 h-6 text-emerald-500" />
+                <TrendingUp className="w-6 h-6 text-apple-green" />
               )}
             </div>
 
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap mb-1">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-green dark:text-apple-green flex items-center gap-1">
                   <span>Market Pulse</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
                 </span>
 
                 {getMetricBadge(currentInsight.metricType, currentInsight.change)}
 
-                <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-bold text-slate-400 dark:text-slate-500">
+                <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-bold text-apple-text-muted dark:text-apple-text-muted">
                   <Info className="w-3 h-3" />
                   <span>Real Aggregate Data</span>
                 </span>
@@ -205,11 +205,11 @@ export default function MarketInsightBanner({
                   transition={{ duration: 0.25 }}
                   className="space-y-0.5"
                 >
-                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
+                  <p className="text-sm font-black text-apple-text dark:text-white truncate">
                     {currentInsight.title}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                    {currentInsight.subtitle} · <span className="text-brand-primary dark:text-amber-400 font-semibold underline underline-offset-2">Tap to view matching properties</span>
+                  <p className="text-xs text-apple-text-muted dark:text-apple-text-muted truncate">
+                    {currentInsight.subtitle} · <span className="text-brand-primary dark:text-apple-orange font-semibold underline underline-offset-2">Tap to view matching properties</span>
                   </p>
                 </motion.div>
               </AnimatePresence>
@@ -217,14 +217,14 @@ export default function MarketInsightBanner({
           </div>
 
           {/* Right section: Navigation & Call to Action */}
-          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-emerald-500/10">
+          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-apple-green/30/10">
             {/* Carousel navigation pills */}
             {insights.length > 1 && (
-              <div className="flex items-center gap-1 bg-white/70 dark:bg-slate-800/70 p-1 rounded-2xl border border-slate-200/60 dark:border-white/5">
+              <div className="flex items-center gap-1 bg-white/70 dark:bg-white/5/70 p-1 rounded-2xl border border-apple-border/60 dark:border-white/5">
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-300 transition-colors cursor-pointer"
+                  className="p-1 rounded-xl hover:bg-apple-gray dark:hover:bg-apple-text-muted text-apple-text-muted dark:text-apple-text transition-colors cursor-pointer"
                   title="Previous insight"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
@@ -243,7 +243,7 @@ export default function MarketInsightBanner({
                         "h-1.5 rounded-full transition-all cursor-pointer",
                         currentIndex === i 
                           ? "w-4 bg-brand-primary" 
-                          : "w-1.5 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400"
+                          : "w-1.5 bg-apple-border dark:bg-apple-text-muted hover:bg-apple-text-muted"
                       )}
                       title={`Insight ${i + 1}`}
                     />
@@ -253,7 +253,7 @@ export default function MarketInsightBanner({
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-300 transition-colors cursor-pointer"
+                  className="p-1 rounded-xl hover:bg-apple-gray dark:hover:bg-apple-text-muted text-apple-text-muted dark:text-apple-text transition-colors cursor-pointer"
                   title="Next insight"
                 >
                   <ChevronRight className="w-3.5 h-3.5" />

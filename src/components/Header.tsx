@@ -126,7 +126,7 @@ export default function Header() {
           {isScrolled ? (
             <button 
               onClick={() => setShowSearchModal(true)}
-              className="hidden md:flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-apple-surface/90 border border-apple-border text-xs text-apple-text-muted hover:text-apple-text cursor-pointer transition-all hover:border-apple-blue shadow-xs group focus-ring-pakizzle"
+              className="hidden lg:flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-apple-surface/90 border border-apple-border text-xs text-apple-text-muted hover:text-apple-text cursor-pointer transition-all hover:border-apple-blue shadow-xs group focus-ring-pakizzle"
             >
               <Search className="w-3.5 h-3.5 text-apple-blue group-hover:scale-110 transition-transform" />
               <span className="font-medium">Search DHA, Clifton, Sector F-7...</span>
@@ -137,42 +137,42 @@ export default function Header() {
           ) : (
             <nav 
               aria-label="Main Navigation"
-              className="hidden lg:flex items-center gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-full border border-black/5 dark:border-white/10 shrink-0"
+              className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-full border border-black/5 dark:border-white/10 shrink-0"
             >
               <Link
                 to="/marketplace?purpose=buy"
-                className="px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
+                className="px-2.5 xl:px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
               >
                 Buy
               </Link>
               <Link
                 to="/marketplace?purpose=rent"
-                className="px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
+                className="px-2.5 xl:px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
               >
                 Rent
               </Link>
               <Link
-                to="/marketplace?make=Plot"
-                className="px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
+                to="/marketplace?propertyType=Plot"
+                className="px-2.5 xl:px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
               >
                 Plots
               </Link>
               <Link
-                to="/marketplace?make=Commercial"
-                className="px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
+                to="/marketplace?propertyType=Commercial"
+                className="px-2.5 xl:px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all focus-ring-pakizzle"
               >
                 Commercial
               </Link>
               <Link
-                to="/auction-verification"
-                className="px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all flex items-center gap-1 focus-ring-pakizzle"
+                to="/verification"
+                className="px-2.5 xl:px-3 py-1.5 text-xs font-semibold text-apple-text hover:text-apple-blue hover:bg-apple-surface rounded-full transition-all flex items-center gap-1 focus-ring-pakizzle"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-apple-green" />
                 <span>Verification</span>
               </Link>
               <Link
                 to="/stories"
-                className="px-3 py-1.5 text-xs font-bold text-white bg-apple-blue hover:opacity-90 rounded-full transition-all flex items-center gap-1.5 shadow-xs focus-ring-pakizzle"
+                className="px-2.5 xl:px-3 py-1.5 text-xs font-bold text-white bg-apple-blue hover:opacity-90 rounded-full transition-all flex items-center gap-1.5 shadow-xs focus-ring-pakizzle"
               >
                 <Sparkles className="w-3.5 h-3.5 text-white/90" />
                 <span>PakStories</span>
@@ -182,21 +182,6 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-1 sm:gap-1.5 lg:gap-2 shrink-0">
-          {/* Location Trigger - Dedicated space on the right (search cockpit also provides city controls) */}
-          <button 
-            onClick={() => setShowLocationModal(true)}
-            className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold text-apple-text transition-all shrink-0 border border-transparent hover:border-black/5 dark:hover:border-white/10 cursor-pointer focus-ring-pakizzle"
-            title="Change Location"
-          >
-            <div className="w-5 h-5 rounded-full bg-apple-blue/10 flex items-center justify-center shrink-0">
-              <MapPin className="w-3 h-3 text-apple-blue stroke-[2.2]" />
-            </div>
-            <span className="truncate max-w-[100px]">
-              {displayLocation}
-            </span>
-            <ChevronDown className="w-3 h-3 text-apple-text-muted/60" />
-          </button>
-
           {/* Spotlight Search Trigger Button */}
           <button
             onClick={() => setShowSearchModal(true)}
@@ -258,7 +243,7 @@ export default function Header() {
           </div>
 
           {/* Notifications Dropdown */}
-          <div className="relative hidden lg:block" ref={notificationsRef}>
+          <div className="relative hidden xl:block" ref={notificationsRef}>
             <button 
               onClick={() => setShowNotificationsDropdown(!showNotificationsDropdown)}
               className={cn(
@@ -290,8 +275,8 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
-          {/* Messages Dropdown - Hidden on mobile as it's in bottom nav */}
-          <div className="relative hidden lg:block" ref={messagesRef}>
+          {/* Messages Dropdown - Hidden on mobile and tablet portrait */}
+          <div className="relative hidden xl:block" ref={messagesRef}>
             <button 
               onClick={() => setShowMessagesDropdown(!showMessagesDropdown)}
               className={cn(
@@ -348,7 +333,7 @@ export default function Header() {
                                   )}
                                 />
                               ) : (
-                                <div className="w-12 h-12 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold flex items-center justify-center text-sm">
+                                <div className="w-12 h-12 rounded-full bg-apple-blue/10 text-apple-blue font-bold flex items-center justify-center text-sm">
                                   {otherParticipant.name?.[0] || 'U'}
                                 </div>
                               )}

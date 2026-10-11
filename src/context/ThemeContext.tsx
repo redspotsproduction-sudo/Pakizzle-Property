@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { getAuth } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 export type ThemeMode = "light" | "dark" | "system";
 export type ResolvedTheme = "light" | "dark";
@@ -79,20 +82,71 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {}
   }, [themeMode, resolvedTheme]);
 
+  const triggerThemeTransition = useCallback(() => {
+    if (typeof window === "undefined") return;
+    const root = document.documentElement;
+    root.classList.add("theme-transition");
+    window.setTimeout(() => {
+      root.classList.remove("theme-transition");
+    }, 250);
+  }, []);
+
   const setThemeMode = useCallback((mode: ThemeMode) => {
+    triggerThemeTransition();
     setThemeModeState(mode);
     try {
       localStorage.setItem("pakizzle-theme", mode);
     } catch (e) {}
-  }, []);
+
+    // Persist to signed-in user profile in Firestore
+    try {
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        setDoc(doc(db, "users", currentUser.uid), {
+          themePreference: mode,
+          updatedAt: new Date().toISOString()
+        }, { merge: true })
+          .then(() => {
+            console.log("[ThemeContext] Successfully saved themePreference to Firestore:", mode);
+          })
+          .catch((err) => {
+            console.error("[ThemeContext] Error saving themePreference to Firestore:", err);
+          });
+      }
+    } catch (e) {
+      console.error("[ThemeContext] Unexpected error updating user theme preference:", e);
+    }
+  }, [triggerThemeTransition]);
 
   const toggleTheme = useCallback(() => {
+    triggerThemeTransition();
     setThemeModeState((prev) => {
-      if (prev === "light") return "dark";
-      if (prev === "dark") return "system";
-      return "light";
+      const next = prev === "light" ? "dark" : prev === "dark" ? "system" : "light";
+      try {
+        localStorage.setItem("pakizzle-theme", next);
+      } catch (e) {}
+      try {
+        const auth = getAuth();
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          setDoc(doc(db, "users", currentUser.uid), {
+            themePreference: next,
+            updatedAt: new Date().toISOString()
+          }, { merge: true })
+            .then(() => {
+              console.log("[ThemeContext] Successfully saved themePreference to Firestore on toggle:", next);
+            })
+            .catch((err) => {
+              console.error("[ThemeContext] Error saving themePreference to Firestore on toggle:", err);
+            });
+        }
+      } catch (e) {
+        console.error("[ThemeContext] Unexpected error updating user theme preference on toggle:", e);
+      }
+      return next;
     });
-  }, []);
+  }, [triggerThemeTransition]);
 
   return (
     <ThemeContext.Provider

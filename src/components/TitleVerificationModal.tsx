@@ -63,7 +63,7 @@ export default function TitleVerificationModal({ isOpen, onClose }: TitleVerific
         {/* Header */}
         <div className="px-6 py-5 border-b border-black/5 dark:border-white/10 flex items-center justify-between bg-apple-gray/20 dark:bg-white/[0.02]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+            <div className="w-10 h-10 rounded-2xl bg-apple-green/10 flex items-center justify-center text-apple-green dark:text-emerald-400">
               <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
@@ -71,7 +71,7 @@ export default function TitleVerificationModal({ isOpen, onClose }: TitleVerific
                 <h3 className="text-lg font-bold text-apple-text tracking-tight">
                   Pakizzle Shanakht™ Title & Registry Verification
                 </h3>
-                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">
+                <span className="text-[10px] font-bold text-apple-green bg-apple-green/10 px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">
                   Anti-Fraud Guarantee
                 </span>
               </div>
@@ -109,7 +109,7 @@ export default function TitleVerificationModal({ isOpen, onClose }: TitleVerific
               <button
                 type="submit"
                 disabled={isVerifying || !searchKey.trim()}
-                className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs transition-all shadow-md flex items-center gap-2 whitespace-nowrap"
+                className="px-6 py-3 rounded-2xl bg-apple-green hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs transition-all shadow-md flex items-center gap-2 whitespace-nowrap"
               >
                 {isVerifying ? (
                   <>
@@ -150,7 +150,7 @@ export default function TitleVerificationModal({ isOpen, onClose }: TitleVerific
               </div>
 
               <div className="p-4 rounded-2xl bg-apple-gray/30 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 space-y-2">
-                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                <div className="w-8 h-8 rounded-xl bg-apple-green/10 flex items-center justify-center text-apple-green">
                   <Lock className="w-4 h-4" />
                 </div>
                 <div className="text-xs font-bold text-apple-text">Biometric Escrow Safety</div>
@@ -166,16 +166,16 @@ export default function TitleVerificationModal({ isOpen, onClose }: TitleVerific
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-6 rounded-3xl bg-emerald-500/5 dark:bg-emerald-950/20 border border-emerald-500/30 space-y-4"
+              className="p-6 rounded-3xl bg-apple-green/5 dark:bg-emerald-950/20 border border-emerald-500/30 space-y-4"
             >
               <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  <CheckCircle2 className="w-5 h-5 text-apple-green dark:text-emerald-400" />
                   <span className="font-bold text-sm text-apple-text font-mono">
                     Certified Record: {verifiedResult.referenceId}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-emerald-600 bg-emerald-500/10 px-2.5 py-1 rounded-full">
+                <span className="text-[10px] font-mono font-bold text-apple-green bg-apple-green/10 px-2.5 py-1 rounded-full">
                   100% TITLE CLEAN
                 </span>
               </div>
@@ -188,7 +188,7 @@ export default function TitleVerificationModal({ isOpen, onClose }: TitleVerific
 
                 <div className="p-3 rounded-xl bg-white dark:bg-[#1A1C24] border border-black/5">
                   <div className="text-apple-text-muted text-[11px]">Title Status</div>
-                  <div className="font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">{verifiedResult.titleStatus}</div>
+                  <div className="font-semibold text-apple-green dark:text-emerald-400 mt-0.5">{verifiedResult.titleStatus}</div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white dark:bg-[#1A1C24] border border-black/5">

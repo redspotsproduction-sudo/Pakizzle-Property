@@ -327,7 +327,7 @@ export default function InspectionManagement() {
       case 'assigned': return 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
       case 'completed': return 'bg-green-500/10 text-green-600 dark:text-green-400';
       case 'cancelled': return 'bg-red-500/10 text-red-600 dark:text-red-400';
-      default: return 'bg-gray-500/10 text-gray-600 dark:text-gray-400';
+      default: return 'bg-apple-text-muted/10 text-apple-text-muted dark:text-apple-text-muted';
     }
   };
 
@@ -368,24 +368,24 @@ export default function InspectionManagement() {
             <Car className="w-3.5 h-3.5" />
             Verified Administration Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Inspection CRM
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Manage technician deployments, coordinate vehicle physical inspections, and check field reports.
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {/* Tab Switcher modeled after standard segment controls */}
-          <div className="flex p-0.5 bg-[#F5F5F7] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
+          <div className="flex p-0.5 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
             <button
               onClick={() => setActiveTab('requests')}
               className={cn(
                 "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
                 activeTab === 'requests'
-                  ? "bg-white dark:bg-[#1C1C1E] shadow-sm text-[#1D1D1F] dark:text-white"
-                  : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  ? "bg-white dark:bg-[var(--bg-raised)] shadow-sm text-[var(--text-primary)] dark:text-white"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
               Requests
@@ -395,8 +395,8 @@ export default function InspectionManagement() {
               className={cn(
                 "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
                 activeTab === 'companies'
-                  ? "bg-white dark:bg-[#1C1C1E] shadow-sm text-[#1D1D1F] dark:text-white"
-                  : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  ? "bg-white dark:bg-[var(--bg-raised)] shadow-sm text-[var(--text-primary)] dark:text-white"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
               Providers
@@ -405,13 +405,13 @@ export default function InspectionManagement() {
 
           {activeTab === 'requests' && (
             <div className="relative group min-w-[200px] sm:w-64">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Search by vehicle, phone, email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           )}
@@ -422,7 +422,7 @@ export default function InspectionManagement() {
                 <button 
                   onClick={seedCompanies}
                   disabled={isUpdating}
-                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[#F5F5F7] dark:hover:bg-white/5 text-[#1D1D1F] dark:text-white transition-all flex items-center justify-center"
+                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[var(--text-primary)] dark:hover:bg-white/5 text-[var(--text-primary)] dark:text-white transition-all flex items-center justify-center"
                 >
                   <Activity className="w-3.5 h-3.5 mr-1.5 text-apple-blue" /> Seed Providers
                 </button>
@@ -452,18 +452,18 @@ export default function InspectionManagement() {
               { label: 'Assigned Engineers', value: requests.filter(r => r.status === 'assigned').length.toString(), change: 'In Field', icon: User, color: 'text-purple-500', bg: 'bg-purple-500/10' },
               { label: 'Completed Sweeps', value: requests.filter(r => r.status === 'completed').length.toString(), change: 'Verified Clean', icon: CheckCircle2, color: 'text-apple-green', bg: 'bg-apple-green/10' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+              <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                 <div className="flex items-start justify-between">
                   <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                     <stat.icon className={cn("w-5 h-5", stat.color)} />
                   </div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                      {stat.change}
                   </div>
                 </div>
                 <div className="mt-4">
-                  <div className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider mt-1.5">{stat.label}</div>
+                  <div className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1.5">{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -484,10 +484,10 @@ export default function InspectionManagement() {
                     "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                     isActive
                       ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                      : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                      : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
@@ -498,7 +498,7 @@ export default function InspectionManagement() {
             <AnimatePresence mode="popLayout">
               {loading ? (
                 Array(3).fill(0).map((_, i) => (
-                  <div key={i} className="animate-pulse bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col md:flex-row items-stretch md:items-center gap-5">
+                  <div key={i} className="animate-pulse bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col md:flex-row items-stretch md:items-center gap-5">
                     <div className="w-full md:w-36 aspect-[4/3] rounded-xl bg-apple-gray dark:bg-white/5 shrink-0" />
                     <div className="flex-1 space-y-3">
                       <div className="h-4 bg-apple-gray dark:bg-white/5 rounded w-1/3" />
@@ -508,7 +508,7 @@ export default function InspectionManagement() {
                   </div>
                 ))
               ) : filteredRequests.length === 0 ? (
-                <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] py-20 text-center text-[#86868B] font-medium text-xs shadow-sm">
+                <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] py-20 text-center text-[var(--text-secondary)] font-medium text-xs shadow-sm">
                   No deployment logs found matching your criteria.
                 </div>
               ) : (
@@ -529,10 +529,10 @@ export default function InspectionManagement() {
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.4, delay: idx * 0.02 }}
                       onClick={() => openEditModal(request)}
-                      className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col md:flex-row items-stretch md:items-center gap-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 cursor-pointer"
+                      className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col md:flex-row items-stretch md:items-center gap-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 cursor-pointer"
                     >
                       {/* Category Image / Custom Shard Icon */}
-                      <div className="relative w-full md:w-36 aspect-[4/3] rounded-xl overflow-hidden shrink-0 bg-[#1C1C1E] border border-black/5 dark:border-white/10 group flex items-center justify-center">
+                      <div className="relative w-full md:w-36 aspect-[4/3] rounded-xl overflow-hidden shrink-0 bg-[var(--bg-raised)] border border-black/5 dark:border-white/10 group flex items-center justify-center">
                         <div className="w-full h-full flex items-center justify-center transition-colors bg-apple-blue/5 dark:bg-apple-blue/10 text-apple-blue">
                           <Car className="w-7 h-7 animate-pulse" />
                         </div>
@@ -550,7 +550,7 @@ export default function InspectionManagement() {
                       {/* Request / Target Details */}
                       <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                         <div>
-                          <div className="flex flex-wrap items-center gap-1.5 text-[9px] font-bold text-[#86868B] uppercase tracking-wider mb-1">
+                          <div className="flex flex-wrap items-center gap-1.5 text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1">
                             <Zap className="w-3 h-3 text-apple-blue" />
                             Request ID #{request.id.toUpperCase()}
                             <span className="opacity-30">•</span>
@@ -559,12 +559,12 @@ export default function InspectionManagement() {
                             <span>{request.phone}</span>
                           </div>
                           
-                          <h2 className="text-sm font-semibold text-[#1D1D1F] dark:text-white truncate block">
+                          <h2 className="text-sm font-semibold text-[var(--text-primary)] dark:text-white truncate block">
                             {request.vehicleYear} {request.vehicleMake} {request.vehicleModel}
                           </h2>
                           
-                          <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[#86868B] font-normal">
-                            <MapPin className="w-3.5 h-3.5 text-[#86868B]" />
+                          <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[var(--text-secondary)] font-normal">
+                            <MapPin className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
                             <span className="truncate max-w-[300px]">{request.address}, {request.city}</span>
                             <span className="opacity-30">/</span>
                             <Calendar className="w-3.5 h-3.5 text-apple-blue" />
@@ -574,25 +574,25 @@ export default function InspectionManagement() {
 
                         {/* Bento Micro-Stats box matrix matching Seller Console layout precisely */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
-                          <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                            <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Operational Node</p>
-                            <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                            <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Operational Node</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">
                               {request.city}
                               <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">Active</span>
                             </p>
                           </div>
-                          <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                            <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Field Engineer</p>
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                            <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Field Engineer</p>
                             <p className="text-xs font-bold text-apple-blue font-mono mt-0.5 truncate max-w-full">
                               {request.assignedEngineer || 'Assigning...'}
                             </p>
                           </div>
-                          <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                            <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Workflow Phase</p>
-                            <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-sans mt-0.5 capitalize">{request.status}</p>
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
+                            <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Workflow Phase</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-sans mt-0.5 capitalize">{request.status}</p>
                           </div>
-                          <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                            <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Platform Security</p>
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
+                            <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Platform Security</p>
                             <p className="text-xs font-bold text-apple-green font-mono mt-0.5">SSL Secured</p>
                           </div>
                         </div>
@@ -611,7 +611,7 @@ export default function InspectionManagement() {
 
                           <DropdownMenu>
                             <DropdownMenuTrigger className={cn(
-                              "w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center transition-all hover:bg-apple-gray dark:hover:bg-white/10 text-apple-text-muted"
+                              "w-8.5 h-8.5 rounded-lg bg-[var(--text-primary)] dark:bg-white/5 flex items-center justify-center transition-all hover:bg-apple-gray dark:hover:bg-white/10 text-apple-text-muted"
                             )}>
                               <MoreVertical className="w-4 h-4" />
                             </DropdownMenuTrigger>
@@ -665,22 +665,22 @@ export default function InspectionManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {companiesLoading ? (
               Array(6).fill(0).map((_, i) => (
-                <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] h-64 animate-pulse" />
+                <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] h-64 animate-pulse" />
               ))
             ) : companies.length === 0 ? (
-              <div className="col-span-full py-20 text-center bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
-                <p className="text-[#86868B] font-medium text-xs">No vehicle inspection partners registered.</p>
+              <div className="col-span-full py-20 text-center bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
+                <p className="text-[var(--text-secondary)] font-medium text-xs">No vehicle inspection partners registered.</p>
               </div>
             ) : (
               companies.map((company) => (
                 <motion.div
                   key={company.id}
                   layoutId={company.id}
-                  className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group"
+                  className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group"
                 >
                   <div className="p-6 flex-1 space-y-6">
                     <div className="flex justify-between items-start">
-                      <div className="w-16 h-16 rounded-xl bg-[#F5F5F7] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                      <div className="w-16 h-16 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                         <img 
                           src={company.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=007AFF&color=fff`} 
                           alt={company.name}
@@ -696,7 +696,7 @@ export default function InspectionManagement() {
                         )}
                         <span className={cn(
                           "px-2 py-0.5 rounded-lg text-[9px] font-bold uppercase tracking-wider",
-                          company.status === 'active' ? "bg-[#34C759]/10 text-[#34C759]" : "bg-[#FF3B30]/10 text-[#FF3B30]"
+                          company.status === 'active' ? "bg-[var(--success)]/10 text-[var(--success)]" : "bg-[var(--danger)]/10 text-[var(--danger)]"
                         )}>
                           {company.status}
                         </span>
@@ -704,27 +704,27 @@ export default function InspectionManagement() {
                     </div>
 
                     <div>
-                      <h3 className="text-base font-semibold tracking-tight text-[#1D1D1F] dark:text-white mb-1.5">{company.name}</h3>
-                      <p className="text-xs text-[#86868B] dark:text-[#86868B]/80 line-clamp-2 leading-relaxed mb-4">{company.description}</p>
+                      <h3 className="text-base font-semibold tracking-tight text-[var(--text-primary)] dark:text-white mb-1.5">{company.name}</h3>
+                      <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)]/80 line-clamp-2 leading-relaxed mb-4">{company.description}</p>
                       
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Inspection Fee:</span>
+                          <span className="text-[var(--text-secondary)]">Inspection Fee:</span>
                           <span className="font-semibold text-apple-blue">{company.baseFee}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Technicians:</span>
-                          <span className="font-semibold text-[#1D1D1F] dark:text-white">{company.engineersCount} certified</span>
+                          <span className="text-[var(--text-secondary)]">Technicians:</span>
+                          <span className="font-semibold text-[var(--text-primary)] dark:text-white">{company.engineersCount} certified</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Coverage:</span>
-                          <span className="font-semibold text-[#1D1D1F] dark:text-white truncate max-w-[150px]" title={company.coverageCities}>{company.coverageCities}</span>
+                          <span className="text-[var(--text-secondary)]">Coverage:</span>
+                          <span className="font-semibold text-[var(--text-primary)] dark:text-white truncate max-w-[150px]" title={company.coverageCities}>{company.coverageCities}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[#F5F5F7]/40 dark:bg-white/[0.02] border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
+                  <div className="p-4 bg-[var(--text-primary)]/40 dark:bg-white/[0.02] border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
                     <button 
                       onClick={() => {
                         setEditingCompany(company);
@@ -743,13 +743,13 @@ export default function InspectionManagement() {
                         });
                         setIsCompanyModalOpen(true);
                       }}
-                      className="flex-1 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-[10px] font-bold uppercase tracking-wider hover:bg-[#F5F5F7] dark:hover:bg-white/10 text-[#1D1D1F] dark:text-white transition-all"
+                      className="flex-1 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-[10px] font-bold uppercase tracking-wider hover:bg-[var(--text-primary)] dark:hover:bg-white/10 text-[var(--text-primary)] dark:text-white transition-all"
                     >
                       Edit Protocol
                     </button>
                     <button 
                       onClick={() => handleDeleteCompany(company.id)}
-                      className="w-9 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-red-500 flex items-center justify-center hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-all border-none"
+                      className="w-9 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-red-500 flex items-center justify-center hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] transition-all border-none"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -763,7 +763,7 @@ export default function InspectionManagement() {
 
       {/* Edit Modal */}
       <Dialog open={!!selectedRequest} onOpenChange={(open) => { if (!open) setSelectedRequest(null); }}>
-        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
           {selectedRequest && (
             <div className="flex flex-col h-full overflow-hidden">
               <div className="p-8 border-b border-apple-border flex items-center justify-between bg-apple-gray/10 dark:bg-white/[0.02]">
@@ -904,7 +904,7 @@ export default function InspectionManagement() {
 
       {/* Provider Modal */}
       <Dialog open={isCompanyModalOpen} onOpenChange={(open) => { if (!open) { setIsCompanyModalOpen(false); setEditingCompany(null); } }}>
-        <DialogContent className="max-w-[92vw] lg:max-w-2xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-2xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
           <form onSubmit={handleUpdateCompany} className="flex flex-col h-full overflow-hidden">
             <div className="p-8 border-b border-apple-border flex items-center justify-between bg-apple-gray/10 dark:bg-white/[0.02]">
               <div>
@@ -929,7 +929,7 @@ export default function InspectionManagement() {
                 {/* Logo and Identity */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div className="flex flex-col items-center">
-                    <div className="relative group w-28 h-28 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06] shadow-inner">
+                    <div className="relative group w-28 h-28 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06] shadow-inner">
                       {companyForm.logoUrl ? (
                         <img 
                           src={companyForm.logoUrl} 
@@ -938,7 +938,7 @@ export default function InspectionManagement() {
                           referrerPolicy="no-referrer"
                         />
                       ) : (
-                        <ImageIcon className="w-8 h-8 text-[#86868B]" />
+                        <ImageIcon className="w-8 h-8 text-[var(--text-secondary)]" />
                       )}
                       
                       {isUploadingLogo && (
@@ -1051,7 +1051,7 @@ export default function InspectionManagement() {
                 </div>
 
                 {/* Presentation Settings */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4.5 rounded-2xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4.5 rounded-2xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                   <div className="flex items-center justify-between sm:justify-start gap-3">
                     <input 
                       type="checkbox" 
@@ -1060,11 +1060,11 @@ export default function InspectionManagement() {
                       checked={companyForm.isFeatured}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, isFeatured: e.target.checked }))}
                     />
-                    <label htmlFor="isFeatured" className="text-xs font-semibold text-[#1D1D1F] dark:text-white cursor-pointer select-none">Featured Partner</label>
+                    <label htmlFor="isFeatured" className="text-xs font-semibold text-[var(--text-primary)] dark:text-white cursor-pointer select-none">Featured Partner</label>
                   </div>
 
                   <div className="space-y-1.5 sm:col-span-2 flex items-center gap-3 justify-between sm:justify-end">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#86868B]">Sort Order</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)]">Sort Order</label>
                     <input 
                       type="number" 
                       className="apple-input w-24 text-center"

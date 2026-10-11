@@ -76,7 +76,7 @@ export default function QuickAccessRow({
     <div className={cn("w-full mb-6 space-y-2.5", className)}>
       {/* Header with Mode Switcher (Property Types vs Popular Societies) */}
       <div className="flex items-center justify-between gap-3 px-1">
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-white/5">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-apple-gray dark:bg-white/5/80 border border-apple-border/80 dark:border-white/5">
           <button
             type="button"
             onClick={() => setActiveTab("types")}
@@ -84,7 +84,7 @@ export default function QuickAccessRow({
               "px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
               activeTab === "types"
                 ? "bg-brand-primary text-white shadow-xs"
-                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                : "text-apple-text-muted dark:text-apple-text-muted hover:text-apple-text dark:hover:text-white"
             )}
           >
             <Layers className="w-3 h-3" />
@@ -98,10 +98,10 @@ export default function QuickAccessRow({
               "px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
               activeTab === "societies"
                 ? "bg-brand-primary text-white shadow-xs"
-                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                : "text-apple-text-muted dark:text-apple-text-muted hover:text-apple-text dark:hover:text-white"
             )}
           >
-            <MapPin className="w-3 h-3 text-amber-400" />
+            <MapPin className="w-3 h-3 text-apple-orange" />
             <span>Top Societies in {effectiveCity}</span>
             {popularSocieties.length > 0 && (
               <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-white/20 font-black">
@@ -112,8 +112,8 @@ export default function QuickAccessRow({
         </div>
 
         {/* Live Filter Hint */}
-        <span className="hidden sm:flex items-center gap-1 text-[11px] font-semibold text-slate-400">
-          <TrendingUp className="w-3 h-3 text-emerald-500" />
+        <span className="hidden sm:flex items-center gap-1 text-[11px] font-semibold text-apple-text-muted">
+          <TrendingUp className="w-3 h-3 text-apple-green" />
           <span>Tap to filter instantly</span>
         </span>
       </div>
@@ -134,7 +134,7 @@ export default function QuickAccessRow({
               "px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all border flex items-center gap-2 cursor-pointer shadow-xs",
               !activePropertyType
                 ? "bg-brand-primary text-white border-brand-primary shadow-brand-primary/20 ring-2 ring-brand-primary/20"
-                : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-300"
+                : "bg-white dark:bg-white/5 text-apple-text dark:text-apple-text border-apple-border dark:border-white/10 hover:border-apple-border"
             )}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -156,12 +156,12 @@ export default function QuickAccessRow({
                   "px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all border flex items-center gap-2 cursor-pointer shadow-xs",
                   isSelected
                     ? "bg-brand-primary text-white border-brand-primary shadow-md shadow-brand-primary/20 ring-2 ring-brand-primary/20"
-                    : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-300"
+                    : "bg-white dark:bg-white/5 text-apple-text dark:text-apple-text border-apple-border dark:border-white/10 hover:border-apple-border"
                 )}
               >
                 <span className={cn(
                   "p-1 rounded-lg shrink-0",
-                  isSelected ? "bg-white/20 text-white" : "bg-brand-primary/10 text-brand-primary dark:text-amber-400"
+                  isSelected ? "bg-white/20 text-white" : "bg-brand-primary/10 text-brand-primary dark:text-apple-orange"
                 )}>
                   {getTypeIcon(pt.name)}
                 </span>
@@ -180,10 +180,10 @@ export default function QuickAccessRow({
               "px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all border flex items-center gap-2 cursor-pointer shadow-xs",
               activePropertyType === "New Projects"
                 ? "bg-brand-primary text-white border-brand-primary shadow-brand-primary/20 ring-2 ring-brand-primary/20"
-                : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-300"
+                : "bg-white dark:bg-white/5 text-apple-text dark:text-apple-text border-apple-border dark:border-white/10 hover:border-apple-border"
             )}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-apple-orange" />
             <span>New Projects</span>
           </motion.button>
         </div>
@@ -205,7 +205,7 @@ export default function QuickAccessRow({
               "px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all border flex items-center gap-2 cursor-pointer shadow-xs",
               !activeArea
                 ? "bg-brand-primary text-white border-brand-primary shadow-brand-primary/20 ring-2 ring-brand-primary/20"
-                : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-300"
+                : "bg-white dark:bg-white/5 text-apple-text dark:text-apple-text border-apple-border dark:border-white/10 hover:border-apple-border"
             )}
           >
             <MapPin className="w-3.5 h-3.5" />
@@ -226,18 +226,18 @@ export default function QuickAccessRow({
                   "px-3.5 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all border flex items-center gap-2 cursor-pointer shadow-xs",
                   isSelected
                     ? "bg-brand-primary text-white border-brand-primary shadow-md shadow-brand-primary/20 ring-2 ring-brand-primary/20"
-                    : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-300"
+                    : "bg-white dark:bg-white/5 text-apple-text dark:text-apple-text border-apple-border dark:border-white/10 hover:border-apple-border"
                 )}
               >
                 <MapPin className={cn(
                   "w-3.5 h-3.5",
-                  isSelected ? "text-white" : "text-brand-primary dark:text-amber-400"
+                  isSelected ? "text-white" : "text-brand-primary dark:text-apple-orange"
                 )} />
                 <span>{soc.name}</span>
                 {soc.listingCount > 0 && (
                   <span className={cn(
                     "text-[10px] font-semibold px-1.5 py-0.2 rounded-full",
-                    isSelected ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                    isSelected ? "bg-white/20 text-white" : "bg-apple-gray dark:bg-white/5 text-apple-text-muted"
                   )}>
                     {soc.listingCount}+
                   </span>

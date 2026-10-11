@@ -329,20 +329,20 @@ export default function VideosManagement() {
   return (
     <div className="space-y-6">
       {/* Top Banner Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-apple-border dark:border-white/10">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#5B2A86] to-[#8A3DB8] flex items-center justify-center text-white shadow-md">
+            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[var(--accent)] to-[#8A3DB8] flex items-center justify-center text-white shadow-md">
               <Film className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <h1 className="text-xl font-extrabold text-apple-text dark:text-white flex items-center gap-2">
                 <span>PakStories™ Video Control Center</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-apple-green/10 text-apple-green dark:text-apple-green font-bold border border-apple-green/20">
                   Phase 1 Active
                 </span>
               </h1>
-              <p className="text-xs text-slate-500 dark:text-[#8E8E93]">
+              <p className="text-xs text-apple-text-muted dark:text-[#8E8E93]">
                 Full lifecycle governance: moderation queue, per-video controls, account-level privileges & ranking parameters
               </p>
             </div>
@@ -351,8 +351,8 @@ export default function VideosManagement() {
 
         {/* Global Feature Flag Indicator */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold">
-            <span className={`w-2 h-2 rounded-full ${settings?.featureEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-apple-gray dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold">
+            <span className={`w-2 h-2 rounded-full ${settings?.featureEnabled ? 'bg-apple-green animate-pulse' : 'bg-apple-red'}`} />
             <span>Feature Status: {settings?.featureEnabled ? 'Broadcast Online' : 'Paused Platform-wide'}</span>
           </div>
         </div>
@@ -364,85 +364,85 @@ export default function VideosManagement() {
           onClick={() => { setActiveTab('moderation'); setStatusFilter('all'); }}
           className={`p-4 rounded-2xl border transition-all cursor-pointer ${
             activeTab === 'moderation' 
-              ? 'bg-[#5B2A86]/10 border-[#5B2A86] shadow-sm' 
-              : 'bg-white dark:bg-[#1A1A1D] border-slate-200 dark:border-white/10 hover:border-slate-300'
+              ? 'bg-[var(--accent)]/10 border-[var(--accent)] shadow-sm' 
+              : 'bg-white dark:bg-[#1A1A1D] border-apple-border dark:border-white/10 hover:border-apple-border'
           }`}
         >
-          <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+          <div className="flex items-center justify-between text-xs font-bold text-apple-text-muted mb-1">
             <span>Pending Review</span>
-            <AlertTriangle className="w-4 h-4 text-amber-500" />
+            <AlertTriangle className="w-4 h-4 text-gold-decoration" />
           </div>
-          <div className="text-2xl font-black text-amber-500">{counts.pending}</div>
-          <span className="text-[10px] text-slate-500">Requires review</span>
+          <div className="text-2xl font-black text-gold-decoration">{counts.pending}</div>
+          <span className="text-[10px] text-apple-text-muted">Requires review</span>
         </div>
 
         <div 
           onClick={() => { setActiveTab('all'); setStatusFilter('approved'); }}
           className={`p-4 rounded-2xl border transition-all cursor-pointer ${
             activeTab === 'all' && statusFilter === 'approved'
-              ? 'bg-[#5B2A86]/10 border-[#5B2A86] shadow-sm' 
-              : 'bg-white dark:bg-[#1A1A1D] border-slate-200 dark:border-white/10 hover:border-slate-300'
+              ? 'bg-[var(--accent)]/10 border-[var(--accent)] shadow-sm' 
+              : 'bg-white dark:bg-[#1A1A1D] border-apple-border dark:border-white/10 hover:border-apple-border'
           }`}
         >
-          <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+          <div className="flex items-center justify-between text-xs font-bold text-apple-text-muted mb-1">
             <span>Live Approved</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <CheckCircle2 className="w-4 h-4 text-apple-green" />
           </div>
-          <div className="text-2xl font-black text-emerald-500">{counts.approved}</div>
-          <span className="text-[10px] text-slate-500">Publicly visible</span>
+          <div className="text-2xl font-black text-apple-green">{counts.approved}</div>
+          <span className="text-[10px] text-apple-text-muted">Publicly visible</span>
         </div>
 
         <div 
           onClick={() => { setActiveTab('all'); setStatusFilter('deactivated'); }}
           className={`p-4 rounded-2xl border transition-all cursor-pointer ${
             activeTab === 'all' && statusFilter === 'deactivated'
-              ? 'bg-[#5B2A86]/10 border-[#5B2A86] shadow-sm' 
-              : 'bg-white dark:bg-[#1A1A1D] border-slate-200 dark:border-white/10 hover:border-slate-300'
+              ? 'bg-[var(--accent)]/10 border-[var(--accent)] shadow-sm' 
+              : 'bg-white dark:bg-[#1A1A1D] border-apple-border dark:border-white/10 hover:border-apple-border'
           }`}
         >
-          <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+          <div className="flex items-center justify-between text-xs font-bold text-apple-text-muted mb-1">
             <span>Deactivated</span>
-            <Lock className="w-4 h-4 text-slate-400" />
+            <Lock className="w-4 h-4 text-apple-text-muted" />
           </div>
-          <div className="text-2xl font-black text-slate-600 dark:text-zinc-400">{counts.deactivated}</div>
-          <span className="text-[10px] text-slate-500">Pulled from view</span>
+          <div className="text-2xl font-black text-apple-text-muted dark:text-apple-text-muted">{counts.deactivated}</div>
+          <span className="text-[10px] text-apple-text-muted">Pulled from view</span>
         </div>
 
         <div 
           onClick={() => { setActiveTab('reports'); }}
           className={`p-4 rounded-2xl border transition-all cursor-pointer ${
             activeTab === 'reports'
-              ? 'bg-[#5B2A86]/10 border-[#5B2A86] shadow-sm' 
-              : 'bg-white dark:bg-[#1A1A1D] border-slate-200 dark:border-white/10 hover:border-slate-300'
+              ? 'bg-[var(--accent)]/10 border-[var(--accent)] shadow-sm' 
+              : 'bg-white dark:bg-[#1A1A1D] border-apple-border dark:border-white/10 hover:border-apple-border'
           }`}
         >
-          <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+          <div className="flex items-center justify-between text-xs font-bold text-apple-text-muted mb-1">
             <span>Flagged Reports</span>
-            <ShieldAlert className="w-4 h-4 text-rose-500" />
+            <ShieldAlert className="w-4 h-4 text-apple-red" />
           </div>
-          <div className="text-2xl font-black text-rose-500">{reports.filter(r => r.status === 'pending').length}</div>
-          <span className="text-[10px] text-slate-500">User flagged</span>
+          <div className="text-2xl font-black text-apple-red">{reports.filter(r => r.status === 'pending').length}</div>
+          <span className="text-[10px] text-apple-text-muted">User flagged</span>
         </div>
 
         <div 
           onClick={() => { setActiveTab('all'); setStatusFilter('all'); }}
           className={`p-4 rounded-2xl border transition-all cursor-pointer ${
             activeTab === 'all' && statusFilter === 'all'
-              ? 'bg-[#5B2A86]/10 border-[#5B2A86] shadow-sm' 
-              : 'bg-white dark:bg-[#1A1A1D] border-slate-200 dark:border-white/10 hover:border-slate-300'
+              ? 'bg-[var(--accent)]/10 border-[var(--accent)] shadow-sm' 
+              : 'bg-white dark:bg-[#1A1A1D] border-apple-border dark:border-white/10 hover:border-apple-border'
           }`}
         >
-          <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+          <div className="flex items-center justify-between text-xs font-bold text-apple-text-muted mb-1">
             <span>Total Catalog</span>
-            <Layers className="w-4 h-4 text-[#5B2A86] dark:text-[#C9A227]" />
+            <Layers className="w-4 h-4 text-[var(--accent)] dark:text-[#C9A227]" />
           </div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white">{counts.total}</div>
-          <span className="text-[10px] text-slate-500">All walkthroughs</span>
+          <div className="text-2xl font-black text-apple-text dark:text-white">{counts.total}</div>
+          <span className="text-[10px] text-apple-text-muted">All walkthroughs</span>
         </div>
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-white/10 overflow-x-auto pb-1">
+      <div className="flex items-center gap-2 border-b border-apple-border dark:border-white/10 overflow-x-auto pb-1">
         {[
           { id: 'moderation', label: `Moderation Queue (${counts.pending})`, icon: AlertTriangle },
           { id: 'all', label: 'All Videos & Per-Video Controls', icon: Film },
@@ -458,8 +458,8 @@ export default function VideosManagement() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-4 py-2.5 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
                 isActive
-                  ? 'bg-[#5B2A86] text-white shadow-sm'
-                  : 'text-slate-600 dark:text-[#8E8E93] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  : 'text-apple-text-muted dark:text-[#8E8E93] hover:text-apple-text dark:hover:text-white hover:bg-apple-gray dark:hover:bg-white/5'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -473,16 +473,16 @@ export default function VideosManagement() {
       {(activeTab === 'moderation' || activeTab === 'all') && (
         <div className="space-y-4">
           {/* Search, Filter & Bulk Actions Bar */}
-          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
             <div className="flex items-center gap-2.5 w-full sm:w-auto flex-1">
               <div className="relative flex-1 max-w-sm">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-apple-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search by title, listing ref, creator..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold outline-none focus:border-[#5B2A86]"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-semibold outline-none focus:border-[var(--accent)]"
                 />
               </div>
 
@@ -490,7 +490,7 @@ export default function VideosManagement() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-white outline-none"
+                  className="px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold text-apple-text-muted dark:text-white outline-none"
                 >
                   <option value="all">All Statuses</option>
                   <option value="pending_review">Pending Review</option>
@@ -504,12 +504,12 @@ export default function VideosManagement() {
             {/* Bulk Action Controls */}
             {selectedVideoIds.length > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-[#5B2A86] dark:text-[#C9A227]">
+                <span className="text-xs font-bold text-[var(--accent)] dark:text-[#C9A227]">
                   {selectedVideoIds.length} selected
                 </span>
                 <button
                   onClick={handleBulkApprove}
-                  className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
+                  className="px-3.5 py-1.5 rounded-xl bg-apple-green hover:bg-apple-green text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Bulk Approve</span>
@@ -520,23 +520,23 @@ export default function VideosManagement() {
 
           {/* Videos Table */}
           {loading ? (
-            <div className="p-16 text-center text-slate-400 flex flex-col items-center gap-2">
-              <RefreshCw className="w-6 h-6 animate-spin text-[#5B2A86]" />
+            <div className="p-16 text-center text-apple-text-muted flex flex-col items-center gap-2">
+              <RefreshCw className="w-6 h-6 animate-spin text-[var(--accent)]" />
               <span className="text-xs font-semibold">Loading video catalog...</span>
             </div>
           ) : videos.length === 0 ? (
-            <div className="p-16 text-center bg-white dark:bg-[#1A1A1D] rounded-2xl border border-slate-200 dark:border-white/10">
-              <Film className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-              <h4 className="text-sm font-bold text-slate-800 dark:text-white">
+            <div className="p-16 text-center bg-white dark:bg-[#1A1A1D] rounded-2xl border border-apple-border dark:border-white/10">
+              <Film className="w-10 h-10 text-apple-text-muted mx-auto mb-2" />
+              <h4 className="text-sm font-bold text-apple-surface dark:text-white">
                 {activeTab === 'moderation' ? 'No pending videos in moderation queue' : 'No walkthrough videos match your filter'}
               </h4>
-              <p className="text-xs text-slate-500 mt-1">All verified submissions have been processed.</p>
+              <p className="text-xs text-apple-text-muted mt-1">All verified submissions have been processed.</p>
             </div>
           ) : (
-            <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-xs">
+            <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-apple-border dark:border-white/10 overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-[#8E8E93] font-black uppercase tracking-wider text-[10px]">
+                  <thead className="bg-apple-surface dark:bg-white/5 border-b border-apple-border dark:border-white/10 text-apple-text-muted dark:text-[#8E8E93] font-black uppercase tracking-wider text-[10px]">
                     <tr>
                       <th className="p-3.5 w-10 text-center">
                         <input
@@ -559,11 +559,11 @@ export default function VideosManagement() {
                       <th className="p-3.5 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-white/5 font-medium">
+                  <tbody className="divide-y divide-apple-gray dark:divide-white/5 font-medium">
                     {videos.map(video => {
                       const isSelected = selectedVideoIds.includes(video.id);
                       return (
-                        <tr key={video.id} className="hover:bg-slate-50/70 dark:hover:bg-white/[0.02] transition-colors">
+                        <tr key={video.id} className="hover:bg-apple-surface/70 dark:hover:bg-white/[0.02] transition-colors">
                           <td className="p-3.5 text-center">
                             <input
                               type="checkbox"
@@ -597,13 +597,13 @@ export default function VideosManagement() {
                               </div>
 
                               <div className="max-w-[200px]">
-                                <div className="font-extrabold text-slate-900 dark:text-white truncate">
+                                <div className="font-extrabold text-apple-text dark:text-white truncate">
                                   {video.title}
                                 </div>
-                                <div className="text-[11px] text-slate-500 truncate">
+                                <div className="text-[11px] text-apple-text-muted truncate">
                                   {video.overlaySpec?.priceText} · {video.overlaySpec?.locationText}
                                 </div>
-                                <div className="text-[10px] text-slate-400 mt-0.5">
+                                <div className="text-[10px] text-apple-text-muted mt-0.5">
                                   {video.format.toUpperCase()} · 9:16 vertical · {(video.fileSizeBytes / (1024 * 1024)).toFixed(1)}MB
                                 </div>
                               </div>
@@ -613,12 +613,12 @@ export default function VideosManagement() {
                           {/* Attached Listing */}
                           <td className="p-3.5">
                             <div className="flex items-center gap-1.5">
-                              <Building2 className="w-3.5 h-3.5 text-[#5B2A86] shrink-0" />
+                              <Building2 className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                               <div className="truncate max-w-[140px]">
-                                <span className="font-bold text-slate-800 dark:text-white block truncate">
+                                <span className="font-bold text-apple-surface dark:text-white block truncate">
                                   {video.listingTitle || 'Listing'}
                                 </span>
-                                <span className="text-[10px] text-[#5B2A86] dark:text-[#C9A227] font-semibold">
+                                <span className="text-[10px] text-[var(--accent)] dark:text-[#C9A227] font-semibold">
                                   Ref #{video.listingReferenceId || video.listingId}
                                 </span>
                               </div>
@@ -628,7 +628,7 @@ export default function VideosManagement() {
                           {/* Creator & Verification */}
                           <td className="p-3.5">
                             <div>
-                              <div className="font-bold text-slate-800 dark:text-white truncate max-w-[130px]">
+                              <div className="font-bold text-apple-surface dark:text-white truncate max-w-[130px]">
                                 {video.creatorName}
                               </div>
                               <div className="flex items-center gap-1 mt-0.5">
@@ -651,12 +651,12 @@ export default function VideosManagement() {
                           <td className="p-3.5">
                             <div className="flex items-center gap-1 text-[11px]">
                               {video.aiPrescreen?.passed ? (
-                                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                <span className="px-2 py-0.5 rounded-full bg-apple-green/10 text-apple-green dark:text-apple-green font-bold flex items-center gap-1">
                                   <Check className="w-3 h-3" />
                                   <span>Genuine ({(video.aiPrescreen.confidence * 100).toFixed(0)}%)</span>
                                 </span>
                               ) : (
-                                <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 font-bold flex items-center gap-1">
+                                <span className="px-2 py-0.5 rounded-full bg-apple-red/10 text-apple-red font-bold flex items-center gap-1">
                                   <AlertTriangle className="w-3 h-3" />
                                   <span>Flagged</span>
                                 </span>
@@ -672,8 +672,8 @@ export default function VideosManagement() {
                                 onClick={() => handleToggleScope(video)}
                                 className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border ${
                                   video.visibilityScope === 'public'
-                                    ? 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-zinc-300'
-                                    : 'bg-amber-500/10 border-amber-500/30 text-amber-500'
+                                    ? 'bg-apple-gray dark:bg-white/5 border-apple-border dark:border-white/10 text-apple-text-muted dark:text-apple-border'
+                                    : 'bg-gold-decoration/10 border-gold-decoration/30 text-gold-decoration'
                                 }`}
                                 title="Click to toggle between Public discovery feed and Listing-only"
                               >
@@ -685,8 +685,8 @@ export default function VideosManagement() {
                                 onClick={() => handleToggleFeatured(video)}
                                 className={`p-1 rounded-lg border ${
                                   video.isFeatured
-                                    ? 'bg-amber-500 text-white border-amber-600 shadow-xs'
-                                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-white border-slate-200 dark:border-white/10'
+                                    ? 'bg-gold-decoration text-white border-gold-decoration shadow-xs'
+                                    : 'text-apple-text-muted hover:text-apple-text-muted dark:hover:text-white border-apple-border dark:border-white/10'
                                 }`}
                                 title={video.isFeatured ? 'Pinned featured at top' : 'Click to pin featured'}
                               >
@@ -699,12 +699,12 @@ export default function VideosManagement() {
                           <td className="p-3.5">
                             <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                               video.status === 'approved'
-                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                                ? 'bg-apple-green/10 text-apple-green dark:text-apple-green border border-apple-green/20'
                                 : video.status === 'pending_review'
-                                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 animate-pulse'
+                                ? 'bg-gold-decoration/10 text-gold-decoration dark:text-gold-decoration border border-gold-decoration/20 animate-pulse'
                                 : video.status === 'rejected'
-                                ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
-                                : 'bg-slate-500/10 text-slate-500 border border-slate-500/20'
+                                ? 'bg-apple-red/10 text-apple-red dark:text-rose-400 border border-apple-red/20'
+                                : 'bg-apple-text-muted/10 text-apple-text-muted border border-apple-text-muted/20'
                             }`}>
                               {video.status.replace('_', ' ')}
                             </span>
@@ -713,11 +713,11 @@ export default function VideosManagement() {
                           {/* Engagement & CTR */}
                           <td className="p-3.5">
                             <div>
-                              <div className="font-extrabold text-slate-800 dark:text-white flex items-center gap-1">
-                                <MousePointerClick className="w-3 h-3 text-[#5B2A86]" />
+                              <div className="font-extrabold text-apple-surface dark:text-white flex items-center gap-1">
+                                <MousePointerClick className="w-3 h-3 text-[var(--accent)]" />
                                 <span>{video.stats?.listingClicksCount || 0} clicks</span>
                               </div>
-                              <span className="text-[10px] text-slate-400">
+                              <span className="text-[10px] text-apple-text-muted">
                                 {video.stats?.viewsCount || 0} views ({video.stats?.completionRate || 0}% compl.)
                               </span>
                             </div>
@@ -730,7 +730,7 @@ export default function VideosManagement() {
                                 <>
                                   <button
                                     onClick={() => handleApprove(video)}
-                                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white"
+                                    className="p-1.5 rounded-lg bg-apple-green hover:bg-apple-green text-white"
                                     title="Approve walkthrough"
                                   >
                                     <Check className="w-3.5 h-3.5" />
@@ -740,7 +740,7 @@ export default function VideosManagement() {
                                       setRejectModalVideo(video);
                                       setRejectReason('');
                                     }}
-                                    className="p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white"
+                                    className="p-1.5 rounded-lg bg-apple-red hover:bg-rose-700 text-white"
                                     title="Reject walkthrough (requires reason)"
                                   >
                                     <X className="w-3.5 h-3.5" />
@@ -751,7 +751,7 @@ export default function VideosManagement() {
                               {/* Activate/Deactivate Toggle */}
                               <button
                                 onClick={() => handleToggleStatus(video)}
-                                className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5"
+                                className="p-1.5 rounded-lg border border-apple-border dark:border-white/10 text-apple-text-muted dark:text-apple-border hover:bg-apple-gray dark:hover:bg-white/5"
                                 title={video.status === 'approved' ? 'Deactivate (pull from view)' : 'Re-activate'}
                               >
                                 {video.status === 'approved' ? <Lock className="w-3.5 h-3.5" /> : <Globe className="w-3.5 h-3.5" />}
@@ -760,7 +760,7 @@ export default function VideosManagement() {
                               {/* Stats Modal */}
                               <button
                                 onClick={() => setStatsModalVideo(video)}
-                                className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5"
+                                className="p-1.5 rounded-lg border border-apple-border dark:border-white/10 text-apple-text-muted dark:text-apple-border hover:bg-apple-gray dark:hover:bg-white/5"
                                 title="View detailed engagement stats & CTR"
                               >
                                 <TrendingUp className="w-3.5 h-3.5" />
@@ -774,7 +774,7 @@ export default function VideosManagement() {
                                   setEditTitle(video.title);
                                   setEditCaption(video.caption || '');
                                 }}
-                                className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5"
+                                className="p-1.5 rounded-lg border border-apple-border dark:border-white/10 text-apple-text-muted dark:text-apple-border hover:bg-apple-gray dark:hover:bg-white/5"
                                 title="Edit metadata & attached listing"
                               >
                                 <Edit3 className="w-3.5 h-3.5" />
@@ -786,7 +786,7 @@ export default function VideosManagement() {
                                   setDeleteModalVideo(video);
                                   setDeleteReason('');
                                 }}
-                                className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/30 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                                className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/30 text-apple-red hover:bg-apple-red/10 dark:hover:bg-rose-950/20"
                                 title="Permanently delete walkthrough"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -807,44 +807,44 @@ export default function VideosManagement() {
       {/* TAB 3: USER REPORTS QUEUE */}
       {activeTab === 'reports' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10">
+            <h3 className="text-sm font-bold text-apple-text dark:text-white mb-1">
               Video Community Reports Queue
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-apple-text-muted">
               Users can flag misleading walkthroughs, unapproved society details, or spam watermarks.
             </p>
           </div>
 
           {reports.length === 0 ? (
-            <div className="p-12 text-center bg-white dark:bg-[#1A1A1D] rounded-2xl border border-slate-200 dark:border-white/10">
-              <ShieldCheck className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
-              <h4 className="text-sm font-bold text-slate-800 dark:text-white">Clean Queue</h4>
-              <p className="text-xs text-slate-500">No unresolved video reports.</p>
+            <div className="p-12 text-center bg-white dark:bg-[#1A1A1D] rounded-2xl border border-apple-border dark:border-white/10">
+              <ShieldCheck className="w-10 h-10 text-apple-green mx-auto mb-2" />
+              <h4 className="text-sm font-bold text-apple-surface dark:text-white">Clean Queue</h4>
+              <p className="text-xs text-apple-text-muted">No unresolved video reports.</p>
             </div>
           ) : (
             <div className="space-y-3">
               {reports.map(rep => (
                 <div
                   key={rep.id}
-                  className="p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-apple-red/10 text-apple-red dark:text-rose-400">
                         {rep.reason.replace('_', ' ')}
                       </span>
-                      <span className="text-xs font-bold text-slate-800 dark:text-white">
+                      <span className="text-xs font-bold text-apple-surface dark:text-white">
                         Reported Video: #{rep.videoId}
                       </span>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-[10px] text-apple-text-muted">
                         {new Date(rep.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-zinc-300">
+                    <p className="text-xs text-apple-text-muted dark:text-apple-border">
                       "{rep.description}"
                     </p>
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-apple-text-muted">
                       Reporter: {rep.reporterEmail || 'Anonymous buyer'}
                     </span>
                   </div>
@@ -858,7 +858,7 @@ export default function VideosManagement() {
                     </button>
                     <button
                       onClick={() => handleReportAction(rep.id, 'dismissed')}
-                      className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 text-xs font-bold text-slate-700 dark:text-white"
+                      className="px-3.5 py-1.5 rounded-xl bg-apple-gray dark:bg-white/10 hover:bg-apple-border text-xs font-bold text-apple-text-muted dark:text-white"
                     >
                       Dismiss Report
                     </button>
@@ -874,13 +874,13 @@ export default function VideosManagement() {
       {activeTab === 'settings' && settings && (
         <form onSubmit={handleSaveSettings} className="space-y-6 max-w-4xl">
           {/* Global Feature Flag Card */}
-          <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10 space-y-3">
+          <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10 space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
+                <h3 className="text-sm font-extrabold text-apple-text dark:text-white">
                   Platform-wide Feature Switch
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-apple-text-muted">
                   Instantly toggle PakStories on or off without redeploying code.
                 </p>
               </div>
@@ -891,21 +891,21 @@ export default function VideosManagement() {
                   onChange={(e) => setSettings({ ...settings, featureEnabled: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#5B2A86]" />
+                <div className="w-11 h-6 bg-apple-border peer-focus:outline-none rounded-full peer dark:bg-apple-text-muted peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-apple-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent)]" />
               </label>
             </div>
           </div>
 
           {/* Constraints Card */}
-          <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10 space-y-4">
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-[#5B2A86]" />
+          <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10 space-y-4">
+            <h3 className="text-sm font-extrabold text-apple-text dark:text-white flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[var(--accent)]" />
               <span>Upload Constraints & Security Guardrails</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-slate-600 dark:text-[#8E8E93] block mb-1">
+                <label className="text-xs font-bold text-apple-text-muted dark:text-[#8E8E93] block mb-1">
                   Max Video Duration (seconds)
                 </label>
                 <input
@@ -914,13 +914,13 @@ export default function VideosManagement() {
                   max="180"
                   value={settings.maxDurationSeconds}
                   onChange={(e) => setSettings({ ...settings, maxDurationSeconds: Number(e.target.value) })}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                  className="w-full px-3.5 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                 />
-                <span className="text-[10px] text-slate-400 mt-1 block">Default: 90 seconds</span>
+                <span className="text-[10px] text-apple-text-muted mt-1 block">Default: 90 seconds</span>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-600 dark:text-[#8E8E93] block mb-1">
+                <label className="text-xs font-bold text-apple-text-muted dark:text-[#8E8E93] block mb-1">
                   Max File Size (MB)
                 </label>
                 <input
@@ -929,18 +929,18 @@ export default function VideosManagement() {
                   max="200"
                   value={settings.maxFileSizeMb}
                   onChange={(e) => setSettings({ ...settings, maxFileSizeMb: Number(e.target.value) })}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                  className="w-full px-3.5 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                 />
-                <span className="text-[10px] text-slate-400 mt-1 block">Protects bandwidth on slow connections</span>
+                <span className="text-[10px] text-apple-text-muted mt-1 block">Protects bandwidth on slow connections</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-white/5">
+            <div className="flex items-center justify-between pt-2 border-t border-apple-gray dark:border-white/5">
               <div>
-                <span className="text-xs font-bold text-slate-800 dark:text-white block">
+                <span className="text-xs font-bold text-apple-surface dark:text-white block">
                   AI Pre-Screening Requirement
                 </span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-apple-text-muted">
                   Pre-scans property walkthrough elements before admin review
                 </span>
               </div>
@@ -948,24 +948,24 @@ export default function VideosManagement() {
                 type="checkbox"
                 checked={settings.aiPrescreenRequired}
                 onChange={(e) => setSettings({ ...settings, aiPrescreenRequired: e.target.checked })}
-                className="w-4 h-4 rounded text-[#5B2A86]"
+                className="w-4 h-4 rounded text-[var(--accent)]"
               />
             </div>
           </div>
 
           {/* Explainable Ranking Formula Tuning Card */}
-          <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-sm font-extrabold text-apple-text dark:text-white flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-[#F0A830]" />
                   <span>Explainable Engagement Ranking Formula Weights</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-apple-text-muted">
                   Tuning parameters for the Phase 1 discovery feed sort score.
                 </p>
               </div>
-              <span className="text-xs font-mono font-bold text-[#5B2A86] dark:text-[#C9A227]">
+              <span className="text-xs font-mono font-bold text-[var(--accent)] dark:text-[#C9A227]">
                 Total: {(
                   settings.rankingWeights.recencyWeight + 
                   settings.rankingWeights.engagementWeight + 
@@ -978,7 +978,7 @@ export default function VideosManagement() {
               <div>
                 <div className="flex justify-between text-xs font-bold mb-1">
                   <span>Recency Weight ({Math.round(settings.rankingWeights.recencyWeight * 100)}%)</span>
-                  <span className="text-slate-400">Promotes newest property walkthroughs</span>
+                  <span className="text-apple-text-muted">Promotes newest property walkthroughs</span>
                 </div>
                 <input
                   type="range"
@@ -990,14 +990,14 @@ export default function VideosManagement() {
                     ...settings,
                     rankingWeights: { ...settings.rankingWeights, recencyWeight: Number(e.target.value) }
                   })}
-                  className="w-full accent-[#5B2A86]"
+                  className="w-full accent-[var(--accent)]"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-bold mb-1">
                   <span>Engagement Weight ({Math.round(settings.rankingWeights.engagementWeight * 100)}%)</span>
-                  <span className="text-slate-400">Likes, shares, and watch completion rate</span>
+                  <span className="text-apple-text-muted">Likes, shares, and watch completion rate</span>
                 </div>
                 <input
                   type="range"
@@ -1009,14 +1009,14 @@ export default function VideosManagement() {
                     ...settings,
                     rankingWeights: { ...settings.rankingWeights, engagementWeight: Number(e.target.value) }
                   })}
-                  className="w-full accent-[#5B2A86]"
+                  className="w-full accent-[var(--accent)]"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-bold mb-1">
                   <span>Click-Through Rate (CTR) Weight ({Math.round(settings.rankingWeights.ctrWeight * 100)}%)</span>
-                  <span className="text-slate-400">Direct inquiries driven to real property listing</span>
+                  <span className="text-apple-text-muted">Direct inquiries driven to real property listing</span>
                 </div>
                 <input
                   type="range"
@@ -1028,14 +1028,14 @@ export default function VideosManagement() {
                     ...settings,
                     rankingWeights: { ...settings.rankingWeights, ctrWeight: Number(e.target.value) }
                   })}
-                  className="w-full accent-[#5B2A86]"
+                  className="w-full accent-[var(--accent)]"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-bold mb-1">
                   <span>Admin Featured Pin Bonus (+{settings.rankingWeights.featuredBoost} pts)</span>
-                  <span className="text-slate-400">Score boost granted to manually pinned walkthroughs</span>
+                  <span className="text-apple-text-muted">Score boost granted to manually pinned walkthroughs</span>
                 </div>
                 <input
                   type="number"
@@ -1046,7 +1046,7 @@ export default function VideosManagement() {
                     ...settings,
                     rankingWeights: { ...settings.rankingWeights, featuredBoost: Number(e.target.value) }
                   })}
-                  className="w-32 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                  className="w-32 px-3 py-1.5 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                 />
               </div>
             </div>
@@ -1055,7 +1055,7 @@ export default function VideosManagement() {
           <button
             type="submit"
             disabled={savingSettings}
-            className="px-6 py-2.5 rounded-xl bg-[#5B2A86] hover:bg-[#48206C] text-white text-xs font-extrabold shadow-md flex items-center gap-2"
+            className="px-6 py-2.5 rounded-xl bg-[var(--accent)] hover:bg-[#48206C] text-white text-xs font-extrabold shadow-md flex items-center gap-2"
           >
             {savingSettings ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
             <span>Save Platform Configuration</span>
@@ -1066,38 +1066,38 @@ export default function VideosManagement() {
       {/* TAB 5: AUDIT TRAIL LOG */}
       {activeTab === 'audit' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-slate-200 dark:border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-apple-border dark:border-white/10 flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-bold text-apple-text dark:text-white">
                 Admin Action Audit Trail (admin_actions_logs)
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-apple-text-muted">
                 Every moderation approval, rejection, deactivation, delete, and parameter update is logged immutably.
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-apple-green/10 text-apple-green border border-apple-green/20">
               Zero Exceptions Policy
             </span>
           </div>
 
-          <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-xs">
-            <div className="divide-y divide-slate-100 dark:divide-white/5">
+          <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-apple-border dark:border-white/10 overflow-hidden shadow-xs">
+            <div className="divide-y divide-apple-gray dark:divide-white/5">
               {auditLogs.map(log => (
                 <div key={log.id} className="p-4 flex items-center justify-between text-xs">
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#5B2A86]/10 text-[#5B2A86] dark:bg-[#C9A227]/15 dark:text-[#C9A227]">
+                      <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[var(--accent)]/10 text-[var(--accent)] dark:bg-[#C9A227]/15 dark:text-[#C9A227]">
                         {log.action}
                       </span>
-                      <span className="font-bold text-slate-800 dark:text-white">
+                      <span className="font-bold text-apple-surface dark:text-white">
                         Target: {log.targetId}
                       </span>
                     </div>
-                    <p className="text-slate-600 dark:text-zinc-300">
+                    <p className="text-apple-text-muted dark:text-apple-border">
                       {log.details}
                     </p>
                   </div>
-                  <div className="text-right text-slate-400 font-mono text-[10px]">
+                  <div className="text-right text-apple-text-muted font-mono text-[10px]">
                     <div>{log.admin}</div>
                     <div>{new Date(log.timestamp).toLocaleTimeString()}</div>
                   </div>
@@ -1164,19 +1164,19 @@ export default function VideosManagement() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white dark:bg-[#1C1C1E] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xl z-10"
+              className="relative w-full max-w-md bg-white dark:bg-[var(--bg-raised)] rounded-3xl p-6 border border-apple-border dark:border-white/10 shadow-2xl z-10"
             >
-              <div className="flex items-center gap-2 mb-3 text-rose-500 font-bold text-sm">
+              <div className="flex items-center gap-2 mb-3 text-apple-red font-bold text-sm">
                 <XCircle className="w-5 h-5" />
                 <span>Reject Video Walkthrough</span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-[#8E8E93] mb-4">
+              <p className="text-xs text-apple-text-muted dark:text-[#8E8E93] mb-4">
                 Platform policy strictly mandates a formal rejection reason before turning down any verified seller submission.
               </p>
 
               <form onSubmit={handleRejectConfirm} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-apple-text-muted dark:text-apple-border mb-1">
                     Rejection Reason <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -1185,7 +1185,7 @@ export default function VideosManagement() {
                     value={rejectReason}
                     onChange={(e) => setRejectReason(e.target.value)}
                     placeholder="E.g., Society name mentioned in audio does not match listing registry; video quality below 480p standard; watermark of another portal present."
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs outline-none focus:border-rose-500"
+                    className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs outline-none focus:border-apple-red"
                   />
                 </div>
 
@@ -1193,13 +1193,13 @@ export default function VideosManagement() {
                   <button
                     type="button"
                     onClick={() => setRejectModalVideo(null)}
-                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-bold hover:bg-slate-200"
+                    className="px-4 py-2 rounded-xl bg-apple-gray dark:bg-white/10 text-xs font-bold hover:bg-apple-border"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold"
+                    className="px-5 py-2 rounded-xl bg-apple-red hover:bg-rose-700 text-white text-xs font-bold"
                   >
                     Confirm Rejection
                   </button>
@@ -1225,51 +1225,51 @@ export default function VideosManagement() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-lg bg-white dark:bg-[#1C1C1E] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xl z-10"
+              className="relative w-full max-w-lg bg-white dark:bg-[var(--bg-raised)] rounded-3xl p-6 border border-apple-border dark:border-white/10 shadow-2xl z-10"
             >
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10 mb-4">
+              <div className="flex items-center justify-between pb-3 border-b border-apple-border dark:border-white/10 mb-4">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#5B2A86] dark:text-[#C9A227]" />
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                  <TrendingUp className="w-5 h-5 text-[var(--accent)] dark:text-[#C9A227]" />
+                  <h3 className="text-sm font-bold text-apple-text dark:text-white">
                     Engagement & Inquiries Analytics: #{statsModalVideo.id}
                   </h3>
                 </div>
-                <button onClick={() => setStatsModalVideo(null)} className="text-slate-400 hover:text-white">
+                <button onClick={() => setStatsModalVideo(null)} className="text-apple-text-muted hover:text-white">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                  <span className="text-[10px] font-bold text-slate-400 block mb-1">Click-Through Rate (CTR)</span>
-                  <div className="text-xl font-black text-[#5B2A86] dark:text-[#C9A227]">
+                <div className="p-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10">
+                  <span className="text-[10px] font-bold text-apple-text-muted block mb-1">Click-Through Rate (CTR)</span>
+                  <div className="text-xl font-black text-[var(--accent)] dark:text-[#C9A227]">
                     {statsModalVideo.stats?.viewsCount ? ((statsModalVideo.stats.listingClicksCount / statsModalVideo.stats.viewsCount) * 100).toFixed(1) : 0}%
                   </div>
-                  <span className="text-[10px] text-slate-500">{statsModalVideo.stats?.listingClicksCount || 0} direct inquiries</span>
+                  <span className="text-[10px] text-apple-text-muted">{statsModalVideo.stats?.listingClicksCount || 0} direct inquiries</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                  <span className="text-[10px] font-bold text-slate-400 block mb-1">Completion Rate</span>
-                  <div className="text-xl font-black text-emerald-500">
+                <div className="p-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10">
+                  <span className="text-[10px] font-bold text-apple-text-muted block mb-1">Completion Rate</span>
+                  <div className="text-xl font-black text-apple-green">
                     {statsModalVideo.stats?.completionRate || 0}%
                   </div>
-                  <span className="text-[10px] text-slate-500">{Math.round((statsModalVideo.stats?.watchTimeTotalSeconds || 0) / 60)} mins watched</span>
+                  <span className="text-[10px] text-apple-text-muted">{Math.round((statsModalVideo.stats?.watchTimeTotalSeconds || 0) / 60)} mins watched</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                  <span className="text-[10px] font-bold text-slate-400 block mb-1">Total Views</span>
-                  <div className="text-xl font-black text-slate-900 dark:text-white">
+                <div className="p-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10">
+                  <span className="text-[10px] font-bold text-apple-text-muted block mb-1">Total Views</span>
+                  <div className="text-xl font-black text-apple-text dark:text-white">
                     {statsModalVideo.stats?.viewsCount || 0}
                   </div>
-                  <span className="text-[10px] text-slate-500">{statsModalVideo.stats?.uniqueViewersCount || 0} unique viewers</span>
+                  <span className="text-[10px] text-apple-text-muted">{statsModalVideo.stats?.uniqueViewersCount || 0} unique viewers</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                  <span className="text-[10px] font-bold text-slate-400 block mb-1">Likes & Shares</span>
-                  <div className="text-xl font-black text-slate-900 dark:text-white">
+                <div className="p-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10">
+                  <span className="text-[10px] font-bold text-apple-text-muted block mb-1">Likes & Shares</span>
+                  <div className="text-xl font-black text-apple-text dark:text-white">
                     {statsModalVideo.stats?.likesCount || 0} / {statsModalVideo.stats?.sharesCount || 0}
                   </div>
-                  <span className="text-[10px] text-slate-500">{statsModalVideo.stats?.savesCount || 0} bookmarks</span>
+                  <span className="text-[10px] text-apple-text-muted">{statsModalVideo.stats?.savesCount || 0} bookmarks</span>
                 </div>
               </div>
 
@@ -1296,16 +1296,16 @@ export default function VideosManagement() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white dark:bg-[#1C1C1E] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xl z-10"
+              className="relative w-full max-w-md bg-white dark:bg-[var(--bg-raised)] rounded-3xl p-6 border border-apple-border dark:border-white/10 shadow-2xl z-10"
             >
-              <div className="flex items-center gap-2 mb-3 text-slate-900 dark:text-white font-bold text-sm">
-                <Edit3 className="w-5 h-5 text-[#5B2A86]" />
+              <div className="flex items-center gap-2 mb-3 text-apple-text dark:text-white font-bold text-sm">
+                <Edit3 className="w-5 h-5 text-[var(--accent)]" />
                 <span>Edit Metadata & Reassign Listing</span>
               </div>
 
               <form onSubmit={handleMetadataSave} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-apple-text-muted dark:text-apple-border mb-1">
                     Attached Listing ID
                   </label>
                   <input
@@ -1313,13 +1313,13 @@ export default function VideosManagement() {
                     required
                     value={editListingId}
                     onChange={(e) => setEditListingId(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                    className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                   />
-                  <span className="text-[10px] text-slate-400">Reassigning fixes any uploader attachment errors</span>
+                  <span className="text-[10px] text-apple-text-muted">Reassigning fixes any uploader attachment errors</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-apple-text-muted dark:text-apple-border mb-1">
                     Display Title
                   </label>
                   <input
@@ -1327,19 +1327,19 @@ export default function VideosManagement() {
                     required
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold"
+                    className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-bold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-apple-text-muted dark:text-apple-border mb-1">
                     Caption Text
                   </label>
                   <textarea
                     rows={2}
                     value={editCaption}
                     onChange={(e) => setEditCaption(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs"
                   />
                 </div>
 
@@ -1347,13 +1347,13 @@ export default function VideosManagement() {
                   <button
                     type="button"
                     onClick={() => setMetadataModalVideo(null)}
-                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-bold"
+                    className="px-4 py-2 rounded-xl bg-apple-gray dark:bg-white/10 text-xs font-bold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-[#5B2A86] hover:bg-[#48206C] text-white text-xs font-bold"
+                    className="px-5 py-2 rounded-xl bg-[var(--accent)] hover:bg-[#48206C] text-white text-xs font-bold"
                   >
                     Save Changes
                   </button>
@@ -1379,19 +1379,19 @@ export default function VideosManagement() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white dark:bg-[#1C1C1E] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xl z-10"
+              className="relative w-full max-w-md bg-white dark:bg-[var(--bg-raised)] rounded-3xl p-6 border border-apple-border dark:border-white/10 shadow-2xl z-10"
             >
               <div className="flex items-center gap-2 mb-3 text-red-500 font-bold text-sm">
                 <UserX className="w-5 h-5" />
                 <span>Suspend Video Upload Privilege</span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-[#8E8E93] mb-4">
+              <p className="text-xs text-apple-text-muted dark:text-[#8E8E93] mb-4">
                 This suspends video creation rights for <strong>{suspendModalUser.name}</strong> while allowing their normal verified listings to remain active.
               </p>
 
               <form onSubmit={handleSuspendUser} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-apple-text-muted dark:text-apple-border mb-1">
                     Suspension Reason <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -1400,7 +1400,7 @@ export default function VideosManagement() {
                     value={suspendReason}
                     onChange={(e) => setSuspendReason(e.target.value)}
                     placeholder="E.g., Repeated upload of low-resolution non-walkthrough videos."
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs outline-none"
+                    className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs outline-none"
                   />
                 </div>
 
@@ -1408,7 +1408,7 @@ export default function VideosManagement() {
                   <button
                     type="button"
                     onClick={() => setSuspendModalUser(null)}
-                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-bold"
+                    className="px-4 py-2 rounded-xl bg-apple-gray dark:bg-white/10 text-xs font-bold"
                   >
                     Cancel
                   </button>
@@ -1440,19 +1440,19 @@ export default function VideosManagement() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white dark:bg-[#1C1C1E] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xl z-10"
+              className="relative w-full max-w-md bg-white dark:bg-[var(--bg-raised)] rounded-3xl p-6 border border-apple-border dark:border-white/10 shadow-2xl z-10"
             >
               <div className="flex items-center gap-2 mb-3 text-red-600 font-bold text-sm">
                 <Trash2 className="w-5 h-5" />
                 <span>Confirm Permanent Removal</span>
               </div>
-              <p className="text-xs text-slate-500 mb-4">
+              <p className="text-xs text-apple-text-muted mb-4">
                 Permanent deletion cannot be undone. Please specify a reason for the audit trail.
               </p>
 
               <form onSubmit={handleDeleteConfirm} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs font-bold text-apple-text-muted dark:text-apple-border mb-1">
                     Deletion Reason <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -1461,7 +1461,7 @@ export default function VideosManagement() {
                     value={deleteReason}
                     onChange={(e) => setDeleteReason(e.target.value)}
                     placeholder="Reason for permanent deletion..."
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs"
                   />
                 </div>
 
@@ -1469,7 +1469,7 @@ export default function VideosManagement() {
                   <button
                     type="button"
                     onClick={() => setDeleteModalVideo(null)}
-                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-bold"
+                    className="px-4 py-2 rounded-xl bg-apple-gray dark:bg-white/10 text-xs font-bold"
                   >
                     Cancel
                   </button>

@@ -123,22 +123,22 @@ export default function SidebarFilters({
   }, [selectedTypes, filters.propertyType]);
 
   return (
-    <div className="w-full space-y-5 text-slate-800 dark:text-slate-200">
+    <div className="w-full space-y-5 text-apple-text dark:text-apple-text">
       {/* 1. VERIFIED SELLERS ONLY TOGGLE (Pakizzle Competitive Differentiator) */}
-      <section className="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-brand-primary/5 to-transparent border border-emerald-500/20">
+      <section className="p-3.5 rounded-2xl bg-gradient-to-br from-apple-green/10 via-brand-primary/5 to-transparent border border-apple-green/30/20">
         <label className="flex items-center justify-between cursor-pointer">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-apple-green/15 text-apple-green dark:text-apple-green flex items-center justify-center shrink-0">
               <ShieldCheck className="w-4.5 h-4.5" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-black text-slate-900 dark:text-white">Verified Sellers Only</span>
-                <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
+                <span className="text-xs font-black text-apple-text dark:text-white">Verified Sellers Only</span>
+                <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded bg-apple-green/20 text-apple-green dark:text-apple-green">
                   Trust
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              <p className="text-[10px] text-apple-text-muted dark:text-apple-text-muted">
                 LDA/CDA verified title deeds & agencies
               </p>
             </div>
@@ -147,20 +147,20 @@ export default function SidebarFilters({
             type="checkbox"
             checked={onlyVerified}
             onChange={(e) => onToggleVerified(e.target.checked)}
-            className="w-4.5 h-4.5 rounded-md border-slate-300 text-emerald-600 focus:ring-emerald-500/20 cursor-pointer"
+            className="w-4.5 h-4.5 rounded-md border-apple-border text-apple-green focus:ring-apple-green/20 cursor-pointer"
           />
         </label>
       </section>
 
       {/* 2. PROPERTY CATEGORY & TYPE (Multi-select Checkbox List) */}
-      <section className="border-b border-slate-100 dark:border-white/5 pb-4">
+      <section className="border-b border-apple-border dark:border-white/5 pb-4">
         <button
           type="button"
           onClick={() => toggleSection("categoryType")}
           className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
         >
           <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+            <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
               Property Type
             </span>
             {selectedTypes.length > 0 && (
@@ -170,9 +170,9 @@ export default function SidebarFilters({
             )}
           </div>
           {openSections.categoryType ? (
-            <ChevronUp className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
+            <ChevronUp className="w-4 h-4 text-apple-text-muted group-hover:text-apple-text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
+            <ChevronDown className="w-4 h-4 text-apple-text-muted group-hover:text-apple-text-muted" />
           )}
         </button>
 
@@ -186,7 +186,7 @@ export default function SidebarFilters({
                   key={pt.id} 
                   className={cn(
                     "flex items-center justify-between px-2.5 py-2 rounded-xl cursor-pointer transition-colors text-xs font-medium",
-                    isChecked ? "bg-brand-primary/10 text-brand-primary font-bold" : "hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                    isChecked ? "bg-brand-primary/10 text-brand-primary font-bold" : "hover:bg-apple-gray dark:bg-white/5/60"
                   )}
                 >
                   <div className="flex items-center gap-2.5">
@@ -194,11 +194,11 @@ export default function SidebarFilters({
                       type="checkbox"
                       checked={isChecked}
                       onChange={() => onToggleType(pt.name)}
-                      className="w-4 h-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary/20 cursor-pointer"
+                      className="w-4 h-4 rounded border-apple-border text-brand-primary focus:ring-brand-primary/20 cursor-pointer"
                     />
                     <span>{pt.name}</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-widest">{pt.category}</span>
+                  <span className="text-[10px] text-apple-text-muted uppercase tracking-widest">{pt.category}</span>
                 </label>
               );
             })}
@@ -207,14 +207,14 @@ export default function SidebarFilters({
       </section>
 
       {/* 3. CASCADING CITY -> AREA/SOCIETY FILTER */}
-      <section className="border-b border-slate-100 dark:border-white/5 pb-4">
+      <section className="border-b border-apple-border dark:border-white/5 pb-4">
         <button
           type="button"
           onClick={() => toggleSection("cityArea")}
           className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
         >
           <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+            <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
               Location & Society
             </span>
             {(filters.city || selectedArea) && (
@@ -224,9 +224,9 @@ export default function SidebarFilters({
             )}
           </div>
           {openSections.cityArea ? (
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-4 h-4 text-apple-text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-apple-text-muted" />
           )}
         </button>
 
@@ -234,7 +234,7 @@ export default function SidebarFilters({
           <div className="mt-3 space-y-3">
             {/* City Selector */}
             <div>
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              <label className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1">
                 Selected City
               </label>
               <select
@@ -243,7 +243,7 @@ export default function SidebarFilters({
                   onChange({ city: e.target.value });
                   onSelectArea(""); // Reset cascading area on city switch
                 }}
-                className="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 outline-none cursor-pointer"
+                className="w-full px-3 py-2 rounded-xl bg-apple-gray dark:bg-white/5 text-xs font-bold text-apple-text dark:text-white border border-apple-border dark:border-white/10 outline-none cursor-pointer"
               >
                 <option value="">All Pakistan</option>
                 {cities.map((c) => (
@@ -255,7 +255,7 @@ export default function SidebarFilters({
             {/* Cascading Area Search & List */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <label className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider">
                   Named Societies in {activeCity}
                 </label>
                 {selectedArea && (
@@ -271,13 +271,13 @@ export default function SidebarFilters({
 
               {/* Search box for societies */}
               <div className="relative mb-2">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-apple-text-muted absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder={`Search ${activeCity} societies...`}
                   value={areaSearchInput}
                   onChange={(e) => setAreaSearchInput(e.target.value)}
-                  className="w-full pl-7.5 pr-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[11px] font-medium border border-transparent focus:border-brand-primary outline-none"
+                  className="w-full pl-7.5 pr-2.5 py-1.5 rounded-lg bg-apple-gray dark:bg-white/5 text-[11px] font-medium border border-transparent focus:border-brand-primary outline-none"
                 />
               </div>
 
@@ -287,7 +287,7 @@ export default function SidebarFilters({
                   onClick={() => onSelectArea("")}
                   className={cn(
                     "w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center justify-between cursor-pointer",
-                    !selectedArea ? "bg-brand-primary text-white font-bold" : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                    !selectedArea ? "bg-brand-primary text-white font-bold" : "hover:bg-apple-gray dark:bg-white/5"
                   )}
                 >
                   <span>All {activeCity} Societies</span>
@@ -305,17 +305,17 @@ export default function SidebarFilters({
                         "w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center justify-between cursor-pointer transition-colors",
                         isSelected
                           ? "bg-brand-primary text-white font-bold shadow-xs"
-                          : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                          : "hover:bg-apple-gray dark:bg-white/5 text-apple-text dark:text-apple-text"
                       )}
                     >
                       <div className="flex items-center gap-1.5 truncate">
-                        <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+                        <MapPin className="w-3 h-3 text-apple-orange shrink-0" />
                         <span className="truncate">{area.name}</span>
                       </div>
                       {area.listingCount > 0 && (
                         <span className={cn(
                           "text-[10px] shrink-0 font-semibold px-1 rounded",
-                          isSelected ? "text-white/80" : "text-slate-400"
+                          isSelected ? "text-white/80" : "text-apple-text-muted"
                         )}>
                           {area.listingCount}
                         </span>
@@ -330,19 +330,19 @@ export default function SidebarFilters({
       </section>
 
       {/* 4. PRICE RANGE (Synced with Top Bar in Real-Time) */}
-      <section className="border-b border-slate-100 dark:border-white/5 pb-4">
+      <section className="border-b border-apple-border dark:border-white/5 pb-4">
         <button
           type="button"
           onClick={() => toggleSection("price")}
           className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
         >
-          <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+          <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
             {isRent ? "Monthly Rent (PKR)" : "Price Range (PKR)"}
           </span>
           {openSections.price ? (
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-4 h-4 text-apple-text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-apple-text-muted" />
           )}
         </button>
 
@@ -350,23 +350,23 @@ export default function SidebarFilters({
           <div className="mt-3 space-y-2.5">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[10px] font-bold text-slate-400 block mb-1">Min (PKR)</label>
+                <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Min (PKR)</label>
                 <input
                   type="number"
                   placeholder="Min"
                   value={filters.minPrice || ""}
                   onChange={(e) => onChange({ minPrice: e.target.value ? Number(e.target.value) : null })}
-                  className="w-full px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold border border-slate-200 dark:border-white/10 outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-xl bg-apple-gray dark:bg-white/5 text-xs font-semibold border border-apple-border dark:border-white/10 outline-none"
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-slate-400 block mb-1">Max (PKR)</label>
+                <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Max (PKR)</label>
                 <input
                   type="number"
                   placeholder="Any"
                   value={filters.maxPrice || ""}
                   onChange={(e) => onChange({ maxPrice: e.target.value ? Number(e.target.value) : null })}
-                  className="w-full px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold border border-slate-200 dark:border-white/10 outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-xl bg-apple-gray dark:bg-white/5 text-xs font-semibold border border-apple-border dark:border-white/10 outline-none"
                 />
               </div>
             </div>
@@ -391,7 +391,7 @@ export default function SidebarFilters({
                   key={idx}
                   type="button"
                   onClick={() => onChange({ minPrice: chip.min || null, maxPrice: chip.max || null })}
-                  className="px-2 py-1 rounded-lg text-[10px] font-semibold border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-100 cursor-pointer text-center"
+                  className="px-2 py-1 rounded-lg text-[10px] font-semibold border border-apple-border dark:border-white/10 bg-apple-gray dark:bg-white/5/80 text-apple-text dark:text-apple-text hover:bg-apple-gray cursor-pointer text-center"
                 >
                   {chip.label}
                 </button>
@@ -403,19 +403,19 @@ export default function SidebarFilters({
 
       {/* 5. BEDROOMS & BATHROOMS (Synced with Top Bar, Auto-hidden on Plots) */}
       {!isOnlyPlotsOrCommercial && (
-        <section className="border-b border-slate-100 dark:border-white/5 pb-4">
+        <section className="border-b border-apple-border dark:border-white/5 pb-4">
           <button
             type="button"
             onClick={() => toggleSection("bedsBaths")}
             className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
           >
-            <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+            <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
               Beds & Baths
             </span>
             {openSections.bedsBaths ? (
-              <ChevronUp className="w-4 h-4 text-slate-400" />
+              <ChevronUp className="w-4 h-4 text-apple-text-muted" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-slate-400" />
+              <ChevronDown className="w-4 h-4 text-apple-text-muted" />
             )}
           </button>
 
@@ -423,7 +423,7 @@ export default function SidebarFilters({
             <div className="mt-3 space-y-3">
               {/* Bedrooms Stepper */}
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                <label className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1.5">
                   Bedrooms
                 </label>
                 <div className="flex flex-wrap gap-1">
@@ -438,7 +438,7 @@ export default function SidebarFilters({
                           "px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer",
                           isCur
                             ? "bg-brand-primary text-white border-brand-primary shadow-xs"
-                            : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100"
+                            : "bg-apple-gray dark:bg-white/5 border-apple-border dark:border-white/10 text-apple-text dark:text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         {b === "studio" ? "Studio" : b}
@@ -450,7 +450,7 @@ export default function SidebarFilters({
 
               {/* Bathrooms Stepper */}
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                <label className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider block mb-1.5">
                   Bathrooms
                 </label>
                 <div className="flex flex-wrap gap-1">
@@ -465,7 +465,7 @@ export default function SidebarFilters({
                           "px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer",
                           isCur
                             ? "bg-brand-primary text-white border-brand-primary shadow-xs"
-                            : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100"
+                            : "bg-apple-gray dark:bg-white/5 border-apple-border dark:border-white/10 text-apple-text dark:text-apple-text hover:bg-apple-gray"
                         )}
                       >
                         {bt}
@@ -480,19 +480,19 @@ export default function SidebarFilters({
       )}
 
       {/* 6. AREA / SIZE WITH UNIT TOGGLE (Marla, Kanal, Sq. Ft, Sq. Yd) */}
-      <section className="border-b border-slate-100 dark:border-white/5 pb-4">
+      <section className="border-b border-apple-border dark:border-white/5 pb-4">
         <button
           type="button"
           onClick={() => toggleSection("areaSize")}
           className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
         >
-          <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+          <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
             Area / Size ({AREA_UNITS.find(u => u.id === filters.areaUnit)?.short})
           </span>
           {openSections.areaSize ? (
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-4 h-4 text-apple-text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-apple-text-muted" />
           )}
         </button>
 
@@ -511,7 +511,7 @@ export default function SidebarFilters({
                       "px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer",
                       isCur
                         ? "bg-brand-primary text-white border-brand-primary shadow-xs"
-                        : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100"
+                        : "bg-apple-gray dark:bg-white/5 border-apple-border dark:border-white/10 text-apple-text-muted dark:text-apple-text-muted hover:bg-apple-gray"
                     )}
                   >
                     {u.short}
@@ -523,23 +523,23 @@ export default function SidebarFilters({
             {/* Min / Max inputs */}
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[10px] font-bold text-slate-400 block mb-1">Min Area</label>
+                <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Min Area</label>
                 <input
                   type="number"
                   placeholder="0"
                   value={filters.minArea || ""}
                   onChange={(e) => onChange({ minArea: e.target.value ? Number(e.target.value) : null })}
-                  className="w-full px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold border border-slate-200 dark:border-white/10 outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-xl bg-apple-gray dark:bg-white/5 text-xs font-semibold border border-apple-border dark:border-white/10 outline-none"
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-slate-400 block mb-1">Max Area</label>
+                <label className="text-[10px] font-bold text-apple-text-muted block mb-1">Max Area</label>
                 <input
                   type="number"
                   placeholder="Any"
                   value={filters.maxArea || ""}
                   onChange={(e) => onChange({ maxArea: e.target.value ? Number(e.target.value) : null })}
-                  className="w-full px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold border border-slate-200 dark:border-white/10 outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-xl bg-apple-gray dark:bg-white/5 text-xs font-semibold border border-apple-border dark:border-white/10 outline-none"
                 />
               </div>
             </div>
@@ -548,19 +548,19 @@ export default function SidebarFilters({
       </section>
 
       {/* 7. ADDITIONAL FEATURES & AMENITIES */}
-      <section className="border-b border-slate-100 dark:border-white/5 pb-4">
+      <section className="border-b border-apple-border dark:border-white/5 pb-4">
         <button
           type="button"
           onClick={() => toggleSection("amenities")}
           className="w-full flex items-center justify-between py-1 text-left cursor-pointer group"
         >
-          <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+          <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
             Features & Amenities
           </span>
           {openSections.amenities ? (
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-4 h-4 text-apple-text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-apple-text-muted" />
           )}
         </button>
 
@@ -573,13 +573,13 @@ export default function SidebarFilters({
               { key: "parkingAvailable", label: "Parking Available", checked: !!filters.parkingAvailable, onToggle: (val: boolean) => onChange({ parkingAvailable: val }) },
               { key: "electricityBackup", label: "Electricity Backup (Solar/UPS)", checked: electricityBackup, onToggle: onToggleElectricityBackup },
             ].map(({ key, label, checked, onToggle }) => (
-              <label key={key} className="flex items-center justify-between cursor-pointer px-1 py-1 hover:bg-slate-50 dark:hover:bg-slate-800/40 rounded-lg">
-                <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{label}</span>
+              <label key={key} className="flex items-center justify-between cursor-pointer px-1 py-1 hover:bg-apple-gray dark:bg-white/5/40 rounded-lg">
+                <span className="text-xs font-medium text-apple-text dark:text-apple-text">{label}</span>
                 <input
                   type="checkbox"
                   checked={checked}
                   onChange={(e) => onToggle(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary/20 cursor-pointer"
+                  className="w-4 h-4 rounded border-apple-border text-brand-primary focus:ring-brand-primary/20 cursor-pointer"
                 />
               </label>
             ))}
@@ -596,14 +596,14 @@ export default function SidebarFilters({
         >
           <div className="flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-brand-primary" />
-            <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+            <span className="text-xs font-black uppercase tracking-wider text-apple-text dark:text-white">
               Date Added
             </span>
           </div>
           {openSections.freshness ? (
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-4 h-4 text-apple-text-muted" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-apple-text-muted" />
           )}
         </button>
 
@@ -625,7 +625,7 @@ export default function SidebarFilters({
                     "px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center",
                     isSelected
                       ? "bg-brand-primary text-white border-brand-primary shadow-xs"
-                      : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-slate-100"
+                      : "bg-apple-gray dark:bg-white/5 border-apple-border dark:border-white/5 text-apple-text dark:text-apple-text hover:bg-apple-gray"
                   )}
                 >
                   {f.label}

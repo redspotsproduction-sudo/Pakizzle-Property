@@ -565,7 +565,7 @@ export default function AdManagement() {
             <Sparkles className="w-3.5 h-3.5 text-apple-orange" />
             Monetization & Ad Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Featured Ads & Campaigns
           </h1>
           <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
@@ -590,14 +590,14 @@ export default function AdManagement() {
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 p-8">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-amber-500 animate-pulse" />
+                <div className="w-12 h-12 bg-gold-decoration/10 rounded-2xl flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-gold-decoration animate-pulse" />
                 </div>
-                <Badge className="bg-amber-500/10 text-amber-500 border-none font-black text-[9px] uppercase">
+                <Badge className="bg-gold-decoration/10 text-gold-decoration border-none font-black text-[9px] uppercase">
                   Monetization Studio
                 </Badge>
               </div>
-              <h2 className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-zinc-100 mt-4">
+              <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-apple-gray mt-4">
                 {formData.id ? 'Edit Ad Campaign' : 'Ad Campaign Builder'}
               </h2>
               <p className="text-[#86868B] text-xs">
@@ -605,15 +605,15 @@ export default function AdManagement() {
               </p>
 
               {/* Seamless Visual Tabs Switcher */}
-              <div className="grid grid-cols-2 bg-[#F5F5F7] dark:bg-zinc-950 p-1 rounded-xl border border-black/[0.04] dark:border-white/[0.04] mt-5">
+              <div className="grid grid-cols-2 bg-[#F5F5F7] dark:bg-apple-text p-1 rounded-xl border border-black/[0.04] dark:border-white/[0.04] mt-5">
                 <button
                   type="button"
                   onClick={() => setActiveTab('editor')}
                   className={cn(
                     "py-2 px-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all duration-300",
                     activeTab === 'editor' 
-                      ? "bg-white dark:bg-[#1D1D1F] text-amber-500 shadow-sm" 
-                      : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                      ? "bg-white dark:bg-[var(--text-primary)] text-gold-decoration shadow-sm" 
+                      : "text-apple-text-muted hover:text-apple-text dark:hover:text-apple-gray"
                   )}
                 >
                   Creator Form
@@ -624,12 +624,12 @@ export default function AdManagement() {
                   className={cn(
                     "py-2 px-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5",
                     activeTab === 'templates' 
-                      ? "bg-white dark:bg-[#1D1D1F] text-amber-500 shadow-sm" 
-                      : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                      ? "bg-white dark:bg-[var(--text-primary)] text-gold-decoration shadow-sm" 
+                      : "text-apple-text-muted hover:text-apple-text dark:hover:text-apple-gray"
                   )}
                 >
                   20+ Presets
-                  <Badge className="h-4 px-1.5 text-[8px] bg-amber-500/10 text-amber-500 border-none">
+                  <Badge className="h-4 px-1.5 text-[8px] bg-gold-decoration/10 text-gold-decoration border-none">
                     NEW
                   </Badge>
                 </button>
@@ -644,8 +644,8 @@ export default function AdManagement() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <div>
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ad Creative Image</label>
-                      <span className="block text-[8px] text-zinc-400 mt-0.5">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Ad Creative Image</label>
+                      <span className="block text-[8px] text-apple-text-muted mt-0.5">
                         {formData.slotType === "native-feed" && "Example: 600x400px (3:2 Grid Listing)"}
                         {formData.slotType === "leaderboard" && "Example: 728x90px or 600x200px (Banner)"}
                         {formData.slotType === "sidebar-medium" && "Example: 300x250px (Ad Box)"}
@@ -656,7 +656,7 @@ export default function AdManagement() {
                     <button 
                       type="button" 
                       onClick={() => fileInputRef.current?.click()}
-                      className="text-[10px] font-black uppercase tracking-widest text-amber-500 hover:underline flex items-center gap-1.5"
+                      className="text-[10px] font-black uppercase tracking-widest text-gold-decoration hover:underline flex items-center gap-1.5"
                     >
                       <Upload className="w-3 h-3" />
                       Upload File
@@ -673,7 +673,7 @@ export default function AdManagement() {
                   <div className="group relative">
                     <div className={cn(
                       "w-full aspect-[16/10] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all duration-500 overflow-hidden",
-                      formData.imageUrl && !imageError ? "border-transparent" : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900"
+                      formData.imageUrl && !imageError ? "border-transparent" : "border-apple-border dark:border-apple-surface bg-apple-surface dark:bg-apple-text"
                     )}>
                       {formData.imageUrl && !imageError ? (
                         <>
@@ -695,7 +695,7 @@ export default function AdManagement() {
                             <Button 
                               type="button"
                               variant="secondary"
-                              className="rounded-full h-10 w-10 p-0 bg-white/20 backdrop-blur-md border-white/20 text-white hover:bg-amber-500 hover:border-amber-500"
+                              className="rounded-full h-10 w-10 p-0 bg-white/20 backdrop-blur-md border-white/20 text-white hover:bg-gold-decoration hover:border-gold-decoration"
                               onClick={() => {
                                 setFormData(prev => ({ ...prev, imageUrl: '' }));
                                 setImageError(false);
@@ -708,15 +708,15 @@ export default function AdManagement() {
                         </>
                       ) : (
                         <div className="flex flex-col items-center gap-3 p-4 text-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                          <div className="w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center">
-                            <ImageIcon className="w-6 h-6 text-zinc-400" />
+                          <div className="w-12 h-12 bg-apple-gray dark:bg-apple-surface rounded-2xl flex items-center justify-center">
+                            <ImageIcon className="w-6 h-6 text-apple-text-muted" />
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-zinc-600 dark:text-zinc-400">
+                            <p className="text-xs font-bold text-apple-text-muted dark:text-apple-text-muted">
                               {imageError ? 'Invalid format/URL' : 'Browse ad asset file'}
                             </p>
-                            <p className="text-[10px] text-zinc-400 mt-1">Accepts PNG, JPG or dynamic Base64 data</p>
-                            <p className="text-[9px] text-amber-500 font-bold mt-1">
+                            <p className="text-[10px] text-apple-text-muted mt-1">Accepts PNG, JPG or dynamic Base64 data</p>
+                            <p className="text-[9px] text-gold-decoration font-bold mt-1">
                               {formData.slotType === 'native-feed' && 'Optimal crop ratio: 3:2 (e.g. 600x400px)'}
                               {formData.slotType === 'leaderboard' && 'Optimal crop ratio: 8:1 (e.g. 600x200px / 728x90px)'}
                               {formData.slotType === 'sidebar-medium' && 'Optimal crop ratio: 6:5 (e.g. 300x250px)'}
@@ -730,7 +730,7 @@ export default function AdManagement() {
                   
                   <div className="relative">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                      <LinkIcon className="w-3.5 h-3.5 text-zinc-400" />
+                      <LinkIcon className="w-3.5 h-3.5 text-apple-text-muted" />
                     </div>
                     <Input 
                       placeholder="Or paste high CTR CDN / Unsplash url image..." 
@@ -739,20 +739,20 @@ export default function AdManagement() {
                         setFormData(prev => ({ ...prev, imageUrl: e.target.value }));
                         setImageError(false);
                       }}
-                      className="pl-10 h-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="pl-10 h-11 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface"
                     />
                   </div>
 
                   {/* Sizing Advisory Box for UI guidance */}
-                  <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-800 flex items-start gap-2.5">
-                    <Megaphone className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                    <div className="text-[10px] text-zinc-500 leading-relaxed font-semibold">
-                      <span className="text-zinc-800 dark:text-zinc-200 font-black">Proper Asset Dimensions Requirement:</span>
+                  <div className="p-3.5 rounded-2xl bg-apple-surface dark:bg-apple-text/40 border border-apple-border dark:border-apple-surface flex items-start gap-2.5">
+                    <Megaphone className="w-4 h-4 text-gold-decoration shrink-0 mt-0.5" />
+                    <div className="text-[10px] text-apple-text-muted leading-relaxed font-semibold">
+                      <span className="text-apple-surface dark:text-apple-border font-black">Proper Asset Dimensions Requirement:</span>
                       <ul className="list-disc list-inside mt-1 space-y-0.5 font-mono text-[9px]">
-                        <li>In-Feed: <span className="text-amber-500">600x400px (3:2 Format)</span></li>
-                        <li>Leaderboard: <span className="text-amber-500">728x90px / 600x200px (Panoramic)</span></li>
-                        <li>Skyscraper: <span className="text-amber-500">300x600px (1:2 Skyscraper)</span></li>
-                        <li>Side-box: <span className="text-amber-500">300x250px (6:5 Medium box)</span></li>
+                        <li>In-Feed: <span className="text-gold-decoration">600x400px (3:2 Format)</span></li>
+                        <li>Leaderboard: <span className="text-gold-decoration">728x90px / 600x200px (Panoramic)</span></li>
+                        <li>Skyscraper: <span className="text-gold-decoration">300x600px (1:2 Skyscraper)</span></li>
+                        <li>Side-box: <span className="text-gold-decoration">300x250px (6:5 Medium box)</span></li>
                       </ul>
                     </div>
                   </div>
@@ -762,12 +762,12 @@ export default function AdManagement() {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Target Slot Layout</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Target Slot Layout</label>
                       <Select 
                         value={formData.slotType} 
                         onValueChange={(v: any) => setFormData(p => ({ ...p, slotType: v }))}
                       >
-                        <SelectTrigger className="w-full h-11 rounded-xl border-zinc-200 dark:border-zinc-800">
+                        <SelectTrigger className="w-full h-11 rounded-xl border-apple-border dark:border-apple-surface">
                           <SelectValue placeholder="Slot Target" />
                         </SelectTrigger>
                         <SelectContent className="min-w-[340px]">
@@ -781,12 +781,12 @@ export default function AdManagement() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Campaign Status</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Campaign Status</label>
                       <Select 
                         value={formData.status} 
                         onValueChange={(v: any) => setFormData(p => ({ ...p, status: v }))}
                       >
-                        <SelectTrigger className="h-11 rounded-xl border-zinc-200 dark:border-zinc-800">
+                        <SelectTrigger className="h-11 rounded-xl border-apple-border dark:border-apple-surface">
                           <SelectValue placeholder="Select Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -799,22 +799,22 @@ export default function AdManagement() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Partner/Brand Badge</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Partner/Brand Badge</label>
                       <Input 
                         placeholder="e.g. Adamjee Auto, Meezan, Shell" 
                         value={formData.badge}
                         onChange={(e) => setFormData(p => ({ ...p, badge: e.target.value }))}
-                        className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-11 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Certified Partner?</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Certified Partner?</label>
                       <Select 
                         value={formData.isCertifiedPartner ? "yes" : "no"} 
                         onValueChange={(v) => setFormData(p => ({ ...p, isCertifiedPartner: v === "yes" }))}
                       >
-                        <SelectTrigger className="h-11 rounded-xl border-zinc-200 dark:border-zinc-800">
+                        <SelectTrigger className="h-11 rounded-xl border-apple-border dark:border-apple-surface">
                           <SelectValue placeholder="Certified Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -826,140 +826,140 @@ export default function AdManagement() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Creative Ad Title</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Creative Ad Title</label>
                     <Input 
                       placeholder="e.g. Own Your Dream Car Instantly!" 
                       value={formData.title}
                       onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))}
-                      className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 font-bold"
+                      className="h-11 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface font-bold"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ad Description/Nurture Copy</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Ad Description/Nurture Copy</label>
                     <Textarea 
                       placeholder="Make this value-oriented to ensure user engagement and strong conversion thresholds." 
                       value={formData.description}
                       onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))}
-                      className="rounded-xl border-zinc-200 dark:border-zinc-800 min-h-[82px]"
+                      className="rounded-xl border-apple-border dark:border-apple-surface min-h-[82px]"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Action Link URL</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Action Link URL</label>
                       <Input 
                         placeholder="e.g. /insurance, /financing, or external URL"
                         value={formData.link}
                         onChange={(e) => setFormData(p => ({ ...p, link: e.target.value }))}
-                        className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-11 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Button CTA Text</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Button CTA Text</label>
                       <Input 
                         placeholder="e.g. Calculate Premium, Book Spot" 
                         value={formData.cta}
                         onChange={(e) => setFormData(p => ({ ...p, cta: e.target.value }))}
-                        className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-11 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Advanced Skyscraper (300x600) properties */}
-                <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 space-y-4">
+                <div className="p-4 rounded-2xl bg-apple-surface dark:bg-apple-text/50 border border-apple-border dark:border-apple-surface space-y-4">
                   <div className="flex items-center gap-2">
-                    <Megaphone className="w-4 h-4 text-amber-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Exotic High-Impact Skyscraper Options</span>
+                    <Megaphone className="w-4 h-4 text-gold-decoration" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted">Exotic High-Impact Skyscraper Options</span>
                   </div>
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[8px] font-bold text-zinc-400 uppercase">Campaign Pill Accent</label>
+                        <label className="text-[8px] font-bold text-apple-text-muted uppercase">Campaign Pill Accent</label>
                         <Input 
                           placeholder="e.g. Golden Visa Perks" 
                           value={formData.highlightPill || ''}
                           onChange={(e) => setFormData(p => ({ ...p, highlightPill: e.target.value }))}
-                          className="h-9 text-xs rounded-lg border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                          className="h-9 text-xs rounded-lg border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[8px] font-bold text-zinc-400 uppercase">Price Label</label>
+                        <label className="text-[8px] font-bold text-apple-text-muted uppercase">Price Label</label>
                         <Input 
                           placeholder="e.g. Starting From" 
                           value={formData.startPriceText || ''}
                           onChange={(e) => setFormData(p => ({ ...p, startPriceText: e.target.value }))}
-                          className="h-9 text-xs rounded-lg border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                          className="h-9 text-xs rounded-lg border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[8px] font-bold text-zinc-400 uppercase">Price Value</label>
+                        <label className="text-[8px] font-bold text-apple-text-muted uppercase">Price Value</label>
                         <Input 
                           placeholder="e.g. AED 2.99M" 
                           value={formData.startPriceValue || ''}
                           onChange={(e) => setFormData(p => ({ ...p, startPriceValue: e.target.value }))}
-                          className="h-9 text-xs rounded-lg border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                          className="h-9 text-xs rounded-lg border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[8px] font-bold text-zinc-400 uppercase">Disclaimer Footer</label>
+                        <label className="text-[8px] font-bold text-apple-text-muted uppercase">Disclaimer Footer</label>
                         <Input 
                           placeholder="e.g. T&C Apply | Rera No..." 
                           value={formData.disclaimer || ''}
                           onChange={(e) => setFormData(p => ({ ...p, disclaimer: e.target.value }))}
-                          className="h-9 text-xs rounded-lg border-transparent focus:border-zinc-200 bg-white dark:bg-zinc-900"
+                          className="h-9 text-xs rounded-lg border-transparent focus:border-apple-border bg-white dark:bg-apple-text"
                         />
                       </div>
                     </div>
 
-                    <div className="border-t border-zinc-200 dark:border-zinc-800/60 my-2 pt-2">
-                      <label className="text-[8px] font-bold text-zinc-400 uppercase block mb-1.5">3-Col Highlights & Analytics</label>
+                    <div className="border-t border-apple-border dark:border-apple-surface/60 my-2 pt-2">
+                      <label className="text-[8px] font-bold text-apple-text-muted uppercase block mb-1.5">3-Col Highlights & Analytics</label>
                       <div className="grid grid-cols-3 gap-1.5">
-                        <div className="space-y-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                        <div className="space-y-1 p-1 bg-apple-gray dark:bg-apple-text rounded-lg">
                           <Input 
                             placeholder="40%" 
                             value={formData.spec1Value || ''} 
                             onChange={(e) => setFormData(p => ({ ...p, spec1Value: e.target.value }))}
-                            className="h-7 text-[10px] px-1 font-bold text-center bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                            className="h-7 text-[10px] px-1 font-bold text-center bg-white dark:bg-apple-text border-apple-border dark:border-apple-surface"
                           />
                           <Input 
                             placeholder="Appr." 
                             value={formData.spec1Title || ''} 
                             onChange={(e) => setFormData(p => ({ ...p, spec1Title: e.target.value }))}
-                            className="h-6 text-[8px] px-1 text-center bg-transparent border-none text-zinc-400"
+                            className="h-6 text-[8px] px-1 text-center bg-transparent border-none text-apple-text-muted"
                           />
                         </div>
-                        <div className="space-y-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                        <div className="space-y-1 p-1 bg-apple-gray dark:bg-apple-text rounded-lg">
                           <Input 
                             placeholder="10%" 
                             value={formData.spec2Value || ''} 
                             onChange={(e) => setFormData(p => ({ ...p, spec2Value: e.target.value }))}
-                            className="h-7 text-[10px] px-1 font-bold text-center bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                            className="h-7 text-[10px] px-1 font-bold text-center bg-white dark:bg-apple-text border-apple-border dark:border-apple-surface"
                           />
                           <Input 
                             placeholder="Rental" 
                             value={formData.spec2Title || ''} 
                             onChange={(e) => setFormData(p => ({ ...p, spec2Title: e.target.value }))}
-                            className="h-6 text-[8px] px-1 text-center bg-transparent border-none text-zinc-400"
+                            className="h-6 text-[8px] px-1 text-center bg-transparent border-none text-apple-text-muted"
                           />
                         </div>
-                        <div className="space-y-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                        <div className="space-y-1 p-1 bg-apple-gray dark:bg-apple-text rounded-lg">
                           <Input 
                             placeholder="Golden" 
                             value={formData.spec3Value || ''} 
                             onChange={(e) => setFormData(p => ({ ...p, spec3Value: e.target.value }))}
-                            className="h-7 text-[10px] px-1 font-bold text-center bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                            className="h-7 text-[10px] px-1 font-bold text-center bg-white dark:bg-apple-text border-apple-border dark:border-apple-surface"
                           />
                           <Input 
                             placeholder="Visa" 
                             value={formData.spec3Title || ''} 
                             onChange={(e) => setFormData(p => ({ ...p, spec3Title: e.target.value }))}
-                            className="h-6 text-[8px] px-1 text-center bg-transparent border-none text-zinc-400"
+                            className="h-6 text-[8px] px-1 text-center bg-transparent border-none text-apple-text-muted"
                           />
                         </div>
                       </div>
@@ -972,7 +972,7 @@ export default function AdManagement() {
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="flex-1 h-14 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-amber-500/20"
+                    className="flex-1 h-14 rounded-2xl bg-gold-decoration hover:bg-gold-decoration text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-gold-decoration/20"
                   >
                     {isSubmitting ? 'Protocol Executing...' : formData.id ? 'Save Changes' : 'Launch Campaign'}
                   </Button>
@@ -980,10 +980,10 @@ export default function AdManagement() {
                     <Button 
                       type="button"
                       variant="outline"
-                      className="h-14 w-14 p-0 rounded-2xl border-zinc-200 dark:border-zinc-800"
+                      className="h-14 w-14 p-0 rounded-2xl border-apple-border dark:border-apple-surface"
                       onClick={resetForm}
                     >
-                      <X className="w-5 h-5 text-zinc-400" />
+                      <X className="w-5 h-5 text-apple-text-muted" />
                     </Button>
                   )}
                 </div>
@@ -995,12 +995,12 @@ export default function AdManagement() {
                 {/* Search & Category Filter Overlay */}
                 <div className="space-y-4">
                   <div className="relative">
-                    <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Search className="w-4 h-4 text-apple-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
                     <Input 
                       placeholder="Search 22+ premium presets..." 
                       value={templateSearchQuery}
                       onChange={(e) => setTemplateSearchQuery(e.target.value)}
-                      className="pl-9 h-10 rounded-xl bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-200"
+                      className="pl-9 h-10 rounded-xl bg-apple-surface dark:bg-apple-text border-apple-border dark:border-apple-surface text-xs text-apple-text-muted dark:text-apple-border"
                     />
                   </div>
                   
@@ -1013,8 +1013,8 @@ export default function AdManagement() {
                         className={cn(
                           "px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg shrink-0 transition-all",
                           templateCategory === cat 
-                            ? "bg-amber-500 text-white" 
-                            : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                            ? "bg-gold-decoration text-white" 
+                            : "bg-apple-gray dark:bg-apple-surface text-apple-text-muted dark:text-apple-text-muted hover:bg-apple-border dark:hover:bg-apple-text-muted"
                         )}
                       >
                         {cat}
@@ -1024,7 +1024,7 @@ export default function AdManagement() {
                 </div>
 
                 {/* Sizing Guideline Info Header */}
-                <div className="p-3 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent rounded-2xl border border-amber-500/15 text-[10px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-semibold">
+                <div className="p-3 bg-gradient-to-r from-gold-decoration/10 via-gold-decoration/5 to-transparent rounded-2xl border border-gold-decoration/15 text-[10px] text-apple-text-muted dark:text-apple-text-muted leading-relaxed font-semibold">
                   🚀 Preset assets are hosted on official Unsplash CDN. Applying a template copies all metadata, labels, CTA links, and pricing structures directly to the editor workspace instantly.
                 </div>
 
@@ -1046,14 +1046,14 @@ export default function AdManagement() {
                     return (
                       <div 
                         key={i}
-                        className="group p-4 bg-zinc-50 dark:bg-zinc-950/40 rounded-2xl border border-zinc-200/60 dark:border-zinc-800 hover:border-amber-500/40 transition-all duration-300 relative flex flex-col gap-3 font-sans"
+                        className="group p-4 bg-apple-surface dark:bg-apple-text/40 rounded-2xl border border-apple-border/60 dark:border-apple-surface hover:border-gold-decoration/40 transition-all duration-300 relative flex flex-col gap-3 font-sans"
                       >
                         {/* Header Badges */}
                         <div className="flex items-center justify-between gap-1.5 flex-wrap">
-                          <span className="text-[8px] font-black bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2 py-0.5 rounded-md uppercase">
+                          <span className="text-[8px] font-black bg-apple-border dark:bg-apple-surface text-apple-text-muted dark:text-apple-text-muted px-2 py-0.5 rounded-md uppercase">
                             {tpl.category}
                           </span>
-                          <span className="text-[8px] font-mono text-zinc-400 bg-amber-500/5 dark:bg-amber-500/10 text-amber-500 hover:text-amber-600 px-2 py-0.5 rounded-md font-bold shrink-0">
+                          <span className="text-[8px] font-mono text-apple-text-muted bg-gold-decoration/5 dark:bg-gold-decoration/10 text-gold-decoration hover:text-gold-decoration px-2 py-0.5 rounded-md font-bold shrink-0">
                             Format: {sizeLabel}
                           </span>
                         </div>
@@ -1063,14 +1063,14 @@ export default function AdManagement() {
                           <img 
                             src={tpl.imageUrl} 
                             alt={tpl.title} 
-                            className="w-16 h-16 rounded-xl object-cover border border-zinc-200 dark:border-zinc-800 shrink-0"
+                            className="w-16 h-16 rounded-xl object-cover border border-apple-border dark:border-apple-surface shrink-0"
                             referrerPolicy="no-referrer"
                           />
                           <div className="min-w-0 flex-1">
-                            <h4 className="text-xs font-black text-zinc-800 dark:text-zinc-200 line-clamp-1 group-hover:text-amber-500 transition-colors">
+                            <h4 className="text-xs font-black text-apple-surface dark:text-apple-border line-clamp-1 group-hover:text-gold-decoration transition-colors">
                               {tpl.title}
                             </h4>
-                            <p className="text-[10px] text-zinc-500 line-clamp-2 mt-0.5 leading-relaxed">
+                            <p className="text-[10px] text-apple-text-muted line-clamp-2 mt-0.5 leading-relaxed">
                               {tpl.description}
                             </p>
                           </div>
@@ -1078,15 +1078,15 @@ export default function AdManagement() {
 
                         {/* Extra skyscraper parameters summary preview tag */}
                         {tpl.slotType === "sidebar-tall" && tpl.startPriceValue && (
-                          <div className="grid grid-cols-2 gap-1.5 p-2 bg-white dark:bg-zinc-900 rounded-xl text-[8px] text-zinc-400 font-mono">
-                            <div className="truncate">Price: <span className="font-bold text-amber-500">{tpl.startPriceValue}</span></div>
-                            <div className="truncate">Pill: <span className="font-bold text-amber-500">{tpl.highlightPill}</span></div>
+                          <div className="grid grid-cols-2 gap-1.5 p-2 bg-white dark:bg-apple-text rounded-xl text-[8px] text-apple-text-muted font-mono">
+                            <div className="truncate">Price: <span className="font-bold text-gold-decoration">{tpl.startPriceValue}</span></div>
+                            <div className="truncate">Pill: <span className="font-bold text-gold-decoration">{tpl.highlightPill}</span></div>
                           </div>
                         )}
 
                         {/* Footer Quick Deployment Action button */}
-                        <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-zinc-200/50 dark:border-zinc-800/40">
-                          <span className="text-[9px] font-bold text-zinc-400">
+                        <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-apple-border/50 dark:border-apple-surface/40">
+                          <span className="text-[9px] font-bold text-apple-text-muted">
                             Partner tag: {tpl.badge}
                           </span>
                           <Button 
@@ -1112,7 +1112,7 @@ export default function AdManagement() {
                               toast.success(`'${tpl.title}' template loaded! Modify details or launch directly.`);
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
-                            className="bg-amber-500 hover:bg-amber-600 text-white text-[9px] h-7 px-3.5 rounded-xl font-bold uppercase transition-all"
+                            className="bg-gold-decoration hover:bg-gold-decoration text-white text-[9px] h-7 px-3.5 rounded-xl font-bold uppercase transition-all"
                           >
                             Apply Preset
                           </Button>
@@ -1128,7 +1128,7 @@ export default function AdManagement() {
                     const matchesCategory = templateCategory === 'All' || tpl.category === templateCategory;
                     return matchesSearch && matchesCategory;
                   }).length === 0 && (
-                    <div className="py-12 text-center text-xs text-zinc-400">
+                    <div className="py-12 text-center text-xs text-apple-text-muted">
                       No matching templates found. Try searching for other tags!
                     </div>
                   )}
@@ -1146,18 +1146,18 @@ export default function AdManagement() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div>
-              <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Total Impressions</p>
-              <h4 className="text-2xl font-black mt-1 text-zinc-900 dark:text-zinc-100">{totalViews.toLocaleString()}</h4>
+              <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-widest">Total Impressions</p>
+              <h4 className="text-2xl font-black mt-1 text-apple-text dark:text-apple-gray">{totalViews.toLocaleString()}</h4>
             </div>
-            <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500">
+            <div className="w-10 h-10 bg-gold-decoration/10 rounded-xl flex items-center justify-center text-gold-decoration">
               <Eye className="w-5 h-5" />
             </div>
           </div>
 
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div>
-              <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Ad Conversions/Clicks</p>
-              <h4 className="text-2xl font-black mt-1 text-zinc-900 dark:text-zinc-100">{totalClicks.toLocaleString()}</h4>
+              <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-widest">Ad Conversions/Clicks</p>
+              <h4 className="text-2xl font-black mt-1 text-apple-text dark:text-apple-gray">{totalClicks.toLocaleString()}</h4>
             </div>
             <div className="w-10 h-10 bg-[#0071E3]/10 rounded-xl flex items-center justify-center text-[#0071E3]">
               <MousePointerClick className="w-5 h-5" />
@@ -1166,10 +1166,10 @@ export default function AdManagement() {
 
           <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div>
-              <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Average CTR Rate</p>
-              <h4 className="text-2xl font-black mt-1 text-emerald-500">{avgCtr}%</h4>
+              <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-widest">Average CTR Rate</p>
+              <h4 className="text-2xl font-black mt-1 text-apple-green">{avgCtr}%</h4>
             </div>
-            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
+            <div className="w-10 h-10 bg-apple-green/10 rounded-xl flex items-center justify-center text-apple-green">
               <Percent className="w-5 h-5" />
             </div>
           </div>
@@ -1206,7 +1206,7 @@ export default function AdManagement() {
                     className="group relative"
                   >
                     <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
-                    <div className="aspect-[16/9] relative overflow-hidden bg-zinc-50 dark:bg-zinc-950">
+                    <div className="aspect-[16/9] relative overflow-hidden bg-apple-surface dark:bg-apple-text">
                       <img 
                         src={ad.imageUrl} 
                         alt={ad.title} 
@@ -1217,11 +1217,11 @@ export default function AdManagement() {
                         <div className="flex justify-between items-end">
                           <div className="space-y-1 flex-1 min-w-0 pr-4">
                             <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                              <Badge variant="secondary" className="text-[8px] font-black uppercase tracking-widest bg-amber-500/20 text-amber-500 border-none h-4 px-1.5">
+                              <Badge variant="secondary" className="text-[8px] font-black uppercase tracking-widest bg-gold-decoration/20 text-gold-decoration border-none h-4 px-1.5">
                                 {ad.slotType}
                               </Badge>
                               {ad.isCertifiedPartner && (
-                                <Badge className="text-[7px] font-black uppercase tracking-widest bg-emerald-500 text-white border-none h-4 px-1 flex items-center gap-0.5">
+                                <Badge className="text-[7px] font-black uppercase tracking-widest bg-apple-green text-white border-none h-4 px-1 flex items-center gap-0.5">
                                   <ShieldCheck className="w-2 h-2" />
                                   Certified
                                 </Badge>
@@ -1255,43 +1255,43 @@ export default function AdManagement() {
                       
                       <div className="absolute top-4 right-4 flex gap-2">
                         {ad.status === 'active' ? (
-                          <Badge className="bg-emerald-500/10 text-emerald-500 border-none rounded-lg text-[9px] font-black uppercase">Active</Badge>
+                          <Badge className="bg-apple-green/10 text-apple-green border-none rounded-lg text-[9px] font-black uppercase">Active</Badge>
                         ) : (
-                          <Badge variant="outline" className="text-zinc-400 border-zinc-200 dark:border-zinc-800 rounded-lg text-[9px] font-black uppercase">Paused</Badge>
+                          <Badge variant="outline" className="text-apple-text-muted border-apple-border dark:border-apple-surface rounded-lg text-[9px] font-black uppercase">Paused</Badge>
                         )}
                       </div>
                     </div>
                     
                     <div className="p-6 space-y-4">
-                      <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-full font-medium line-clamp-2">
+                      <p className="text-xs text-apple-text-muted dark:text-apple-text-muted leading-relaxed max-w-full font-medium line-clamp-2">
                         {ad.description}
                       </p>
 
-                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800/60">
-                        <div className="text-center p-2 rounded-xl bg-zinc-50 dark:bg-zinc-950/40">
-                          <span className="text-[9px] uppercase font-black text-zinc-400 tracking-wider">Views</span>
-                          <h5 className="font-bold text-sm text-zinc-800 dark:text-zinc-100 mt-0.5">{ad.views || 0}</h5>
+                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-apple-gray dark:border-apple-surface/60">
+                        <div className="text-center p-2 rounded-xl bg-apple-surface dark:bg-apple-text/40">
+                          <span className="text-[9px] uppercase font-black text-apple-text-muted tracking-wider">Views</span>
+                          <h5 className="font-bold text-sm text-apple-surface dark:text-apple-gray mt-0.5">{ad.views || 0}</h5>
                         </div>
-                        <div className="text-center p-2 rounded-xl bg-zinc-50 dark:bg-zinc-950/40">
-                          <span className="text-[9px] uppercase font-black text-zinc-400 tracking-wider">Clicks</span>
-                          <h5 className="font-bold text-sm text-zinc-800 dark:text-zinc-100 mt-0.5">{ad.clicks || 0}</h5>
+                        <div className="text-center p-2 rounded-xl bg-apple-surface dark:bg-apple-text/40">
+                          <span className="text-[9px] uppercase font-black text-apple-text-muted tracking-wider">Clicks</span>
+                          <h5 className="font-bold text-sm text-apple-surface dark:text-apple-gray mt-0.5">{ad.clicks || 0}</h5>
                         </div>
-                        <div className="text-center p-2 rounded-xl bg-zinc-50 dark:bg-zinc-950/40">
-                          <span className="text-[9px] uppercase font-black text-zinc-400 tracking-wider">CTR</span>
-                          <h5 className="font-bold text-sm text-emerald-500 mt-0.5">{ctr}%</h5>
+                        <div className="text-center p-2 rounded-xl bg-apple-surface dark:bg-apple-text/40">
+                          <span className="text-[9px] uppercase font-black text-apple-text-muted tracking-wider">CTR</span>
+                          <h5 className="font-bold text-sm text-apple-green mt-0.5">{ctr}%</h5>
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-4 text-[10px] mt-2 pt-1 font-mono text-zinc-400">
+                      <div className="flex flex-wrap items-center gap-4 text-[10px] mt-2 pt-1 font-mono text-apple-text-muted">
                         <div className="flex items-center gap-1">
                           <Megaphone className="w-3 h-3" />
                           <span>{ad.badge}</span>
                         </div>
-                        <div className="flex items-center gap-1 text-amber-500 font-bold">
+                        <div className="flex items-center gap-1 text-gold-decoration font-bold">
                           <span className="shrink-0">CTA:</span>
                           <span className="truncate max-w-[120px]">{ad.cta}</span>
                         </div>
-                        <div className="flex items-center gap-1 text-zinc-500 ml-auto">
+                        <div className="flex items-center gap-1 text-apple-text-muted ml-auto">
                           <span>Target:</span>
                           <span className="truncate max-w-[100px]">{ad.link}</span>
                         </div>
@@ -1305,11 +1305,11 @@ export default function AdManagement() {
 
             {filteredAds.length === 0 && !isLoading && (
               <div className="col-span-full py-24 text-center">
-                <div className="w-20 h-20 bg-zinc-50 dark:bg-zinc-900 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <Megaphone className="w-8 h-8 text-zinc-300" />
+                <div className="w-20 h-20 bg-apple-surface dark:bg-apple-text rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <Megaphone className="w-8 h-8 text-apple-border" />
                 </div>
-                <h3 className="text-xl font-bold text-zinc-400">No active ads match filter criteria.</h3>
-                <p className="text-zinc-500 mt-2">Generate a campaign on the builder panel to launch.</p>
+                <h3 className="text-xl font-bold text-apple-text-muted">No active ads match filter criteria.</h3>
+                <p className="text-apple-text-muted mt-2">Generate a campaign on the builder panel to launch.</p>
               </div>
             )}
           </div>

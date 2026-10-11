@@ -53,7 +53,8 @@ service cloud.firestore {
         return incoming().diff(existing()).affectedKeys().hasOnly([
           'displayName', 'photoURL', 'username', 'phoneNumber', 'phone', 
           'isOnline', 'lastSeen', 'notificationSettings', 'dob', 
-          'nationality', 'gender', 'updatedAt', 'rating', 'ratingCount'
+          'nationality', 'gender', 'updatedAt', 'rating', 'ratingCount',
+          'themePreference'
         ]);
       }
 

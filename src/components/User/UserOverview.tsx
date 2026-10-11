@@ -71,7 +71,7 @@ export default function UserOverview() {
 
   const stats = [
     { label: "Neural Impressions", value: (myVehicles.length * 1240).toLocaleString(), change: "+14.2%", positive: true, icon: Eye, color: "text-apple-blue", trend: [12, 14, 13, 15, 17, 16, 18], accentColor: "bg-blue-500/10 text-apple-blue" },
-    { label: "Active Connections", value: (myVehicles.length * 12).toString(), change: "+5.1%", positive: true, icon: MessageSquare, color: "text-apple-green", trend: [8, 10, 9, 11, 13, 12, 14], accentColor: "bg-emerald-500/10 text-apple-green" },
+    { label: "Active Connections", value: (myVehicles.length * 12).toString(), change: "+5.1%", positive: true, icon: MessageSquare, color: "text-apple-green", trend: [8, 10, 9, 11, 13, 12, 14], accentColor: "bg-apple-green/10 text-apple-green" },
     { label: "Asset Affinity", value: wishlist.length.toString(), change: "-2.4%", positive: false, icon: Heart, color: "text-apple-red", trend: [15, 14, 16, 13, 14, 12, 11], accentColor: "bg-red-500/10 text-apple-red" },
     { label: "Market Resonance", value: "104.2", change: "+1.2%", positive: true, icon: TrendingUp, color: "text-purple-500", trend: [98, 100, 101, 102, 103, 103.5, 104.2], accentColor: "bg-purple-500/10 text-purple-500" },
   ];
@@ -121,7 +121,7 @@ export default function UserOverview() {
             <ShieldCheck className="w-3.5 h-3.5" />
             Verified Merchant Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Welcome, <span className="text-apple-text-muted">{profile?.displayName?.split(' ')[0] || 'User'}</span>
           </h1>
           <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
@@ -147,7 +147,7 @@ export default function UserOverview() {
         <div className="flex-1 space-y-1.5">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4.5 h-4.5 text-apple-blue shrink-0" />
-            <h3 className="text-xs font-semibold tracking-tight text-[#1D1D1F] dark:text-white">Listing Allocation Status</h3>
+            <h3 className="text-xs font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">Listing Allocation Status</h3>
           </div>
           <p className="text-[11px] text-[#86868B] max-w-lg leading-relaxed font-normal">
             Optimize your dealership exposure. You have premium post allocation credits and custom featured boosters ready for deployment.
@@ -174,7 +174,7 @@ export default function UserOverview() {
 
           <Link 
             to="/dashboard/credits"
-            className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+            className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[#86868B] hover:text-[var(--text-primary)] dark:hover:text-white"
           >
             <span>Get Credits</span>
             <ArrowUpRight className="w-3 h-3" />
@@ -221,7 +221,7 @@ export default function UserOverview() {
               
               <div className="space-y-0.5">
                 <div className="text-[9px] font-bold text-[#86868B] uppercase tracking-[0.1em]">{stat.label}</div>
-                <div className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-[#1D1D1F] dark:text-[#FFFFFF] leading-none">{stat.value}</div>
+                <div className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-[var(--text-primary)] dark:text-[#FFFFFF] leading-none">{stat.value}</div>
               </div>
 
               {/* Micro-sparklines with smooth curves, continuous bezier paths, and area fills */}
@@ -292,7 +292,7 @@ export default function UserOverview() {
           {/* Active Listings Preview */}
           <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 relative overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+              <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                 <Car className="w-3.5 h-3.5 text-apple-blue" />
                 Priority Portfolio
               </h2>
@@ -317,7 +317,7 @@ export default function UserOverview() {
                         transition={{ delay: index * 0.03 }}
                         className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 py-4 first:pt-0 last:pb-0 group relative"
                       >
-                        <Link to={formatPropertyUrl(v)} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[#1C1C1E] flex items-center justify-center border border-black/5 dark:border-white/10">
+                        <Link to={formatPropertyUrl(v)} className="w-20 h-14 rounded-xl overflow-hidden shadow-sm shrink-0 self-center sm:self-auto relative bg-[var(--bg-raised)] flex items-center justify-center border border-black/5 dark:border-white/10">
                           {v.images?.[0] ? (
                             <img 
                               src={v.images[0]} 
@@ -332,7 +332,7 @@ export default function UserOverview() {
                         
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                           <div className="flex items-start justify-between gap-3">
-                            <Link to={formatPropertyUrl(v)} className="text-sm font-semibold text-[#1D1D1F] dark:text-white hover:text-apple-blue transition-colors truncate block">
+                            <Link to={formatPropertyUrl(v)} className="text-sm font-semibold text-[var(--text-primary)] dark:text-white hover:text-apple-blue transition-colors truncate block">
                               {v.year} {v.make} {v.model}
                             </Link>
                             <span className="text-xs font-semibold font-mono text-apple-blue shrink-0">
@@ -365,7 +365,7 @@ export default function UserOverview() {
                   <div className="w-14 h-14 rounded-full bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center mx-auto mb-4 text-[#86868B]">
                     <Car className="w-7 h-7" />
                   </div>
-                  <h3 className="text-sm font-semibold mb-1 text-[#1D1D1F] dark:text-white">Launch Your Portfolio</h3>
+                  <h3 className="text-sm font-semibold mb-1 text-[var(--text-primary)] dark:text-white">Launch Your Portfolio</h3>
                   <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-6 leading-relaxed">
                     No active listings detected. Start selling today to leverage Pakistan's most advanced automotive network.
                   </p>
@@ -383,7 +383,7 @@ export default function UserOverview() {
         <div className="space-y-6">
           {/* Transmission Log (Activity) */}
           <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
-            <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 mb-4 text-[#1D1D1F] dark:text-white">
+            <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 mb-4 text-[var(--text-primary)] dark:text-white">
               <Clock className="w-3.5 h-3.5 text-apple-blue" />
               Transmission Log
             </h2>
@@ -416,7 +416,7 @@ export default function UserOverview() {
                           <span className="w-1.5 h-1.5 rounded-full bg-apple-blue animate-pulse shadow-sm" />
                         )}
                       </div>
-                      <div className="text-xs font-semibold text-[#1D1D1F] dark:text-white leading-tight group-hover:translate-x-0.5 transition-transform truncate">{item.desc}</div>
+                      <div className="text-xs font-semibold text-[var(--text-primary)] dark:text-white leading-tight group-hover:translate-x-0.5 transition-transform truncate">{item.desc}</div>
                       <div className="text-[9px] text-[#86868B] uppercase tracking-wider mt-0.5">
                         {new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
@@ -448,7 +448,7 @@ export default function UserOverview() {
                 </div>
                 <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#86868B]">Market Intelligence</span>
               </div>
-              <h3 className="text-sm font-semibold tracking-tight text-[#1D1D1F] dark:text-white mb-2">
+              <h3 className="text-sm font-semibold tracking-tight text-[var(--text-primary)] dark:text-white mb-2">
                 Demand Spike: <span className="text-purple-500">Luxury EVs</span>
               </h3>
               <p className="text-[11px] text-[#86868B] leading-relaxed font-normal mb-4">
@@ -461,7 +461,7 @@ export default function UserOverview() {
                 </div>
                 <div className="flex-1">
                   <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] mb-0.5">Time Horizon</p>
-                  <p className="text-base font-bold text-[#1D1D1F] dark:text-white font-mono">14 Days</p>
+                  <p className="text-base font-bold text-[var(--text-primary)] dark:text-white font-mono">14 Days</p>
                 </div>
               </div>
             </div>

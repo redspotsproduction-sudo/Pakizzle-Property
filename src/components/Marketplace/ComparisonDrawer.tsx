@@ -24,7 +24,7 @@ const ComparisonDrawer = React.memo(({ compareList, onToggleCompare, onClear, on
           transition={{ type: "spring", damping: 26, stiffness: 280 }}
           className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[70] w-full max-w-4xl px-4 md:px-6 pointer-events-none"
         >
-          <div className="glass-card bg-white/90 dark:bg-[#1C1C1E]/90 backdrop-blur-2xl p-3.5 md:p-5 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.25)] border border-black/10 dark:border-white/10 rounded-[28px] pointer-events-auto">
+          <div className="glass-card bg-white/90 dark:bg-apple-card-bg backdrop-blur-2xl p-3.5 md:p-5 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.25)] border border-black/10 dark:border-white/10 rounded-[28px] pointer-events-auto">
             <div className="flex items-center gap-3 md:gap-6 overflow-x-auto pb-1 scrollbar-hide w-full md:w-auto">
               <div className="shrink-0">
                 <div className="text-xs md:text-sm font-bold tracking-tight text-apple-text dark:text-white">Property Comparison</div>

@@ -28,12 +28,6 @@
             var meta = document.getElementById("theme-color-meta");
             if (meta) meta.setAttribute("content", "#FAF3E6");
           }
-          // Enable smooth transition after first paint without flash
-          window.addEventListener("DOMContentLoaded", function() {
-            setTimeout(function() {
-              root.classList.add("theme-transition");
-            }, 100);
-          });
         } catch (e) {}
       })();
     </script>

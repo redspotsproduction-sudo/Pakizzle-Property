@@ -367,10 +367,10 @@ export default function AuctionVerification() {
             <ShieldCheck className="w-3.5 h-3.5" />
             Verified Administration Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Auction Verification Hub
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Verify vehicle authenticity, auction sheet consistency, and physical inspection reports.
           </p>
         </div>
@@ -379,20 +379,20 @@ export default function AuctionVerification() {
           {activeTab === 'requests' ? (
             <>
               <div className="relative group min-w-[200px] sm:w-64">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
                 <input
                   type="text"
                   placeholder="Search verification records..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                  className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
                 />
               </div>
               
               <div className="flex items-center gap-2">
                 <Button 
                   variant="outline" 
-                  className="rounded-xl border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] h-9 px-4 text-xs font-bold shadow-sm hover:bg-[#F5F5F7] dark:hover:bg-white/5"
+                  className="rounded-xl border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-bold shadow-sm hover:bg-[var(--text-primary)] dark:hover:bg-white/5"
                   onClick={() => toast.success("Exporting Audit Logs", { description: "Current verification cycle data is being packaged." })}
                 >
                   <Download className="w-3.5 h-3.5 mr-2" /> Export Audit
@@ -428,7 +428,7 @@ export default function AuctionVerification() {
             "pb-3.5 px-6 text-xs font-bold uppercase tracking-wider border-b-2 transition-all",
             activeTab === 'requests' 
               ? "border-apple-blue text-apple-blue" 
-              : "border-transparent text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
+              : "border-transparent text-apple-text-muted hover:text-[var(--text-primary)] dark:hover:text-white"
           )}
         >
           Verification Requests
@@ -439,7 +439,7 @@ export default function AuctionVerification() {
             "pb-3.5 px-6 text-xs font-bold uppercase tracking-wider border-b-2 transition-all",
             activeTab === 'companies' 
               ? "border-apple-blue text-apple-blue" 
-              : "border-transparent text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
+              : "border-transparent text-apple-text-muted hover:text-[var(--text-primary)] dark:hover:text-white"
           )}
         >
           Verification Agencies
@@ -456,18 +456,18 @@ export default function AuctionVerification() {
               { label: 'Failed Checks', value: '12', change: 'Safety Flags', icon: AlertTriangle, color: 'text-apple-red', bg: 'bg-apple-red/10' },
               { label: 'Integrity Score', value: '98.4%', change: 'Excellent', icon: Shield, color: 'text-purple-500', bg: 'bg-purple-500/10' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+              <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                 <div className="flex items-start justify-between">
                   <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                     <stat.icon className={cn("w-5 h-5", stat.color)} />
                   </div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                      {stat.change}
                   </div>
                 </div>
                 <div className="mt-4">
-                  <div className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider mt-1.5">{stat.label}</div>
+                  <div className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1.5">{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -488,26 +488,26 @@ export default function AuctionVerification() {
                     "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                     isActive
                       ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                      : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                      : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Verification List Table - EXACT border, background and hover transition as Approval Center card */}
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+          <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div className="overflow-x-auto custom-scrollbar">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-black/[0.04] dark:border-white/[0.04]">
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] pl-6">Target Entity</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Audit Status</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Verification Type</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Priority Level</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] text-right pr-6">Audit Actions</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] pl-6">Target Entity</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Audit Status</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Verification Type</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Priority Level</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] text-right pr-6">Audit Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/[0.03] dark:divide-white/[0.03]">
@@ -521,16 +521,16 @@ export default function AuctionVerification() {
                         exit={{ opacity: 0, x: 10 }}
                         transition={{ delay: idx * 0.05 }}
                         onClick={() => handleAction('inspect', req)}
-                        className="group border-b border-black/[0.03] dark:border-white/[0.03] last:border-b-0 hover:bg-[#F5F5F7]/40 dark:hover:bg-white/[0.01] transition-all cursor-pointer"
+                        className="group border-b border-black/[0.03] dark:border-white/[0.03] last:border-b-0 hover:bg-[var(--text-primary)]/40 dark:hover:bg-white/[0.01] transition-all cursor-pointer"
                       >
                         <td className="py-4.5 pl-6">
                           <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-xl bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                            <div className="h-12 w-12 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                                <img src={req.vehicle.images[0]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                             </div>
                             <div>
-                              <div className="font-semibold text-sm tracking-tight text-[#1D1D1F] dark:text-white">{req.vehicle.year} {req.vehicle.make} {req.vehicle.model}</div>
-                              <div className="text-[10px] font-medium text-[#86868B] flex items-center gap-1.5 mt-0.5">
+                              <div className="font-semibold text-sm tracking-tight text-[var(--text-primary)] dark:text-white">{req.vehicle.year} {req.vehicle.make} {req.vehicle.model}</div>
+                              <div className="text-[10px] font-medium text-[var(--text-secondary)] flex items-center gap-1.5 mt-0.5">
                                  <span className="text-apple-blue">{req.targetId}</span> • {req.vehicle.location}
                               </div>
                             </div>
@@ -545,7 +545,7 @@ export default function AuctionVerification() {
                               )}>
                                 {req.status}
                               </Badge>
-                              <div className="text-[9px] font-medium text-[#86868B] flex items-center gap-1.5">
+                              <div className="text-[9px] font-medium text-[var(--text-secondary)] flex items-center gap-1.5">
                                 <Clock className="w-3.5 h-3.5" /> {new Date(req.createdAt).toLocaleDateString()}
                               </div>
                            </div>
@@ -556,8 +556,8 @@ export default function AuctionVerification() {
                                   <ShieldCheck className="w-4 h-4" />
                               </div>
                               <div>
-                                 <div className="font-semibold text-xs text-[#1D1D1F] dark:text-white">{req.newData.inspectionType}</div>
-                                 <div className="text-[9px] font-medium text-[#86868B] mt-0.5">Audit Protocol</div>
+                                 <div className="font-semibold text-xs text-[var(--text-primary)] dark:text-white">{req.newData.inspectionType}</div>
+                                 <div className="text-[9px] font-medium text-[var(--text-secondary)] mt-0.5">Audit Protocol</div>
                               </div>
                            </div>
                         </td>
@@ -566,7 +566,7 @@ export default function AuctionVerification() {
                               <div className={cn(
                                  "text-[9px] font-bold px-2 py-0.5 rounded-lg w-fit",
                                  req.newData.priority === 'Critical' ? "bg-apple-red/10 text-apple-red" :
-                                 req.newData.priority === 'High' ? "bg-apple-orange/10 text-apple-orange" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]"
+                                 req.newData.priority === 'High' ? "bg-apple-orange/10 text-apple-orange" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]"
                               )}>
                                  {req.newData.priority}
                               </div>
@@ -583,10 +583,10 @@ export default function AuctionVerification() {
                           <DropdownMenu>
                             <DropdownMenuTrigger render={
                               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-apple-gray dark:hover:bg-white/10 active:scale-95 transition-all shadow-none">
-                                <MoreVertical className="w-4 h-4 text-[#86868B]" />
+                                <MoreVertical className="w-4 h-4 text-[var(--text-secondary)]" />
                               </Button>
                             } />
-                            <DropdownMenuContent align="end" className="w-64 rounded-2xl border-apple-border/10 p-2.5 backdrop-blur-2xl bg-white/95 dark:bg-[#1D1D1F]/95 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+                            <DropdownMenuContent align="end" className="w-64 rounded-2xl border-apple-border/10 p-2.5 backdrop-blur-2xl bg-white/95 dark:bg-[var(--text-primary)]/95 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
                               <DropdownMenuItem onClick={() => handleAction('inspect', req)} className="rounded-xl py-3 px-4 font-bold text-xs cursor-pointer">
                                  <Activity className="w-4 h-4 mr-3 text-apple-blue" /> Full Inspection
                               </DropdownMenuItem>
@@ -622,20 +622,20 @@ export default function AuctionVerification() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: 'Licensed Providers', value: companies.length.toString(), change: 'Sovereign Nodes', icon: Building2, color: 'text-apple-blue', bg: 'bg-apple-blue/10' },
-              { label: 'Featured Agencies', value: companies.filter(c => c.isFeatured).length.toString(), change: 'Prime Trusted', icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+              { label: 'Featured Agencies', value: companies.filter(c => c.isFeatured).length.toString(), change: 'Prime Trusted', icon: Star, color: 'text-gold-decoration', bg: 'bg-gold-decoration/10' },
               { label: 'Avg Turnaround', value: '3 Hours', change: 'Real-time SLA', icon: Clock, color: 'text-apple-green', bg: 'bg-apple-green/10' },
               { label: 'Active Coverage', value: '4 Auction Houses', change: 'Nationwide Sync', icon: CheckCircle2, color: 'text-purple-500', bg: 'bg-purple-500/10' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+              <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                 <div className="flex items-start justify-between">
                   <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                     <stat.icon className={cn("w-5 h-5", stat.color)} />
                   </div>
-                  <span className="text-[10px] font-bold text-[#86868B] bg-apple-gray dark:bg-white/5 px-2 py-0.5 rounded-full uppercase tracking-wider">{stat.change}</span>
+                  <span className="text-[10px] font-bold text-[var(--text-secondary)] bg-apple-gray dark:bg-white/5 px-2 py-0.5 rounded-full uppercase tracking-wider">{stat.change}</span>
                 </div>
                 <div className="mt-4">
-                  <div className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider mt-1.5">{stat.label}</div>
+                  <div className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1.5">{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -643,15 +643,15 @@ export default function AuctionVerification() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {companiesLoading ? (
-              <div className="col-span-full py-20 flex flex-col items-center justify-center text-[#86868B]">
+              <div className="col-span-full py-20 flex flex-col items-center justify-center text-[var(--text-secondary)]">
                 <Loader2 className="w-8 h-8 animate-spin text-apple-blue mb-4" />
                 <p className="text-xs font-bold uppercase tracking-wider">Synchronizing verified verifiers...</p>
               </div>
             ) : companies.length === 0 ? (
-              <div className="col-span-full py-20 flex flex-col items-center justify-center text-[#86868B] bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
+              <div className="col-span-full py-20 flex flex-col items-center justify-center text-[var(--text-secondary)] bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
                 <Building2 className="w-12 h-12 text-apple-border mb-4 opacity-40" />
-                <p className="text-sm font-semibold text-[#1D1D1F] dark:text-white">No registered verifiers found</p>
-                <p className="text-xs text-[#86868B] mt-1 mb-5">Deploy physical inspection networks and auction sheet verifiers.</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)] dark:text-white">No registered verifiers found</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-1 mb-5">Deploy physical inspection networks and auction sheet verifiers.</p>
                 <button
                   onClick={() => {
                     setEditingCompany(null);
@@ -668,28 +668,28 @@ export default function AuctionVerification() {
                 <motion.div
                   key={company.id}
                   layout
-                  className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 hover:shadow-[0_12px_32px_rgba(0,0,0,0.03)] transition-all flex flex-col justify-between"
+                  className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 hover:shadow-[0_12px_32px_rgba(0,0,0,0.03)] transition-all flex flex-col justify-between"
                 >
                   <div className="space-y-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3.5">
-                        <div className="w-14 h-14 bg-[#F5F5F7] dark:bg-white/5 rounded-xl border border-black/[0.06] dark:border-white/[0.06] p-2 flex items-center justify-center overflow-hidden">
+                        <div className="w-14 h-14 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.06] dark:border-white/[0.06] p-2 flex items-center justify-center overflow-hidden">
                           {company.logoUrl ? (
                             <img src={company.logoUrl} alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                           ) : (
-                            <Building2 className="w-6 h-6 text-[#86868B]" />
+                            <Building2 className="w-6 h-6 text-[var(--text-secondary)]" />
                           )}
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <h3 className="font-bold text-sm text-[#1D1D1F] dark:text-white tracking-tight">{company.name}</h3>
+                            <h3 className="font-bold text-sm text-[var(--text-primary)] dark:text-white tracking-tight">{company.name}</h3>
                             {company.isFeatured && (
-                              <span className="p-0.5 rounded bg-amber-500/15 text-amber-500 shrink-0">
-                                <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                              <span className="p-0.5 rounded bg-gold-decoration/15 text-gold-decoration shrink-0">
+                                <Star className="w-3 h-3 fill-gold-decoration text-gold-decoration" />
                               </span>
                             )}
                           </div>
-                          <p className="text-[10px] text-[#86868B] font-medium mt-0.5 flex items-center gap-1">
+                          <p className="text-[10px] text-[var(--text-secondary)] font-medium mt-0.5 flex items-center gap-1">
                             <MapPin className="w-3 h-3 text-apple-blue" /> Verified Partner
                           </p>
                         </div>
@@ -697,28 +697,28 @@ export default function AuctionVerification() {
 
                       <Badge className={cn(
                         "px-2 py-0.5 rounded-md font-bold text-[9px] uppercase tracking-wider border-none shadow-none",
-                        company.status === 'active' ? "bg-apple-green/10 text-apple-green" : "bg-apple-gray text-[#86868B]"
+                        company.status === 'active' ? "bg-apple-green/10 text-apple-green" : "bg-apple-gray text-[var(--text-secondary)]"
                       )}>
                         {company.status === 'active' ? 'Active' : 'Hidden'}
                       </Badge>
                     </div>
 
-                    <p className="text-xs text-[#86868B] dark:text-[#86868B]/80 leading-relaxed font-normal min-h-[3rem] line-clamp-2">
+                    <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)]/80 leading-relaxed font-normal min-h-[3rem] line-clamp-2">
                       {company.description || "Certified physical inspector and electronic auction log matching network."}
                     </p>
 
-                    <div className="grid grid-cols-2 gap-2.5 p-3.5 bg-[#F5F5F7]/50 dark:bg-white/[0.02] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
+                    <div className="grid grid-cols-2 gap-2.5 p-3.5 bg-[var(--text-primary)]/50 dark:bg-white/[0.02] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
                       <div>
-                        <p className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider">Verification Fee</p>
-                        <p className="text-xs font-black mt-0.5 text-[#1D1D1F] dark:text-white">{company.verificationFee}</p>
+                        <p className="text-[8px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Verification Fee</p>
+                        <p className="text-xs font-black mt-0.5 text-[var(--text-primary)] dark:text-white">{company.verificationFee}</p>
                       </div>
                       <div>
-                        <p className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider">Turnaround SLA</p>
+                        <p className="text-[8px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Turnaround SLA</p>
                         <p className="text-xs font-black mt-0.5 text-apple-blue">{company.reportTurnaround}</p>
                       </div>
                       <div className="col-span-2 pt-1.5 border-t border-black/[0.04] dark:border-white/[0.04] mt-1.5">
-                        <p className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider">Covered Auctions</p>
-                        <p className="text-[10px] font-bold mt-0.5 text-[#1D1D1F] dark:text-white line-clamp-1">{company.coverageAuctions}</p>
+                        <p className="text-[8px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Covered Auctions</p>
+                        <p className="text-[10px] font-bold mt-0.5 text-[var(--text-primary)] dark:text-white line-clamp-1">{company.coverageAuctions}</p>
                       </div>
                     </div>
                   </div>
@@ -742,13 +742,13 @@ export default function AuctionVerification() {
                         });
                         setIsCompanyModalOpen(true);
                       }}
-                      className="px-4 py-2 bg-[#F5F5F7] dark:bg-white/5 hover:bg-[#E8E8ED] dark:hover:bg-white/10 text-[#1D1D1F] dark:text-white rounded-xl text-xs font-bold transition-all border border-transparent hover:border-black/[0.04]"
+                      className="px-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 hover:bg-[var(--bg-inset)] dark:hover:bg-white/10 text-[var(--text-primary)] dark:text-white rounded-xl text-xs font-bold transition-all border border-transparent hover:border-black/[0.04]"
                     >
                       Edit Protocol
                     </button>
                     <button
                       onClick={() => handleDeleteCompany(company.id)}
-                      className="w-9 h-9 rounded-xl border border-transparent text-red-500 flex items-center justify-center hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-all"
+                      className="w-9 h-9 rounded-xl border border-transparent text-red-500 flex items-center justify-center hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -760,7 +760,7 @@ export default function AuctionVerification() {
         </div>
       )}      {/* Advanced Inspection Vault */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="max-w-[95vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[95vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
           {selectedRequest && (
             <div className="flex flex-col lg:flex-row h-full overflow-hidden">
               {/* Media & Key Specs Sidebar */}
@@ -897,7 +897,7 @@ export default function AuctionVerification() {
 
       {/* Decision Dialog */}
       <Dialog open={isProcessOpen} onOpenChange={setIsProcessOpen}>
-        <DialogContent className="max-w-sm rounded-[28px] border-apple-border/20 bg-white dark:bg-[#1D1D1F] p-6 overflow-hidden">
+        <DialogContent className="max-w-sm rounded-[28px] border-apple-border/20 bg-white dark:bg-[var(--text-primary)] p-6 overflow-hidden">
           <div className="text-center relative">
             <div className="w-14 h-14 rounded-2xl bg-apple-blue/10 flex items-center justify-center mx-auto mb-5">
                <ShieldCheck className="w-7 h-7 text-apple-blue" />
@@ -923,12 +923,12 @@ export default function AuctionVerification() {
 
       {/* Auction Company Registration/Edit Dialog */}
       <Dialog open={isCompanyModalOpen} onOpenChange={setIsCompanyModalOpen}>
-        <DialogContent className="max-w-2xl rounded-[40px] border-apple-border/10 bg-white dark:bg-[#1D1D1F] p-8 overflow-hidden max-h-[90vh] flex flex-col gap-0 shadow-2xl">
+        <DialogContent className="max-w-2xl rounded-[40px] border-apple-border/10 bg-white dark:bg-[var(--text-primary)] p-8 overflow-hidden max-h-[90vh] flex flex-col gap-0 shadow-2xl">
           <div className="text-center pb-6 shrink-0 relative">
             <div className="w-20 h-20 rounded-[28px] bg-apple-blue/10 dark:bg-apple-blue/20 flex items-center justify-center mx-auto mb-4 transition-transform hover:scale-105">
               <Building2 className="w-10 h-10 text-apple-blue" />
             </div>
-            <DialogTitle className="text-3xl font-black tracking-tighter text-[#1D1D1F] dark:text-white">
+            <DialogTitle className="text-3xl font-black tracking-tighter text-[var(--text-primary)] dark:text-white">
               {editingCompany ? 'Configure Verification Agency' : 'Register Verification Agency'}
             </DialogTitle>
             <DialogDescription className="text-xs font-bold text-apple-text-muted dark:text-apple-text-muted/80 uppercase tracking-widest opacity-80 mt-2 max-w-md mx-auto leading-relaxed">
@@ -940,18 +940,18 @@ export default function AuctionVerification() {
             <ScrollArea className="flex-1 pr-2">
               <div className="space-y-6 py-2 px-1">
                 {/* Logo Upload */}
-                <div className="flex items-center gap-6 p-5 bg-[#F5F5F7]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
-                  <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[#161617] p-3 border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm">
+                <div className="flex items-center gap-6 p-5 bg-[var(--text-primary)]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
+                  <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[var(--bg-surface)] p-3 border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm">
                     {companyForm.logoUrl ? (
                       <img src={companyForm.logoUrl} alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                     ) : (
-                      <Building2 className="w-8 h-8 text-[#86868B]" />
+                      <Building2 className="w-8 h-8 text-[var(--text-secondary)]" />
                     )}
                   </div>
                   <div className="space-y-1">
-                    <p className="text-xs font-bold text-[#1D1D1F] dark:text-white uppercase tracking-wider">Agency Logo</p>
-                    <p className="text-[10px] text-[#86868B] font-semibold">PNG or SVG format under 2MB preferred.</p>
-                    <label className="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-[#161617] border border-black/[0.08] dark:border-white/[0.08] rounded-xl text-[10px] font-black uppercase tracking-wider text-[#1D1D1F] dark:text-white cursor-pointer hover:bg-apple-gray dark:hover:bg-white/5 transition-all shadow-sm mt-1.5 active:scale-95">
+                    <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white uppercase tracking-wider">Agency Logo</p>
+                    <p className="text-[10px] text-[var(--text-secondary)] font-semibold">PNG or SVG format under 2MB preferred.</p>
+                    <label className="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-[var(--bg-surface)] border border-black/[0.08] dark:border-white/[0.08] rounded-xl text-[10px] font-black uppercase tracking-wider text-[var(--text-primary)] dark:text-white cursor-pointer hover:bg-apple-gray dark:hover:bg-white/5 transition-all shadow-sm mt-1.5 active:scale-95">
                       Upload Logo
                       <input 
                         type="file" 
@@ -972,7 +972,7 @@ export default function AuctionVerification() {
                       type="text" 
                       required
                       placeholder="e.g. SGS Global, Pakizzle Verified Pro"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.name}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, name: e.target.value }))}
                     />
@@ -984,7 +984,7 @@ export default function AuctionVerification() {
                       type="text" 
                       required
                       placeholder="e.g. Rs. 2,500"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.verificationFee}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, verificationFee: e.target.value }))}
                     />
@@ -996,7 +996,7 @@ export default function AuctionVerification() {
                       type="text" 
                       required
                       placeholder="e.g. 3 Hours, Next Day"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.reportTurnaround}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, reportTurnaround: e.target.value }))}
                     />
@@ -1007,7 +1007,7 @@ export default function AuctionVerification() {
                     <input 
                       type="text" 
                       placeholder="e.g. USS Tokyo, JU, CAA, JAA"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.coverageAuctions}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, coverageAuctions: e.target.value }))}
                     />
@@ -1018,7 +1018,7 @@ export default function AuctionVerification() {
                     <textarea 
                       rows={3}
                       placeholder="Describe the agency, its inspection scope or certification standards."
-                      className="w-full p-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all resize-none focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full p-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all resize-none focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.description}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, description: e.target.value }))}
                     />
@@ -1029,7 +1029,7 @@ export default function AuctionVerification() {
                     <input 
                       type="text" 
                       placeholder="+92 (300) 123-4567"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.contactPhone}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, contactPhone: e.target.value }))}
                     />
@@ -1040,7 +1040,7 @@ export default function AuctionVerification() {
                     <input 
                       type="email" 
                       placeholder="audit@agency.com"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.contactEmail}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, contactEmail: e.target.value }))}
                     />
@@ -1050,7 +1050,7 @@ export default function AuctionVerification() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted dark:text-apple-text-muted/80 ml-1">Sort Order</label>
                     <input 
                       type="number" 
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.order}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, order: Number(e.target.value) }))}
                     />
@@ -1059,7 +1059,7 @@ export default function AuctionVerification() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted dark:text-apple-text-muted/80 ml-1">Silo Status</label>
                     <select 
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20 cursor-pointer"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20 cursor-pointer"
                       value={companyForm.status}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, status: e.target.value as any }))}
                     >
@@ -1068,14 +1068,14 @@ export default function AuctionVerification() {
                     </select>
                   </div>
 
-                  <div className="col-span-2 mt-2 flex items-center justify-between p-5 bg-[#F5F5F7]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
+                  <div className="col-span-2 mt-2 flex items-center justify-between p-5 bg-[var(--text-primary)]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
                     <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-[#1D1D1F] dark:text-white uppercase tracking-wider">Featured Partner Badge</p>
-                      <p className="text-[10px] text-[#86868B] font-semibold">Elevates visibility and prioritizes matching on primary search dashboards.</p>
+                      <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white uppercase tracking-wider">Featured Partner Badge</p>
+                      <p className="text-[10px] text-[var(--text-secondary)] font-semibold">Elevates visibility and prioritizes matching on primary search dashboards.</p>
                     </div>
                     <input 
                       type="checkbox" 
-                      className="w-5 h-5 accent-apple-blue cursor-pointer rounded-lg border-gray-300"
+                      className="w-5 h-5 accent-apple-blue cursor-pointer rounded-lg border-apple-border"
                       checked={companyForm.isFeatured}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, isFeatured: e.target.checked }))}
                     />
@@ -1097,7 +1097,7 @@ export default function AuctionVerification() {
                 type="button" 
                 variant="ghost" 
                 onClick={() => setIsCompanyModalOpen(false)}
-                className="w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest text-apple-text-muted hover:bg-[#F5F5F7] dark:hover:bg-white/5"
+                className="w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest text-apple-text-muted hover:bg-[var(--text-primary)] dark:hover:bg-white/5"
               >
                 Abort & Return
               </Button>

@@ -50,8 +50,22 @@ import SEO from "./SEO";
 import { AnimatedCounter, SPRING_SNAPPY } from "./motion";
 
 export default function Marketplace() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // Redirect legacy ?make=Plot or ?make=Commercial to ?propertyType=...
+  useEffect(() => {
+    const legacyMake = searchParams.get("make");
+    if (legacyMake) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("make");
+      if (!newParams.has("propertyType")) {
+        newParams.set("propertyType", legacyMake);
+      }
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const { properties } = useProperties();
   const { location: userLocation } = useLocation();
   const { trackSearch } = useIntelligence();
@@ -89,7 +103,7 @@ export default function Marketplace() {
   const [topFilters, setTopFilters] = useState<TopFilterBarState>({
     purpose: (searchParams.get("purpose") as any) === "rent" ? "for-rent" : "for-sale",
     city: searchParams.get("city") || "",
-    propertyType: searchParams.get("type") || searchParams.get("make") || "",
+    propertyType: searchParams.get("propertyType") || searchParams.get("type") || searchParams.get("make") || "",
     minPrice: searchParams.get("priceMin") ? parseInt(searchParams.get("priceMin")!) : null,
     maxPrice: searchParams.get("priceMax") ? parseInt(searchParams.get("priceMax")!) : null,
     beds: searchParams.get("beds") || null,
@@ -432,9 +446,23 @@ export default function Marketplace() {
           (selectedCities.length > 0 && selectedCities.includes(v.city || ""));
 
         // 3. Property Type Filter (Supports multi-select from sidebar or single-select from top bar)
-        const matchesType = (selectedPropertyTypes.length === 0 && !topFilters.propertyType) ||
-          (selectedPropertyTypes.length > 0 && selectedPropertyTypes.some(t => v.make?.toLowerCase().includes(t.toLowerCase()))) ||
-          (topFilters.propertyType && v.make?.toLowerCase().includes(topFilters.propertyType.toLowerCase()));
+        const targetType = topFilters.propertyType?.toLowerCase();
+        const matchesType = (selectedPropertyTypes.length === 0 && !targetType) ||
+          (selectedPropertyTypes.length > 0 && selectedPropertyTypes.some(t => {
+            const tl = t.toLowerCase();
+            return v.make?.toLowerCase().includes(tl) || 
+                   v.fuelType?.toLowerCase().includes(tl) || 
+                   v.type?.toLowerCase().includes(tl) ||
+                   (tl === "plot" && (v.fuelType === "plot" || v.type === "plot" || v.make?.toLowerCase().includes("plot"))) ||
+                   (tl === "commercial" && (v.fuelType === "commercial" || v.type === "commercial" || v.make?.toLowerCase().includes("commercial")));
+          })) ||
+          (targetType && (
+            v.make?.toLowerCase().includes(targetType) ||
+            v.fuelType?.toLowerCase().includes(targetType) ||
+            v.type?.toLowerCase().includes(targetType) ||
+            (targetType === "plot" && (v.fuelType === "plot" || v.type === "plot" || v.make?.toLowerCase().includes("plot"))) ||
+            (targetType === "commercial" && (v.fuelType === "commercial" || v.type === "commercial" || v.make?.toLowerCase().includes("commercial")))
+          ));
 
         // 4. Price Filter (Scaled based on Buy vs Rent)
         const displayPrice = isRent && v.price !== undefined ? Math.floor(v.price / 400) : v.price;
@@ -1717,7 +1745,7 @@ export default function Marketplace() {
                               "w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-between",
                               sortBy === option.id 
                                 ? "bg-brand-primary text-white shadow-xs" 
-                                : "text-slate-700 text-apple-text hover:bg-slate-100 dark:hover:bg-white/5"
+                                : "text-apple-text text-apple-text hover:bg-apple-gray dark:hover:bg-white/5"
                             )}
                           >
                             <span>{option.label}</span>
@@ -1868,7 +1896,7 @@ export default function Marketplace() {
           whileTap={{ scale: 0.94 }}
           transition={SPRING_SNAPPY}
           onClick={() => setIsFilterOpen(true)}
-          className="h-11 px-5 rounded-full bg-apple-blue text-white shadow-[0_8px_25px_rgba(15,118,110,0.45)] border border-teal-300/40 flex items-center gap-2 font-bold text-xs cursor-pointer backdrop-blur-md min-h-[44px] touch-target"
+          className="h-11 px-5 rounded-full bg-apple-blue text-white shadow-[0_8px_25px_rgba(15,118,110,0.45)] border border-apple-blue/30/40 flex items-center gap-2 font-bold text-xs cursor-pointer backdrop-blur-md min-h-[44px] touch-target"
         >
           <SlidersHorizontal className="w-4 h-4" />
           <span>Filters</span>

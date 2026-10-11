@@ -379,7 +379,7 @@ export default function ListingManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5B2A86]/10 text-[#5B2A86] dark:text-[#F0A830] text-xs font-bold uppercase tracking-wider mb-2 border border-[#5B2A86]/20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] dark:text-[#F0A830] text-xs font-bold uppercase tracking-wider mb-2 border border-[var(--accent)]/20">
             <Building2 className="w-3.5 h-3.5" />
             <span>Master Inventory Registry</span>
           </div>
@@ -393,18 +393,18 @@ export default function ListingManagement() {
 
         {/* Bulk Action Bar */}
         {selectedIds.length > 0 && (
-          <div className="flex items-center gap-2 p-1.5 bg-slate-900 text-white rounded-2xl shadow-xl px-3 border border-white/10 animate-fade-in">
-            <span className="text-xs font-bold mr-2 text-amber-400">{selectedIds.length} selected</span>
-            <Button size="sm" onClick={() => handleBulkAction("approve")} className="h-7 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">
+          <div className="flex items-center gap-2 p-1.5 bg-apple-text text-white rounded-2xl shadow-xl px-3 border border-white/10 animate-fade-in">
+            <span className="text-xs font-bold mr-2 text-gold-decoration">{selectedIds.length} selected</span>
+            <Button size="sm" onClick={() => handleBulkAction("approve")} className="h-7 text-xs font-bold bg-apple-green hover:bg-apple-green text-white rounded-xl">
               Approve
             </Button>
             <Button size="sm" onClick={() => handleBulkAction("boost")} className="h-7 text-xs font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-xl">
               Boost
             </Button>
-            <Button size="sm" onClick={() => handleBulkAction("expire")} className="h-7 text-xs font-bold bg-slate-700 hover:bg-slate-600 text-white rounded-xl">
+            <Button size="sm" onClick={() => handleBulkAction("expire")} className="h-7 text-xs font-bold bg-apple-text-muted hover:bg-apple-text-muted text-white rounded-xl">
               Expire
             </Button>
-            <Button size="sm" onClick={() => handleBulkAction("delete")} className="h-7 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl">
+            <Button size="sm" onClick={() => handleBulkAction("delete")} className="h-7 text-xs font-bold bg-apple-red hover:bg-rose-700 text-white rounded-xl">
               Delete
             </Button>
           </div>
@@ -413,7 +413,7 @@ export default function ListingManagement() {
 
       {/* KPI Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+        <Card className="rounded-2xl border-apple-border/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Total Properties</span>
@@ -421,61 +421,61 @@ export default function ListingManagement() {
                 <Building2 className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-apple-text dark:text-white">
               {listings.length}
             </div>
-            <span className="text-[11px] font-semibold text-slate-400 mt-1 block">
+            <span className="text-[11px] font-semibold text-apple-text-muted mt-1 block">
               Active & Pending Submissions
             </span>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+        <Card className="rounded-2xl border-apple-border/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Title Guaranteed</span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-apple-green/10 text-apple-green dark:text-apple-green flex items-center justify-center">
                 <ShieldCheck className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-apple-text dark:text-white">
               {listings.filter(l => l.titleStatus === "registry_verified" || l.titleStatus === "lda_approved").length}
             </div>
-            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
+            <span className="text-[11px] font-semibold text-apple-green dark:text-apple-green mt-1 block">
               LDA / CDA Registry Validated
             </span>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+        <Card className="rounded-2xl border-apple-border/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Fraud / Duplicate Flags</span>
-              <div className="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-apple-red/10 text-apple-red dark:text-rose-400 flex items-center justify-center">
                 <ShieldAlert className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black mt-2 text-rose-600 dark:text-rose-400">
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-apple-red dark:text-rose-400">
               {listings.filter(l => l.isFraudFlagged).length}
             </div>
-            <span className="text-[11px] font-semibold text-rose-500 mt-1 block">
+            <span className="text-[11px] font-semibold text-apple-red mt-1 block">
               Requires Admin Intervention
             </span>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border-slate-200/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
+        <Card className="rounded-2xl border-apple-border/80 dark:border-white/10 shadow-xs bg-white dark:bg-[#1E1E20]">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted">Active Boosts</span>
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-gold-decoration/10 text-gold-decoration dark:text-gold-decoration flex items-center justify-center">
                 <Flame className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black mt-2 text-slate-900 dark:text-white">
+            <div className="text-2xl sm:text-3xl font-black mt-2 text-apple-text dark:text-white">
               {listings.filter(l => l.isBoosted || l.isFeatured).length}
             </div>
-            <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 mt-1 block">
+            <span className="text-[11px] font-semibold text-gold-decoration dark:text-gold-decoration mt-1 block">
               High-Visibility Placements
             </span>
           </CardContent>
@@ -486,14 +486,14 @@ export default function ListingManagement() {
       <StaleListingsWidget />
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#1E1E20] border border-slate-200/80 dark:border-white/10 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#1E1E20] border border-apple-border/80 dark:border-white/10 shadow-xs">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-apple-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
           <Input 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by title, Property ID (PK-...), city, society, or agency..."
-            className="pl-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border-transparent text-xs font-semibold"
+            className="pl-10 h-10 rounded-xl bg-apple-surface dark:bg-white/5 border-transparent text-xs font-semibold"
           />
         </div>
 
@@ -501,7 +501,7 @@ export default function ListingManagement() {
           <select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-10 px-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-[#F5F5F7] outline-none"
+            className="h-10 px-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-semibold text-apple-text-muted dark:text-[#F5F5F7] outline-none"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -514,7 +514,7 @@ export default function ListingManagement() {
           <select 
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="h-10 px-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-[#F5F5F7] outline-none"
+            className="h-10 px-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-semibold text-apple-text-muted dark:text-[#F5F5F7] outline-none"
           >
             <option value="all">All Cities</option>
             <option value="lahore">Lahore</option>
@@ -526,7 +526,7 @@ export default function ListingManagement() {
           <select 
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="h-10 px-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-[#F5F5F7] outline-none"
+            className="h-10 px-3 rounded-xl bg-apple-surface dark:bg-white/5 border border-apple-border dark:border-white/10 text-xs font-semibold text-apple-text-muted dark:text-[#F5F5F7] outline-none"
           >
             <option value="all">All Types</option>
             <option value="house">House</option>
@@ -539,7 +539,7 @@ export default function ListingManagement() {
             variant={fraudFilterOnly ? "destructive" : "outline"}
             size="sm"
             onClick={() => setFraudFilterOnly(!fraudFilterOnly)}
-            className={cn("h-10 rounded-xl text-xs font-bold gap-1.5 cursor-pointer", fraudFilterOnly && "bg-rose-600 text-white")}
+            className={cn("h-10 rounded-xl text-xs font-bold gap-1.5 cursor-pointer", fraudFilterOnly && "bg-apple-red text-white")}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
             <span>Fraud Flags Only</span>
@@ -548,10 +548,10 @@ export default function ListingManagement() {
       </div>
 
       {/* Main Properties Table */}
-      <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#1E1E20] shadow-sm overflow-hidden">
+      <div className="rounded-3xl border border-apple-border/80 dark:border-white/10 bg-white dark:bg-[#1E1E20] shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader className="bg-slate-50/80 dark:bg-white/5 border-b border-slate-200/80 dark:border-white/10">
+            <TableHeader className="bg-apple-surface/80 dark:bg-white/5 border-b border-apple-border/80 dark:border-white/10">
               <TableRow className="hover:bg-transparent">
                 <TableHead className="w-12 text-center py-4 pl-4">
                   <input 
@@ -570,9 +570,9 @@ export default function ListingManagement() {
                 <TableHead className="text-xs font-bold uppercase tracking-wider py-4 pr-6 text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-slate-100 dark:divide-white/5">
+            <TableBody className="divide-y divide-apple-gray dark:divide-white/5">
               {filteredListings.map((prop) => (
-                <TableRow key={prop.id} className={cn("hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors", prop.isFraudFlagged && "bg-rose-50/20 dark:bg-rose-950/10")}>
+                <TableRow key={prop.id} className={cn("hover:bg-apple-surface/50 dark:hover:bg-white/5 transition-colors", prop.isFraudFlagged && "bg-apple-red/10/20 dark:bg-rose-950/10")}>
                   <TableCell className="text-center py-4 pl-4">
                     <input 
                       type="checkbox" 
@@ -584,28 +584,28 @@ export default function ListingManagement() {
 
                   <TableCell className="py-4">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-14 h-14 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-white/10">
+                      <div className="relative w-14 h-14 rounded-2xl overflow-hidden shrink-0 border border-apple-border dark:border-white/10">
                         <img src={prop.images[0]} alt={prop.title} className="w-full h-full object-cover" />
                         {prop.isFeatured && (
-                          <div className="absolute top-1 left-1 bg-amber-500 text-black text-[8px] font-black px-1 rounded-sm">
+                          <div className="absolute top-1 left-1 bg-gold-decoration text-black text-[8px] font-black px-1 rounded-sm">
                             BOOST
                           </div>
                         )}
                       </div>
                       <div className="min-w-0 max-w-[260px]">
-                        <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate flex items-center gap-1.5">
+                        <div className="font-extrabold text-xs text-apple-text dark:text-white truncate flex items-center gap-1.5">
                           <span>{prop.title}</span>
                         </div>
-                        <div className="text-[10px] font-mono text-slate-400 mt-0.5 flex items-center gap-1">
-                          <span className="font-bold text-[#5B2A86] dark:text-[#C9A227]">{prop.referenceId}</span>
+                        <div className="text-[10px] font-mono text-apple-text-muted mt-0.5 flex items-center gap-1">
+                          <span className="font-bold text-[var(--accent)] dark:text-[#C9A227]">{prop.referenceId}</span>
                           <span>·</span>
                           <span className="uppercase">{prop.purpose}</span>
                           <span>·</span>
                           <span>{prop.propertyType}</span>
                         </div>
                         {prop.agencyName && (
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold truncate flex items-center gap-1 mt-0.5">
-                            <Building2 className="w-3 h-3 text-slate-400" />
+                          <div className="text-[10px] text-apple-text-muted dark:text-apple-text-muted font-semibold truncate flex items-center gap-1 mt-0.5">
+                            <Building2 className="w-3 h-3 text-apple-text-muted" />
                             <span>{prop.agencyName}</span>
                           </div>
                         )}
@@ -614,20 +614,20 @@ export default function ListingManagement() {
                   </TableCell>
 
                   <TableCell className="py-4">
-                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <div className="text-xs font-bold text-apple-surface dark:text-apple-border">
                       {prop.area}
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate max-w-[140px]">
+                    <div className="text-[11px] text-apple-text-muted truncate max-w-[140px]">
                       {prop.city}
                     </div>
                   </TableCell>
 
                   <TableCell className="py-4">
-                    <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <div className="text-xs font-bold text-apple-surface dark:text-apple-border">
                       {prop.areaSize} {prop.areaUnit}
                     </div>
                     {prop.bedrooms > 0 && (
-                      <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5 font-medium">
+                      <div className="text-[11px] text-apple-text-muted flex items-center gap-2 mt-0.5 font-medium">
                         <span>{prop.bedrooms} Beds</span>
                         <span>·</span>
                         <span>{prop.bathrooms} Baths</span>
@@ -636,7 +636,7 @@ export default function ListingManagement() {
                   </TableCell>
 
                   <TableCell className="py-4">
-                    <div className="text-xs font-black font-mono text-slate-900 dark:text-[#F0A830]">
+                    <div className="text-xs font-black font-mono text-apple-text dark:text-[#F0A830]">
                       {formatPrice(prop.price)}
                     </div>
                   </TableCell>
@@ -645,18 +645,18 @@ export default function ListingManagement() {
                     <div className="inline-flex flex-col items-center gap-1">
                       <Badge className={cn(
                         "text-[9px] font-bold rounded-md px-1.5",
-                        prop.qualityScore >= 90 ? "bg-emerald-500/10 text-emerald-600" :
-                        prop.qualityScore >= 70 ? "bg-amber-500/10 text-amber-600" : "bg-rose-500/10 text-rose-600"
+                        prop.qualityScore >= 90 ? "bg-apple-green/10 text-apple-green" :
+                        prop.qualityScore >= 70 ? "bg-gold-decoration/10 text-gold-decoration" : "bg-apple-red/10 text-apple-red"
                       )}>
                         Score: {prop.qualityScore}%
                       </Badge>
                       {prop.titleStatus === "registry_verified" && (
-                        <span className="text-[9px] font-bold text-emerald-600 flex items-center gap-0.5">
+                        <span className="text-[9px] font-bold text-apple-green flex items-center gap-0.5">
                           <Check className="w-3 h-3" /> Title Verified
                         </span>
                       )}
                       {prop.isFraudFlagged && (
-                        <span className="text-[9px] font-bold text-rose-600 flex items-center gap-0.5">
+                        <span className="text-[9px] font-bold text-apple-red flex items-center gap-0.5">
                           <AlertTriangle className="w-3 h-3" /> Flagged
                         </span>
                       )}
@@ -666,11 +666,11 @@ export default function ListingManagement() {
                   <TableCell className="py-4">
                     <span className={cn(
                       "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold",
-                      prop.status === "active" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
-                      prop.status === "pending" && "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20",
+                      prop.status === "active" && "bg-apple-green/10 text-apple-green dark:text-apple-green border border-apple-green/20",
+                      prop.status === "pending" && "bg-gold-decoration/10 text-gold-decoration dark:text-gold-decoration border border-gold-decoration/20",
                       prop.status === "sold" && "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
-                      prop.status === "expired" && "bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20",
-                      prop.status === "rejected" && "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20"
+                      prop.status === "expired" && "bg-apple-text-muted/10 text-apple-text-muted dark:text-apple-text-muted border border-apple-text-muted/20",
+                      prop.status === "rejected" && "bg-apple-red/10 text-apple-red dark:text-rose-400 border border-apple-red/20"
                     )}>
                       {prop.status.toUpperCase()}
                     </span>
@@ -682,7 +682,7 @@ export default function ListingManagement() {
                         size="sm"
                         variant="ghost"
                         onClick={() => { setSelectedListing(prop); setIsDetailOpen(true); }}
-                        className="h-8 px-2.5 rounded-lg text-xs font-bold hover:bg-slate-100 dark:hover:bg-white/10"
+                        className="h-8 px-2.5 rounded-lg text-xs font-bold hover:bg-apple-gray dark:hover:bg-white/10"
                       >
                         Inspect
                       </Button>
@@ -693,14 +693,14 @@ export default function ListingManagement() {
                             <MoreVertical className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48 rounded-2xl bg-white dark:bg-[#1E1E20] border-slate-200 dark:border-white/15">
+                        <DropdownMenuContent align="end" className="w-48 rounded-2xl bg-white dark:bg-[#1E1E20] border-apple-border dark:border-white/15">
                           {prop.status === "pending" && (
                             <DropdownMenuItem 
                               onClick={() => {
                                 setListings(prev => prev.map(l => l.id === prop.id ? { ...l, status: "active" } : l));
                                 toast.success(`Listing ${prop.referenceId} Approved`);
                               }}
-                              className="text-emerald-600 font-bold text-xs cursor-pointer"
+                              className="text-apple-green font-bold text-xs cursor-pointer"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5 mr-2" /> Approve Listing
                             </DropdownMenuItem>
@@ -726,7 +726,7 @@ export default function ListingManagement() {
                               setListings(prev => prev.filter(l => l.id !== prop.id));
                               toast.success(`Listing ${prop.referenceId} Deleted`);
                             }}
-                            className="text-rose-600 font-bold text-xs cursor-pointer"
+                            className="text-apple-red font-bold text-xs cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete Listing
                           </DropdownMenuItem>
@@ -743,29 +743,29 @@ export default function ListingManagement() {
 
       {/* Property Detail Drawer */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        <DialogContent className="max-w-3xl rounded-3xl bg-white dark:bg-[#1E1E20] border-slate-200 dark:border-white/15 p-6 max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl rounded-3xl bg-white dark:bg-[#1E1E20] border-apple-border dark:border-white/15 p-6 max-h-[90vh] overflow-y-auto">
           {selectedListing && (
             <div className="space-y-6">
               <DialogHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-mono text-xs font-bold text-[#5B2A86] dark:text-[#F0A830]">
+                      <span className="font-mono text-xs font-bold text-[var(--accent)] dark:text-[#F0A830]">
                         {selectedListing.referenceId}
                       </span>
                       <Badge className="text-[10px]">{selectedListing.propertyType}</Badge>
                       <Badge variant="outline" className="text-[10px] uppercase">{selectedListing.purpose}</Badge>
                     </div>
-                    <DialogTitle className="text-xl font-extrabold text-slate-900 dark:text-white">
+                    <DialogTitle className="text-xl font-extrabold text-apple-text dark:text-white">
                       {selectedListing.title}
                     </DialogTitle>
-                    <DialogDescription className="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                    <DialogDescription className="text-xs text-apple-text-muted mt-1 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-gold-decoration" />
                       <span>{selectedListing.address}</span>
                     </DialogDescription>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-black font-mono text-[#5B2A86] dark:text-[#F0A830]">
+                    <div className="text-lg font-black font-mono text-[var(--accent)] dark:text-[#F0A830]">
                       {formatPrice(selectedListing.price)}
                     </div>
                   </div>
@@ -775,7 +775,7 @@ export default function ListingManagement() {
               {/* Photos Gallery */}
               <div className="grid grid-cols-3 gap-2 rounded-2xl overflow-hidden">
                 {selectedListing.images.map((img, i) => (
-                  <div key={i} className="aspect-video relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/10">
+                  <div key={i} className="aspect-video relative rounded-xl overflow-hidden border border-apple-border dark:border-white/10">
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </div>
                 ))}
@@ -783,9 +783,9 @@ export default function ListingManagement() {
 
               {/* Fraud Warning Box if Flagged */}
               {selectedListing.isFraudFlagged && (
-                <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
+                <div className="p-4 rounded-2xl bg-apple-red/10 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
                   <div className="flex items-start gap-2.5">
-                    <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+                    <ShieldAlert className="w-5 h-5 text-apple-red shrink-0 mt-0.5" />
                     <div>
                       <h4 className="text-xs font-bold text-rose-800 dark:text-rose-300">Fraud & Anomaly Warning</h4>
                       <p className="text-xs text-rose-700 dark:text-rose-400 mt-0.5 leading-relaxed">{selectedListing.fraudReason}</p>
@@ -796,45 +796,45 @@ export default function ListingManagement() {
 
               {/* Specs Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Size</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-1 block">{selectedListing.areaSize} {selectedListing.areaUnit}</span>
+                <div className="p-3.5 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-apple-text-muted block">Size</span>
+                  <span className="text-sm font-bold text-apple-text dark:text-white mt-1 block">{selectedListing.areaSize} {selectedListing.areaUnit}</span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Bedrooms</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-1 block">{selectedListing.bedrooms} Beds</span>
+                <div className="p-3.5 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-apple-text-muted block">Bedrooms</span>
+                  <span className="text-sm font-bold text-apple-text dark:text-white mt-1 block">{selectedListing.bedrooms} Beds</span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Bathrooms</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-1 block">{selectedListing.bathrooms} Baths</span>
+                <div className="p-3.5 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-apple-text-muted block">Bathrooms</span>
+                  <span className="text-sm font-bold text-apple-text dark:text-white mt-1 block">{selectedListing.bathrooms} Baths</span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Quality Score</span>
-                  <span className="text-sm font-bold text-emerald-600 mt-1 block">{selectedListing.qualityScore}% High Grade</span>
+                <div className="p-3.5 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border/80 dark:border-white/10">
+                  <span className="text-[10px] uppercase font-bold text-apple-text-muted block">Quality Score</span>
+                  <span className="text-sm font-bold text-apple-green mt-1 block">{selectedListing.qualityScore}% High Grade</span>
                 </div>
               </div>
 
               {/* Description */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Description</span>
-                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{selectedListing.description}</p>
+              <div className="p-4 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border/80 dark:border-white/10">
+                <span className="text-xs font-bold uppercase tracking-wider text-apple-text-muted block mb-1">Description</span>
+                <p className="text-xs text-apple-text-muted dark:text-apple-border leading-relaxed">{selectedListing.description}</p>
               </div>
 
               {/* Seller / Agency */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 flex items-center justify-between">
+              <div className="p-4 rounded-2xl bg-apple-surface dark:bg-white/5 border border-apple-border/80 dark:border-white/10 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Listed By</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{selectedListing.sellerName}</span>
+                  <span className="text-[10px] uppercase font-bold text-apple-text-muted block">Listed By</span>
+                  <span className="text-sm font-bold text-apple-text dark:text-white mt-0.5 block">{selectedListing.sellerName}</span>
                   {selectedListing.agencyName && (
                     <span className="text-xs text-purple-600 dark:text-purple-400 font-semibold">{selectedListing.agencyName}</span>
                   )}
                 </div>
-                <Badge className="bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 text-xs">
+                <Badge className="bg-apple-green/10 text-apple-green border border-apple-green/20 text-xs">
                   {selectedListing.sellerBadge.toUpperCase()}
                 </Badge>
               </div>
 
-              <DialogFooter className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4">
+              <DialogFooter className="flex items-center justify-between border-t border-apple-gray dark:border-white/10 pt-4">
                 <Button variant="outline" size="sm" onClick={() => setIsDetailOpen(false)} className="rounded-xl text-xs font-bold">
                   Close
                 </Button>
@@ -847,7 +847,7 @@ export default function ListingManagement() {
                         toast.success("Listing Approved");
                         setIsDetailOpen(false);
                       }}
-                      className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold"
+                      className="rounded-xl bg-apple-green hover:bg-apple-green text-white text-xs font-bold"
                     >
                       Approve Listing
                     </Button>

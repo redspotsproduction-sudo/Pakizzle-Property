@@ -407,10 +407,10 @@ export default function UserManagement() {
             <Users className="w-3.5 h-3.5" />
             Verified Administration Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             User Management
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             {activeTab === 'guardian' ? 'AI-Powered Security & Fraud Mitigation Console with advanced behavioral risk scoring.' : 
              activeTab === 'fraud' ? 'Fraud Intelligence terminal & real-time threat detection logs.' :
              'Enterprise User CRM, advanced identity verification status, and real-time security profile analytics.'}
@@ -420,13 +420,13 @@ export default function UserManagement() {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {activeTab === 'directory' && (
             <div className="relative group min-w-[200px] sm:w-64">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Search user profiles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           )}
@@ -446,7 +446,7 @@ export default function UserManagement() {
                     "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                     isActive
                       ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                      : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                      : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
                   {tab.label}
@@ -474,18 +474,18 @@ export default function UserManagement() {
                 { label: 'Neural Monitoring', value: 'Live', change: '892 Active', icon: Radar, color: 'text-purple-500', bg: 'bg-purple-500/10' },
                 { label: 'Anomalies Detected', value: alerts.length.toString(), change: 'AI Flagged', icon: AlertTriangle, color: 'text-apple-red', bg: 'bg-apple-red/10' },
               ].map((stat, i) => (
-                <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+                <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                   <div className="flex items-start justify-between">
                     <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                       <stat.icon className={cn("w-5 h-5", stat.color)} />
                     </div>
-                    <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                    <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                        {stat.change}
                     </div>
                   </div>
                   <div className="mt-4">
-                    <div className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-none">{stat.value}</div>
-                    <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider mt-1.5">{stat.label}</div>
+                    <div className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
+                    <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1.5">{stat.label}</div>
                   </div>
                 </div>
               ))}
@@ -506,24 +506,24 @@ export default function UserManagement() {
                       "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                       isActive
                         ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                        : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                        : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                     )}
                   >
-                    {role.charAt(0).toUpperCase() + role.slice(1)}s <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+                    {role.charAt(0).toUpperCase() + role.slice(1)}s <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                   </button>
                 );
               })}
             </div>
 
             {/* Advanced Filters Panel */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 bg-[#F5F5F7]/60 dark:bg-white/[0.02] p-4.5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 bg-[var(--text-primary)]/60 dark:bg-white/[0.02] p-4.5 rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
               {/* Account Type Filter */}
               <div className="space-y-1">
-                <label className="text-[9px] font-bold uppercase tracking-widest text-[#86868B]">Account Type</label>
+                <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">Account Type</label>
                 <select
                   value={accountTypeFilter}
                   onChange={(e) => setAccountTypeFilter(e.target.value)}
-                  className="w-full bg-white dark:bg-[#161617] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[#1D1D1F] dark:text-white"
+                  className="w-full bg-white dark:bg-[var(--bg-surface)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[var(--text-primary)] dark:text-white"
                 >
                   <option value="all">All Types</option>
                   <option value="user">Individual User</option>
@@ -534,11 +534,11 @@ export default function UserManagement() {
 
               {/* City Filter */}
               <div className="space-y-1">
-                <label className="text-[9px] font-bold uppercase tracking-widest text-[#86868B]">City</label>
+                <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">City</label>
                 <select
                   value={cityFilter}
                   onChange={(e) => setCityFilter(e.target.value)}
-                  className="w-full bg-white dark:bg-[#161617] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[#1D1D1F] dark:text-white"
+                  className="w-full bg-white dark:bg-[var(--bg-surface)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[var(--text-primary)] dark:text-white"
                 >
                   <option value="all">All Cities</option>
                   {cities.map(city => (
@@ -549,11 +549,11 @@ export default function UserManagement() {
 
               {/* Country Filter */}
               <div className="space-y-1">
-                <label className="text-[9px] font-bold uppercase tracking-widest text-[#86868B]">Country</label>
+                <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">Country</label>
                 <select
                   value={countryFilter}
                   onChange={(e) => setCountryFilter(e.target.value)}
-                  className="w-full bg-white dark:bg-[#161617] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[#1D1D1F] dark:text-white"
+                  className="w-full bg-white dark:bg-[var(--bg-surface)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[var(--text-primary)] dark:text-white"
                 >
                   <option value="all">All Countries</option>
                   {countries.map(country => (
@@ -564,11 +564,11 @@ export default function UserManagement() {
 
               {/* Registration Source Filter */}
               <div className="space-y-1">
-                <label className="text-[9px] font-bold uppercase tracking-widest text-[#86868B]">Signup Source</label>
+                <label className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">Signup Source</label>
                 <select
                   value={sourceFilter}
                   onChange={(e) => setSourceFilter(e.target.value)}
-                  className="w-full bg-white dark:bg-[#161617] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[#1D1D1F] dark:text-white"
+                  className="w-full bg-white dark:bg-[var(--bg-surface)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:border-apple-blue text-[var(--text-primary)] dark:text-white"
                 >
                   <option value="all">All Sources</option>
                   <option value="google">Google OAuth</option>
@@ -583,17 +583,17 @@ export default function UserManagement() {
             </div>
 
             {/* Table Container - EXACT border, background and hover transition as Approval Center card */}
-            <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+            <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
               <div className="overflow-x-auto custom-scrollbar">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-black/[0.04] dark:border-white/[0.04]">
-                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">User Identity</th>
-                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Verification Status</th>
-                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Security Profile</th>
-                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Risk Index</th>
-                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Origin (Last IP)</th>
-                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] text-right">Actions</th>
+                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">User Identity</th>
+                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Verification Status</th>
+                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Security Profile</th>
+                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Risk Index</th>
+                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Origin (Last IP)</th>
+                      <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-black/[0.03] dark:divide-white/[0.03]">
@@ -615,13 +615,13 @@ export default function UserManagement() {
                                 <AvatarFallback className="bg-apple-blue text-white font-semibold text-sm">{user.displayName.charAt(0)}</AvatarFallback>
                               </Avatar>
                               <div>
-                                 <div className="font-semibold text-sm tracking-tight text-[#1D1D1F] dark:text-white flex items-center gap-2">
+                                 <div className="font-semibold text-sm tracking-tight text-[var(--text-primary)] dark:text-white flex items-center gap-2">
                                    {user.displayName}
                                    {(user.email_verified || user.isEmailVerified) && (
                                      <CheckCircle2 className="w-3.5 h-3.5 text-apple-blue" />
                                    )}
                                  </div>
-                                 <div className="text-[10px] font-medium text-[#86868B] lowercase mt-0.5">{user.email}</div>
+                                 <div className="text-[10px] font-medium text-[var(--text-secondary)] lowercase mt-0.5">{user.email}</div>
                               </div>
                            </div>
                         </td>
@@ -632,7 +632,7 @@ export default function UserManagement() {
                                   "text-[9px] font-bold px-2 py-0.5 rounded-lg border-none animate-in fade-in zoom-in duration-300 shadow-none",
                                   (user.identity_status === 'verified' || (user.isEmailVerified && user.isPhoneVerified)) ? "bg-apple-green/10 text-apple-green" : 
                                   (user.identity_status === 'partial' || user.isEmailVerified || user.isPhoneVerified) ? "bg-apple-orange/10 text-apple-orange" : 
-                                  "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]"
+                                  "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]"
                                 )}>
                                   {user.identity_status === 'verified' || (user.isEmailVerified && user.isPhoneVerified) ? 'Verified' : 
                                    user.identity_status === 'partial' || user.isEmailVerified || user.isPhoneVerified ? 'Partial' : 
@@ -642,13 +642,13 @@ export default function UserManagement() {
                               <div className="flex items-center gap-3">
                                  <div className={cn(
                                     "flex items-center gap-1 text-[9px] font-medium transition-colors duration-500",
-                                    (user.email_verified || user.isEmailVerified) ? "text-apple-green" : "text-[#86868B] opacity-40"
+                                    (user.email_verified || user.isEmailVerified) ? "text-apple-green" : "text-[var(--text-secondary)] opacity-40"
                                  )}>
                                    <Mail className={cn("w-3 h-3", (user.email_verified || user.isEmailVerified) && "animate-pulse")} /> Email
                                  </div>
                                  <div className={cn(
                                     "flex items-center gap-1 text-[9px] font-medium transition-colors duration-500",
-                                    (user.phone_verified || user.isPhoneVerified) ? "text-apple-green" : "text-[#86868B] opacity-40"
+                                    (user.phone_verified || user.isPhoneVerified) ? "text-apple-green" : "text-[var(--text-secondary)] opacity-40"
                                  )}>
                                    <Smartphone className={cn("w-3 h-3", (user.phone_verified || user.isPhoneVerified) && "animate-pulse")} /> Phone
                                  </div>
@@ -671,7 +671,7 @@ export default function UserManagement() {
                                   {user.status}
                                 </Badge>
                               </div>
-                              <div className="flex items-center gap-1.5 text-[10px] font-medium text-[#86868B]">
+                              <div className="flex items-center gap-1.5 text-[10px] font-medium text-[var(--text-secondary)]">
                                  <Clock className="w-3 h-3" /> Exp: {new Date(user.createdAt).getFullYear()}
                               </div>
                            </div>
@@ -679,7 +679,7 @@ export default function UserManagement() {
                         <td className="px-6 py-4.5">
                            <div className="flex flex-col gap-1.5">
                               <div className="flex items-center justify-between w-32 mb-1">
-                                 <span className="text-[9px] font-semibold uppercase tracking-wider text-[#86868B]">Risk Stage</span>
+                                 <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Risk Stage</span>
                                  <span className={cn(
                                    "text-[10px] font-semibold",
                                    (user.riskScore || 0) > 70 ? "text-apple-red" : (user.riskScore || 0) > 30 ? "text-apple-orange" : "text-apple-green"
@@ -706,11 +706,11 @@ export default function UserManagement() {
                         </td>
                         <td className="px-6 py-4.5">
                            <div className="flex flex-col gap-1">
-                              <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1D1D1F] dark:text-white tracking-tight">
+                              <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)] dark:text-white tracking-tight">
                                  <Globe className="w-3.5 h-3.5 text-apple-blue" />
                                  {user.lastKnownIp || '0.0.0.0'}
                               </div>
-                              <div className="text-[9px] font-medium text-[#86868B] uppercase tracking-wider">
+                              <div className="text-[9px] font-medium text-[var(--text-secondary)] uppercase tracking-wider">
                                  {user.ipHistory?.[0]?.location || 'N/A'}
                               </div>
                               {(user.isProxyDetected || user.isVpnDetected) && (
@@ -723,9 +723,9 @@ export default function UserManagement() {
                         <td className="px-6 py-4.5 text-right" onClick={e => e.stopPropagation()}>
                            <DropdownMenu>
                               <DropdownMenuTrigger className="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-apple-gray dark:hover:bg-white/10 transition-colors">
-                                 <MoreVertical className="w-4 h-4 text-[#86868B]" />
+                                 <MoreVertical className="w-4 h-4 text-[var(--text-secondary)]" />
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="w-64 p-2 rounded-2xl border-apple-border/10 backdrop-blur-xl bg-white/95 dark:bg-[#1D1D1F]/95 shadow-2xl">
+                              <DropdownMenuContent align="end" className="w-64 p-2 rounded-2xl border-apple-border/10 backdrop-blur-xl bg-white/95 dark:bg-[var(--text-primary)]/95 shadow-2xl">
                                 <DropdownMenuItem onClick={() => handleAction('view', user)} className="rounded-xl py-3 px-4 font-bold text-xs">
                                    <Eye className="w-4 h-4 mr-3 text-apple-blue" /> Inspect Data Matrix
                                 </DropdownMenuItem>
@@ -857,7 +857,7 @@ export default function UserManagement() {
 
             {/* Guardian Sidebar Stats */}
             <div className="space-y-6">
-               <Card className="border-apple-border/10 bg-apple-gray/50 dark:bg-[#1D1D1F]/50 rounded-[32px] overflow-hidden shadow-2xl">
+               <Card className="border-apple-border/10 bg-apple-gray/50 dark:bg-[var(--text-primary)]/50 rounded-[32px] overflow-hidden shadow-2xl">
                   <header className="px-8 py-6 border-b border-apple-border/10 bg-white/50 dark:bg-white/5">
                      <h3 className="text-sm font-black uppercase tracking-widest">Security Configuration</h3>
                   </header>
@@ -917,7 +917,7 @@ export default function UserManagement() {
 
       {/* Details Modal (Matrix) */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="max-w-[92vw] lg:max-w-5xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-5xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
           {selectedUser && editUser && (
             <Tabs defaultValue="dossier" className="flex flex-col h-full overflow-hidden">
               {/* Header */}
@@ -930,7 +930,7 @@ export default function UserManagement() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h2 className="text-xl font-bold text-[#1D1D1F] dark:text-white leading-tight flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-[var(--text-primary)] dark:text-white leading-tight flex items-center gap-2">
                       {selectedUser.displayName}
                       {selectedUser.status === 'active' && <ShieldCheck className="w-5 h-5 text-apple-green" />}
                     </h2>
@@ -953,15 +953,15 @@ export default function UserManagement() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <TabsList className="bg-[#F5F5F7] dark:bg-white/5 p-1 rounded-xl">
-                    <TabsTrigger value="dossier" className="rounded-lg text-xs font-bold px-3 py-1.5 data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:text-apple-blue">
+                  <TabsList className="bg-[var(--text-primary)] dark:bg-white/5 p-1 rounded-xl">
+                    <TabsTrigger value="dossier" className="rounded-lg text-xs font-bold px-3 py-1.5 data-[state=active]:bg-white dark:data-[state=active]:bg-apple-surface data-[state=active]:text-apple-blue">
                       Profile Dossier
                     </TabsTrigger>
-                    <TabsTrigger value="override" className="rounded-lg text-xs font-bold px-3 py-1.5 data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:text-apple-blue flex items-center gap-1.5">
+                    <TabsTrigger value="override" className="rounded-lg text-xs font-bold px-3 py-1.5 data-[state=active]:bg-white dark:data-[state=active]:bg-apple-surface data-[state=active]:text-apple-blue flex items-center gap-1.5">
                       <Shield className="w-3.5 h-3.5" /> Administrative Control
                     </TabsTrigger>
                   </TabsList>
-                  <Button variant="ghost" className="rounded-full h-8 w-8 p-0 hover:bg-[#F5F5F7] dark:hover:bg-white/5" onClick={() => setIsDetailsOpen(false)}>
+                  <Button variant="ghost" className="rounded-full h-8 w-8 p-0 hover:bg-[var(--text-primary)] dark:hover:bg-white/5" onClick={() => setIsDetailsOpen(false)}>
                     ✕
                   </Button>
                 </div>
@@ -995,69 +995,69 @@ export default function UserManagement() {
                   {/* Section 2: Detailed User Dossier Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Left: General & Account Records */}
-                    <div className="p-6 rounded-[2rem] bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-text-muted flex items-center gap-2">
                         <Briefcase className="w-3.5 h-3.5 text-apple-blue" /> Legal & Account Records
                       </h4>
-                      <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-xs font-semibold text-[#1D1D1F] dark:text-zinc-200">
+                      <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-xs font-semibold text-[var(--text-primary)] dark:text-apple-border">
                         <div>
-                          <span className="text-[8px] font-bold text-[#86868B] uppercase block">Legal Name</span>
+                          <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Legal Name</span>
                           <span className="font-bold mt-1 block">{(selectedUser.firstName && selectedUser.lastName) ? `${selectedUser.firstName} ${selectedUser.lastName}` : (selectedUser.displayName || 'Not configured')}</span>
                         </div>
                         <div>
-                          <span className="text-[8px] font-bold text-[#86868B] uppercase block">Platform Handle</span>
+                          <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Platform Handle</span>
                           <span className="font-bold mt-1 block">{selectedUser.username ? `@${selectedUser.username}` : 'Not configured'}</span>
                         </div>
                         <div>
-                          <span className="text-[8px] font-bold text-[#86868B] uppercase block">Ecosystem Entry</span>
+                          <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Ecosystem Entry</span>
                           <span className="font-bold mt-1 block">{selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString() : 'Today'}</span>
                         </div>
                         <div>
-                          <span className="text-[8px] font-bold text-[#86868B] uppercase block">Account UID</span>
+                          <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Account UID</span>
                           <span className="font-bold mt-1 block font-mono truncate max-w-full text-[10px]" title={selectedUser.uid}>{selectedUser.uid}</span>
                         </div>
                         <div>
-                          <span className="text-[8px] font-bold text-[#86868B] uppercase block">Date of Birth</span>
+                          <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Date of Birth</span>
                           <span className="font-bold mt-1 block">{selectedUser.dob ? new Date(selectedUser.dob).toLocaleDateString() : 'Not configured'}</span>
                         </div>
                         <div>
-                          <span className="text-[8px] font-bold text-[#86868B] uppercase block">Gender Profile</span>
+                          <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Gender Profile</span>
                           <span className="font-bold mt-1 block">{selectedUser.gender || 'Not configured'}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Right: Contact Channels & Location */}
-                    <div className="p-6 rounded-[2rem] bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-text-muted flex items-center gap-2">
                         <Phone className="w-3.5 h-3.5 text-apple-green" /> Communication Channels
                       </h4>
-                      <div className="space-y-3.5 text-xs text-[#1D1D1F] dark:text-zinc-200">
+                      <div className="space-y-3.5 text-xs text-[var(--text-primary)] dark:text-apple-border">
                         <div className="flex items-center gap-2.5">
-                          <Mail className="w-4 h-4 text-[#86868B]" />
+                          <Mail className="w-4 h-4 text-[var(--text-secondary)]" />
                           <span className="font-semibold">{selectedUser.email}</span>
                         </div>
                         <div className="flex items-center gap-2.5">
-                          <Phone className="w-4 h-4 text-[#86868B]" />
+                          <Phone className="w-4 h-4 text-[var(--text-secondary)]" />
                           <span className="font-semibold">{selectedUser.phone || selectedUser.phoneNumber || 'Not configured'}</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <MapPin className="w-4 h-4 text-[#86868B] shrink-0 mt-0.5" />
+                          <MapPin className="w-4 h-4 text-[var(--text-secondary)] shrink-0 mt-0.5" />
                           <span className="font-semibold leading-relaxed">
                             {(selectedUser.city || selectedUser.country) ? `${selectedUser.city || ''}, ${selectedUser.country || ''}`.replace(/^,\s*/, '') : 'Not configured'}
                           </span>
                         </div>
                         <div className="flex items-center gap-2.5">
-                          <Globe className="w-4 h-4 text-[#86868B]" />
+                          <Globe className="w-4 h-4 text-[var(--text-secondary)]" />
                           <span className="font-semibold">Last Known IP: {selectedUser.lastKnownIp || '0.0.0.0'}</span>
                         </div>
                         <div className="flex items-center gap-2.5 pt-1.5 border-t border-apple-border/5 justify-between">
                           <div className="flex items-center gap-1">
-                            <span className="text-[8px] font-bold text-[#86868B] uppercase block">Campaign Code: </span>
+                            <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Campaign Code: </span>
                             <span className="font-bold text-xs ml-1 block">{selectedUser.referralCode || 'None'}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className="text-[8px] font-bold text-[#86868B] uppercase block">Tier: </span>
+                            <span className="text-[8px] font-bold text-[var(--text-secondary)] uppercase block">Tier: </span>
                             <span className="font-bold text-xs ml-1 block text-purple-500">{selectedUser.accountType || 'Standard'}</span>
                           </div>
                         </div>
@@ -1073,7 +1073,7 @@ export default function UserManagement() {
                     
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                       {/* Attachment 1: ID Card Front */}
-                      <div className="bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
+                      <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
                         <div>
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-[8px] font-black uppercase tracking-wider text-apple-blue">National ID (Front)</span>
@@ -1109,7 +1109,7 @@ export default function UserManagement() {
                       </div>
 
                       {/* Attachment 2: ID Card Back */}
-                      <div className="bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
+                      <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
                         <div>
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-[8px] font-black uppercase tracking-wider text-apple-blue">National ID (Back)</span>
@@ -1145,7 +1145,7 @@ export default function UserManagement() {
                       </div>
 
                       {/* Attachment 3: Biometric Selfie */}
-                      <div className="bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
+                      <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
                         <div>
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-[8px] font-black uppercase tracking-wider text-apple-blue">Biometric Selfie Match</span>
@@ -1190,21 +1190,21 @@ export default function UserManagement() {
                     <div className="space-y-3">
                       {selectedUser.ipHistory && selectedUser.ipHistory.length > 0 ? (
                         selectedUser.ipHistory.map((h, i) => (
-                          <div key={i} className="flex items-center justify-between p-5 rounded-[1.5rem] bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 group hover:border-apple-blue/30 transition-all duration-300">
+                          <div key={i} className="flex items-center justify-between p-5 rounded-[1.5rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 group hover:border-apple-blue/30 transition-all duration-300">
                             <div className="flex items-center gap-4">
                               <div className="w-2.5 h-2.5 rounded-full bg-apple-green pulse shadow-lg shadow-apple-green/20" />
                               <div>
-                                <div className="font-bold text-xs text-[#1D1D1F] dark:text-[#F5F5F7]">Identity Access from {h.location}</div>
-                                <div className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider mt-0.5 font-mono">Verified Node IP: {h.ip}</div>
+                                <div className="font-bold text-xs text-[var(--text-primary)] dark:text-[var(--text-primary)]">Identity Access from {h.location}</div>
+                                <div className="text-[8px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-0.5 font-mono">Verified Node IP: {h.ip}</div>
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="text-[9px] font-bold uppercase text-[#86868B]">{new Date(h.timestamp).toLocaleString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' })}</div>
+                              <div className="text-[9px] font-bold uppercase text-[var(--text-secondary)]">{new Date(h.timestamp).toLocaleString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' })}</div>
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="p-5 rounded-[1.5rem] bg-[#F5F5F7] dark:bg-white/[0.02] border border-apple-border/5 text-center text-xs text-[#86868B] font-semibold">
+                        <div className="p-5 rounded-[1.5rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 text-center text-xs text-[var(--text-secondary)] font-semibold">
                           No verification access history recorded.
                         </div>
                       )}
@@ -1216,7 +1216,7 @@ export default function UserManagement() {
                 <footer className="p-6 border-t border-apple-border/10 bg-neutral-50 dark:bg-white/[0.02] flex justify-end gap-3 shrink-0 flex-wrap">
                   <Button 
                     variant="outline" 
-                    className="rounded-xl px-5 font-bold text-xs hover:bg-[#F5F5F7] dark:hover:bg-white/5" 
+                    className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--text-primary)] dark:hover:bg-white/5" 
                     onClick={() => setIsDetailsOpen(false)}
                   >
                     Close Profile
@@ -1224,7 +1224,7 @@ export default function UserManagement() {
                   
                   <Button 
                     variant="outline" 
-                    className="rounded-xl px-5 font-bold text-xs hover:bg-[#F5F5F7] dark:hover:bg-white/5"
+                    className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--text-primary)] dark:hover:bg-white/5"
                     onClick={() => {
                       if (window.confirm("CRITICAL: This will bypass all AI security checks. Proceed?")) {
                         handleAdminUpdate(selectedUser.uid, { 
@@ -1313,11 +1313,11 @@ export default function UserManagement() {
               {/* Tab 2: Overrule Control (Full Attributes Editor) */}
               <TabsContent value="override" className="flex-1 overflow-hidden m-0 outline-none flex flex-col">
                 <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar">
-                  <div className="bg-[#F5F5F7] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
+                  <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
                     <h3 className="text-sm font-bold flex items-center gap-1.5 text-apple-blue">
                       <Shield className="w-4 h-4" /> Comprehensive Administration Overrule console
                     </h3>
-                    <p className="text-xs text-[#86868B] leading-relaxed font-medium">
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                       Modify any attribute of this identity. Overrule account types, permissions, verify profiles, change status metrics, reset infractions, and allocate system privileges. These overrides bypass the standard client-side registration checks.
                     </p>
                   </div>
@@ -1327,60 +1327,60 @@ export default function UserManagement() {
                     <div className="space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-wider text-apple-text-muted px-1">Core Identity Attributes</h4>
                       
-                      <div className="space-y-3 bg-[#F5F5F7] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
+                      <div className="space-y-3 bg-[var(--text-primary)] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
                         <div>
-                          <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Display Name</label>
+                          <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Display Name</label>
                           <Input 
                             value={editUser.displayName || ""} 
                             onChange={(e) => setEditUser({ ...editUser, displayName: e.target.value })}
-                            className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
+                            className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
                           />
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Username Handle</label>
+                          <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Username Handle</label>
                           <Input 
                             value={editUser.username || ""} 
                             onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
-                            className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-mono font-bold" 
+                            className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-mono font-bold" 
                           />
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Email Address</label>
+                          <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Email Address</label>
                           <Input 
                             type="email"
                             value={editUser.email || ""} 
                             onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-                            className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
+                            className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
                           />
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Phone Number</label>
+                          <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Phone Number</label>
                           <Input 
                             value={editUser.phoneNumber || editUser.phone || ""} 
                             onChange={(e) => setEditUser({ ...editUser, phoneNumber: e.target.value, phone: e.target.value })}
-                            className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
+                            className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Date of Birth</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Date of Birth</label>
                             <Input 
                               type="date"
                               value={editUser.dob ? editUser.dob.substring(0, 10) : ""} 
                               onChange={(e) => setEditUser({ ...editUser, dob: e.target.value })}
-                              className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-semibold" 
+                              className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-semibold" 
                             />
                           </div>
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Gender Profile</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Gender Profile</label>
                             <select 
                               value={editUser.gender || "Not configured"} 
                               onChange={(e) => setEditUser({ ...editUser, gender: e.target.value })}
-                              className="w-full bg-white dark:bg-zinc-900 border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-zinc-100"
+                              className="w-full bg-white dark:bg-apple-text border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-apple-gray"
                             >
                               <option value="Male">Male</option>
                               <option value="Female">Female</option>
@@ -1392,29 +1392,29 @@ export default function UserManagement() {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">City</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">City</label>
                             <Input 
                               value={editUser.city || ""} 
                               onChange={(e) => setEditUser({ ...editUser, city: e.target.value })}
-                              className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
+                              className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
                             />
                           </div>
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Country</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Country</label>
                             <Input 
                               value={editUser.country || ""} 
                               onChange={(e) => setEditUser({ ...editUser, country: e.target.value })}
-                              className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
+                              className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-medium" 
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Campaign Referral Code</label>
+                          <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Campaign Referral Code</label>
                           <Input 
                             value={editUser.referralCode || ""} 
                             onChange={(e) => setEditUser({ ...editUser, referralCode: e.target.value })}
-                            className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-mono text-xs uppercase" 
+                            className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-mono text-xs uppercase" 
                           />
                         </div>
                       </div>
@@ -1424,14 +1424,14 @@ export default function UserManagement() {
                     <div className="space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-wider text-apple-text-muted px-1">Ecosystem Rights & Integrity Ratings</h4>
 
-                      <div className="space-y-4 bg-[#F5F5F7] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
+                      <div className="space-y-4 bg-[var(--text-primary)] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Account Status</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Account Status</label>
                             <select 
                               value={editUser.status} 
                               onChange={(e) => setEditUser({ ...editUser, status: e.target.value as any })}
-                              className="w-full bg-white dark:bg-zinc-900 border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-zinc-100"
+                              className="w-full bg-white dark:bg-apple-text border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-apple-gray"
                             >
                               <option value="active">Active</option>
                               <option value="suspended">Suspended</option>
@@ -1440,11 +1440,11 @@ export default function UserManagement() {
                             </select>
                           </div>
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">System Role</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">System Role</label>
                             <select 
                               value={editUser.role} 
                               onChange={(e) => setEditUser({ ...editUser, role: e.target.value as any })}
-                              className="w-full bg-white dark:bg-zinc-900 border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-zinc-100"
+                              className="w-full bg-white dark:bg-apple-text border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-apple-gray"
                             >
                               <option value="user">Standard User</option>
                               <option value="moderator">Moderator</option>
@@ -1457,11 +1457,11 @@ export default function UserManagement() {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Account Category</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Account Category</label>
                             <select 
                               value={editUser.accountType || "user"} 
                               onChange={(e) => setEditUser({ ...editUser, accountType: e.target.value })}
-                              className="w-full bg-white dark:bg-zinc-900 border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-zinc-100"
+                              className="w-full bg-white dark:bg-apple-text border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-apple-gray"
                             >
                               <option value="user">Standard Member</option>
                               <option value="dealer">Automotive Dealer</option>
@@ -1469,11 +1469,11 @@ export default function UserManagement() {
                             </select>
                           </div>
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Verification Level</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Verification Level</label>
                             <select 
                               value={editUser.verificationLevel ?? 0} 
                               onChange={(e) => setEditUser({ ...editUser, verificationLevel: Number(e.target.value) as any })}
-                              className="w-full bg-white dark:bg-zinc-900 border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-zinc-100"
+                              className="w-full bg-white dark:bg-apple-text border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-apple-gray"
                             >
                               <option value={0}>Lvl 0 (None)</option>
                               <option value={1}>Lvl 1 (Email Linked)</option>
@@ -1485,10 +1485,10 @@ export default function UserManagement() {
 
                         <div>
                           <div className="flex justify-between items-center mb-1">
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block">Trust Rating Index</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block">Trust Rating Index</label>
                             <span className="text-xs font-black text-apple-blue">{editUser.trustScore ?? 0}% Trust</span>
                           </div>
-                          <div className="flex items-center gap-3 bg-white dark:bg-zinc-900 p-2.5 rounded-xl border border-apple-border/10">
+                          <div className="flex items-center gap-3 bg-white dark:bg-apple-text p-2.5 rounded-xl border border-apple-border/10">
                             <input 
                               type="range" 
                               min="0" 
@@ -1510,22 +1510,22 @@ export default function UserManagement() {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Risk Security Score</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Risk Security Score</label>
                             <Input 
                               type="number" 
                               min="0" 
                               max="100" 
                               value={editUser.riskScore ?? 0} 
                               onChange={(e) => setEditUser({ ...editUser, riskScore: Number(e.target.value) })}
-                              className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-bold" 
+                              className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-bold" 
                             />
                           </div>
                           <div>
-                            <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">System Risk Tier</label>
+                            <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">System Risk Tier</label>
                             <select 
                               value={editUser.riskLevel || "low"} 
                               onChange={(e) => setEditUser({ ...editUser, riskLevel: e.target.value as any })}
-                              className="w-full bg-white dark:bg-zinc-900 border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-zinc-100"
+                              className="w-full bg-white dark:bg-apple-text border border-apple-border/10 px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-apple-blue/30 text-stone-900 dark:text-apple-gray"
                             >
                               <option value="low">Low Risk</option>
                               <option value="medium">Medium Risk</option>
@@ -1536,38 +1536,38 @@ export default function UserManagement() {
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-[#86868B] uppercase block mb-1">Suspicious Infractions Count</label>
+                          <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Suspicious Infractions Count</label>
                           <Input 
                             type="number" 
                             min="0" 
                             value={editUser.suspiciousActivityCount ?? 0} 
                             onChange={(e) => setEditUser({ ...editUser, suspiciousActivityCount: Number(e.target.value) })}
-                            className="bg-white dark:bg-zinc-900 border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-bold" 
+                            className="bg-white dark:bg-apple-text border-apple-border/10 focus-visible:ring-apple-blue/20 rounded-xl font-bold" 
                           />
                         </div>
 
                         <div className="pt-2 border-t border-apple-border/5 space-y-3">
-                          <span className="text-[8px] font-black uppercase text-[#86868B] block tracking-wider">Communication Verification Flags</span>
+                          <span className="text-[8px] font-black uppercase text-[var(--text-secondary)] block tracking-wider">Communication Verification Flags</span>
                           
                           <div className="grid grid-cols-2 gap-3">
-                            <label className="flex items-center gap-2 p-3 bg-white dark:bg-zinc-900 border border-apple-border/10 rounded-xl cursor-pointer select-none">
+                            <label className="flex items-center gap-2 p-3 bg-white dark:bg-apple-text border border-apple-border/10 rounded-xl cursor-pointer select-none">
                               <input 
                                 type="checkbox" 
                                 checked={editUser.isEmailVerified || false} 
                                 onChange={(e) => setEditUser({ ...editUser, isEmailVerified: e.target.checked, email_verified: e.target.checked })}
                                 className="accent-apple-blue w-4 h-4 rounded-md"
                               />
-                              <span className="text-[10px] font-bold text-stone-800 dark:text-zinc-100">Email Approved</span>
+                              <span className="text-[10px] font-bold text-stone-800 dark:text-apple-gray">Email Approved</span>
                             </label>
 
-                            <label className="flex items-center gap-2 p-3 bg-white dark:bg-zinc-900 border border-apple-border/10 rounded-xl cursor-pointer select-none">
+                            <label className="flex items-center gap-2 p-3 bg-white dark:bg-apple-text border border-apple-border/10 rounded-xl cursor-pointer select-none">
                               <input 
                                 type="checkbox" 
                                 checked={editUser.isPhoneVerified || false} 
                                 onChange={(e) => setEditUser({ ...editUser, isPhoneVerified: e.target.checked, phone_verified: e.target.checked })}
                                 className="accent-apple-blue w-4 h-4 rounded-md"
                               />
-                              <span className="text-[10px] font-bold text-stone-800 dark:text-zinc-100">Phone Approved</span>
+                              <span className="text-[10px] font-bold text-stone-800 dark:text-apple-gray">Phone Approved</span>
                             </label>
                           </div>
                         </div>
@@ -1582,7 +1582,7 @@ export default function UserManagement() {
                       value={editUser.adminNotes || ""} 
                       onChange={(e) => setEditUser({ ...editUser, adminNotes: e.target.value })}
                       placeholder="Input relevant legal clearances, notes, verification logs, or justification of status edits..."
-                      className="w-full h-24 p-4 bg-[#F5F5F7] dark:bg-white/[0.01] border border-apple-border/10 focus:border-apple-blue/30 rounded-3xl text-xs font-semibold focus:ring-0 outline-none text-stone-900 dark:text-white"
+                      className="w-full h-24 p-4 bg-[var(--text-primary)] dark:bg-white/[0.01] border border-apple-border/10 focus:border-apple-blue/30 rounded-3xl text-xs font-semibold focus:ring-0 outline-none text-stone-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -1591,7 +1591,7 @@ export default function UserManagement() {
                 <footer className="p-6 border-t border-apple-border/10 bg-neutral-50 dark:bg-white/[0.02] flex justify-end gap-3 shrink-0 flex-wrap">
                   <Button 
                     variant="outline" 
-                    className="rounded-xl px-5 font-bold text-xs hover:bg-[#F5F5F7] dark:hover:bg-white/5" 
+                    className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--text-primary)] dark:hover:bg-white/5" 
                     onClick={() => setIsDetailsOpen(false)}
                   >
                     Cancel
@@ -1622,7 +1622,7 @@ export default function UserManagement() {
 
       {/* Suspension Modal */}
       <Dialog open={isSuspendConfirmOpen} onOpenChange={setIsSuspendConfirmOpen}>
-        <DialogContent className="max-w-md rounded-[40px] border-apple-border/10 bg-white dark:bg-[#1D1D1F] p-10">
+        <DialogContent className="max-w-md rounded-[40px] border-apple-border/10 bg-white dark:bg-[var(--text-primary)] p-10">
           <div className="text-center space-y-6">
             <div className={cn(
               "w-24 h-24 rounded-[32px] flex items-center justify-center mx-auto mb-6",

@@ -65,7 +65,7 @@ const ADVANTAGE_STEPS: AdvantageStep[] = [
     description: "Every listing on Pakizzle is cross-checked against official Sub-Registrar books, town planning records, and Biometric Seller Validation. We reject over 68% of unverified broker submissions.",
     actionText: "Run Shanakht™ Verification",
     modalType: "title",
-    accentColor: "from-emerald-500 to-teal-600",
+    accentColor: "from-apple-green to-teal-600",
     icon: ShieldCheck,
     preview: {
       statValue: "100%",
@@ -88,7 +88,7 @@ const ADVANTAGE_STEPS: AdvantageStep[] = [
     description: "Traditional portals surround your property with flashing third-party display ads, predatory popups, and fake agency stamps. Pakizzle is built like an Apple operating system: whisper-quiet and focused on design.",
     actionText: "Explore Architectural Homes",
     modalType: "plot",
-    accentColor: "from-blue-500 to-indigo-600",
+    accentColor: "from-blue-500 to-apple-blue",
     icon: Sparkles,
     preview: {
       statValue: "0",
@@ -111,7 +111,7 @@ const ADVANTAGE_STEPS: AdvantageStep[] = [
     description: "Never get blindsided at the registry office. Our proprietary tax engine calculates exact Section 236K (Buyer), Section 236C (Seller), 2% Stamp Duty, TMA fees, and Section 7E liability in real time.",
     actionText: "Calculate Property Taxes",
     modalType: "tax",
-    accentColor: "from-amber-500 to-orange-600",
+    accentColor: "from-gold-decoration to-orange-600",
     icon: Calculator,
     preview: {
       statValue: "PKR 0",
@@ -246,10 +246,10 @@ export default function ZameenAdvantageSection() {
               <Sparkles className="w-3.5 h-3.5 text-apple-blue" />
               <span>Scroll-Driven Feature Architecture</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-apple-text dark:text-white tracking-tight">
               Why Pakistan's Premier Buyers Choose Pakizzle
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-apple-text-muted dark:text-apple-text-muted mt-1 max-w-2xl">
               Engineered with Apple design restraint: 0 banner spam, 100% cryptographic title clearance, and zero surprises.
             </p>
           </div>
@@ -261,7 +261,7 @@ export default function ZameenAdvantageSection() {
             <div className="lg:col-span-5 flex flex-col justify-between">
               
               {/* Stepper Tabs Bar */}
-              <div className="flex items-center gap-2 mb-6 p-1 rounded-2xl bg-slate-200/60 dark:bg-white/5 border border-black/5 dark:border-white/10 w-fit">
+              <div className="flex items-center gap-2 mb-6 p-1 rounded-2xl bg-apple-border/60 dark:bg-white/5 border border-black/5 dark:border-white/10 w-fit">
                 {ADVANTAGE_STEPS.map((step, idx) => {
                   const isCurrent = activeStep === idx;
                   return (
@@ -271,15 +271,15 @@ export default function ZameenAdvantageSection() {
                       className={cn(
                         "relative px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer",
                         isCurrent 
-                          ? "text-slate-900 dark:text-white shadow-sm font-black" 
-                          : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                          ? "text-apple-text dark:text-white shadow-sm font-black" 
+                          : "text-apple-text-muted hover:text-apple-text dark:hover:text-white"
                       )}
                     >
                       {isCurrent && (
                         <motion.div
                           layoutId="active-step-tab-bg"
                           transition={SPRING_TACTILE}
-                          className="absolute inset-0 bg-white dark:bg-[#1D1D1F] rounded-xl shadow-sm z-[-1] border border-black/5 dark:border-white/10"
+                          className="absolute inset-0 bg-white dark:bg-[var(--text-primary)] rounded-xl shadow-sm z-[-1] border border-black/5 dark:border-white/10"
                         />
                       )}
                       <span>{step.stepNumber}</span>
@@ -304,7 +304,7 @@ export default function ZameenAdvantageSection() {
                     <span>{currentStepData.badge}</span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-apple-text dark:text-white tracking-tight leading-tight">
                     {currentStepData.title}
                   </h3>
 
@@ -312,7 +312,7 @@ export default function ZameenAdvantageSection() {
                     {currentStepData.headline}
                   </p>
 
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-sm text-apple-text-muted dark:text-apple-text-muted leading-relaxed">
                     {currentStepData.description}
                   </p>
 
@@ -321,7 +321,7 @@ export default function ZameenAdvantageSection() {
                       variant="emerald"
                       size="md"
                       onClick={() => setActiveModal(currentStepData.modalType)}
-                      className="gap-2 shadow-md shadow-emerald-950/20"
+                      className="gap-2 shadow-md shadow-apple-surface/20"
                     >
                       <span>{currentStepData.actionText}</span>
                       <ArrowRight className="w-4 h-4" />
@@ -332,7 +332,7 @@ export default function ZameenAdvantageSection() {
                         const el = document.getElementById("comparison-matrix-table");
                         if (el) el.scrollIntoView({ behavior: "smooth" });
                       }}
-                      className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-3 py-2 rounded-xl transition-colors cursor-pointer"
+                      className="text-xs font-semibold text-apple-text-muted dark:text-apple-text-muted hover:text-apple-text dark:hover:text-white px-3 py-2 rounded-xl transition-colors cursor-pointer"
                     >
                       Compare vs Zameen.com ↓
                     </button>
@@ -341,9 +341,9 @@ export default function ZameenAdvantageSection() {
               </AnimatePresence>
 
               {/* Continuous Scroll Indicator */}
-              <div className="mt-8 pt-4 border-t border-black/5 dark:border-white/10 hidden lg:flex items-center justify-between text-xs text-slate-400">
+              <div className="mt-8 pt-4 border-t border-black/5 dark:border-white/10 hidden lg:flex items-center justify-between text-xs text-apple-text-muted">
                 <span>Scroll to traverse feature points ({activeStep + 1} of 4)</span>
-                <div className="w-24 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                <div className="w-24 h-1.5 bg-apple-border dark:bg-white/10 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-teal-500 rounded-full transition-all duration-300"
                     style={{ width: `${((activeStep + 1) / 4) * 100}%` }}
@@ -362,7 +362,7 @@ export default function ZameenAdvantageSection() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96, y: -30 }}
                   transition={{ duration: 0.5, ease: REVEAL_EASE }}
-                  className="rounded-[32px] p-6 sm:p-8 bg-white/80 dark:bg-[#161720]/80 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.12)] relative overflow-hidden"
+                  className="rounded-[32px] p-6 sm:p-8 bg-white/80 dark:bg-[var(--bg-surface)]/80 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.12)] relative overflow-hidden"
                 >
                   {/* Decorative background aura */}
                   <div className={cn(
@@ -377,10 +377,10 @@ export default function ZameenAdvantageSection() {
                         <StepIcon className="w-6 h-6 stroke-[2.2]" />
                       </div>
                       <div>
-                        <div className="text-[11px] font-mono uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400">
+                        <div className="text-[11px] font-mono uppercase tracking-wider font-bold text-apple-text-muted dark:text-apple-text-muted">
                           Verified Architecture Stage
                         </div>
-                        <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                        <h4 className="text-lg font-bold text-apple-text dark:text-white">
                           {currentStepData.title}
                         </h4>
                       </div>
@@ -392,7 +392,7 @@ export default function ZameenAdvantageSection() {
                   </div>
 
                   {/* Center Highlight Stat Box */}
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-[#12131A] text-white shadow-xl mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="p-6 rounded-2xl bg-gradient-to-br from-apple-text to-[var(--bg-surface)] text-white shadow-xl mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                       <div className="text-3xl sm:text-4xl font-extrabold font-mono text-teal-300">
                         {currentStepData.preview.statValue}
@@ -403,7 +403,7 @@ export default function ZameenAdvantageSection() {
                     </div>
 
                     <div className="text-left sm:text-right">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-300 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-500/40">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-300 bg-apple-surface/60 px-2.5 py-1 rounded-full border border-apple-green/40">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Pakizzle Verified
                       </span>
@@ -413,11 +413,11 @@ export default function ZameenAdvantageSection() {
                   {/* Feature Checkpoints */}
                   <div className="space-y-3 mb-6">
                     {currentStepData.preview.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-100/70 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                        <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-apple-gray/70 dark:bg-white/5 border border-black/5 dark:border-white/5">
+                        <div className="w-5 h-5 rounded-full bg-apple-green/20 text-apple-green dark:text-apple-green flex items-center justify-center shrink-0 mt-0.5">
                           <Check className="w-3 h-3 stroke-[3]" />
                         </div>
-                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 leading-relaxed">
+                        <span className="text-xs font-medium text-apple-surface dark:text-apple-border leading-relaxed">
                           {feature}
                         </span>
                       </div>
@@ -426,7 +426,7 @@ export default function ZameenAdvantageSection() {
 
                   {/* Footer Micro Note */}
                   <div className="pt-4 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                    <p className="text-[11px] text-apple-text-muted dark:text-apple-text-muted italic">
                       {currentStepData.preview.microNote}
                     </p>
                     <button
@@ -449,15 +449,15 @@ export default function ZameenAdvantageSection() {
 
       {/* Side-by-Side Comparison Matrix Table Section */}
       <div id="comparison-matrix-table" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-white dark:bg-[#15161E] rounded-[32px] border border-black/5 dark:border-white/10 p-6 md:p-10 shadow-sm">
+        <div className="bg-white dark:bg-[var(--bg-surface)] rounded-[32px] border border-black/5 dark:border-white/10 p-6 md:p-10 shadow-sm">
           <div className="text-center max-w-xl mx-auto mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-400 text-xs font-bold uppercase tracking-wider mb-2">
               Objective Comparison
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-apple-text dark:text-white tracking-tight">
               The Reality: Pakizzle vs Zameen.com
             </h3>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-apple-text-muted dark:text-apple-text-muted mt-1">
               Engineered with Apple's standard of user respect, clarity, and precision.
             </p>
           </div>
@@ -466,7 +466,7 @@ export default function ZameenAdvantageSection() {
             {COMPARISONS.map((comp, idx) => (
               <div key={idx} className="py-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <div className="md:col-span-4">
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider block">
+                  <span className="text-xs font-bold text-apple-surface dark:text-apple-border uppercase tracking-wider block">
                     {comp.feature}
                   </span>
                 </div>
@@ -475,16 +475,16 @@ export default function ZameenAdvantageSection() {
                     <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                     Pakizzle Standard
                   </div>
-                  <div className="text-xs text-slate-900 dark:text-white font-semibold leading-relaxed">
+                  <div className="text-xs text-apple-text dark:text-white font-semibold leading-relaxed">
                     {comp.pakizzle}
                   </div>
                 </div>
-                <div className="md:col-span-4 p-3.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-black/5">
-                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-                    <CloseIcon className="w-3.5 h-3.5 text-rose-500" />
+                <div className="md:col-span-4 p-3.5 rounded-2xl bg-apple-gray dark:bg-white/5 border border-black/5">
+                  <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                    <CloseIcon className="w-3.5 h-3.5 text-apple-red" />
                     Zameen.com
                   </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <div className="text-xs text-apple-text-muted dark:text-apple-text-muted leading-relaxed">
                     {comp.zameen}
                   </div>
                 </div>

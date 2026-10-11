@@ -54,7 +54,7 @@ export default function UserAnalytics() {
             <Activity className="w-3.5 h-3.5" />
             Performance & Analytics
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Performance Velocity
           </h1>
           <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
@@ -67,7 +67,7 @@ export default function UserAnalytics() {
       <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[#1D1D1F] dark:text-white flex items-center gap-2">
+            <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[var(--text-primary)] dark:text-white flex items-center gap-2">
               <TrendingUp className="w-3.5 h-3.5 text-apple-blue" />
               Inventory Engagement
             </h2>
@@ -151,7 +151,7 @@ export default function UserAnalytics() {
                  <Globe className="w-4.5 h-4.5 text-apple-blue" />
               </div>
               <div>
-                 <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[#1D1D1F] dark:text-white">Geographic Resonance</h2>
+                 <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[var(--text-primary)] dark:text-white">Geographic Resonance</h2>
                  <p className="text-[10px] text-[#86868B] font-normal mt-0.5">Lead Origin Mapping</p>
               </div>
            </div>
@@ -183,7 +183,7 @@ export default function UserAnalytics() {
                     <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[i] }} />
                     <div className="min-w-0">
                        <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] truncate">{sector.name}</p>
-                       <p className="text-sm font-semibold text-[#1D1D1F] dark:text-white font-mono mt-0.5">{((sector.value / 1200) * 100).toFixed(0)}%</p>
+                       <p className="text-sm font-semibold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">{((sector.value / 1200) * 100).toFixed(0)}%</p>
                     </div>
                  </div>
               ))}
@@ -194,11 +194,11 @@ export default function UserAnalytics() {
         <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)] flex flex-col justify-between">
            <div>
              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 bg-apple-green/5 dark:bg-apple-green/10 rounded-xl flex items-center justify-center shrink-0">
                    <Smartphone className="w-4.5 h-4.5 text-apple-green" />
                 </div>
                 <div>
-                   <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[#1D1D1F] dark:text-white">Access Modalities</h2>
+                   <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[var(--text-primary)] dark:text-white">Access Modalities</h2>
                    <p className="text-[10px] text-[#86868B] font-normal mt-0.5">Device-Type Analysis</p>
                 </div>
              </div>
@@ -206,11 +206,11 @@ export default function UserAnalytics() {
              <div className="space-y-4">
                 <div className="space-y-2">
                    <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
-                      <div className="flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+                      <div className="flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                          <Smartphone className="w-3.5 h-3.5 text-apple-blue" />
                          <span>Mobile Interface</span>
                       </div>
-                      <span className="font-mono text-[#1D1D1F] dark:text-white">84%</span>
+                      <span className="font-mono text-[var(--text-primary)] dark:text-white">84%</span>
                    </div>
                    <div className="h-2 bg-[#E5E5E7] dark:bg-white/10 rounded-full overflow-hidden">
                       <motion.div 
@@ -224,11 +224,11 @@ export default function UserAnalytics() {
 
                 <div className="space-y-2">
                    <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
-                      <div className="flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+                      <div className="flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                          <Laptop className="w-3.5 h-3.5 text-[#86868B]" />
                          <span>Desktop Terminal</span>
                       </div>
-                      <span className="font-mono text-[#1D1D1F] dark:text-white">12%</span>
+                      <span className="font-mono text-[var(--text-primary)] dark:text-white">12%</span>
                    </div>
                    <div className="h-2 bg-[#E5E5E7] dark:bg-white/10 rounded-full overflow-hidden">
                       <motion.div 
@@ -242,11 +242,11 @@ export default function UserAnalytics() {
 
                 <div className="space-y-2">
                    <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
-                      <div className="flex items-center gap-2 text-[#1D1D1F] dark:text-white">
+                      <div className="flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                          <Globe className="w-3.5 h-3.5 text-[#86868B]" />
                          <span>Other Entities</span>
                       </div>
-                      <span className="font-mono text-[#1D1D1F] dark:text-white">4%</span>
+                      <span className="font-mono text-[var(--text-primary)] dark:text-white">4%</span>
                    </div>
                    <div className="h-2 bg-[#E5E5E7] dark:bg-white/10 rounded-full overflow-hidden">
                       <motion.div 
@@ -263,7 +263,7 @@ export default function UserAnalytics() {
            <div className="mt-6 p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-center justify-between gap-4">
               <div className="min-w-0">
                  <p className="text-[9px] font-bold uppercase tracking-wider text-apple-blue mb-0.5">Elite Insight</p>
-                 <p className="text-[11px] font-semibold text-[#1D1D1F] dark:text-white leading-tight">Mobile conversion is 4x higher. Optimize descriptions for vertical scan.</p>
+                 <p className="text-[11px] font-semibold text-[var(--text-primary)] dark:text-white leading-tight">Mobile conversion is 4x higher. Optimize descriptions for vertical scan.</p>
               </div>
               <TrendingUp className="w-6 h-6 text-apple-blue shrink-0" />
            </div>
@@ -271,7 +271,7 @@ export default function UserAnalytics() {
       </div>
 
       {/* Advanced Market Trajectory Block */}
-      <section className="relative overflow-hidden rounded-2xl bg-[#1D1D1F] p-6 sm:p-8 text-white shadow-lg">
+      <section className="relative overflow-hidden rounded-2xl bg-[var(--text-primary)] p-6 sm:p-8 text-white shadow-lg">
          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(0,113,227,0.12),transparent)] pointer-events-none" />
          
          <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-8">

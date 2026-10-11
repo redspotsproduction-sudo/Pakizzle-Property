@@ -47,7 +47,7 @@ const PROPERTY_STYLES = [
     subtitle: "On-Ground Possession",
     icon: Map,
     tag: "Capital Growth",
-    filter: "make=Plot",
+    filter: "propertyType=Plot",
     image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=600"
   },
   {
@@ -56,7 +56,7 @@ const PROPERTY_STYLES = [
     subtitle: "Main Boulevard Retail",
     icon: Building2,
     tag: "8%+ Rental Yield",
-    filter: "make=Commercial",
+    filter: "propertyType=Commercial",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600"
   },
   {

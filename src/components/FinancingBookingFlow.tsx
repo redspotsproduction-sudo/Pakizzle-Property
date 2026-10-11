@@ -191,10 +191,10 @@ export default function FinancingBookingFlow() {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F5F5F7] dark:bg-[#000000] flex flex-col md:flex-row overflow-hidden text-[#1D1D1F] dark:text-[#F5F5F7] antialiased">
+    <div className="fixed inset-0 z-50 bg-[var(--text-primary)] dark:bg-[var(--bg-page)] flex flex-col md:flex-row overflow-hidden text-[var(--text-primary)] dark:text-[var(--text-primary)] antialiased">
       
       {/* Sidebar - Desktop Only with Luxury Blue Grid & Live Hotspot HUD */}
-      <div className="hidden md:flex w-[400px] bg-white dark:bg-[#111112] border-r border-black/[0.05] dark:border-white/[0.05] flex-col p-8 relative overflow-hidden select-none shrink-0">
+      <div className="hidden md:flex w-[400px] bg-white dark:bg-[var(--bg-surface)] border-r border-black/[0.05] dark:border-white/[0.05] flex-col p-8 relative overflow-hidden select-none shrink-0">
         
         {/* Blue color grid */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.4] dark:opacity-[0.2]" style={{
@@ -208,22 +208,22 @@ export default function FinancingBookingFlow() {
             <DollarSign className="w-5 h-5 text-white" />
           </div>
           <div>
-            <span className="text-lg font-black tracking-tight block leading-none text-[#1D1D1F] dark:text-white">PAKIZZLE</span>
+            <span className="text-lg font-black tracking-tight block leading-none text-[var(--text-primary)] dark:text-white">PAKIZZLE</span>
             <span className="text-[9px] font-bold text-apple-blue uppercase tracking-widest block mt-0.5">Capital Terminal</span>
           </div>
         </div>
 
         {/* Live Step HUD Display */}
-        <div className="mb-8 relative z-10 bg-[#FAFAFA] dark:bg-[#1C1C1E] rounded-2xl p-4 border border-black/[0.03] dark:border-white/[0.03]">
+        <div className="mb-8 relative z-10 bg-[var(--bg-surface)] dark:bg-[var(--bg-raised)] rounded-2xl p-4 border border-black/[0.03] dark:border-white/[0.03]">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-black uppercase text-[#86868B] tracking-wider">Credit HUD Telemetry</span>
+            <span className="text-[10px] font-black uppercase text-[var(--text-secondary)] tracking-wider">Credit HUD Telemetry</span>
             <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-apple-blue/10 text-apple-blue border border-apple-blue/20 animate-pulse uppercase">
               {currentStep === 'confirmation' ? 'Pre-Approved File' : 'Active Telemetry'}
             </span>
           </div>
           
           {/* Miniature side profile blue/silver sedan with responsive blips */}
-          <div className="relative py-4 bg-apple-blue/[0.02] dark:bg-[#15171a] rounded-xl overflow-hidden border border-apple-blue/10 flex justify-center items-center">
+          <div className="relative py-4 bg-apple-blue/[0.02] dark:bg-[var(--bg-surface)] rounded-xl overflow-hidden border border-apple-blue/10 flex justify-center items-center">
             
             {/* Grid pattern inner */}
             <div className="absolute inset-0 pointer-events-none opacity-50" style={{
@@ -255,7 +255,7 @@ export default function FinancingBookingFlow() {
                       "absolute inset-0 rounded-full w-6 h-6 -left-3 -top-3 transition-all duration-1000 scale-100",
                       isGlowing 
                         ? currentStep === 'confirmation'
-                          ? "bg-emerald-500/20 border border-emerald-500 animate-ping"
+                          ? "bg-apple-green/20 border border-apple-green animate-ping"
                           : "bg-apple-blue/20 border border-apple-blue animate-ping" 
                         : "bg-transparent"
                     )} />
@@ -263,13 +263,13 @@ export default function FinancingBookingFlow() {
                       "w-3 h-3 rounded-full border flex items-center justify-center transition-all duration-500 shadow-md",
                       isGlowing 
                         ? currentStep === 'confirmation'
-                          ? "bg-emerald-500 border-white text-white"
+                          ? "bg-apple-green border-white text-white"
                           : "bg-apple-blue border-white text-white scale-110" 
-                        : "bg-[#2C2C2E] border-white/20 opacity-30"
+                        : "bg-[var(--bg-inset)] border-white/20 opacity-30"
                     )}>
                       <div className={cn(
                         "w-1 h-1 rounded-full",
-                        isGlowing ? "bg-white" : "bg-gray-400"
+                        isGlowing ? "bg-white" : "bg-apple-text-muted"
                       )} />
                     </div>
                   </div>
@@ -279,7 +279,7 @@ export default function FinancingBookingFlow() {
           </div>
 
           <div className="mt-3 text-center">
-            <p className="text-[10px] font-bold text-[#86868B] tracking-normal leading-normal">
+            <p className="text-[10px] font-bold text-[var(--text-secondary)] tracking-normal leading-normal">
               {currentStep === 'vehicle' && '📡 Initializing asset valuation and collateral appraisal...'}
               {currentStep === 'financing' && '💳 Structuring amortization schedule and GPS tracker allocation...'}
               {currentStep === 'employment' && '💼 Querying State Bank credit registry nodes...'}
@@ -309,7 +309,7 @@ export default function FinancingBookingFlow() {
                     ? "border-apple-blue text-apple-blue bg-apple-blue/5 scale-110 ring-4 ring-apple-blue/10" 
                     : isCompleted 
                       ? "bg-apple-blue border-apple-blue text-white" 
-                      : "border-black/[0.08] dark:border-white/[0.08] text-[#86868B] bg-white dark:bg-[#1C1C1E]"
+                      : "border-black/[0.08] dark:border-white/[0.08] text-[var(--text-secondary)] bg-white dark:bg-[var(--bg-raised)]"
                 )}>
                   {isCompleted ? (
                     <Check className="w-4 h-4 stroke-[3]" />
@@ -323,7 +323,7 @@ export default function FinancingBookingFlow() {
                   isActive ? "opacity-100 translate-x-1" : isCompleted ? "opacity-90" : "opacity-40"
                 )}>
                   <p className="text-[8px] font-black uppercase tracking-widest text-apple-blue font-mono">Step 0{idx + 1}</p>
-                  <h4 className="text-xs font-bold text-[#1D1D1F] dark:text-white">{step.label}</h4>
+                  <h4 className="text-xs font-bold text-[var(--text-primary)] dark:text-white">{step.label}</h4>
                 </div>
               </div>
             );
@@ -332,11 +332,11 @@ export default function FinancingBookingFlow() {
 
         {/* Footer Security Badge */}
         <div className="mt-auto relative z-10 pt-4 border-t border-black/[0.05] dark:border-white/[0.05]">
-          <div className="bg-apple-blue/[0.02] dark:bg-[#111112] p-4 rounded-2xl border border-apple-blue/10 flex items-start gap-3">
+          <div className="bg-apple-blue/[0.02] dark:bg-[var(--bg-surface)] p-4 rounded-2xl border border-apple-blue/10 flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-apple-blue shrink-0 mt-0.5" />
             <div>
-              <p className="text-[10px] font-bold text-[#1D1D1F] dark:text-white">Authorized Credit Processing</p>
-              <p className="text-[9px] text-[#86868B] leading-relaxed mt-0.5">
+              <p className="text-[10px] font-bold text-[var(--text-primary)] dark:text-white">Authorized Credit Processing</p>
+              <p className="text-[9px] text-[var(--text-secondary)] leading-relaxed mt-0.5">
                 Your borrowing thresholds and SBP Debt Burden ratios are calculated under full PCI-DSS secure parameters.
               </p>
             </div>
@@ -345,11 +345,11 @@ export default function FinancingBookingFlow() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full relative overflow-y-auto custom-scrollbar bg-[#F5F5F7] dark:bg-[#000000]">
+      <div className="flex-1 flex flex-col h-full relative overflow-y-auto custom-scrollbar bg-[var(--text-primary)] dark:bg-[var(--bg-page)]">
         
         {/* Mobile Header */}
         <div className="md:hidden sticky top-0 bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/[0.04] dark:border-white/[0.04] px-6 h-16 flex items-center justify-between z-20">
-          <button onClick={() => navigate('/financing')} className="p-1.5 text-[#1D1D1F] dark:text-white">
+          <button onClick={() => navigate('/financing')} className="p-1.5 text-[var(--text-primary)] dark:text-white">
             <X className="w-5 h-5" />
           </button>
           
@@ -368,7 +368,7 @@ export default function FinancingBookingFlow() {
         {/* Desktop Exit Pill */}
         <button 
            onClick={() => navigate('/financing')}
-           className="hidden md:flex absolute top-6 right-6 p-2 bg-white dark:bg-[#111112] border border-black/[0.05] dark:border-white/[0.05] rounded-full text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white hover:scale-105 transition-all z-20 group"
+           className="hidden md:flex absolute top-6 right-6 p-2 bg-white dark:bg-[var(--bg-surface)] border border-black/[0.05] dark:border-white/[0.05] rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white hover:scale-105 transition-all z-20 group"
         >
           <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
         </button>
@@ -389,17 +389,17 @@ export default function FinancingBookingFlow() {
                     <Sparkles className="w-3 h-3" />
                     Asset Registry
                   </div>
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.15]">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-[1.15]">
                     Identify Your <span className="text-apple-blue font-bold">Machine</span>
                   </h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Provide the core vehicle parameters. Pakizzle calibrates down payment boundaries and maximum credit limits under State Bank of Pakistan guidelines.
                   </p>
                 </div>
 
-                <div className="space-y-4 bg-white dark:bg-[#111112] p-6 rounded-3xl border border-black/[0.03] dark:border-white/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+                <div className="space-y-4 bg-white dark:bg-[var(--bg-surface)] p-6 rounded-3xl border border-black/[0.03] dark:border-white/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Manufacturer / Make</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Manufacturer / Make</label>
                     <input 
                       type="text" 
                       placeholder="e.g. Toyota, Suzuki, Honda" 
@@ -411,7 +411,7 @@ export default function FinancingBookingFlow() {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Model Name</label>
+                        <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Model Name</label>
                         <input 
                             type="text" 
                             placeholder="e.g. Fortuner, Swift, Civic" 
@@ -421,7 +421,7 @@ export default function FinancingBookingFlow() {
                         />
                     </div>
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Manufacturing Year</label>
+                        <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Manufacturing Year</label>
                         <input 
                             type="text" 
                             placeholder="e.g. 2024" 
@@ -434,7 +434,7 @@ export default function FinancingBookingFlow() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Estimated Vehicle Price (PKR)</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Estimated Vehicle Price (PKR)</label>
                     <div className="relative">
                       <input 
                         type="number" 
@@ -443,14 +443,14 @@ export default function FinancingBookingFlow() {
                         value={formData.vehiclePrice}
                         onChange={(e) => setFormData({...formData, vehiclePrice: e.target.value})}
                       />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[#86868B]">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--text-secondary)]">
                         PKR
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-4 bg-[#FAFAFA] dark:bg-[#111112] rounded-2xl border border-black/[0.03] dark:border-white/[0.03] text-[10px] text-[#86868B]">
+                <div className="flex items-center gap-3 p-4 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.03] dark:border-white/[0.03] text-[10px] text-[var(--text-secondary)]">
                   <Cpu className="w-4 h-4 text-apple-blue shrink-0" />
                   <span>The database will dynamically load paint thickness tolerances and vehicle category bounds for custom assessment.</span>
                 </div>
@@ -471,18 +471,18 @@ export default function FinancingBookingFlow() {
                     <DollarSign className="w-3 h-3" />
                     Capital Structure
                   </div>
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.15]">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-[1.15]">
                     Financing <span className="text-apple-blue font-bold">Structure</span>
                   </h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Structure your borrowing requirements. Set your down payment margins (minimum 30% under SBP rules) and select preferred lease tenures.
                   </p>
                 </div>
 
-                <div className="space-y-6 bg-white dark:bg-[#111112] p-6 rounded-3xl border border-black/[0.03] dark:border-white/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+                <div className="space-y-6 bg-white dark:bg-[var(--bg-surface)] p-6 rounded-3xl border border-black/[0.03] dark:border-white/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
                   {/* Down Payment Input */}
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Down Payment (PKR) — Min 30%</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Down Payment (PKR) — Min 30%</label>
                     <div className="relative">
                       <input 
                         type="number" 
@@ -491,7 +491,7 @@ export default function FinancingBookingFlow() {
                         value={formData.downPayment}
                         onChange={(e) => setFormData({...formData, downPayment: e.target.value})}
                       />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[#86868B]">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--text-secondary)]">
                         PKR
                       </div>
                     </div>
@@ -505,7 +505,7 @@ export default function FinancingBookingFlow() {
 
                   {/* Tenure selector */}
                   <div className="space-y-2">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Lease Tenure Duration</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Lease Tenure Duration</label>
                     <div className="grid grid-cols-5 gap-2">
                       {['12_months', '24_months', '36_months', '48_months', '60_months'].map((term) => {
                         const isSelected = formData.loanTerm === term;
@@ -517,7 +517,7 @@ export default function FinancingBookingFlow() {
                               "py-2.5 text-xs font-bold rounded-xl border text-center transition-all active:scale-95",
                               isSelected
                                 ? "bg-apple-blue border-apple-blue text-white shadow-sm"
-                                : "bg-[#F5F5F7] dark:bg-black/30 border-transparent text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                                : "bg-[var(--text-primary)] dark:bg-black/30 border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                             )}
                           >
                             {term.split('_')[0]}M
@@ -531,15 +531,15 @@ export default function FinancingBookingFlow() {
                   <div className="bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/10 rounded-2xl p-4 flex justify-between items-center">
                     <div>
                       <span className="text-[8px] font-extrabold text-apple-blue uppercase tracking-wider block font-mono">ESTIMATED INSTALMENT</span>
-                      <span className="text-lg font-extrabold font-mono text-[#1D1D1F] dark:text-white">
+                      <span className="text-lg font-extrabold font-mono text-[var(--text-primary)] dark:text-white">
                         {formatPrice(calculateMockInstallment(Number(formData.vehiclePrice), Number(formData.downPayment), formData.loanTerm))}
-                        <span className="text-[10px] font-sans font-normal text-[#86868B]">/mo</span>
+                        <span className="text-[10px] font-sans font-normal text-[var(--text-secondary)]">/mo</span>
                       </span>
-                      <span className="text-[7px] text-[#86868B] block mt-0.5">Calculated at standard 15.5% preferential APR.</span>
+                      <span className="text-[7px] text-[var(--text-secondary)] block mt-0.5">Calculated at standard 15.5% preferential APR.</span>
                     </div>
                     <div className="text-right">
                       <span className="text-[8px] font-extrabold text-apple-blue uppercase tracking-wider block font-mono">APR RATE</span>
-                      <span className="text-sm font-extrabold font-mono text-[#1D1D1F] dark:text-white">15.5%</span>
+                      <span className="text-sm font-extrabold font-mono text-[var(--text-primary)] dark:text-white">15.5%</span>
                     </div>
                   </div>
                 </div>
@@ -560,18 +560,18 @@ export default function FinancingBookingFlow() {
                     <Briefcase className="w-3 h-3" />
                     Financial Standing
                   </div>
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.15]">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-[1.15]">
                     Financial <span className="text-apple-blue font-bold">Standing</span>
                   </h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Verify your source of income. This information is processed securely under PCI-DSS standards to establish creditworthiness and SBP Debt Burden ratio compliance.
                   </p>
                 </div>
 
-                <div className="space-y-5 bg-white dark:bg-[#111112] p-6 rounded-3xl border border-black/[0.03] dark:border-white/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+                <div className="space-y-5 bg-white dark:bg-[var(--bg-surface)] p-6 rounded-3xl border border-black/[0.03] dark:border-white/[0.03] shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
                   {/* Employment Status Grid */}
                   <div className="space-y-2">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Employment Stream</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Employment Stream</label>
                     <div className="grid grid-cols-2 gap-3">
                       {[
                         { id: 'employed', label: 'Salaried', icon: Briefcase },
@@ -587,12 +587,12 @@ export default function FinancingBookingFlow() {
                             className={cn(
                               "h-12 rounded-xl border font-bold text-xs flex items-center justify-between px-4 transition-all duration-300 relative overflow-hidden active:scale-[0.98]",
                               isSelected 
-                                ? "bg-apple-blue/5 border-apple-blue text-[#1D1D1F] dark:text-white shadow-sm font-semibold" 
-                                : "bg-white dark:bg-black/30 border-black/[0.06] dark:border-white/[0.06] text-[#86868B] hover:border-apple-blue/25"
+                                ? "bg-apple-blue/5 border-apple-blue text-[var(--text-primary)] dark:text-white shadow-sm font-semibold" 
+                                : "bg-white dark:bg-black/30 border-black/[0.06] dark:border-white/[0.06] text-[var(--text-secondary)] hover:border-apple-blue/25"
                             )}
                           >
                             <div className="flex items-center gap-2">
-                              <status.icon className={cn("w-4 h-4", isSelected ? "text-apple-blue" : "text-[#86868B]")} />
+                              <status.icon className={cn("w-4 h-4", isSelected ? "text-apple-blue" : "text-[var(--text-secondary)]")} />
                               <span>{status.label}</span>
                             </div>
                             {isSelected ? (
@@ -607,7 +607,7 @@ export default function FinancingBookingFlow() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Monthly Net Disposable Salary (PKR)</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Monthly Net Disposable Salary (PKR)</label>
                     <div className="relative">
                       <input 
                         type="number" 
@@ -616,7 +616,7 @@ export default function FinancingBookingFlow() {
                         value={formData.monthlyIncome}
                         onChange={(e) => setFormData({...formData, monthlyIncome: e.target.value})}
                       />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[#86868B]">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--text-secondary)]">
                         PKR
                       </div>
                     </div>
@@ -639,40 +639,40 @@ export default function FinancingBookingFlow() {
                     <FileText className="w-3 h-3" />
                     Credit Manifest
                   </div>
-                  <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.15]">
+                  <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-[1.15]">
                     Credit <span className="text-apple-blue font-bold">Manifest</span>
                   </h2>
-                  <p className="text-xs text-[#86868B] leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                     Verify your borrowing criteria, collateral asset specs, and configured amortization totals before logging into the underwriter decision queue.
                   </p>
                 </div>
 
                 {/* Elegant Invoice Box */}
-                <div className="bg-white dark:bg-[#111112] border border-black/[0.04] dark:border-white/[0.04] p-6 rounded-3xl relative overflow-hidden shadow-[0_10px_35px_rgba(0,0,0,0.02)] space-y-6">
+                <div className="bg-white dark:bg-[var(--bg-surface)] border border-black/[0.04] dark:border-white/[0.04] p-6 rounded-3xl relative overflow-hidden shadow-[0_10px_35px_rgba(0,0,0,0.02)] space-y-6">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-apple-blue/5 blur-2xl rounded-full" />
                     
                     <div className="grid grid-cols-2 gap-6 pb-6 border-b border-black/[0.04] dark:border-white/[0.04]">
                         <div className="space-y-0.5">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Target Asset</p>
-                            <p className="text-sm font-bold text-[#1D1D1F] dark:text-white">
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Target Asset</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] dark:text-white">
                               {formData.vehicleYear} {formData.vehicleMake} {formData.vehicleModel}
                             </p>
                         </div>
                         <div className="space-y-0.5">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Tenure Cycle</p>
-                            <p className="text-sm font-bold text-[#1D1D1F] dark:text-white">
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Tenure Cycle</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] dark:text-white">
                               {formData.loanTerm.split('_')[0]} Months
                             </p>
                         </div>
                         <div className="space-y-0.5">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Asset Valuation</p>
-                            <p className="text-sm font-bold text-[#1D1D1F] dark:text-white font-mono">
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Asset Valuation</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] dark:text-white font-mono">
                               {formatPrice(Number(formData.vehiclePrice))}
                             </p>
                         </div>
                         <div className="space-y-0.5">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Down Payment Cash</p>
-                            <p className="text-sm font-bold text-[#1D1D1F] dark:text-white font-mono">
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Down Payment Cash</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] dark:text-white font-mono">
                               {formatPrice(Number(formData.downPayment))}
                             </p>
                         </div>
@@ -680,25 +680,25 @@ export default function FinancingBookingFlow() {
 
                     <div className="space-y-2 text-[11px] pb-6 border-b border-black/[0.04] dark:border-white/[0.04]">
                       <div className="flex justify-between">
-                        <span className="text-[#86868B]">Loan Principal balance</span>
-                        <span className="font-mono font-semibold text-[#1D1D1F] dark:text-white">{formatPrice(Number(formData.vehiclePrice) - Number(formData.downPayment))}</span>
+                        <span className="text-[var(--text-secondary)]">Loan Principal balance</span>
+                        <span className="font-mono font-semibold text-[var(--text-primary)] dark:text-white">{formatPrice(Number(formData.vehiclePrice) - Number(formData.downPayment))}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-[#86868B]">GPS Tracker Hardware & Setup</span>
-                        <span className="font-mono font-bold text-emerald-500 uppercase text-[9px]">Free Included</span>
+                        <span className="text-[var(--text-secondary)]">GPS Tracker Hardware & Setup</span>
+                        <span className="font-mono font-bold text-apple-green uppercase text-[9px]">Free Included</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-[#86868B]">Preferential Underwriter APR</span>
-                        <span className="font-mono font-semibold text-[#1D1D1F] dark:text-white">15.5% (Amortized)</span>
+                        <span className="text-[var(--text-secondary)]">Preferential Underwriter APR</span>
+                        <span className="font-mono font-semibold text-[var(--text-primary)] dark:text-white">15.5% (Amortized)</span>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-end">
                         <div className="space-y-0.5">
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Monthly Commitment</p>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Monthly Commitment</p>
                             <p className="text-2xl font-black text-apple-blue font-mono">{formatPrice(calculateMockInstallment(Number(formData.vehiclePrice), Number(formData.downPayment), formData.loanTerm))}</p>
                         </div>
-                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/10">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-apple-green/10 text-apple-green border border-apple-green/10">
                             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
                             <span className="text-[8px] font-bold uppercase tracking-wider font-mono">Pre-Approved Rate</span>
                         </div>
@@ -708,9 +708,9 @@ export default function FinancingBookingFlow() {
                 {/* Contact & Agreement Block */}
                 <div className="space-y-4">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] ml-2">Contact Number (WhatsApp Preferred)</label>
+                      <label className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] ml-2">Contact Number (WhatsApp Preferred)</label>
                       <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#86868B]">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]">
                           <Phone className="w-4 h-4" />
                         </div>
                         <input 
@@ -723,9 +723,9 @@ export default function FinancingBookingFlow() {
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-[#FAFAFA] dark:bg-[#111112] rounded-2xl border border-black/[0.03] dark:border-white/[0.03]">
+                    <div className="flex items-start gap-3 p-4 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.03] dark:border-white/[0.03]">
                       <AlertCircle className="w-4 h-4 text-apple-blue shrink-0 mt-0.5" />
-                      <p className="text-[10px] text-[#86868B] leading-relaxed">
+                      <p className="text-[10px] text-[var(--text-secondary)] leading-relaxed">
                         By continuing, you authorize Pakizzle Capital to query SBP credit records. Standard underwriting procedures apply.
                       </p>
                     </div>
@@ -747,33 +747,33 @@ export default function FinancingBookingFlow() {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2, type: "spring", stiffness: 180 }}
-                        className="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-xl shadow-emerald-500/20 z-10"
+                        className="w-16 h-16 rounded-full bg-apple-green flex items-center justify-center text-white shadow-xl shadow-apple-green/20 z-10"
                     >
                         <Check className="w-8 h-8 stroke-[3]" />
                     </motion.div>
                     <motion.div 
                         animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                        className="absolute inset-0 rounded-full border-2 border-emerald-500"
+                        className="absolute inset-0 rounded-full border-2 border-apple-green"
                     />
                 </div>
 
                 <div className="space-y-3">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 font-mono">CREDIT LOGGED ONLINE</span>
-                    <h2 className="text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.2]">
-                      Financing Request <br /> <span className="text-emerald-500 font-bold">Successfully Submitted</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-apple-green font-mono">CREDIT LOGGED ONLINE</span>
+                    <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-[1.2]">
+                      Financing Request <br /> <span className="text-apple-green font-bold">Successfully Submitted</span>
                     </h2>
-                    <p className="text-xs text-[#86868B] leading-relaxed max-w-sm mx-auto">
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-sm mx-auto">
                       Your capital file has been safely registered. Our dedicated underwriting specialist will contact you via WhatsApp/Phone within 12 hours.
                     </p>
                 </div>
 
                 {/* Simulated Receipt Box */}
-                <div className="bg-white dark:bg-[#111112] border border-black/[0.04] dark:border-white/[0.04] p-5 rounded-3xl inline-block shadow-[0_4px_24px_rgba(0,0,0,0.01)] text-left min-w-[300px]">
+                <div className="bg-white dark:bg-[var(--bg-surface)] border border-black/[0.04] dark:border-white/[0.04] p-5 rounded-3xl inline-block shadow-[0_4px_24px_rgba(0,0,0,0.01)] text-left min-w-[300px]">
                     <div className="flex items-center justify-between gap-6">
                         <div>
-                            <p className="text-[8px] font-black text-[#86868B] uppercase tracking-wider">Application Token</p>
-                            <p className="text-sm font-bold font-mono text-[#1D1D1F] dark:text-white tracking-tight uppercase">PKZ-CAP-{Math.floor(100000 + Math.random() * 900000)}</p>
+                            <p className="text-[8px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Application Token</p>
+                            <p className="text-sm font-bold font-mono text-[var(--text-primary)] dark:text-white tracking-tight uppercase">PKZ-CAP-{Math.floor(100000 + Math.random() * 900000)}</p>
                         </div>
                         <div className="w-px h-8 bg-black/[0.06] dark:bg-white/[0.06]" />
                         <button 
@@ -805,7 +805,7 @@ export default function FinancingBookingFlow() {
              <button 
                 onClick={handleBack}
                 disabled={currentStep === 'vehicle'}
-                className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white disabled:opacity-0 transition-all active:scale-95 duration-200"
+                className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white disabled:opacity-0 transition-all active:scale-95 duration-200"
              >
                 <ChevronLeft className="w-4 h-4" />
                 Back

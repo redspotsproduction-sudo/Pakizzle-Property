@@ -311,28 +311,28 @@ export default function ListingAnalyticsModal({
           className="relative w-full max-w-4xl bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.06] dark:border-white/[0.08] shadow-[0_30px_70px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col max-h-[92vh] z-10"
         >
           {/* Header Bar */}
-          <div className="p-5 sm:p-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06] flex items-start justify-between gap-4 bg-slate-50/50 dark:bg-white/[0.01]">
+          <div className="p-5 sm:p-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06] flex items-start justify-between gap-4 bg-apple-surface/50 dark:bg-white/[0.01]">
             <div className="space-y-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="px-2.5 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue text-[10px] font-black uppercase tracking-wider">
                   Real-Time Seller Analytics
                 </span>
-                <span className="text-[11px] font-mono font-semibold text-slate-500">
+                <span className="text-[11px] font-mono font-semibold text-apple-text-muted">
                   ID: #{property.reference_id || property.id}
                 </span>
-                <span className="text-slate-300 dark:text-slate-700">•</span>
-                <span className="text-[11px] text-slate-500 font-medium">
+                <span className="text-apple-border dark:text-apple-text-muted">•</span>
+                <span className="text-[11px] text-apple-text-muted font-medium">
                   {marketBenchmark.categoryName}
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white truncate">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-apple-text dark:text-white truncate">
                 {property.model}
               </h2>
-              <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                <span>Asking Price: <strong className="text-slate-900 dark:text-white font-mono">{formatPrice(property.price)} PKR</strong></span>
+              <div className="flex items-center gap-3 text-xs text-apple-text-muted font-medium">
+                <span>Asking Price: <strong className="text-apple-text dark:text-white font-mono">{formatPrice(property.price)} PKR</strong></span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <span className={cn("w-2 h-2 rounded-full", freshness.status === 'expired' ? 'bg-rose-500' : 'bg-emerald-500')} />
+                  <span className={cn("w-2 h-2 rounded-full", freshness.status === 'expired' ? 'bg-apple-red' : 'bg-apple-green')} />
                   {freshness.displayText}
                 </span>
               </div>
@@ -342,7 +342,7 @@ export default function ListingAnalyticsModal({
               <button
                 onClick={handleManualRefresh}
                 disabled={isRefreshing}
-                className="px-3 py-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-zinc-800 text-xs font-semibold hover:border-apple-blue text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-apple-surface text-xs font-semibold hover:border-apple-blue text-apple-text-muted dark:text-apple-border flex items-center gap-1.5 transition-colors cursor-pointer"
                 title="Refresh real-time data"
               >
                 <RefreshCw className={cn("w-3.5 h-3.5 text-apple-blue", isRefreshing && "animate-spin")} />
@@ -350,7 +350,7 @@ export default function ListingAnalyticsModal({
               </button>
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
+                className="w-9 h-9 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 flex items-center justify-center text-apple-text-muted hover:text-apple-text-muted dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -370,7 +370,7 @@ export default function ListingAnalyticsModal({
                   "p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden",
                   selectedMetric === 'views' 
                     ? "bg-apple-blue/5 border-apple-blue/40 shadow-sm" 
-                    : "bg-slate-50/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue/20"
+                    : "bg-apple-surface/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue/20"
                 )}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -379,16 +379,16 @@ export default function ListingAnalyticsModal({
                   </div>
                   <span className={cn(
                     "text-[10px] font-bold font-mono px-2 py-0.5 rounded-full",
-                    marketBenchmark.isAboveAverage ? "bg-emerald-500/10 text-emerald-600" : "bg-rose-500/10 text-rose-600"
+                    marketBenchmark.isAboveAverage ? "bg-apple-green/10 text-apple-green" : "bg-apple-red/10 text-apple-red"
                   )}>
                     {marketBenchmark.viewsDiffPct >= 0 ? `+${marketBenchmark.viewsDiffPct}%` : `${marketBenchmark.viewsDiffPct}%`}
                   </span>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Views</div>
-                <div className="text-2xl font-bold font-mono tracking-tight text-slate-900 dark:text-white mt-0.5">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">Total Views</div>
+                <div className="text-2xl font-bold font-mono tracking-tight text-apple-text dark:text-white mt-0.5">
                   {marketBenchmark.propViews.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 font-medium">30-day cumulative impressions</div>
+                <div className="text-[10px] text-apple-text-muted mt-1 font-medium">30-day cumulative impressions</div>
               </div>
 
               {/* Unique Viewers */}
@@ -398,7 +398,7 @@ export default function ListingAnalyticsModal({
                   "p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden",
                   selectedMetric === 'uniqueViewers' 
                     ? "bg-purple-500/5 border-purple-500/40 shadow-sm" 
-                    : "bg-slate-50/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-purple-500/20"
+                    : "bg-apple-surface/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-purple-500/20"
                 )}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -409,11 +409,11 @@ export default function ListingAnalyticsModal({
                     76% Unique
                   </span>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Unique Viewers</div>
-                <div className="text-2xl font-bold font-mono tracking-tight text-slate-900 dark:text-white mt-0.5">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">Unique Viewers</div>
+                <div className="text-2xl font-bold font-mono tracking-tight text-apple-text dark:text-white mt-0.5">
                   {marketBenchmark.propUniqueViewers.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 font-medium">Deduplicated visitor devices</div>
+                <div className="text-[10px] text-apple-text-muted mt-1 font-medium">Deduplicated visitor devices</div>
               </div>
 
               {/* Saves / Wishlist */}
@@ -422,26 +422,26 @@ export default function ListingAnalyticsModal({
                 className={cn(
                   "p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden",
                   selectedMetric === 'saves' 
-                    ? "bg-rose-500/5 border-rose-500/40 shadow-sm" 
-                    : "bg-slate-50/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-rose-500/20"
+                    ? "bg-apple-red/5 border-apple-red/40 shadow-sm" 
+                    : "bg-apple-surface/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-apple-red/20"
                 )}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500">
+                  <div className="w-8 h-8 rounded-xl bg-apple-red/10 flex items-center justify-center text-apple-red">
                     <Heart className="w-4 h-4" />
                   </div>
                   <span className={cn(
                     "text-[10px] font-bold font-mono px-2 py-0.5 rounded-full",
-                    marketBenchmark.savesDiffPct >= 0 ? "bg-emerald-500/10 text-emerald-600" : "bg-rose-500/10 text-rose-600"
+                    marketBenchmark.savesDiffPct >= 0 ? "bg-apple-green/10 text-apple-green" : "bg-apple-red/10 text-apple-red"
                   )}>
                     {marketBenchmark.savesDiffPct >= 0 ? `+${marketBenchmark.savesDiffPct}%` : `${marketBenchmark.savesDiffPct}%`}
                   </span>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Saves / Wishlist</div>
-                <div className="text-2xl font-bold font-mono tracking-tight text-slate-900 dark:text-white mt-0.5">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">Saves / Wishlist</div>
+                <div className="text-2xl font-bold font-mono tracking-tight text-apple-text dark:text-white mt-0.5">
                   {marketBenchmark.propSaves.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 font-medium">Active buyer bookmarks</div>
+                <div className="text-[10px] text-apple-text-muted mt-1 font-medium">Active buyer bookmarks</div>
               </div>
 
               {/* Contact Inquiries */}
@@ -450,28 +450,28 @@ export default function ListingAnalyticsModal({
                 className={cn(
                   "p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden",
                   selectedMetric === 'inquiries' 
-                    ? "bg-emerald-500/5 border-emerald-500/40 shadow-sm" 
-                    : "bg-slate-50/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-emerald-500/20"
+                    ? "bg-apple-green/5 border-apple-green/40 shadow-sm" 
+                    : "bg-apple-surface/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04] hover:border-apple-green/20"
                 )}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                  <div className="w-8 h-8 rounded-xl bg-apple-green/10 flex items-center justify-center text-apple-green">
                     <MessageSquare className="w-4 h-4" />
                   </div>
-                  <span className="text-[10px] font-bold font-mono text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-bold font-mono text-apple-green bg-apple-green/10 px-2 py-0.5 rounded-full">
                     3.1% Conv.
                   </span>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Contact Clicks</div>
-                <div className="text-2xl font-bold font-mono tracking-tight text-slate-900 dark:text-white mt-0.5">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">Contact Clicks</div>
+                <div className="text-2xl font-bold font-mono tracking-tight text-apple-text dark:text-white mt-0.5">
                   {marketBenchmark.propInquiries.toLocaleString()}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 font-medium">Calls & WhatsApp chats initiated</div>
+                <div className="text-[10px] text-apple-text-muted mt-1 font-medium">Calls & WhatsApp chats initiated</div>
               </div>
             </div>
 
             {/* 2. Comparative Market Benchmark Pill (Fixes Zameen's #1 Seller Analytics Defect) */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-apple-blue/5 via-indigo-500/5 to-purple-500/5 border border-apple-blue/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-apple-blue/5 via-apple-blue/5 to-purple-500/5 border border-apple-blue/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-apple-blue uppercase tracking-wider">
@@ -481,17 +481,17 @@ export default function ListingAnalyticsModal({
                     Sample: {marketBenchmark.poolSize} Similar Listings
                   </span>
                 </div>
-                <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">
+                <p className="text-xs text-apple-text-muted dark:text-apple-border font-medium">
                   Benchmark: Similar <strong>{property.make || 'Properties'}</strong> in <strong>{property.city || 'your city'}</strong> average <strong>{marketBenchmark.avgViews.toLocaleString()} views</strong> and <strong>{marketBenchmark.avgInquiries} inquiries</strong> per month.
                 </p>
               </div>
 
               <div className="flex items-center gap-4 shrink-0">
                 <div className="text-right">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">Your Variance</div>
+                  <div className="text-[10px] uppercase font-bold text-apple-text-muted">Your Variance</div>
                   <div className={cn(
                     "text-lg font-bold font-mono flex items-center gap-1 justify-end",
-                    marketBenchmark.isAboveAverage ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"
+                    marketBenchmark.isAboveAverage ? "text-apple-green dark:text-apple-green" : "text-gold-decoration dark:text-gold-decoration"
                   )}>
                     {marketBenchmark.isAboveAverage ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                     <span>{marketBenchmark.viewsDiffPct >= 0 ? `+${marketBenchmark.viewsDiffPct}%` : `${marketBenchmark.viewsDiffPct}%`}</span>
@@ -499,8 +499,8 @@ export default function ListingAnalyticsModal({
                 </div>
                 <div className="h-9 w-px bg-apple-blue/20" />
                 <div className="text-left">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">Market Avg Price</div>
-                  <div className="text-sm font-bold font-mono text-slate-900 dark:text-white">
+                  <div className="text-[10px] uppercase font-bold text-apple-text-muted">Market Avg Price</div>
+                  <div className="text-sm font-bold font-mono text-apple-text dark:text-white">
                     {formatPrice(marketBenchmark.avgPrice)} PKR
                   </div>
                 </div>
@@ -508,25 +508,25 @@ export default function ListingAnalyticsModal({
             </div>
 
             {/* 3. 30-Day Daily Chronological Breakdown Chart */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900/60 border border-black/[0.04] dark:border-white/[0.06] space-y-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-apple-text/60 border border-black/[0.04] dark:border-white/[0.06] space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-apple-text dark:text-white flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-apple-blue" />
                     <span>30-Day Daily Trajectory ({selectedMetric.toUpperCase()})</span>
                   </h3>
-                  <p className="text-[11px] text-slate-500 font-medium">
+                  <p className="text-[11px] text-apple-text-muted font-medium">
                     Continuous day-by-day activity over the past 30 days compared against category baseline.
                   </p>
                 </div>
 
                 {/* Metric Selector Tabs */}
-                <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-zinc-800 rounded-xl text-xs font-semibold">
+                <div className="flex items-center gap-1 p-1 bg-apple-gray dark:bg-apple-surface rounded-xl text-xs font-semibold">
                   <button
                     onClick={() => setSelectedMetric('views')}
                     className={cn(
                       "px-2.5 py-1 rounded-lg transition-colors cursor-pointer",
-                      selectedMetric === 'views' ? "bg-white dark:bg-zinc-900 text-apple-blue shadow-xs" : "text-slate-600 dark:text-slate-400"
+                      selectedMetric === 'views' ? "bg-white dark:bg-apple-text text-apple-blue shadow-xs" : "text-apple-text-muted dark:text-apple-text-muted"
                     )}
                   >
                     Views
@@ -535,7 +535,7 @@ export default function ListingAnalyticsModal({
                     onClick={() => setSelectedMetric('uniqueViewers')}
                     className={cn(
                       "px-2.5 py-1 rounded-lg transition-colors cursor-pointer",
-                      selectedMetric === 'uniqueViewers' ? "bg-white dark:bg-zinc-900 text-purple-600 shadow-xs" : "text-slate-600 dark:text-slate-400"
+                      selectedMetric === 'uniqueViewers' ? "bg-white dark:bg-apple-text text-purple-600 shadow-xs" : "text-apple-text-muted dark:text-apple-text-muted"
                     )}
                   >
                     Unique
@@ -544,7 +544,7 @@ export default function ListingAnalyticsModal({
                     onClick={() => setSelectedMetric('saves')}
                     className={cn(
                       "px-2.5 py-1 rounded-lg transition-colors cursor-pointer",
-                      selectedMetric === 'saves' ? "bg-white dark:bg-zinc-900 text-rose-500 shadow-xs" : "text-slate-600 dark:text-slate-400"
+                      selectedMetric === 'saves' ? "bg-white dark:bg-apple-text text-apple-red shadow-xs" : "text-apple-text-muted dark:text-apple-text-muted"
                     )}
                   >
                     Saves
@@ -553,7 +553,7 @@ export default function ListingAnalyticsModal({
                     onClick={() => setSelectedMetric('inquiries')}
                     className={cn(
                       "px-2.5 py-1 rounded-lg transition-colors cursor-pointer",
-                      selectedMetric === 'inquiries' ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-slate-600 dark:text-slate-400"
+                      selectedMetric === 'inquiries' ? "bg-white dark:bg-apple-text text-apple-green shadow-xs" : "text-apple-text-muted dark:text-apple-text-muted"
                     )}
                   >
                     Inquiries
@@ -601,13 +601,13 @@ export default function ListingAnalyticsModal({
                         if (!active || !payload || !payload.length) return null;
                         const d = payload[0].payload;
                         return (
-                          <div className="bg-slate-900 text-white p-2.5 rounded-xl text-xs shadow-xl border border-white/10 space-y-1">
-                            <div className="font-bold text-slate-300">{d.dayLabel} ({d.date})</div>
+                          <div className="bg-apple-text text-white p-2.5 rounded-xl text-xs shadow-xl border border-white/10 space-y-1">
+                            <div className="font-bold text-apple-border">{d.dayLabel} ({d.date})</div>
                             <div className="flex items-center justify-between gap-4">
-                              <span className="capitalize text-slate-400">{selectedMetric}:</span>
+                              <span className="capitalize text-apple-text-muted">{selectedMetric}:</span>
                               <span className="font-bold font-mono text-apple-blue">{d[selectedMetric]}</span>
                             </div>
-                            <div className="flex items-center justify-between gap-4 text-[10px] text-slate-400">
+                            <div className="flex items-center justify-between gap-4 text-[10px] text-apple-text-muted">
                               <span>Market Avg Views:</span>
                               <span className="font-mono">{d.marketAvgViews}</span>
                             </div>
@@ -640,7 +640,7 @@ export default function ListingAnalyticsModal({
                 </ResponsiveContainer>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium pt-2 border-t border-black/[0.04] dark:border-white/[0.06]">
+              <div className="flex items-center justify-between text-[11px] text-apple-text-muted font-medium pt-2 border-t border-black/[0.04] dark:border-white/[0.06]">
                 <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3 h-1 rounded-full bg-apple-blue" />
@@ -648,12 +648,12 @@ export default function ListingAnalyticsModal({
                   </span>
                   {selectedMetric === 'views' && (
                     <span className="flex items-center gap-1.5">
-                      <span className="w-3 h-0.5 border-t border-dashed border-slate-400" />
+                      <span className="w-3 h-0.5 border-t border-dashed border-apple-text-muted" />
                       <span>Category Average Baseline</span>
                     </span>
                   )}
                 </div>
-                <div className="text-[10px] text-slate-400 font-mono">
+                <div className="text-[10px] text-apple-text-muted font-mono">
                   Near real-time refresh: {lastRefreshedTime}
                 </div>
               </div>
@@ -663,19 +663,19 @@ export default function ListingAnalyticsModal({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-500" />
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                  <Sparkles className="w-4 h-4 text-gold-decoration" />
+                  <h3 className="text-sm font-bold text-apple-text dark:text-white">
                     Actionable Improvement Suggestions ({actionableSuggestions.length})
                   </h3>
                 </div>
-                <span className="text-[11px] text-slate-500">
+                <span className="text-[11px] text-apple-text-muted">
                   Targeted recommendations based on market comparison
                 </span>
               </div>
 
               {actionableSuggestions.length === 0 ? (
-                <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-200 flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div className="p-4 rounded-2xl bg-apple-green/10 border border-apple-green/20 text-apple-green dark:text-apple-green/30 flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-apple-green shrink-0" />
                   <div className="text-xs font-semibold">
                     Optimal Listing Quality: This property has completed all primary optimization checkpoints (8+ photos, market-aligned pricing, and active freshness status).
                   </div>
@@ -690,8 +690,8 @@ export default function ListingAnalyticsModal({
                         className={cn(
                           "p-4 rounded-2xl border flex flex-col justify-between transition-all",
                           sug.severity === 'high' 
-                            ? "bg-amber-500/5 border-amber-500/30" 
-                            : "bg-slate-50/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04]"
+                            ? "bg-gold-decoration/5 border-gold-decoration/30" 
+                            : "bg-apple-surface/70 dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04]"
                         )}
                       >
                         <div className="space-y-2">
@@ -699,22 +699,22 @@ export default function ListingAnalyticsModal({
                             <div className="flex items-center gap-2 min-w-0">
                               <div className={cn(
                                 "w-7 h-7 rounded-lg flex items-center justify-center shrink-0",
-                                sug.severity === 'high' ? "bg-amber-500/15 text-amber-600" : "bg-apple-blue/10 text-apple-blue"
+                                sug.severity === 'high' ? "bg-gold-decoration/15 text-gold-decoration" : "bg-apple-blue/10 text-apple-blue"
                               )}>
                                 <Icon className="w-3.5 h-3.5" />
                               </div>
-                              <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                              <h4 className="text-xs font-bold text-apple-text dark:text-white truncate">
                                 {sug.title}
                               </h4>
                             </div>
                             <span className={cn(
                               "text-[9px] uppercase font-black px-1.5 py-0.5 rounded-full shrink-0",
-                              sug.severity === 'high' ? "bg-amber-500/20 text-amber-700 dark:text-amber-300" : "bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-slate-300"
+                              sug.severity === 'high' ? "bg-gold-decoration/20 text-amber-700 dark:text-gold-decoration/40" : "bg-apple-border dark:bg-apple-surface text-apple-text-muted dark:text-apple-border"
                             )}>
                               {sug.severity}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                          <p className="text-[11px] text-apple-text-muted dark:text-apple-text-muted leading-relaxed font-normal">
                             {sug.description}
                           </p>
                         </div>
@@ -732,8 +732,8 @@ export default function ListingAnalyticsModal({
                             className={cn(
                               "w-full py-1.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                               sug.severity === 'high' 
-                                ? "bg-amber-600 hover:bg-amber-700 text-white shadow-xs" 
-                                : "bg-slate-900 dark:bg-white hover:bg-slate-800 text-white dark:text-slate-900"
+                                ? "bg-gold-decoration hover:bg-amber-700 text-white shadow-xs" 
+                                : "bg-apple-text dark:bg-white hover:bg-apple-surface text-white dark:text-apple-text"
                             )}
                           >
                             <span>{sug.actionText}</span>
@@ -750,14 +750,14 @@ export default function ListingAnalyticsModal({
           </div>
 
           {/* Footer Bar */}
-          <div className="p-4 px-6 border-t border-black/[0.06] dark:border-white/[0.06] bg-slate-50/50 dark:bg-white/[0.01] flex items-center justify-between text-xs text-slate-500">
+          <div className="p-4 px-6 border-t border-black/[0.06] dark:border-white/[0.06] bg-apple-surface/50 dark:bg-white/[0.01] flex items-center justify-between text-xs text-apple-text-muted">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
               <span>Telemetry Feed Active (Socket & Firestore Live Synced)</span>
             </span>
             <button
               onClick={onClose}
-              className="px-4 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold cursor-pointer hover:opacity-90 transition-opacity"
+              className="px-4 py-1.5 bg-apple-text dark:bg-white text-white dark:text-apple-text rounded-xl font-bold cursor-pointer hover:opacity-90 transition-opacity"
             >
               Done
             </button>

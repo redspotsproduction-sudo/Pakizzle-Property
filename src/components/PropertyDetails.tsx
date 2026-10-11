@@ -349,7 +349,7 @@ export default function PropertyDetails() {
       >
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-bold text-apple-text-muted dark:text-slate-400 uppercase tracking-wider truncate">
+            <span className="text-[10px] font-bold text-apple-text-muted dark:text-apple-text-muted uppercase tracking-wider truncate">
               {property.make} • {property.city}
             </span>
             <button 
@@ -358,7 +358,7 @@ export default function PropertyDetails() {
               title="Copy Property ID"
             >
               #{property.reference_id || property.id}
-              {copiedId ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
+              {copiedId ? <Check className="w-2.5 h-2.5 text-apple-green" /> : <Copy className="w-2.5 h-2.5" />}
             </button>
           </div>
           <span className="text-base font-extrabold font-mono text-apple-blue dark:text-teal-400 truncate">
@@ -402,7 +402,7 @@ export default function PropertyDetails() {
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-apple-gray dark:bg-white/10 text-[10px] font-mono font-bold text-apple-blue shrink-0">
                   ID: {property.reference_id || property.id}
                   <button onClick={handleCopyId} className="hover:text-apple-text text-apple-text-muted transition-colors cursor-pointer" title="Copy Property ID">
-                    {copiedId ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
+                    {copiedId ? <Check className="w-2.5 h-2.5 text-apple-green" /> : <Copy className="w-2.5 h-2.5" />}
                   </button>
                 </span>
               </div>
@@ -581,13 +581,13 @@ export default function PropertyDetails() {
                         aria-label="Copy Property ID"
                       >
                         {copiedId ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-500 animate-in zoom-in-50 duration-200" />
+                          <Check className="w-3.5 h-3.5 text-apple-green animate-in zoom-in-50 duration-200" />
                         ) : (
                           <Copy className="w-3.5 h-3.5" />
                         )}
                       </motion.button>
                       {copiedId && (
-                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-200">
+                        <span className="text-[10px] font-bold text-apple-green dark:text-emerald-400 animate-in fade-in duration-200">
                           Copied!
                         </span>
                       )}
@@ -613,8 +613,8 @@ export default function PropertyDetails() {
                       (property as any).titleDeedStatus === 'verified' || 
                       (property as any).title_deed_verified === true || 
                       (property as any).isTitleDeedVerified === true) && (
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-green/10 border border-apple-green/20 text-apple-green dark:text-emerald-400 text-[11px] font-bold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-apple-green shrink-0" />
                         <span>Verified Title Deed</span>
                       </div>
                     )}
@@ -624,9 +624,9 @@ export default function PropertyDetails() {
                       <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-apple-gray/80 dark:bg-white/10 border border-apple-border/60 text-xs font-semibold text-apple-text shadow-xs">
                         <span className={cn(
                           "w-2 h-2 rounded-full shrink-0",
-                          freshness.status === 'expired' ? "bg-rose-500" :
-                          freshness.status === 'stale_pending_confirmation' ? "bg-amber-500 animate-pulse" :
-                          freshness.status === 'approaching_stale' ? "bg-amber-400" : "bg-emerald-500"
+                          freshness.status === 'expired' ? "bg-apple-red" :
+                          freshness.status === 'stale_pending_confirmation' ? "bg-apple-orange animate-pulse" :
+                          freshness.status === 'approaching_stale' ? "bg-apple-orange" : "bg-apple-green"
                         )} />
                         <Clock className="w-3 h-3 text-apple-text-muted shrink-0" />
                         <span>{freshness.displayText}</span>
@@ -637,7 +637,7 @@ export default function PropertyDetails() {
                     {isOwner && !freshness?.isExpired && (
                       <button
                         onClick={handleConfirmActive}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 text-[11px] font-bold transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-apple-green/10 hover:bg-apple-green/20 text-apple-green dark:text-emerald-300 border border-apple-green/20 text-[11px] font-bold transition-all cursor-pointer"
                         title="Confirm this listing is still actively available today"
                       >
                         <Check className="w-3 h-3" />
@@ -678,27 +678,27 @@ export default function PropertyDetails() {
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-5 p-4 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 shadow-sm"
+                    className="mb-5 p-4 rounded-2xl bg-apple-orange/10 dark:bg-apple-orange/15 border border-gold-decoration/30 text-amber-900 dark:text-amber-200 shadow-sm"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0 text-amber-700 dark:text-amber-300 mt-0.5">
+                      <div className="w-8 h-8 rounded-xl bg-apple-orange/20 flex items-center justify-center shrink-0 text-apple-orange dark:text-amber-300 mt-0.5">
                         <AlertTriangle className="w-4 h-4" />
                       </div>
                       <div className="flex-1 space-y-1">
                         <div className="flex items-center justify-between gap-2">
                           <h4 className="text-sm font-bold tracking-tight">This listing may no longer be available</h4>
-                          <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300">
+                          <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-apple-orange/20 text-apple-orange dark:text-amber-300">
                             Stale Listing
                           </span>
                         </div>
-                        <p className="text-xs text-amber-800/90 dark:text-amber-300/90 leading-relaxed">
+                        <p className="text-xs text-apple-orange/90 dark:text-amber-300/90 leading-relaxed">
                           This property was last confirmed active {freshness.daysSinceConfirmed} days ago. Contact the agency to confirm current availability before planning a site visit.
                         </p>
                         {isOwner && (
                           <div className="pt-2">
                             <button
                               onClick={handleReactivate}
-                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-apple-orange hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
                             >
                               <RefreshCw className="w-3.5 h-3.5" />
                               <span>Confirm Still Available & Reactivate Listing</span>

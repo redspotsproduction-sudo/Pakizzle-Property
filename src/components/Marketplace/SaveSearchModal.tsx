@@ -205,7 +205,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 16 }}
             transition={{ type: "spring", damping: 26, stiffness: 360 }}
-            className="relative my-auto w-full max-w-md bg-white dark:bg-[#121214] border border-gray-100 dark:border-zinc-800/85 rounded-[28px] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden z-[10000]"
+            className="relative my-auto w-full max-w-md bg-white dark:bg-[#121214] border border-apple-border dark:border-white/10/85 rounded-[28px] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden z-[10000]"
           >
             {/* Apple-style gradient bar accent at the top */}
             <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-apple-blue via-indigo-500 to-purple-600" />
@@ -216,7 +216,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                 whileTap={{ scale: 0.9 }}
                 whileHover={{ scale: 1.05 }}
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-800/60 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-700/80 transition-colors border border-gray-200/50 dark:border-zinc-700/50 text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-200 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-apple-gray dark:bg-white/5/60 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-700/80 transition-colors border border-apple-border/50 dark:border-white/10/50 text-apple-text-muted dark:text-apple-text-muted hover:text-apple-text dark:hover:text-apple-text cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </motion.button>
@@ -237,7 +237,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
               </div>
 
               {/* Filter Summary Matrix */}
-              <div className="mb-6 p-4 rounded-2xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-100 dark:border-zinc-800">
+              <div className="mb-6 p-4 rounded-2xl bg-apple-gray dark:bg-white/5/50 border border-apple-border dark:border-white/10">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
                     <ListFilter className="w-3.5 h-3.5 text-apple-blue" /> Criteria
@@ -250,33 +250,33 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                 {hasFilters ? (
                   <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto custom-scrollbar pr-1">
                     {filters.searchQuery && (
-                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
+                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-white/5 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-apple-border dark:border-white/10/50 font-medium">
                         <Tag className="w-3 h-3 text-neutral-400" /> "{filters.searchQuery}"
                       </div>
                     )}
                     {(filters.propertyType || filters.make) && (
-                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
+                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-white/5 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-apple-border dark:border-white/10/50 font-medium">
                         <span className="font-bold">{filters.propertyType || filters.make}</span>
                       </div>
                     )}
                     {filters.society && (
-                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
+                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-white/5 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-apple-border dark:border-white/10/50 font-medium">
                         <span className="font-medium text-neutral-500">Society:</span> <span className="font-bold">{filters.society}</span>
                       </div>
                     )}
                     {filters.city && (
-                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
+                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-white/5 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-apple-border dark:border-white/10/50 font-medium">
                         <MapPin className="w-3 h-3 text-apple-blue" /> <span>{filters.city}</span>
                       </div>
                     )}
                     {filters.cities && filters.cities.map(c => (
-                      <div key={`city-${c}`} className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
+                      <div key={`city-${c}`} className="flex items-center gap-1 text-[11px] bg-white dark:bg-white/5 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-apple-border dark:border-white/10/50 font-medium">
                         <MapPin className="w-3 h-3 text-apple-blue" /> <span>{c}</span>
                       </div>
                     ))}
                     {(filters.minPrice || filters.maxPrice) && (
-                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-zinc-800 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-gray-100 dark:border-zinc-700/50 font-medium">
-                        <DollarSign className="w-2.5 h-2.5 text-emerald-500" />
+                      <div className="flex items-center gap-1 text-[11px] bg-white dark:bg-white/5 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg border border-apple-border dark:border-white/10/50 font-medium">
+                        <DollarSign className="w-2.5 h-2.5 text-apple-green" />
                         <span>
                           {filters.minPrice ? `PKR ${(filters.minPrice/100000).toFixed(0)}L` : "PKR 0"}-
                           {filters.maxPrice ? `PKR ${(filters.maxPrice/100000).toFixed(0)}L` : "Any"}
@@ -300,7 +300,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                     value={watcherName}
                     onChange={(e) => setWatcherName(e.target.value)}
                     placeholder="e.g. 10-Marla DHA Lahore Watcher"
-                    className="w-full text-sm font-semibold bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none rounded-xl px-4 py-2.5 text-neutral-900 dark:text-white"
+                    className="w-full text-sm font-semibold bg-apple-gray dark:bg-white/5 border border-apple-border dark:border-white/10 focus:ring-2 focus:ring-apple-blue focus:border-transparent transition-all outline-none rounded-xl px-4 py-2.5 text-neutral-900 dark:text-white"
                   />
                 </div>
 
@@ -314,7 +314,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                       className={`flex flex-col items-center p-3.5 rounded-2xl border text-center transition-all duration-300 ${
                         frequency === "instant" 
                           ? "border-apple-blue bg-apple-blue/5 dark:bg-apple-blue/10 text-apple-blue" 
-                          : "border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-850/50"
+                          : "border-apple-border dark:border-white/10 hover:bg-apple-gray dark:hover:bg-zinc-850/50"
                       }`}
                     >
                       <Zap className={`w-4 h-4 mb-1 ${frequency === "instant" ? "text-apple-blue" : "text-neutral-400"}`} />
@@ -328,7 +328,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                       className={`flex flex-col items-center p-3.5 rounded-2xl border text-center transition-all duration-300 ${
                         frequency === "daily" 
                           ? "border-apple-blue bg-apple-blue/5 dark:bg-apple-blue/10 text-apple-blue" 
-                          : "border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-850/50"
+                          : "border-apple-border dark:border-white/10 hover:bg-apple-gray dark:hover:bg-zinc-850/50"
                       }`}
                     >
                       <Clock className={`w-4 h-4 mb-1 ${frequency === "daily" ? "text-apple-blue" : "text-neutral-400"}`} />
@@ -342,9 +342,9 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 ml-0.5 block">Alert Channels</label>
                   <div className="space-y-2">
-                    <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-100 dark:border-zinc-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+                    <label className="flex items-center justify-between p-3 rounded-xl bg-apple-gray dark:bg-white/5/50 border border-apple-border dark:border-white/10 cursor-pointer hover:bg-apple-gray dark:bg-white/5 transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-indigo-550/10 flex items-center justify-center text-indigo-500">
+                        <div className="w-7 h-7 rounded-lg bg-indigo-550/10 flex items-center justify-center text-apple-blue">
                           <Smartphone className="w-4 h-4" />
                         </div>
                         <div>
@@ -360,9 +360,9 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                       />
                     </label>
 
-                    <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-100 dark:border-zinc-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+                    <label className="flex items-center justify-between p-3 rounded-xl bg-apple-gray dark:bg-white/5/50 border border-apple-border dark:border-white/10 cursor-pointer hover:bg-apple-gray dark:bg-white/5 transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-emerald-550/10 flex items-center justify-center text-emerald-500">
+                        <div className="w-7 h-7 rounded-lg bg-emerald-550/10 flex items-center justify-center text-apple-green">
                           <Mail className="w-4 h-4" />
                         </div>
                         <div>
@@ -382,10 +382,10 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
               </div>
 
               {/* Action Buttons Footer */}
-              <div className="mt-8 pt-5 border-t border-gray-100 dark:border-zinc-800/80 flex flex-col gap-3">
+              <div className="mt-8 pt-5 border-t border-apple-border dark:border-white/10/80 flex flex-col gap-3">
                 {!user ? (
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-medium">
-                    <AlertCircle className="w-4 h-4 shrink-0 text-amber-500" />
+                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-apple-orange/10 border border-apple-orange/30/20 text-apple-orange dark:text-apple-orange text-xs font-medium">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-apple-orange" />
                     <span>Identity missing. Connect session on top header.</span>
                   </div>
                 ) : (
@@ -400,7 +400,7 @@ export default function SaveSearchModal({ isOpen, onClose, filters }: SaveSearch
                     type="button"
                     variant="outline"
                     onClick={onClose}
-                    className="flex-1 py-2.5 rounded-xl border-gray-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 hover:bg-gray-50 text-xs font-bold bg-transparent"
+                    className="flex-1 py-2.5 rounded-xl border-apple-border dark:border-white/10 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 hover:bg-apple-gray text-xs font-bold bg-transparent"
                   >
                     Cancel
                   </Button>

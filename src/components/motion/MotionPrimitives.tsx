@@ -278,12 +278,12 @@ export const MotionButton = React.forwardRef<HTMLButtonElement, MotionButtonProp
     }[size];
 
     const variantClasses = {
-      primary: "bg-[#1D1D1F] dark:bg-white text-white dark:text-[#1D1D1F] shadow-sm hover:shadow-md",
-      secondary: "bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/15",
-      glass: "liquid-glass-mid text-slate-800 dark:text-white border border-slate-200/60 dark:border-white/15 shadow-sm hover:shadow-md",
-      ghost: "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5",
-      danger: "bg-rose-500 text-white shadow-sm hover:bg-rose-600",
-      emerald: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm hover:shadow-emerald-500/20",
+      primary: "bg-[var(--text-primary)] dark:bg-white text-white dark:text-[var(--text-primary)] shadow-sm hover:shadow-md",
+      secondary: "bg-apple-gray dark:bg-white/10 text-apple-surface dark:text-white hover:bg-apple-border dark:hover:bg-white/15",
+      glass: "liquid-glass-mid text-apple-surface dark:text-white border border-apple-border/60 dark:border-white/15 shadow-sm hover:shadow-md",
+      ghost: "text-apple-text-muted dark:text-apple-border hover:bg-apple-gray dark:hover:bg-white/5",
+      danger: "bg-apple-red text-white shadow-sm hover:bg-apple-red",
+      emerald: "bg-apple-green hover:bg-apple-green text-white shadow-sm hover:shadow-apple-green/20",
     }[variant];
 
     return (
@@ -294,7 +294,7 @@ export const MotionButton = React.forwardRef<HTMLButtonElement, MotionButtonProp
         transition={SPRING_SNAPPY}
         disabled={disabled}
         className={cn(
-          "inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 disabled:opacity-50 disabled:pointer-events-none select-none cursor-pointer",
+          "inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apple-green/50 disabled:opacity-50 disabled:pointer-events-none select-none cursor-pointer",
           sizeClasses,
           variantClasses,
           className
@@ -509,7 +509,7 @@ export function SlidingSegmentedControl<T extends string>({
     <div
       role="tablist"
       className={cn(
-        "inline-flex items-center bg-slate-200/70 dark:bg-white/10 backdrop-blur-md rounded-2xl relative select-none border border-slate-300/40 dark:border-white/10",
+        "inline-flex items-center bg-apple-border/70 dark:bg-white/10 backdrop-blur-md rounded-2xl relative select-none border border-apple-border/40 dark:border-white/10",
         sizeClasses,
         className
       )}
@@ -524,11 +524,11 @@ export function SlidingSegmentedControl<T extends string>({
             aria-selected={isSelected}
             onClick={() => onChange(opt.id)}
             className={cn(
-              "relative font-semibold transition-colors duration-200 flex items-center gap-1.5 z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500",
+              "relative font-semibold transition-colors duration-200 flex items-center gap-1.5 z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-apple-green",
               itemPadding,
               isSelected
-                ? "text-slate-900 dark:text-white"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+                ? "text-apple-text dark:text-white"
+                : "text-apple-text-muted dark:text-apple-border hover:text-apple-text dark:hover:text-white"
             )}
           >
             {isSelected && (
@@ -539,13 +539,13 @@ export function SlidingSegmentedControl<T extends string>({
                   stiffness: 420,
                   damping: 32,
                 }}
-                className="absolute inset-0 bg-white dark:bg-[#1D1D1F] rounded-xl shadow-md border border-black/5 dark:border-white/10 z-[-1]"
+                className="absolute inset-0 bg-white dark:bg-[var(--text-primary)] rounded-xl shadow-md border border-black/5 dark:border-white/10 z-[-1]"
               />
             )}
             {opt.icon && <span className="shrink-0">{opt.icon}</span>}
             <span>{opt.label}</span>
             {opt.badge !== undefined && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200 dark:bg-white/20 font-bold ml-0.5">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-apple-border dark:bg-white/20 font-bold ml-0.5">
                 {opt.badge}
               </span>
             )}
@@ -581,7 +581,7 @@ export const SuccessCheckmark: React.FC<SuccessCheckmarkProps> = ({
         viewBox="0 0 48 48"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={cn("text-emerald-500", className)}
+        className={cn("text-apple-green", className)}
       >
         <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth={strokeWidth} />
         <polyline points="14,24 21,31 34,17" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
@@ -599,7 +599,7 @@ export const SuccessCheckmark: React.FC<SuccessCheckmarkProps> = ({
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.35, ease: REVEAL_EASE }}
-      className={cn("text-emerald-500", className)}
+      className={cn("text-apple-green", className)}
     >
       <motion.circle
         cx="24"
@@ -769,7 +769,7 @@ export const SkeletonShimmer: React.FC<SkeletonShimmerProps> = ({
   if (shouldReduceMotion) {
     return (
       <div
-        className={cn("bg-slate-200 dark:bg-slate-800", roundedClasses, className)}
+        className={cn("bg-apple-border dark:bg-apple-surface", roundedClasses, className)}
       />
     );
   }
@@ -777,7 +777,7 @@ export const SkeletonShimmer: React.FC<SkeletonShimmerProps> = ({
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-slate-200/80 dark:bg-slate-800/80",
+        "relative overflow-hidden bg-apple-border/80 dark:bg-apple-surface/80",
         roundedClasses,
         className
       )}
@@ -888,9 +888,9 @@ export const PinRevealSection: React.FC<PinRevealSectionProps> = ({
         {title && <h2 className="text-3xl font-bold tracking-tight">{title}</h2>}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {items.map((item) => (
-            <div key={item.id} className="p-6 rounded-2xl border border-slate-200 dark:border-white/10">
+            <div key={item.id} className="p-6 rounded-2xl border border-apple-border dark:border-white/10">
               <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-              <p className="text-slate-600 dark:text-slate-400">{item.description}</p>
+              <p className="text-apple-text-muted dark:text-apple-text-muted">{item.description}</p>
             </div>
           ))}
         </div>
@@ -908,11 +908,11 @@ export const PinRevealSection: React.FC<PinRevealSectionProps> = ({
         {title && (
           <div className="mb-8">
             {subtitle && (
-              <span className="text-xs uppercase font-mono tracking-widest text-emerald-600 dark:text-emerald-400">
+              <span className="text-xs uppercase font-mono tracking-widest text-apple-green dark:text-apple-green">
                 {subtitle}
               </span>
             )}
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mt-1 text-slate-900 dark:text-white">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mt-1 text-apple-text dark:text-white">
               {title}
             </h2>
           </div>
@@ -931,19 +931,19 @@ export const PinRevealSection: React.FC<PinRevealSectionProps> = ({
                     x: isActive ? 12 : 0,
                   }}
                   transition={{ duration: 0.35, ease: REVEAL_EASE }}
-                  className="p-6 rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm"
+                  className="p-6 rounded-2xl border border-apple-border/70 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     {item.icon && (
-                      <span className={cn("p-2 rounded-xl text-white", isActive ? "bg-emerald-600" : "bg-slate-400")}>
+                      <span className={cn("p-2 rounded-xl text-white", isActive ? "bg-apple-green" : "bg-apple-text-muted")}>
                         {item.icon}
                       </span>
                     )}
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-xl font-bold text-apple-text dark:text-white">
                       {item.title}
                     </h3>
                   </div>
-                  <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">
+                  <p className="text-sm md:text-base text-apple-text-muted dark:text-apple-border">
                     {item.description}
                   </p>
                 </motion.div>
@@ -952,7 +952,7 @@ export const PinRevealSection: React.FC<PinRevealSectionProps> = ({
           </div>
 
           {/* Cross-fading Active Visual */}
-          <div className="relative h-80 lg:h-[420px] rounded-3xl overflow-hidden border border-slate-200/80 dark:border-white/10 bg-slate-900 shadow-2xl flex items-center justify-center">
+          <div className="relative h-80 lg:h-[420px] rounded-3xl overflow-hidden border border-apple-border/80 dark:border-white/10 bg-apple-text shadow-2xl flex items-center justify-center">
             {items.map((item, idx) => (
               <motion.div
                 key={item.id}

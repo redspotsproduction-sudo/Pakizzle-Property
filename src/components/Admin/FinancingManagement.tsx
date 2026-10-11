@@ -240,7 +240,7 @@ export default function FinancingManagement() {
       case 'documents_requested': return 'bg-orange-500/10 text-orange-600 dark:text-orange-400';
       case 'disbursed': return 'bg-purple-500/10 text-purple-600 dark:text-purple-400';
       case 'rejected': return 'bg-red-500/10 text-red-600 dark:text-red-400';
-      default: return 'bg-gray-500/10 text-gray-600 dark:text-gray-400';
+      default: return 'bg-apple-text-muted/10 text-apple-text-muted dark:text-apple-text-muted';
     }
   };
 
@@ -283,10 +283,10 @@ export default function FinancingManagement() {
             <DollarSign className="w-3.5 h-3.5" />
             Verified Administration Console
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Capital Terminal
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Manage risk assessment, credit profiles, debt ratios, and disbursement status.
           </p>
         </div>
@@ -294,13 +294,13 @@ export default function FinancingManagement() {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {activeTab === 'requests' ? (
             <div className="relative group min-w-[200px] sm:w-64">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] group-focus-within:text-apple-blue transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Search credits, applicants..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           ) : (
@@ -326,7 +326,7 @@ export default function FinancingManagement() {
             "pb-3.5 px-6 text-xs font-bold uppercase tracking-wider border-b-2 transition-all",
             activeTab === 'requests' 
               ? "border-apple-blue text-apple-blue" 
-              : "border-transparent text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
+              : "border-transparent text-apple-text-muted hover:text-[var(--text-primary)] dark:hover:text-white"
           )}
         >
           Credit Requests
@@ -337,7 +337,7 @@ export default function FinancingManagement() {
             "pb-3.5 px-6 text-xs font-bold uppercase tracking-wider border-b-2 transition-all",
             activeTab === 'companies' 
               ? "border-apple-blue text-apple-blue" 
-              : "border-transparent text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
+              : "border-transparent text-apple-text-muted hover:text-[var(--text-primary)] dark:hover:text-white"
           )}
         >
           Capital Providers
@@ -354,18 +354,18 @@ export default function FinancingManagement() {
               { label: 'Approved Lines', value: requests.filter(r => r.status === 'approved').length.toString(), change: 'Ready for Issuance', icon: CheckCircle2, color: 'text-apple-green', bg: 'bg-apple-green/10' },
               { label: 'Disbursed Capital', value: requests.filter(r => r.status === 'disbursed').length.toString(), change: 'Funds Released', icon: DollarSign, color: 'text-purple-500', bg: 'bg-purple-500/10' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+              <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                 <div className="flex items-start justify-between">
                   <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                     <stat.icon className={cn("w-5 h-5", stat.color)} />
                   </div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                      {stat.change}
                   </div>
                 </div>
                 <div className="mt-4">
-                  <div className="text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider mt-1.5">{stat.label}</div>
+                  <div className="text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
+                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1.5">{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -386,26 +386,26 @@ export default function FinancingManagement() {
                     "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                     isActive
                       ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                      : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                      : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Table List - EXACT border, background and hover transition as Approval Center card */}
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+          <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div className="overflow-x-auto custom-scrollbar">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-black/[0.04] dark:border-white/[0.04]">
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] pl-6">Target Asset</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Applicant</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Loan Metrics</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B]">Credit Status</th>
-                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#86868B] text-right pr-6">Command</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] pl-6">Target Asset</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Applicant</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Loan Metrics</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">Credit Status</th>
+                    <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] text-right pr-6">Command</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/[0.03] dark:divide-white/[0.03]">
@@ -420,7 +420,7 @@ export default function FinancingManagement() {
                     ))
                   ) : filteredRequests.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-20 text-center text-[#86868B] font-medium text-xs">
+                      <td colSpan={5} className="px-6 py-20 text-center text-[var(--text-secondary)] font-medium text-xs">
                         No credit applications found in the encrypted silo.
                       </td>
                     </tr>
@@ -429,7 +429,7 @@ export default function FinancingManagement() {
                       <tr 
                         key={request.id} 
                         onClick={() => openEditModal(request)}
-                        className="group border-b border-black/[0.03] dark:border-white/[0.03] last:border-b-0 hover:bg-[#F5F5F7]/40 dark:hover:bg-white/[0.01] transition-all cursor-pointer"
+                        className="group border-b border-black/[0.03] dark:border-white/[0.03] last:border-b-0 hover:bg-[var(--text-primary)]/40 dark:hover:bg-white/[0.01] transition-all cursor-pointer"
                       >
                         <td className="px-6 py-4.5 pl-6">
                           <div className="flex items-center gap-4">
@@ -437,10 +437,10 @@ export default function FinancingManagement() {
                               <Car className="w-5 h-5" />
                             </div>
                             <div>
-                              <div className="font-semibold text-sm tracking-tight text-[#1D1D1F] dark:text-white">
+                              <div className="font-semibold text-sm tracking-tight text-[var(--text-primary)] dark:text-white">
                                 {request.vehicleYear} {request.vehicleMake}
                               </div>
-                              <div className="text-[10px] font-medium text-[#86868B] mt-0.5">
+                              <div className="text-[10px] font-medium text-[var(--text-secondary)] mt-0.5">
                                 {request.vehicleModel}
                               </div>
                             </div>
@@ -448,17 +448,17 @@ export default function FinancingManagement() {
                         </td>
                         <td className="px-6 py-4.5">
                           <div>
-                            <div className="font-semibold text-sm text-[#1D1D1F] dark:text-white">{request.phone}</div>
-                            <div className="text-[10px] font-medium text-[#86868B] mt-0.5">{request.email}</div>
+                            <div className="font-semibold text-sm text-[var(--text-primary)] dark:text-white">{request.phone}</div>
+                            <div className="text-[10px] font-medium text-[var(--text-secondary)] mt-0.5">{request.email}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4.5">
                           <div className="flex flex-col gap-1.5">
-                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#1D1D1F] dark:text-white">
+                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--text-primary)] dark:text-white">
                               <TrendingUp className="w-3.5 h-3.5 text-apple-blue" />
                               {formatPrice(request.vehiclePrice - request.downPayment)}
                             </div>
-                            <div className="text-[10px] font-medium text-[#86868B]">
+                            <div className="text-[10px] font-medium text-[var(--text-secondary)]">
                               {request.interestRate || '15.5'}% Rate | {request.loanTerm.split('_')[0]}M
                             </div>
                           </div>
@@ -474,7 +474,7 @@ export default function FinancingManagement() {
                         <td className="px-6 py-4.5 pr-6 text-right" onClick={(e) => e.stopPropagation()}>
                           <button 
                             onClick={() => openEditModal(request)}
-                            className="h-9 w-9 rounded-xl flex items-center justify-center transition-all hover:bg-[#F5F5F7] dark:hover:bg-white/10 text-[#86868B] active:scale-95 shadow-none"
+                            className="h-9 w-9 rounded-xl flex items-center justify-center transition-all hover:bg-[var(--text-primary)] dark:hover:bg-white/10 text-[var(--text-secondary)] active:scale-95 shadow-none"
                           >
                             <MoreVertical className="w-4 h-4" />
                           </button>
@@ -493,22 +493,22 @@ export default function FinancingManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {companiesLoading ? (
               Array(6).fill(0).map((_, i) => (
-                <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] h-64 animate-pulse" />
+                <div key={i} className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] h-64 animate-pulse" />
               ))
             ) : companies.length === 0 ? (
-              <div className="col-span-full py-20 text-center bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
-                <p className="text-[#86868B] font-medium text-xs">No financing partners registered.</p>
+              <div className="col-span-full py-20 text-center bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04]">
+                <p className="text-[var(--text-secondary)] font-medium text-xs">No financing partners registered.</p>
               </div>
             ) : (
               companies.map((company) => (
                 <motion.div
                   key={company.id}
                   layoutId={company.id}
-                  className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group"
+                  className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group"
                 >
                   <div className="p-6 flex-1 space-y-6">
                     <div className="flex justify-between items-start">
-                      <div className="w-16 h-16 rounded-xl bg-[#F5F5F7] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                      <div className="w-16 h-16 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                         <img 
                           src={company.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=007AFF&color=fff`} 
                           alt={company.name}
@@ -524,7 +524,7 @@ export default function FinancingManagement() {
                         )}
                         <span className={cn(
                           "px-2 py-0.5 rounded-lg text-[9px] font-bold uppercase tracking-wider",
-                          company.status === 'active' ? "bg-[#34C759]/10 text-[#34C759]" : "bg-[#FF3B30]/10 text-[#FF3B30]"
+                          company.status === 'active' ? "bg-[var(--success)]/10 text-[var(--success)]" : "bg-[var(--danger)]/10 text-[var(--danger)]"
                         )}>
                           {company.status}
                         </span>
@@ -532,31 +532,31 @@ export default function FinancingManagement() {
                     </div>
 
                     <div>
-                      <h3 className="text-base font-semibold tracking-tight text-[#1D1D1F] dark:text-white mb-1.5">{company.name}</h3>
-                      <p className="text-xs text-[#86868B] dark:text-[#86868B]/80 line-clamp-2 leading-relaxed mb-4">{company.description}</p>
+                      <h3 className="text-base font-semibold tracking-tight text-[var(--text-primary)] dark:text-white mb-1.5">{company.name}</h3>
+                      <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)]/80 line-clamp-2 leading-relaxed mb-4">{company.description}</p>
                       
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Min APR Rate:</span>
+                          <span className="text-[var(--text-secondary)]">Min APR Rate:</span>
                           <span className="font-semibold text-apple-green">{company.minInterestRate}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Max Tenure:</span>
-                          <span className="font-semibold text-[#1D1D1F] dark:text-white">{company.maxTenureYears} Years</span>
+                          <span className="text-[var(--text-secondary)]">Max Tenure:</span>
+                          <span className="font-semibold text-[var(--text-primary)] dark:text-white">{company.maxTenureYears} Years</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Min Down Payment:</span>
-                          <span className="font-semibold text-[#1D1D1F] dark:text-white">{company.minDownPayment}</span>
+                          <span className="text-[var(--text-secondary)]">Min Down Payment:</span>
+                          <span className="font-semibold text-[var(--text-primary)] dark:text-white">{company.minDownPayment}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#86868B]">Processing Fee:</span>
+                          <span className="text-[var(--text-secondary)]">Processing Fee:</span>
                           <span className="font-semibold text-apple-blue">{company.processingFee}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[#F5F5F7]/40 dark:bg-white/[0.02] border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
+                  <div className="p-4 bg-[var(--text-primary)]/40 dark:bg-white/[0.02] border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
                     <button 
                       onClick={() => {
                         setEditingCompany(company);
@@ -576,13 +576,13 @@ export default function FinancingManagement() {
                         });
                         setIsCompanyModalOpen(true);
                       }}
-                      className="flex-1 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-[10px] font-bold uppercase tracking-wider hover:bg-[#F5F5F7] dark:hover:bg-white/10 text-[#1D1D1F] dark:text-white transition-all"
+                      className="flex-1 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-[10px] font-bold uppercase tracking-wider hover:bg-[var(--text-primary)] dark:hover:bg-white/10 text-[var(--text-primary)] dark:text-white transition-all"
                     >
                       Edit Protocol
                     </button>
                     <button 
                       onClick={() => handleDeleteCompany(company.id)}
-                      className="w-9 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-red-500 flex items-center justify-center hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-all border-none"
+                      className="w-9 h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.06] text-red-500 flex items-center justify-center hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] transition-all border-none"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -742,12 +742,12 @@ export default function FinancingManagement() {
 
       {/* Capital Provider Registration/Edit Dialog */}
       <Dialog open={isCompanyModalOpen} onOpenChange={setIsCompanyModalOpen}>
-        <DialogContent className="max-w-2xl rounded-[40px] border-apple-border/10 bg-white dark:bg-[#1D1D1F] p-8 overflow-hidden max-h-[90vh] flex flex-col gap-0 shadow-2xl">
+        <DialogContent className="max-w-2xl rounded-[40px] border-apple-border/10 bg-white dark:bg-[var(--text-primary)] p-8 overflow-hidden max-h-[90vh] flex flex-col gap-0 shadow-2xl">
           <div className="text-center pb-6 shrink-0 relative">
             <div className="w-20 h-20 rounded-[28px] bg-apple-blue/10 dark:bg-apple-blue/20 flex items-center justify-center mx-auto mb-4 transition-transform hover:scale-105">
               <Building2 className="w-10 h-10 text-apple-blue" />
             </div>
-            <DialogTitle className="text-3xl font-black tracking-tighter text-[#1D1D1F] dark:text-white">
+            <DialogTitle className="text-3xl font-black tracking-tighter text-[var(--text-primary)] dark:text-white">
               {editingCompany ? 'Configure Capital Partner' : 'Register Capital Partner'}
             </DialogTitle>
             <DialogDescription className="text-xs font-bold text-apple-text-muted dark:text-apple-text-muted/80 uppercase tracking-widest opacity-80 mt-2 max-w-md mx-auto leading-relaxed">
@@ -759,18 +759,18 @@ export default function FinancingManagement() {
             <ScrollArea className="flex-1 pr-2">
               <div className="space-y-6 py-2 px-1">
                 {/* Logo Upload */}
-                <div className="flex items-center gap-6 p-5 bg-[#F5F5F7]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
-                  <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[#161617] p-3 border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm">
+                <div className="flex items-center gap-6 p-5 bg-[var(--text-primary)]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
+                  <div className="w-18 h-18 rounded-2xl bg-white dark:bg-[var(--bg-surface)] p-3 border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm">
                     {companyForm.logoUrl ? (
                       <img src={companyForm.logoUrl} alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                     ) : (
-                      <Building2 className="w-8 h-8 text-[#86868B]" />
+                      <Building2 className="w-8 h-8 text-[var(--text-secondary)]" />
                     )}
                   </div>
                   <div className="space-y-1">
-                    <p className="text-xs font-bold text-[#1D1D1F] dark:text-white uppercase tracking-wider">Institution Logo</p>
-                    <p className="text-[10px] text-[#86868B] font-semibold">PNG or SVG format under 2MB preferred.</p>
-                    <label className="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-[#161617] border border-black/[0.08] dark:border-white/[0.08] rounded-xl text-[10px] font-black uppercase tracking-wider text-[#1D1D1F] dark:text-white cursor-pointer hover:bg-apple-gray dark:hover:bg-white/5 transition-all shadow-sm mt-1.5 active:scale-95">
+                    <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white uppercase tracking-wider">Institution Logo</p>
+                    <p className="text-[10px] text-[var(--text-secondary)] font-semibold">PNG or SVG format under 2MB preferred.</p>
+                    <label className="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-[var(--bg-surface)] border border-black/[0.08] dark:border-white/[0.08] rounded-xl text-[10px] font-black uppercase tracking-wider text-[var(--text-primary)] dark:text-white cursor-pointer hover:bg-apple-gray dark:hover:bg-white/5 transition-all shadow-sm mt-1.5 active:scale-95">
                       Upload Logo
                       <input 
                         type="file" 
@@ -791,7 +791,7 @@ export default function FinancingManagement() {
                       type="text" 
                       required
                       placeholder="e.g. Chase Commercial, Standard Chartered"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.name}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, name: e.target.value }))}
                     />
@@ -803,7 +803,7 @@ export default function FinancingManagement() {
                       type="text" 
                       required
                       placeholder="e.g. 11.5%"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.minInterestRate}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, minInterestRate: e.target.value }))}
                     />
@@ -816,7 +816,7 @@ export default function FinancingManagement() {
                       required
                       min={1}
                       max={20}
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.maxTenureYears}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, maxTenureYears: Number(e.target.value) }))}
                     />
@@ -827,7 +827,7 @@ export default function FinancingManagement() {
                     <input 
                       type="text" 
                       placeholder="e.g. 15%"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.minDownPayment}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, minDownPayment: e.target.value }))}
                     />
@@ -838,7 +838,7 @@ export default function FinancingManagement() {
                     <input 
                       type="text" 
                       placeholder="e.g. Rs. 3,000"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.processingFee}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, processingFee: e.target.value }))}
                     />
@@ -849,7 +849,7 @@ export default function FinancingManagement() {
                     <textarea 
                       rows={3}
                       placeholder="Describe target customer profiles, requirements or advantages."
-                      className="w-full p-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all resize-none focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full p-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all resize-none focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.description}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, description: e.target.value }))}
                     />
@@ -860,7 +860,7 @@ export default function FinancingManagement() {
                     <input 
                       type="text" 
                       placeholder="+1 (555) 019-2834"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.contactPhone}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, contactPhone: e.target.value }))}
                     />
@@ -871,7 +871,7 @@ export default function FinancingManagement() {
                     <input 
                       type="email" 
                       placeholder="underwriting@bank.com"
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.contactEmail}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, contactEmail: e.target.value }))}
                     />
@@ -881,7 +881,7 @@ export default function FinancingManagement() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted dark:text-apple-text-muted/80 ml-1">Sort Order</label>
                     <input 
                       type="number" 
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.order}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, order: Number(e.target.value) }))}
                     />
@@ -890,7 +890,7 @@ export default function FinancingManagement() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted dark:text-apple-text-muted/80 ml-1">Silo Status</label>
                     <select 
-                      className="w-full h-12 px-4 rounded-2xl bg-[#F5F5F7] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[#1D1D1F] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[#161617] focus:ring-2 focus:ring-apple-blue/20 cursor-pointer"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20 cursor-pointer"
                       value={companyForm.status}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, status: e.target.value as any }))}
                     >
@@ -899,14 +899,14 @@ export default function FinancingManagement() {
                     </select>
                   </div>
 
-                  <div className="col-span-2 mt-2 flex items-center justify-between p-5 bg-[#F5F5F7]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
+                  <div className="col-span-2 mt-2 flex items-center justify-between p-5 bg-[var(--text-primary)]/50 dark:bg-white/[0.02] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
                     <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-[#1D1D1F] dark:text-white uppercase tracking-wider">Featured Partner Badge</p>
-                      <p className="text-[10px] text-[#86868B] font-semibold">Elevates visibility and prioritizes matching on primary search dashboards.</p>
+                      <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white uppercase tracking-wider">Featured Partner Badge</p>
+                      <p className="text-[10px] text-[var(--text-secondary)] font-semibold">Elevates visibility and prioritizes matching on primary search dashboards.</p>
                     </div>
                     <input 
                       type="checkbox" 
-                      className="w-5 h-5 accent-apple-blue cursor-pointer rounded-lg border-gray-300"
+                      className="w-5 h-5 accent-apple-blue cursor-pointer rounded-lg border-apple-border"
                       checked={companyForm.isFeatured}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, isFeatured: e.target.checked }))}
                     />
@@ -928,7 +928,7 @@ export default function FinancingManagement() {
                 type="button" 
                 variant="ghost" 
                 onClick={() => setIsCompanyModalOpen(false)}
-                className="w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest text-apple-text-muted hover:bg-[#F5F5F7] dark:hover:bg-white/5"
+                className="w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest text-apple-text-muted hover:bg-[var(--text-primary)] dark:hover:bg-white/5"
               >
                 Abort & Return
               </Button>

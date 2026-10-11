@@ -798,7 +798,7 @@ export default function ReelsFeed() {
   // Remix Action handler
   const handleRemixClick = () => {
     toast.success("🎵 Multi-track premium audio remix captured! Preset loaded onto your editor dashboard.", {
-      icon: <RefreshCw className="w-4 h-4 text-emerald-400 animate-spin" />
+      icon: <RefreshCw className="w-4 h-4 text-apple-green animate-spin" />
     });
   };
 
@@ -892,29 +892,29 @@ export default function ReelsFeed() {
           <div className="flex items-center gap-1.5 select-none shrink-0">
             {/* Wave bracket left */}
             <div className="hidden sm:flex gap-[2px] items-center text-indigo-400 opacity-80 animate-pulse">
-              <span className="w-[2px] h-3.5 bg-gradient-to-t from-blue-500 to-indigo-500 rounded-full" />
-              <span className="w-[2.5px] h-5.5 bg-gradient-to-t from-indigo-500 to-purple-500 rounded-full" />
+              <span className="w-[2px] h-3.5 bg-gradient-to-t from-blue-500 to-apple-blue rounded-full" />
+              <span className="w-[2.5px] h-5.5 bg-gradient-to-t from-apple-blue to-purple-500 rounded-full" />
             </div>
             
             {/* Playing triangle button with shiny colorful gradient */}
-            <div className="relative w-8.5 h-8.5 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-blue-500 flex items-center justify-center shadow-lg shadow-indigo-500/10 shrink-0">
+            <div className="relative w-8.5 h-8.5 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-blue-500 flex items-center justify-center shadow-lg shadow-apple-blue/10 shrink-0">
               <div className="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8.5px] border-l-white ml-0.5" />
             </div>
             
             {/* Wave bracket right */}
             <div className="hidden sm:flex gap-[2px] items-center text-indigo-400 opacity-80 animate-pulse">
-              <span className="w-[2.5px] h-5.5 bg-gradient-to-t from-purple-500 to-indigo-500 rounded-full" />
-              <span className="w-[2px] h-3.5 bg-gradient-to-t from-indigo-500 to-blue-500 rounded-full" />
+              <span className="w-[2.5px] h-5.5 bg-gradient-to-t from-purple-500 to-apple-blue rounded-full" />
+              <span className="w-[2px] h-3.5 bg-gradient-to-t from-apple-blue to-blue-500 rounded-full" />
             </div>
           </div>
 
           {/* Search input bar aligned on the left next to logo/back */}
           <div className="relative flex items-center bg-[#18191c]/90 border border-white/5 rounded-full px-3.5 py-2 w-full max-w-[140px] xs:max-w-[180px] sm:max-w-[220px] md:max-w-[260px] backdrop-blur-md ml-1 md:ml-2">
-            <Search className="w-4 h-4 text-gray-400 mr-2 shrink-0" />
+            <Search className="w-4 h-4 text-apple-text-muted mr-2 shrink-0" />
             <input 
               type="text" 
               placeholder="Search" 
-              className="bg-transparent text-xs text-white/95 placeholder-gray-500 focus:outline-none w-full font-medium"
+              className="bg-transparent text-xs text-white/95 placeholder-apple-text-muted focus:outline-none w-full font-medium"
             />
           </div>
         </div>
@@ -927,7 +927,7 @@ export default function ReelsFeed() {
             </span>
             <button 
               onClick={() => setIsUploading(true)}
-              className="text-xs font-semibold text-gray-400 hover:text-white transition-colors cursor-pointer"
+              className="text-xs font-semibold text-apple-text-muted hover:text-white transition-colors cursor-pointer"
             >
               Upload Reel
             </button>
@@ -939,11 +939,11 @@ export default function ReelsFeed() {
               onClick={() => setIsMuted(!isMuted)} 
               className="flex items-center justify-center w-8.5 h-8.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white hover:bg-white/20 transition-all hover:scale-105"
             >
-              {isMuted ? <VolumeX className="w-4.5 h-4.5 text-gray-300" /> : <Volume2 className="w-4.5 h-4.5 text-blue-400 animate-pulse" />}
+              {isMuted ? <VolumeX className="w-4.5 h-4.5 text-apple-border" /> : <Volume2 className="w-4.5 h-4.5 text-blue-400 animate-pulse" />}
             </button>
 
             {/* Profile circular avatar placeholder */}
-            <button className="w-8.5 h-8.5 rounded-full bg-[#202124] border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-zinc-800 transition-all">
+            <button className="w-8.5 h-8.5 rounded-full bg-[#202124] border border-white/10 flex items-center justify-center text-apple-text-muted hover:text-white hover:bg-apple-surface transition-all">
               <User className="w-4.5 h-4.5" />
             </button>
           </div>
@@ -975,7 +975,7 @@ export default function ReelsFeed() {
                 
                 {/* 1. Primary Video Player Screen (Aspect Locked/Full-screen Mobile layout) */}
                 <div 
-                  className="w-full max-w-none md:max-w-[420px] h-[100dvh] md:h-[95vh] max-h-none md:max-h-[960px] aspect-auto md:aspect-[9/16] rounded-none md:rounded-[36px] overflow-hidden border-0 md:border md:border-white/10 relative bg-zinc-950 shadow-none md:shadow-[0_32px_80px_rgba(0,0,0,0.95)] shrink-0 group pointer-events-auto"
+                  className="w-full max-w-none md:max-w-[420px] h-[100dvh] md:h-[95vh] max-h-none md:max-h-[960px] aspect-auto md:aspect-[9/16] rounded-none md:rounded-[36px] overflow-hidden border-0 md:border md:border-white/10 relative bg-apple-text shadow-none md:shadow-[0_32px_80px_rgba(0,0,0,0.95)] shrink-0 group pointer-events-auto"
                 >
                    <ReelVideo
                     id={reel.id}
@@ -1010,7 +1010,7 @@ export default function ReelsFeed() {
                   {/* Top Location Pill Badge (Floating inside player frame - pushed below glass header on mobile) */}
                   <div className="absolute top-[84px] md:top-5 left-4 right-4 md:left-5 md:right-5 z-20 flex justify-between items-center pointer-events-none">
                     <div className="flex items-center gap-1 bg-black/65 backdrop-blur-md px-3 py-1 md:px-3.5 md:py-1.5 rounded-full text-[9.5px] md:text-[10.5px] font-bold text-white pointer-events-auto cursor-pointer border border-white/10 hover:bg-black/85 transition-all shadow-md">
-                      <MapPin className="w-3 md:w-3.5 h-3 md:h-3.5 text-rose-500 fill-rose-500/10" />
+                      <MapPin className="w-3 md:w-3.5 h-3 md:h-3.5 text-apple-red fill-apple-red/10" />
                       <span>
                         {reel.sellerId === 'demo_seller_1' ? 'F-7 Markaz - Islamabad' : reel.sellerId === 'demo_seller_2' ? 'DHA Phase 6 - Karachi' : reel.sellerId === 'demo_seller_3' ? 'Gulberg III - Lahore' : 'F-7 Markaz - Islamabad'}
                       </span>
@@ -1031,7 +1031,7 @@ export default function ReelsFeed() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="absolute inset-5 z-30 bg-zinc-950/95 backdrop-blur-2xl border border-white/15 rounded-2xl p-5 flex flex-col justify-between text-left shadow-2xl overflow-y-auto"
+                        className="absolute inset-5 z-30 bg-apple-text/95 backdrop-blur-2xl border border-white/15 rounded-2xl p-5 flex flex-col justify-between text-left shadow-2xl overflow-y-auto"
                       >
                         <div>
                           <div className="flex justify-between items-center border-b border-white/10 pb-3">
@@ -1061,11 +1061,11 @@ export default function ReelsFeed() {
                                   <div className="grid grid-cols-2 gap-3">
                                     <div className="bg-white/5 p-2 rounded-xl border border-white/5">
                                       <span className="text-[8px] text-white/40 font-mono block">ACCELERATION</span>
-                                      <span className="text-xs font-black text-emerald-400 mt-1 block">{spec.acceleration.split(' in ')[1] || '4.0s'}</span>
+                                      <span className="text-xs font-black text-apple-green mt-1 block">{spec.acceleration.split(' in ')[1] || '4.0s'}</span>
                                     </div>
                                     <div className="bg-white/5 p-2 rounded-xl border border-white/5">
                                       <span className="text-[8px] text-white/40 font-mono block">RATING POWER</span>
-                                      <span className="text-xs font-black text-amber-400 mt-1 block">{spec.power.split(' @')[0] || '450 HP'}</span>
+                                      <span className="text-xs font-black text-gold-decoration mt-1 block">{spec.power.split(' @')[0] || '450 HP'}</span>
                                     </div>
                                   </div>
 
@@ -1163,8 +1163,8 @@ export default function ReelsFeed() {
                     <div className="p-2.5 md:p-3 rounded-xl md:rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-between w-full text-[10px] select-none">
                       <div className="flex items-center gap-1.5 md:gap-2">
                         <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-emerald-500"></span>
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-apple-green opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-apple-green"></span>
                         </span>
                         <div className="text-left">
                           <span className="text-[7.5px] md:text-[8.5px] font-black uppercase tracking-[0.12em] text-[#86868B] block leading-none mb-0.5">Showroom Audited</span>
@@ -1175,7 +1175,7 @@ export default function ReelsFeed() {
                       </div>
                       <div className="text-right">
                         <span className="text-[7.5px] md:text-[8.5px] font-black uppercase tracking-[0.12em] text-[#86868B] block leading-none mb-0.5">Confidence rating</span>
-                        <span className="text-[9.5px] md:text-[10.5px] font-black text-emerald-400 font-mono leading-none">
+                        <span className="text-[9.5px] md:text-[10.5px] font-black text-apple-green font-mono leading-none">
                           {reel.sellerId === 'demo_seller_1' ? "99.2% EXCELLENCE" : "97.8% COMPLIANT"}
                         </span>
                       </div>
@@ -1183,7 +1183,7 @@ export default function ReelsFeed() {
 
                     {/* 2. Description Block */}
                     <div className="text-left w-full space-y-1.5 md:space-y-2">
-                      <p className="text-[11.5px] sm:text-[13px] text-zinc-100 leading-relaxed font-semibold tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
+                      <p className="text-[11.5px] sm:text-[13px] text-apple-gray leading-relaxed font-semibold tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
                         {(() => {
                            const isExpanded = expandedCaptions[reel.id] || false;
                            const isTranslated = translatedReels[reel.id] || false;
@@ -1278,7 +1278,7 @@ export default function ReelsFeed() {
                       onClick={handleDislikeToggle}
                       className={`w-12 h-12 rounded-full flex items-center justify-center transition-all bg-white/10 backdrop-blur-md border hover:scale-110 active:scale-95 shadow-lg pointer-events-auto ${
                         isDisliked 
-                          ? 'text-indigo-400 border-indigo-500/40 bg-indigo-500/20' 
+                          ? 'text-indigo-400 border-apple-blue/40 bg-apple-blue/20' 
                           : 'text-white border-white/10 hover:bg-white/20'
                       }`}
                     >
@@ -1349,7 +1349,7 @@ export default function ReelsFeed() {
 
                   {/* Rotating Vinyl Disc Sound helper */}
                   <div className="relative w-12 h-12 flex items-center justify-center cursor-pointer pointer-events-auto active:scale-95 mt-1 flex" onClick={handleRemixClick}>
-                    <div className="w-10 h-10 rounded-full bg-zinc-900 border border-white/20 flex items-center justify-center relative overflow-hidden animate-[spin_5s_linear_infinite] shadow-[0_0_15px_rgba(139,92,246,0.25)]">
+                    <div className="w-10 h-10 rounded-full bg-apple-text border border-white/20 flex items-center justify-center relative overflow-hidden animate-[spin_5s_linear_infinite] shadow-[0_0_15px_rgba(139,92,246,0.25)]">
                       <img 
                         src={reel.sellerId === 'demo_seller_1' ? 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=150&q=80' : reel.sellerAvatar || 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=150&q=80'} 
                         alt="Sound vinyl header" 
@@ -1371,7 +1371,7 @@ export default function ReelsFeed() {
                       initial={{ opacity: 0, x: 40 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 40 }}
-                      className="hidden md:flex flex-col w-[380px] lg:w-[450px] h-[82vh] md:h-[95vh] max-h-[720px] md:max-h-[960px] bg-zinc-950/90 border border-white/10 rounded-[28px] md:rounded-[36px] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.85)] backdrop-blur-2xl text-left pointer-events-auto"
+                      className="hidden md:flex flex-col w-[380px] lg:w-[450px] h-[82vh] md:h-[95vh] max-h-[720px] md:max-h-[960px] bg-apple-text/90 border border-white/10 rounded-[28px] md:rounded-[36px] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.85)] backdrop-blur-2xl text-left pointer-events-auto"
                     >
                       {/* Comments Console Header */}
                       <div className="p-5 border-b border-white/15 flex justify-between items-center bg-black/60">
@@ -1406,7 +1406,7 @@ export default function ReelsFeed() {
                       {reels[activeIndex] && (
                         <div className="px-5 py-3 border-b border-white/5 bg-gradient-to-r from-blue-500/5 to-purple-500/5 flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
                             <div>
                               <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Showroom Verification</span>
                               <span className="text-[10px] font-bold text-white block">
@@ -1416,7 +1416,7 @@ export default function ReelsFeed() {
                           </div>
                           <div className="text-right">
                             <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Confidence Rating</span>
-                            <span className="text-[10px] font-mono font-bold text-emerald-400 block">
+                            <span className="text-[10px] font-mono font-bold text-apple-green block">
                               {reels[activeIndex].sellerId === 'demo_seller_1' ? "99.2% EXCELLENCE" : "97.8% COMPLIANT"}
                             </span>
                           </div>
@@ -1457,7 +1457,7 @@ export default function ReelsFeed() {
                             return (
                               <div key={comment.id} className="flex flex-col gap-2 border-b border-white/5 pb-3">
                                 <div className="flex gap-2.5 text-left items-start">
-                                  <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 flex-shrink-0 overflow-hidden text-center flex items-center justify-center">
+                                  <div className="w-8 h-8 rounded-full bg-apple-surface border border-white/10 flex-shrink-0 overflow-hidden text-center flex items-center justify-center">
                                     {comment.userAvatar ? (
                                       <img src={comment.userAvatar} alt="user avatar" className="w-full h-full object-cover" />
                                     ) : (
@@ -1522,7 +1522,7 @@ export default function ReelsFeed() {
                                     >
                                       {subreplies.map((rep) => (
                                         <div key={rep.id} className="flex gap-2 text-left">
-                                          <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/5 flex-shrink-0 text-center flex items-center justify-center text-[8.5px] font-bold text-white/40 uppercase">
+                                          <div className="w-6 h-6 rounded-full bg-apple-surface border border-white/5 flex-shrink-0 text-center flex items-center justify-center text-[8.5px] font-bold text-white/40 uppercase">
                                             {rep.userName.charAt(1)}
                                           </div>
                                           <div className="flex-1">
@@ -1607,7 +1607,7 @@ export default function ReelsFeed() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="w-full bg-zinc-950/95 border-t border-white/10 rounded-t-[28px] h-[70vh] flex flex-col overflow-hidden text-left shadow-2xl"
+              className="w-full bg-apple-text/95 border-t border-white/10 rounded-t-[28px] h-[70vh] flex flex-col overflow-hidden text-left shadow-2xl"
             >
               {/* Comment Header */}
               <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/60">
@@ -1630,7 +1630,7 @@ export default function ReelsFeed() {
               {reels[activeIndex] && (
                 <div className="px-5 py-3.5 border-b border-white/5 bg-gradient-to-r from-blue-500/5 to-purple-500/5 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
                     <div>
                       <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Showroom Verification</span>
                       <span className="text-[10px] font-bold text-white block">
@@ -1640,7 +1640,7 @@ export default function ReelsFeed() {
                   </div>
                   <div className="text-right">
                     <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Confidence Rating</span>
-                    <span className="text-[10px] font-mono font-bold text-emerald-400 block">
+                    <span className="text-[10px] font-mono font-bold text-apple-green block">
                       {reels[activeIndex].sellerId === 'demo_seller_1' ? "99.2% EXCELLENCE" : "97.8% COMPLIANT"}
                     </span>
                   </div>
@@ -1664,7 +1664,7 @@ export default function ReelsFeed() {
               <div className="flex-1 overflow-y-auto p-5 space-y-4">
                 {activeReelComments.map((comment) => (
                   <div key={comment.id} className="flex gap-2.5 text-left">
-                    <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 overflow-hidden flex-shrink-0 text-center flex items-center justify-center text-[10px] text-white/40">
+                    <div className="w-8 h-8 rounded-full bg-apple-surface border border-white/10 overflow-hidden flex-shrink-0 text-center flex items-center justify-center text-[10px] text-white/40">
                       {comment.userAvatar ? (
                         <img src={comment.userAvatar} alt="avatar" className="w-full h-full object-cover" />
                       ) : (
@@ -1716,11 +1716,11 @@ export default function ReelsFeed() {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.9, y: 30, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="relative w-full max-w-lg bg-zinc-950/95 backdrop-blur-3xl rounded-[32px] border border-white/15 overflow-hidden shadow-2xl p-8 text-left z-10 flex flex-col gap-6"
+              className="relative w-full max-w-lg bg-apple-text/95 backdrop-blur-3xl rounded-[32px] border border-white/15 overflow-hidden shadow-2xl p-8 text-left z-10 flex flex-col gap-6"
             >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20">
+                  <div className="p-2.5 bg-apple-green/10 rounded-xl text-apple-green border border-apple-green/20">
                     <DollarSign className="w-5 h-5 animate-pulse" />
                   </div>
                   <div>
@@ -1739,7 +1739,7 @@ export default function ReelsFeed() {
               {/* Target Car Specifications */}
               <div className="p-4 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-between">
                 <div>
-                  <span className="text-[9px] text-emerald-400 font-mono uppercase tracking-widest font-black block">Target Vehicle</span>
+                  <span className="text-[9px] text-apple-green font-mono uppercase tracking-widest font-black block">Target Vehicle</span>
                   <span className="text-sm font-extrabold text-white mt-1 block">
                     {reels[activeIndex].year} {reels[activeIndex].make} {reels[activeIndex].model}
                   </span>
@@ -1764,7 +1764,7 @@ export default function ReelsFeed() {
                       value={offerPriceInput}
                       onChange={(e) => setOfferPriceInput(e.target.value)}
                       placeholder="e.g. 320"
-                      className="w-full bg-white/5 focus:bg-white/10 focus:outline-none font-mono text-xl font-black text-emerald-400 p-4 rounded-xl border border-white/10 focus:ring-1 focus:ring-emerald-400 text-center"
+                      className="w-full bg-white/5 focus:bg-white/10 focus:outline-none font-mono text-xl font-black text-apple-green p-4 rounded-xl border border-white/10 focus:ring-1 focus:ring-apple-green text-center"
                     />
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-white/50">Lakh PKR</div>
                   </div>
@@ -1781,13 +1781,13 @@ export default function ReelsFeed() {
                   let alertColor = "text-red-400 border-red-500/20 bg-red-500/10";
                   if (diffPercent >= 0) {
                     alertText = "👑 PLATINUM VALUE HIGH-TICKET ACTION";
-                    alertColor = "text-emerald-400 border-emerald-500/25 bg-emerald-500/15 animate-pulse";
+                    alertColor = "text-apple-green border-apple-green/25 bg-apple-green/15 animate-pulse";
                   } else if (diffPercent >= -10) {
                     alertText = "📈 COMPETITIVE DEALER ESTIMATION";
                     alertColor = "text-blue-400 border-blue-500/20 bg-blue-500/10";
                   } else if (diffPercent >= -22) {
                     alertText = "⚠️ FAIR MARKET BATTLE POSITION";
-                    alertColor = "text-amber-400 border-amber-500/20 bg-amber-500/10";
+                    alertColor = "text-gold-decoration border-gold-decoration/20 bg-gold-decoration/10";
                   }
 
                   return (
@@ -1824,7 +1824,7 @@ export default function ReelsFeed() {
                   <button
                     type="submit"
                     disabled={isSubmittingOffer}
-                    className="flex-1 py-3 text-xs font-black bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl flex items-center justify-center gap-1.5 shadow-lg transition-all"
+                    className="flex-1 py-3 text-xs font-black bg-gradient-to-r from-apple-green to-teal-600 hover:from-apple-green hover:to-teal-700 text-white rounded-xl flex items-center justify-center gap-1.5 shadow-lg transition-all"
                   >
                     {isSubmittingOffer ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -1857,7 +1857,7 @@ export default function ReelsFeed() {
               initial={{ scale: 0.9, y: 30, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.9, y: 30, opacity: 0 }}
-              className="relative w-full max-w-sm bg-zinc-950/95 border border-white/15 rounded-[32px] overflow-hidden shadow-2xl p-6 text-center z-10 flex flex-col gap-5 text-left"
+              className="relative w-full max-w-sm bg-apple-text/95 border border-white/15 rounded-[32px] overflow-hidden shadow-2xl p-6 text-center z-10 flex flex-col gap-5 text-left"
             >
               <div className="flex justify-between items-center bg-transparent">
                 <span className="text-[9px] uppercase tracking-widest font-mono text-blue-400 font-extrabold">Instant Transmission</span>
@@ -1888,7 +1888,7 @@ export default function ReelsFeed() {
                   onClick={handleCopyLink}
                   className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-[11px] font-bold text-white cursor-pointer"
                 >
-                  {copiedLink ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}
+                  {copiedLink ? <Check className="w-4 h-4 text-apple-green" /> : <Copy className="w-4 h-4 text-blue-400" />}
                   {copiedLink ? "Copied!" : "Copy Link"}
                 </button>
 
@@ -1903,7 +1903,7 @@ export default function ReelsFeed() {
                   }}
                   className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-[11px] font-bold text-white cursor-pointer"
                 >
-                  <Share2 className="w-4 h-4 text-emerald-400" />
+                  <Share2 className="w-4 h-4 text-apple-green" />
                   WhatsApp
                 </button>
               </div>
