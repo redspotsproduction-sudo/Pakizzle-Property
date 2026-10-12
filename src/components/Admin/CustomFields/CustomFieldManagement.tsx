@@ -254,7 +254,7 @@ export default function CustomFieldManagement() {
       </div>
 
       {/* Fields Table Container - EXACT match to Approval Center's custom styles */}
-      <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+      <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>

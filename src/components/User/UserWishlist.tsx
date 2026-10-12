@@ -30,7 +30,7 @@ export default function UserWishlist() {
           </p>
         </div>
         
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0 self-start md:self-end">
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0 self-start md:self-end">
            <div className="w-8 h-8 bg-apple-red/5 rounded-lg flex items-center justify-center">
               <Heart className="w-4 h-4 text-apple-red fill-apple-red" />
            </div>
@@ -52,7 +52,7 @@ export default function UserWishlist() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3, delay: i * 0.02 }}
-                className="group relative bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] transition-all duration-300"
+                className="group relative bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] transition-all duration-300"
               >
                 {/* Remove Button */}
                 <button 

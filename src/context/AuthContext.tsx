@@ -547,47 +547,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const riskScore = Math.floor(Math.random() * 20); // standard low risk on creation
       const fraudScore = Math.floor(Math.random() * 15);
 
-      const finalizedProfile: UserProfile = {
-        uid: user.uid,
-        email: profileData.email || user.email || '',
+      const onboardingPayload = {
         displayName: profileData.displayName || user.displayName || 'User',
         username: profileData.username || (profileData.displayName || 'user').toLowerCase().replace(/\s+/g, '_') + '_' + user.uid.substring(0, 5),
         photoURL: profileData.photoURL || user.photoURL || '',
-        role: 'user', // base role, but can have accountType
-        status: profileData.accountType === 'user' ? 'active' : 'pending', // dealer & companies are pending validation
-        isPhoneVerified,
-        isEmailVerified,
-        phone_verified: isPhoneVerified,
-        email_verified: isEmailVerified,
-        email_verified_at: isEmailVerified ? new Date().toISOString() : undefined,
-        phone_verified_at: isPhoneVerified ? new Date().toISOString() : undefined,
-        identity_status: (isEmailVerified && isPhoneVerified) ? 'verified' : (isEmailVerified || isPhoneVerified ? 'partial' : 'unverified'),
+        accountType: profileData.accountType || 'user',
+        agencyName: profileData.agencyName || '',
+        agencyLicense: profileData.agencyLicense || '',
+        city: profileData.city || 'Karachi',
+        address: profileData.address || '',
+        operatingSystem: os,
+        browser,
+        device,
+        registrationSource,
         trustScore: 50,
         riskScore,
         riskLevel: riskScore > 75 ? 'critical' : riskScore > 50 ? 'high' : riskScore > 25 ? 'medium' : 'low',
         suspiciousActivityCount: 0,
-        verificationLevel: (isEmailVerified && isPhoneVerified) ? 2 : 1,
-        createdAt: new Date().toISOString(),
         lastLoginAt: new Date().toISOString(),
         isOnline: true,
         lastSeen: new Date().toISOString(),
         isPendingOnboarding: false,
-        
-        // Onboarding payload fields
-        ...profileData,
-        
-        // System generated meta
-        device,
-        browser,
-        operatingSystem: os,
-        fraudScore,
-        registrationSource,
-        lastKnownIp: '182.180.89.21', // Karachi Static/Residential gateway
-        ipHistory: [{ ip: '182.180.89.21', timestamp: new Date().toISOString(), location: 'Karachi, Pakistan' }]
+        onboardingCompletedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        status: profileData.accountType === 'user' ? 'active' : 'pending',
+        role: 'user',
+        lastKnownIp: '182.180.89.21',
+        ipHistory: [{ ip: '182.180.89.21', timestamp: new Date().toISOString(), location: 'Karachi, Pakistan' }],
+        bio: profileData.bio || ''
       };
 
-      await setDoc(userDocRef, finalizedProfile);
-      setProfile(finalizedProfile);
+      await setDoc(userDocRef, onboardingPayload, { merge: true });
+
+      // Create/Update publicProfiles/{uid} for public display
+      try {
+        await setDoc(doc(db, 'publicProfiles', user.uid), {
+          uid: user.uid,
+          name: onboardingPayload.displayName,
+          displayName: onboardingPayload.displayName,
+          photo: onboardingPayload.photoURL,
+          photoURL: onboardingPayload.photoURL,
+          badge: profileData.accountType === 'dealer' ? 'business' : 'none',
+          badgeType: profileData.accountType === 'dealer' ? 'business' : 'none',
+          agency: onboardingPayload.agencyName,
+          agencyName: onboardingPayload.agencyName,
+          rating: 5.0,
+          isVerified: false,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      } catch (pubErr) {
+        console.warn('Failed to sync publicProfiles document:', pubErr);
+      }
+
+      setProfile(prev => ({
+        ...prev,
+        ...onboardingPayload
+      } as any));
+
       toast.success("Ecosystem account activated successfully!", {
         description: "Your Apple-grade identity profile is synchronized."
       });
@@ -605,6 +621,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ...data,
         updatedAt: new Date().toISOString()
       }, { merge: true });
+
+      // Synchronize publicProfiles/{uid} document
+      try {
+        const publicUpdates: Record<string, any> = { updatedAt: new Date().toISOString() };
+        if (data.displayName) {
+          publicUpdates.name = data.displayName;
+          publicUpdates.displayName = data.displayName;
+        }
+        if (data.photoURL) {
+          publicUpdates.photo = data.photoURL;
+          publicUpdates.photoURL = data.photoURL;
+        }
+        if (data.agencyName) {
+          publicUpdates.agency = data.agencyName;
+          publicUpdates.agencyName = data.agencyName;
+        }
+        await setDoc(doc(db, 'publicProfiles', user.uid), publicUpdates, { merge: true });
+      } catch (pubErr) {
+        console.warn('Could not sync public profile update:', pubErr);
+      }
       
       setProfile(prev => prev ? { ...prev, ...data } : null);
     } catch (error) {

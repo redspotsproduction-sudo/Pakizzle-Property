@@ -7,9 +7,8 @@ service firebase.storage {
     }
 
     function isAdmin() {
-      return isSignedIn() && (
+      return isSignedIn() && request.auth.token.email_verified == true && (
         request.auth.token.email == 'redspotsproduction@gmail.com' ||
-        request.auth.token.role == 'admin' ||
         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
         firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
       );
@@ -19,21 +18,72 @@ service firebase.storage {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Identity verification documents: only the owner and admins can read them
-    match /identity_verifications/{userId}/{allPaths=**} {
+    // 1. Identity verification files:
+    // Read: owner and admin only
+    // Create: owner only, images up to 8 MB
+    // Update/Delete: admin only
+    match /identity_verifications/{userId}/{fileName} {
       allow read: if isOwner(userId) || isAdmin();
-      allow write: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && 
+                    request.resource.size <= 8 * 1024 * 1024 && 
+                    request.resource.contentType.matches('image/.*');
+      allow update, delete: if isAdmin();
     }
 
-    // Default rule for other uploads (e.g. property images)
-    match /properties/{propertyId}/{allPaths=**} {
+    // 2. Property listings images
+    // Read: public
+    // Create/Update: signed-in users, images up to 10 MB
+    // Delete: signed-in users or admin
+    match /properties/{propertyId}/{fileName} {
       allow read: if true;
-      allow write: if isSignedIn();
+      allow create, update: if isSignedIn() && 
+                            request.resource.size <= 10 * 1024 * 1024 && 
+                            request.resource.contentType.matches('image/.*');
+      allow delete: if isSignedIn();
     }
 
-    match /{allPaths=**} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+    // 3. Property & Community Videos
+    // Read: public
+    // Create/Update: signed-in users, video format up to 100 MB
+    // Delete: signed-in users or admin
+    match /videos/{videoId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && 
+                            request.resource.size <= 100 * 1024 * 1024 && 
+                            request.resource.contentType.matches('video/.*');
+      allow delete: if isSignedIn();
+    }
+
+    // 4. Reels & PakStories (Short Videos and cover images)
+    // Read: public
+    // Create/Update: signed-in users, media up to 50 MB
+    // Delete: signed-in users or admin
+    match /reels/{reelId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && 
+                            request.resource.size <= 50 * 1024 * 1024 && 
+                            (request.resource.contentType.matches('video/.*') || request.resource.contentType.matches('image/.*'));
+      allow delete: if isSignedIn();
+    }
+
+    match /pakstories/{storyId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && 
+                            request.resource.size <= 50 * 1024 * 1024 && 
+                            (request.resource.contentType.matches('video/.*') || request.resource.contentType.matches('image/.*'));
+      allow delete: if isSignedIn();
+    }
+
+    // 5. User Avatars & Profile Photos
+    // Read: public
+    // Create/Update: owner only, images up to 5 MB
+    // Delete: owner or admin
+    match /avatars/{userId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isOwner(userId) && 
+                            request.resource.size <= 5 * 1024 * 1024 && 
+                            request.resource.contentType.matches('image/.*');
+      allow delete: if isOwner(userId) || isAdmin();
     }
   }
 }

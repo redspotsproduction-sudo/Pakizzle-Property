@@ -7,12 +7,12 @@ service cloud.firestore {
     match /{document=**} { allow read, write: if false; }
 
     // ---------------------------------------------------------
-    // Phase 3: Global Helpers
+    // Global Helpers
     // ---------------------------------------------------------
     function isSignedIn() { return request.auth != null; }
     
     function isAdmin() { 
-      return isSignedIn() && (
+      return isSignedIn() && request.auth.token.email_verified == true && (
         request.auth.token.email == 'redspotsproduction@gmail.com' ||
         exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
@@ -32,7 +32,16 @@ service cloud.firestore {
     function existing() { return resource.data; }
 
     // ---------------------------------------------------------
-    // Users & Profiles
+    // Public Profiles (Sanitized, non-PII, public display)
+    // ---------------------------------------------------------
+    match /publicProfiles/{userId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // Users & Private Profiles
     // ---------------------------------------------------------
     function isValidUser(data) {
       return data.keys().hasAll(['uid', 'email', 'status', 'role']) &&
@@ -40,34 +49,31 @@ service cloud.firestore {
              data.email is string &&
              data.status in ['active', 'suspended', 'banned', 'pending'] &&
              data.role in ['user', 'moderator', 'finance', 'support'] &&
+             (!('isVerified' in data) || data.isVerified == false) &&
+             (!('verificationLevel' in data) || data.verificationLevel == 0) &&
+             (!('isPhoneVerified' in data) || data.isPhoneVerified == false) &&
+             (!('isEmailVerified' in data) || data.isEmailVerified == false) &&
+             (!('isOtpVerified' in data) || data.isOtpVerified == false) &&
              (!('identity_status' in data) || data.identity_status != 'verified') &&
              (!('verified_badge_type' in data) || data.verified_badge_type == 'none');
     }
 
     match /users/{userId} {
-      allow read: if true; 
+      // Readable by owner and admin only (PII Isolation)
+      allow read: if isOwner(userId) || isAdmin(); 
       allow create: if isSignedIn() && isValidUser(incoming()) && userId == request.auth.uid;
       
-      // Action: Profile Update
+      // Action: Profile Update (Restricted non-sensitive profile customization)
       function isProfileUpdate() {
         return incoming().diff(existing()).affectedKeys().hasOnly([
-          'displayName', 'photoURL', 'username', 'phoneNumber', 'phone', 
+          'displayName', 'photoURL', 'username',
           'isOnline', 'lastSeen', 'notificationSettings', 'dob', 
           'nationality', 'gender', 'updatedAt', 'rating', 'ratingCount',
-          'themePreference'
+          'themePreference', 'bio', 'city', 'address', 'agencyName', 'agencyLicense'
         ]);
       }
 
-      // Action: Verification Sync (Required for real-time verification status task)
-      function isVerificationUpdate() {
-        return incoming().diff(existing()).affectedKeys().hasOnly([
-          'isEmailVerified', 'email_verified', 'email_verified_at',
-          'isPhoneVerified', 'phone_verified', 'phone_verified_at',
-          'isOtpVerified', 'identity_status', 'verificationLevel', 'updatedAt', 'phone', 'email'
-        ]);
-      }
-
-      // Action: Onboarding Initialization & Transition
+      // Action: Onboarding Initial State Transition with Strict Field Allowlist
       function isTransitioningOnboarding() {
         return (
           !('onboardingCompletedAt' in existing()) || 
@@ -78,18 +84,34 @@ service cloud.firestore {
         (
           (!('accountType' in incoming()) || incoming().accountType == 'user' && incoming().status == 'active') ||
           (incoming().accountType in ['dealer', 'company'] && incoming().status == 'pending')
-        );
+        ) &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName', 'username', 'photoURL', 'accountType', 'agencyName', 
+          'agencyLicense', 'city', 'address', 'operatingSystem', 'browser', 
+          'device', 'registrationSource', 'trustScore', 'riskScore', 'riskLevel', 
+          'suspiciousActivityCount', 'lastLoginAt', 'isOnline', 'lastSeen', 
+          'isPendingOnboarding', 'onboardingCompletedAt', 'updatedAt', 'status', 
+          'role', 'lastKnownIp', 'ipHistory', 'bio'
+        ]);
       }
 
-      // Constraints enforcing that normal users cannot write identity_status='verified', verified_badge_type, or role
+      // Constraints enforcing that normal users cannot write identity_status='verified', verified_badge_type, role, or verification fields
       function isSafeUserSelfUpdate() {
         return isOwner(userId) &&
           // Normal user cannot change role
           (incoming().role == existing().role || (!('role' in incoming()) && !('role' in existing()))) &&
           // Normal user cannot make themselves admin
           (!('role' in incoming()) || incoming().role != 'admin' || existing().role == 'admin') &&
+          // Normal user cannot self-grant isVerified
+          (!('isVerified' in incoming()) || incoming().isVerified == existing().isVerified) &&
           // Normal user cannot self-grant identity_status == 'verified'
-          (!('identity_status' in incoming()) || incoming().identity_status != 'verified' || existing().identity_status == 'verified') &&
+          (!('identity_status' in incoming()) || incoming().identity_status == existing().identity_status) &&
+          // Normal user cannot self-grant verificationLevel
+          (!('verificationLevel' in incoming()) || incoming().verificationLevel == existing().verificationLevel) &&
+          // Normal user cannot self-grant phone/email verification
+          (!('isPhoneVerified' in incoming()) || incoming().isPhoneVerified == existing().isPhoneVerified) &&
+          (!('isEmailVerified' in incoming()) || incoming().isEmailVerified == existing().isEmailVerified) &&
+          (!('isOtpVerified' in incoming()) || incoming().isOtpVerified == existing().isOtpVerified) &&
           // Normal user cannot self-grant verified_badge_type
           (!('verified_badge_type' in incoming()) || incoming().verified_badge_type == existing().verified_badge_type) &&
           // Normal user cannot self-grant badgeType
@@ -99,9 +121,10 @@ service cloud.firestore {
       allow update: if isSignedIn() && (
         (isOwner(userId) && 
          (
-           isTransitioningOnboarding() ||
-           isSafeUserSelfUpdate()
-         )
+           isProfileUpdate() ||
+           isTransitioningOnboarding()
+         ) &&
+         isSafeUserSelfUpdate()
         ) || isAdmin()
       );
       
@@ -158,7 +181,7 @@ service cloud.firestore {
     }
 
     // ---------------------------------------------------------
-    // Vehicles
+    // Vehicles / Legacy listings
     // ---------------------------------------------------------
     function isValidVehicle(data) {
       return data.keys().hasAll(['id', 'make', 'model', 'price', 'seller', 'status', 'createdAt']) &&
@@ -172,7 +195,7 @@ service cloud.firestore {
       allow update: if isSignedIn() && (
         (isOwner(existing().seller.uid) && 
          incoming().seller.uid == existing().seller.uid &&
-         incoming().diff(existing()).affectedKeys().hasOnly(['make', 'model', 'year', 'price', 'mileage', 'location', 'city', 'area', 'images', 'type', 'category', 'condition', 'transmission', 'fuelType', 'engineSize', 'specs', 'features', 'description', 'status', 'updatedAt', 'isAuctionVerified', 'isFeatured', 'featuredUntil', 'views', 'favorites', 'badges'])
+         incoming().diff(existing()).affectedKeys().hasOnly(['make', 'model', 'year', 'price', 'mileage', 'location', 'city', 'area', 'images', 'type', 'category', 'condition', 'transmission', 'fuelType', 'engineSize', 'specs', 'features', 'description', 'status', 'updatedAt', 'isAuctionVerified', 'isFeatured', 'featuredUntil', 'views', 'favorites', 'badges', 'propertyType'])
         ) || isAdmin()
       );
       allow delete: if isSignedIn() && (isOwner(existing().seller.uid) || isAdmin());
@@ -205,7 +228,7 @@ service cloud.firestore {
     }
 
     // ---------------------------------------------------------
-    // Other Collections
+    // Service Requests & Other Collections
     // ---------------------------------------------------------
     match /financing_requests/{requestId} {
       allow read, write: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
@@ -275,9 +298,7 @@ service cloud.firestore {
       allow read: if true;
       allow create: if isSignedIn() && incoming().sellerId == request.auth.uid;
       allow update: if isSignedIn() && (
-        // Action: Owner self editing caption or details
         (existing().sellerId == request.auth.uid && incoming().sellerId == request.auth.uid) ||
-        // Action: Atomic interactions (likes Count, comments Count, views Count) by search or user flow
         (incoming().diff(existing()).affectedKeys().hasAny(['likesCount', 'commentsCount', 'viewsCount']) &&
          incoming().diff(existing()).affectedKeys().size() <= 3) ||
         isAdmin()
@@ -313,9 +334,7 @@ service cloud.firestore {
       );
       allow create: if isSignedIn() && incoming().userId == request.auth.uid && incoming().status == 'pending';
       allow update: if isSignedIn() && (
-        // The offer owner can edit notes, priceOffer or status
         (existing().userId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['priceOffer', 'notes', 'status'])) ||
-        // The showroom owner (seller) of the reel can accept/reject (change status)
         (get(/databases/$(database)/documents/reels/$(existing().reelId)).data.sellerId == request.auth.uid &&
          incoming().diff(existing()).affectedKeys().hasOnly(['status'])) ||
         isAdmin()

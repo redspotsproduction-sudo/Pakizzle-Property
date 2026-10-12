@@ -74,7 +74,8 @@ const generateProperties = (count: number): Property[] => {
       id: `prop-${i}`,
       reference_id: referenceId,
       purpose: purpose,
-      make: base.make, // E.g., "House", "Apartment", "Plot", "Commercial"
+      propertyType: base.make, // E.g., "House", "Apartment", "Plot", "Commercial", "Penthouse"
+      make: base.make,
       model: base.model, // E.g., "Luxury Contemporary Villa"
       year: yearBuilt,
       price: Math.floor(price / 50000) * 50000,

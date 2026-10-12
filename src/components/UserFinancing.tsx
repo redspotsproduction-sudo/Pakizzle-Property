@@ -88,7 +88,7 @@ export default function UserFinancing() {
   return (
     <div className="space-y-6 pb-24">
       {/* Header Panel */}
-      <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white">Financing Applications</h2>
           <p className="text-xs font-semibold text-[#86868B] mt-1">Monitor credit scores, active monthly EMIs, and document statuses.</p>
@@ -108,7 +108,7 @@ export default function UserFinancing() {
       </div>
 
       {requests.length === 0 ? (
-        <div className="bg-white dark:bg-[#161617] rounded-3xl p-12 text-center border border-black/[0.04] dark:border-white/[0.04]">
+        <div className="bg-white dark:bg-[var(--surface-dark)] rounded-3xl p-12 text-center border border-black/[0.04] dark:border-white/[0.04]">
           <div className="w-16 h-16 bg-[#F5F5F7] dark:bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-5">
             <DollarSign className="w-7 h-7 text-[#86868B]" />
           </div>
@@ -129,7 +129,7 @@ export default function UserFinancing() {
               <input
                 type="text"
                 placeholder="Search requests by asset..."
-                className="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-apple-blue"
+                className="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-apple-blue"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -143,7 +143,7 @@ export default function UserFinancing() {
                 key={request.id}
                 layoutId={request.id}
                 onClick={() => setSelectedRequest(request)}
-                className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 cursor-pointer hover:shadow-md transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
+                className="bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 cursor-pointer hover:shadow-md transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-4 gap-2">

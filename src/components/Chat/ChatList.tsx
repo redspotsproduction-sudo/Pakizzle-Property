@@ -35,12 +35,12 @@ export default function ChatList({ isDashboardView = false }: ChatListProps) {
   const unpinnedConversations = filteredConversations.filter(c => !c.isPinned);
 
   return (
-    <div className={cn("w-full flex flex-col h-full", isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-bg")}>
+    <div className={cn("w-full flex flex-col h-full", isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg")}>
       {/* Header */}
       <div className={cn(
         "sticky top-0 z-20 border-b",
         isDashboardView 
-          ? "p-2 md:p-2.5 border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617]" 
+          ? "p-2 md:p-2.5 border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)]" 
           : "p-3 md:p-4 border-apple-border bg-apple-card-bg backdrop-blur-md"
       )}>
         <div className={cn("flex items-center justify-between", isDashboardView ? "mb-2" : "mb-4 md:mb-6")}>

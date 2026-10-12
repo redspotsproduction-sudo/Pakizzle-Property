@@ -69,7 +69,7 @@ export default function ChatContainer({ isDashboardView = false }: ChatContainer
       className={cn(
         "flex flex-col overflow-hidden relative w-full h-full",
         isDragging && "select-none cursor-col-resize",
-        isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-bg"
+        isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg"
       )}
     >
       {!isDashboardView && <Header />}
@@ -111,7 +111,7 @@ export default function ChatContainer({ isDashboardView = false }: ChatContainer
           <div className={cn(
             "flex-1 h-full min-w-0",
             !isDragging && "transition-all duration-300",
-            isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-bg",
+            isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg",
             !activeConversationId ? "hidden md:flex" : "flex"
           )}>
             <ChatWindow isDashboardView={isDashboardView} />

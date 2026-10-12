@@ -213,7 +213,7 @@ export default function CameraCapture({ label, expectedName, type, onVerified, o
               {/* Technical Metadata info - Top left */}
               <div className="absolute top-12 left-14 space-y-1">
                  <div className="flex items-center gap-1.5">
-                   <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse shadow-[0_0_5px_#3b82f6]" />
+                   <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse shadow-[0_0_5px_var(--brand-indigo)]" />
                    <span className="text-[9px] font-black text-white/90 uppercase tracking-[0.25em] drop-shadow-md">Matrix V4.2</span>
                  </div>
                  <div className="text-[7px] font-black text-white/40 uppercase tracking-[0.3em] font-mono">

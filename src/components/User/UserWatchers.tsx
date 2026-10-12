@@ -199,7 +199,7 @@ export default function UserWatchers() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0 self-start md:self-end">
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0 self-start md:self-end">
            <div className="w-8 h-8 bg-apple-blue/5 rounded-lg flex items-center justify-center">
               <Layers className="w-4 h-4 text-apple-blue" />
            </div>
@@ -211,7 +211,7 @@ export default function UserWatchers() {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl">
+        <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl">
           <RefreshCw className="w-6 h-6 text-apple-blue animate-spin mb-3" />
           <p className="text-xs text-[#86868B] font-medium">Synchronizing watcher registry with the cloud matrix...</p>
         </div>
@@ -229,7 +229,7 @@ export default function UserWatchers() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.4, delay: idx * 0.02 }}
-                  className="group relative bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] transition-all duration-300 flex flex-col justify-between"
+                  className="group relative bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
                     {/* Header info */}

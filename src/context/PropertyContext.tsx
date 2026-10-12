@@ -137,13 +137,20 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
       });
 
       const normalized = merged.map(p => {
-        if (!p.reference_id) {
+        const resolvedPropertyType = p.propertyType || p.make || (p.type === 'plot' ? 'Plot' : p.type === 'commercial' ? 'Commercial' : 'House');
+        let refId = p.reference_id;
+        if (!refId) {
           const generated = generateReferenceId(knownIds);
           knownIds.add(generated);
           reservedReferenceIdsRef.current.add(generated);
-          return { ...p, reference_id: generated };
+          refId = generated;
         }
-        return p;
+        return {
+          ...p,
+          propertyType: resolvedPropertyType,
+          make: p.make || resolvedPropertyType,
+          reference_id: refId
+        };
       });
 
       setProperties(normalized);
@@ -168,12 +175,19 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
             if (p.reference_id) knownIds.add(p.reference_id);
           });
           const normalized = merged.map(p => {
-            if (!p.reference_id) {
+            const resolvedPropertyType = p.propertyType || p.make || (p.type === 'plot' ? 'Plot' : p.type === 'commercial' ? 'Commercial' : 'House');
+            let refId = p.reference_id;
+            if (!refId) {
               const generated = generateReferenceId(knownIds);
               knownIds.add(generated);
-              return { ...p, reference_id: generated };
+              refId = generated;
             }
-            return p;
+            return {
+              ...p,
+              propertyType: resolvedPropertyType,
+              make: p.make || resolvedPropertyType,
+              reference_id: refId
+            };
           });
 
           setProperties(normalized);

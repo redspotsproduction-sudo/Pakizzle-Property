@@ -143,7 +143,7 @@ export default function UserOverview() {
       </div>
 
       {/* Credit allocation status bar */}
-      <div className="mb-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] p-4.5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+      <div className="mb-6 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)] p-4.5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
         <div className="flex-1 space-y-1.5">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4.5 h-4.5 text-apple-blue shrink-0" />
@@ -187,11 +187,11 @@ export default function UserOverview() {
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           const colorMapping = [
-            { stroke: "#0071e3", bg: "rgba(0, 113, 227, 0.05)" }, // Blue
-            { stroke: "#34c759", bg: "rgba(52, 199, 89, 0.05)" },  // Green
-            { stroke: "#ff3b30", bg: "rgba(255, 59, 48, 0.05)" },  // Red
-            { stroke: "#af52de", bg: "rgba(175, 82, 222, 0.05)" }   // Purple
-          ][i] || { stroke: "#0071e3", bg: "rgba(0, 113, 227, 0.05)" };
+            { stroke: "var(--brand-blue)", bg: "rgba(0, 113, 227, 0.05)" },
+            { stroke: "var(--success)", bg: "rgba(30, 122, 56, 0.05)" },
+            { stroke: "var(--danger)", bg: "rgba(197, 48, 48, 0.05)" },
+            { stroke: "var(--brand-purple)", bg: "rgba(96, 91, 255, 0.05)" }
+          ][i] || { stroke: "var(--brand-blue)", bg: "rgba(0, 113, 227, 0.05)" };
 
           return (
             <motion.div
@@ -199,7 +199,7 @@ export default function UserOverview() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04, type: "spring", stiffness: 140, damping: 15 }}
-              className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col justify-between hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:border-black/[0.08] dark:hover:border-white/[0.08] transition-all duration-300 relative overflow-hidden group"
+              className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4.5 flex flex-col justify-between hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:border-black/[0.08] dark:hover:border-white/[0.08] transition-all duration-300 relative overflow-hidden group"
             >
               <div 
                 className="absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -220,8 +220,8 @@ export default function UserOverview() {
               </div>
               
               <div className="space-y-0.5">
-                <div className="text-[9px] font-bold text-[#86868B] uppercase tracking-[0.1em]">{stat.label}</div>
-                <div className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-[var(--text-primary)] dark:text-[#FFFFFF] leading-none">{stat.value}</div>
+                <div className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-[var(--text-primary)] dark:text-white leading-none">{stat.value}</div>
               </div>
 
               {/* Micro-sparklines with smooth curves, continuous bezier paths, and area fills */}
@@ -259,7 +259,7 @@ export default function UserOverview() {
           <motion.div 
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0071e3] to-[#8622e3] p-5 shadow-sm text-white"
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--brand-blue)] to-[var(--accent)] p-5 shadow-sm text-white"
           >
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -290,7 +290,7 @@ export default function UserOverview() {
           </motion.div>
 
           {/* Active Listings Preview */}
-          <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 relative overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+          <section className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 relative overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 text-[var(--text-primary)] dark:text-white">
                 <Car className="w-3.5 h-3.5 text-apple-blue" />
@@ -382,7 +382,7 @@ export default function UserOverview() {
         {/* Sidebar: Activity & Intelligence */}
         <div className="space-y-6">
           {/* Transmission Log (Activity) */}
-          <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+          <section className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
             <h2 className="text-xs font-bold uppercase tracking-[0.08em] flex items-center gap-2 mb-4 text-[var(--text-primary)] dark:text-white">
               <Clock className="w-3.5 h-3.5 text-apple-blue" />
               Transmission Log
@@ -437,7 +437,7 @@ export default function UserOverview() {
           </section>
 
           {/* Market Intelligence */}
-          <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)] relative overflow-hidden group">
+          <section className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 shadow-[0_4px_24px_rgba(0,0,0,0.01)] relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-125 transition-all duration-700 group-hover:rotate-12">
               <TrendingUp className="w-16 h-16" />
             </div>

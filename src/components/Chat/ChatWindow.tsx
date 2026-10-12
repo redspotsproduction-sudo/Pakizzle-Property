@@ -121,7 +121,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
     return (
       <div className={cn(
         "flex-1 flex flex-col items-center justify-center p-12 text-center",
-        isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-gray/30"
+        isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-gray/30"
       )}>
         <div className={cn(
           "flex items-center justify-center mb-8",
@@ -150,7 +150,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
       return (
         <div className={cn(
           "flex-1 flex flex-col items-center justify-center p-12 text-center",
-          isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-gray/30"
+          isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-gray/30"
         )}>
           <Loader2 className="w-10 h-10 text-apple-blue animate-spin mb-4" />
           <p className="text-apple-text-muted font-bold">Loading conversation...</p>
@@ -160,7 +160,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
     return (
       <div className={cn(
         "flex-1 flex flex-col items-center justify-center p-12 text-center",
-        isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-gray/30"
+        isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-gray/30"
       )}>
         <div className={cn(
           "flex items-center justify-center mb-8",
@@ -191,12 +191,12 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
   }
 
   return (
-    <div className={cn("flex-1 flex flex-col h-full relative", isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-bg")}>
+    <div className={cn("flex-1 flex flex-col h-full relative", isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg")}>
       {/* Header */}
       <div className={cn(
         "border-b flex items-center justify-between z-40 shrink-0",
         isDashboardView 
-          ? "px-3 py-1.5 h-[52px] md:h-[56px] border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617]" 
+          ? "px-3 py-1.5 h-[52px] md:h-[56px] border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)]" 
           : "p-3 md:p-4 h-[64px] md:h-[80px] border-apple-border bg-apple-card-bg backdrop-blur-xl shadow-sm"
       )}>
         <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
@@ -300,7 +300,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
         <div className={cn(
           "z-30 border-b flex items-center shrink-0",
           isDashboardView 
-            ? "px-2.5 py-1.5 gap-2 border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617]" 
+            ? "px-2.5 py-1.5 gap-2 border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)]" 
             : "px-3 py-2 md:px-4 md:py-3 gap-3 border-apple-border bg-apple-card-bg backdrop-blur-md shadow-sm"
         )}>
           {(() => {
@@ -364,7 +364,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
       )}
 
       {/* Messages */}
-      <div className={cn("flex-1 overflow-y-auto relative", isDashboardView ? "bg-white dark:bg-[#161617]" : "bg-apple-bg")}>
+      <div className={cn("flex-1 overflow-y-auto relative", isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg")}>
         {/* Background Pattern Overlay */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-[0.05]"
@@ -635,7 +635,7 @@ export default function ChatWindow({ isDashboardView = false }: ChatWindowProps)
       <div className={cn(
         "border-t",
         isDashboardView 
-          ? "p-2 md:p-2.5 border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617]" 
+          ? "p-2 md:p-2.5 border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)]" 
           : "p-4 border-apple-border bg-apple-card-bg md:p-6"
       )}>
         {activeConv?.isBlocked ? (

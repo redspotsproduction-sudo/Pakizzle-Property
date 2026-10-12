@@ -70,7 +70,7 @@ const navItems: NavItem[] = [
   { id: 'users', label: 'Users', icon: Users, path: '/admin/users', category: 'Community' },
   { id: 'dealers', label: 'Dealers', icon: Store, path: '/admin/dealers', category: 'Community' },
   { id: 'companies', label: 'Companies', icon: Building2, path: '/admin/companies', category: 'Community' },
-  { id: 'verifications', label: 'Auction Verifications', icon: ShieldCheck, path: '/admin/verifications', category: 'Community' },
+  { id: 'verifications', label: 'Verifications Review', icon: ShieldCheck, path: '/admin/verifications', category: 'Community' },
 
   { id: 'inspections', label: 'Inspections CRM', icon: Activity, path: '/admin/inspections', category: 'Services' },
   { id: 'insurance', label: 'Insurance Terminal', icon: ShieldCheck, path: '/admin/insurance', category: 'Services' },

@@ -587,7 +587,7 @@ export default function AdManagement() {
             animate={{ opacity: 1, x: 0 }}
             className="w-full lg:w-[480px] shrink-0"
         >
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 p-8">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 p-8">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="w-12 h-12 bg-gold-decoration/10 rounded-2xl flex items-center justify-center">
@@ -1144,7 +1144,7 @@ export default function AdManagement() {
         
         {/* Statistics Headings */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div>
               <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-widest">Total Impressions</p>
               <h4 className="text-2xl font-black mt-1 text-apple-text dark:text-apple-gray">{totalViews.toLocaleString()}</h4>
@@ -1154,17 +1154,17 @@ export default function AdManagement() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div>
               <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-widest">Ad Conversions/Clicks</p>
               <h4 className="text-2xl font-black mt-1 text-apple-text dark:text-apple-gray">{totalClicks.toLocaleString()}</h4>
             </div>
-            <div className="w-10 h-10 bg-[#0071E3]/10 rounded-xl flex items-center justify-center text-[#0071E3]">
+            <div className="w-10 h-10 bg-[var(--brand-blue)]/10 rounded-xl flex items-center justify-center text-[var(--brand-blue)]">
               <MousePointerClick className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex items-center justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
             <div>
               <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-widest">Average CTR Rate</p>
               <h4 className="text-2xl font-black mt-1 text-apple-green">{avgCtr}%</h4>
@@ -1205,7 +1205,7 @@ export default function AdManagement() {
                     transition={{ delay: index * 0.05 }}
                     className="group relative"
                   >
-                    <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+                    <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
                     <div className="aspect-[16/9] relative overflow-hidden bg-apple-surface dark:bg-apple-text">
                       <img 
                         src={ad.imageUrl} 

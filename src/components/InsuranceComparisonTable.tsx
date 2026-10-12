@@ -357,10 +357,10 @@ export default function InsuranceComparisonTable() {
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/15 rounded-full text-[10px] font-black uppercase tracking-widest text-apple-blue">
           <Scale className="w-3.5 h-3.5" /> Direct Underwriter Matrix
         </div>
-        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white">
+        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">
           Compare Live Car Insurance Quotes
         </h2>
-        <p className="text-xs sm:text-sm text-[#86868B] max-w-2xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-2xl leading-relaxed">
           Input your vehicle specifications below. Our central routing engine queries premium rates across Pakistan’s top underwriters in real time to secure custom quotes.
         </p>
       </div>
@@ -369,9 +369,9 @@ export default function InsuranceComparisonTable() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
         
         {/* Left Control Panel (7 columns) */}
-        <div className="lg:col-span-7 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 space-y-6 shadow-sm">
+        <div className="lg:col-span-7 bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 space-y-6 shadow-sm">
           <div className="flex items-center justify-between border-b border-black/[0.04] dark:border-white/5 pb-4">
-            <h3 className="text-sm font-bold text-[#1D1D1F] dark:text-white flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[var(--text-primary)] dark:text-white flex items-center gap-2">
               <Sliders className="w-4 h-4 text-apple-blue" />
               1. Calibrate Vehicle Value
             </h3>
@@ -386,7 +386,7 @@ export default function InsuranceComparisonTable() {
               <button
                 key={preset.label}
                 onClick={() => applyPreset(preset)}
-                className="px-3 py-1.5 bg-[#F5F5F7] dark:bg-white/5 hover:bg-apple-blue/5 dark:hover:bg-apple-blue/10 text-[10px] font-bold rounded-lg border border-transparent hover:border-apple-blue/20 transition-all"
+                className="px-3 py-1.5 bg-[var(--text-primary)] dark:bg-white/5 hover:bg-apple-blue/5 dark:hover:bg-apple-blue/10 text-[10px] font-bold rounded-lg border border-transparent hover:border-apple-blue/20 transition-all"
               >
                 {preset.label}
               </button>
@@ -404,7 +404,7 @@ export default function InsuranceComparisonTable() {
               onChange={(e) => setCarValue(parseInt(e.target.value))}
               className="w-full h-1.5 bg-black/5 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-apple-blue focus:outline-none"
             />
-            <div className="flex justify-between text-[8px] text-[#86868B] font-mono">
+            <div className="flex justify-between text-[8px] text-[var(--text-secondary)] font-mono">
               <span>PKR 8 Lacs (Hatchback)</span>
               <span>PKR 50 Lacs (Sedan)</span>
               <span>PKR 1.8 Crore (Luxury EV / SUV)</span>
@@ -414,31 +414,31 @@ export default function InsuranceComparisonTable() {
           {/* Property Specs Input */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">Property Category</label>
+              <label className="text-[9px] font-black uppercase text-[var(--text-secondary)] tracking-wider ml-1">Property Category</label>
               <input
                 type="text"
                 value={propertyCategory}
                 onChange={(e) => setPropertyCategory(e.target.value)}
                 placeholder="e.g. House, Flat, Commercial"
-                className="w-full px-3.5 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[#1D1D1F] dark:text-white transition-all"
+                className="w-full px-3.5 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[var(--text-primary)] dark:text-white transition-all"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">Property Sub-Type</label>
+              <label className="text-[9px] font-black uppercase text-[var(--text-secondary)] tracking-wider ml-1">Property Sub-Type</label>
               <input
                 type="text"
                 value={propertyType}
                 onChange={(e) => setPropertyType(e.target.value)}
                 placeholder="e.g. Luxury Villa, Penthouse"
-                className="w-full px-3.5 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[#1D1D1F] dark:text-white transition-all"
+                className="w-full px-3.5 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[var(--text-primary)] dark:text-white transition-all"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase text-[#86868B] tracking-wider ml-1">City Node</label>
+              <label className="text-[9px] font-black uppercase text-[var(--text-secondary)] tracking-wider ml-1">City Node</label>
               <select
                 value={cityNode}
                 onChange={(e) => setCityNode(e.target.value as any)}
-                className="w-full px-3.5 py-2 bg-[#F5F5F7] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[#1D1D1F] dark:text-white transition-all"
+                className="w-full px-3.5 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent rounded-xl text-xs font-bold outline-none focus:border-apple-blue/30 focus:bg-white dark:focus:bg-black text-[var(--text-primary)] dark:text-white transition-all"
               >
                 <option value="lhe">Lahore</option>
                 <option value="khi">Karachi</option>
@@ -449,8 +449,8 @@ export default function InsuranceComparisonTable() {
         </div>
 
         {/* Right Add-ons Panel (5 columns) */}
-        <div className="lg:col-span-5 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 space-y-5 shadow-sm">
-          <h3 className="text-sm font-bold text-[#1D1D1F] dark:text-white border-b border-black/[0.04] dark:border-white/5 pb-4 flex items-center gap-2">
+        <div className="lg:col-span-5 bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 space-y-5 shadow-sm">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] dark:text-white border-b border-black/[0.04] dark:border-white/5 pb-4 flex items-center gap-2">
             <Shield className="w-4 h-4 text-apple-blue" />
             2. Policy Add-on Layers
           </h3>
@@ -503,8 +503,8 @@ export default function InsuranceComparisonTable() {
                   {addon.checked && <Check className="w-3 h-3 stroke-[2.5]" />}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-[#1D1D1F] dark:text-white leading-tight">{addon.label}</h4>
-                  <p className="text-[9px] text-[#86868B] leading-relaxed mt-0.5">{addon.desc}</p>
+                  <h4 className="text-xs font-bold text-[var(--text-primary)] dark:text-white leading-tight">{addon.label}</h4>
+                  <p className="text-[9px] text-[var(--text-secondary)] leading-relaxed mt-0.5">{addon.desc}</p>
                 </div>
               </button>
             ))}
@@ -514,14 +514,14 @@ export default function InsuranceComparisonTable() {
       </div>
 
       {/* FILTERS & DYNAMIC MATCHING SUMMARY BAR */}
-      <div className="bg-[#F5F5F7] dark:bg-black/35 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+      <div className="bg-[var(--text-primary)] dark:bg-black/35 rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-bold text-[#86868B] uppercase tracking-wider text-[9px] font-mono flex items-center gap-1">
+          <span className="font-bold text-[var(--text-secondary)] uppercase tracking-wider text-[9px] font-mono flex items-center gap-1">
             <Filter className="w-3.5 h-3.5 text-apple-blue" /> FILTERS:
           </span>
           
           {/* Tracker selector */}
-          <div className="flex bg-white dark:bg-[#1C1C1E] p-1 rounded-xl border border-black/[0.02] dark:border-white/5">
+          <div className="flex bg-white dark:bg-[var(--bg-raised)] p-1 rounded-xl border border-black/[0.02] dark:border-white/5">
             {[
               { id: 'all', label: 'All Trackers' },
               { id: 'free', label: 'Free Tracker' },
@@ -534,7 +534,7 @@ export default function InsuranceComparisonTable() {
                   "px-3 py-1 text-[9px] font-bold rounded-lg transition-all",
                   filterTracker === t.id
                     ? "bg-apple-blue text-white shadow-sm"
-                    : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                 )}
               >
                 {t.label}
@@ -544,11 +544,11 @@ export default function InsuranceComparisonTable() {
 
           {/* Claim ratio range selector */}
           <div className="flex items-center gap-2">
-            <span className="text-[9px] font-bold text-[#86868B] uppercase">Claim Ratio:</span>
+            <span className="text-[9px] font-bold text-[var(--text-secondary)] uppercase">Claim Ratio:</span>
             <select
               value={minClaimRatio}
               onChange={(e) => setMinClaimRatio(parseInt(e.target.value))}
-              className="px-2 py-1 bg-white dark:bg-[#1C1C1E] border border-black/[0.04] dark:border-white/5 rounded-xl text-[10px] font-bold outline-none text-[#1D1D1F] dark:text-white"
+              className="px-2 py-1 bg-white dark:bg-[var(--bg-raised)] border border-black/[0.04] dark:border-white/5 rounded-xl text-[10px] font-bold outline-none text-[var(--text-primary)] dark:text-white"
             >
               <option value={90}>&gt;= 90%</option>
               <option value={95}>&gt;= 95%</option>
@@ -557,7 +557,7 @@ export default function InsuranceComparisonTable() {
           </div>
         </div>
 
-        <div className="text-[10px] text-[#86868B] font-mono font-bold uppercase tracking-wider">
+        <div className="text-[10px] text-[var(--text-secondary)] font-mono font-bold uppercase tracking-wider">
           <span className="text-apple-blue font-black">{processedCompanies.length}</span> companies locked matching specs
         </div>
       </div>
@@ -575,7 +575,7 @@ export default function InsuranceComparisonTable() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               className={cn(
-                "bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.02)] relative overflow-hidden grid grid-cols-1 md:grid-cols-12 gap-6 items-center",
+                "bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.02)] relative overflow-hidden grid grid-cols-1 md:grid-cols-12 gap-6 items-center",
                 company.isFeatured && "ring-1.5 ring-apple-blue/20 dark:ring-apple-blue/15"
               )}
             >
@@ -602,7 +602,7 @@ export default function InsuranceComparisonTable() {
                   )}>
                     {isCompared && <Check className="w-3 h-3 stroke-[2.5]" />}
                   </div>
-                  <span className="text-[7px] font-black text-[#86868B] uppercase tracking-tighter mt-1 group-hover:text-apple-blue">
+                  <span className="text-[7px] font-black text-[var(--text-secondary)] uppercase tracking-tighter mt-1 group-hover:text-apple-blue">
                     Compare
                   </span>
                 </button>
@@ -618,17 +618,17 @@ export default function InsuranceComparisonTable() {
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <span className="font-bold text-sm text-slate-700">{company.name?.[0] || 'I'}</span>
+                      <span className="font-bold text-sm text-apple-text-muted">{company.name?.[0] || 'I'}</span>
                     )}
                   </div>
                   <div className="space-y-0.5">
                     <button
                       onClick={() => setSelectedDetails(company)}
-                      className="text-base font-black text-[#1D1D1F] dark:text-white hover:text-apple-blue text-left leading-tight block"
+                      className="text-base font-black text-[var(--text-primary)] dark:text-white hover:text-apple-blue text-left leading-tight block"
                     >
                       {company.name}
                     </button>
-                    <span className="text-[10px] text-[#86868B] font-mono block">
+                    <span className="text-[10px] text-[var(--text-secondary)] font-mono block">
                       {company.claimRatio} Claim Ratio • {company.workshopNetwork?.split(' ')[0]} network
                     </span>
                   </div>
@@ -637,18 +637,18 @@ export default function InsuranceComparisonTable() {
 
               {/* Column 2: Key Policy Features list (3 columns) */}
               <div className="md:col-span-3 space-y-1.5 border-t md:border-t-0 md:border-x border-black/[0.04] dark:border-white/5 pt-4 md:pt-0 md:px-5">
-                <span className="text-[8px] font-extrabold text-[#86868B] uppercase tracking-wider block">KEY HIGHLIGHTS</span>
+                <span className="text-[8px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider block">KEY HIGHLIGHTS</span>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#1D1D1F] dark:text-white/80">
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-primary)] dark:text-white/80">
+                    <CheckCircle className="w-3.5 h-3.5 text-apple-green shrink-0" />
                     <span className="truncate leading-none">{company.usp}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#1D1D1F] dark:text-white/80">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-primary)] dark:text-white/80">
                     <Compass className="w-3.5 h-3.5 text-apple-blue shrink-0" />
                     <span className="truncate leading-none">{company.trackerFee.toLowerCase().includes('free') ? 'Free GPS Satellite Tracker' : `PKR ${company.trackerFee} tracker fee`}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#1D1D1F] dark:text-white/80">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-primary)] dark:text-white/80">
+                    <ShieldCheck className="w-3.5 h-3.5 text-apple-green shrink-0" />
                     <span className="truncate leading-none">Deductible: {company.deductible}</span>
                   </div>
                 </div>
@@ -656,16 +656,16 @@ export default function InsuranceComparisonTable() {
 
               {/* Column 3: Premium Premium rates (3 columns) */}
               <div className="md:col-span-3 text-left md:text-right space-y-1">
-                <span className="text-[8px] font-extrabold text-[#86868B] uppercase tracking-wider block">PREMIUM CALCULATION</span>
+                <span className="text-[8px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider block">PREMIUM CALCULATION</span>
                 <div className="flex md:flex-col items-baseline md:items-end gap-2 md:gap-0">
                   <p className="text-xl font-black text-apple-blue font-mono">
-                    PKR {Math.round(stats.premium).toLocaleString()} <span className="text-[10px] font-bold text-[#86868B] font-sans">/yr</span>
+                    PKR {Math.round(stats.premium).toLocaleString()} <span className="text-[10px] font-bold text-[var(--text-secondary)] font-sans">/yr</span>
                   </p>
-                  <p className="text-xs font-black text-emerald-500 font-mono">
-                    PKR {Math.round(stats.monthly).toLocaleString()} <span className="text-[9px] font-bold text-[#86868B] font-sans">/mo (12x)</span>
+                  <p className="text-xs font-black text-apple-green font-mono">
+                    PKR {Math.round(stats.monthly).toLocaleString()} <span className="text-[9px] font-bold text-[var(--text-secondary)] font-sans">/mo (12x)</span>
                   </p>
                 </div>
-                <span className="text-[8px] text-[#86868B] block">
+                <span className="text-[8px] text-[var(--text-secondary)] block">
                   Based on {stats.rate.toFixed(2)}% dynamic coverage rate
                 </span>
               </div>
@@ -680,7 +680,7 @@ export default function InsuranceComparisonTable() {
                 </button>
                 <button
                   onClick={() => setSelectedDetails(company)}
-                  className="w-full py-2 bg-[#F5F5F7] dark:bg-white/5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] text-[10px] font-bold rounded-xl text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white transition-all border border-transparent hover:border-black/[0.02]"
+                  className="w-full py-2 bg-[var(--text-primary)] dark:bg-white/5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] text-[10px] font-bold rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white transition-all border border-transparent hover:border-black/[0.02]"
                 >
                   View Details
                 </button>
@@ -691,10 +691,10 @@ export default function InsuranceComparisonTable() {
         })}
 
         {processedCompanies.length === 0 && (
-          <div className="py-24 text-center bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
-            <Building2 className="w-12 h-12 text-[#86868B] mx-auto mb-4 opacity-30" />
-            <h4 className="text-base font-bold text-[#1D1D1F] dark:text-white">No active matches found</h4>
-            <p className="text-xs text-[#86868B] max-w-sm mx-auto mt-1 leading-relaxed">
+          <div className="py-24 text-center bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04]">
+            <Building2 className="w-12 h-12 text-[var(--text-secondary)] mx-auto mb-4 opacity-30" />
+            <h4 className="text-base font-bold text-[var(--text-primary)] dark:text-white">No active matches found</h4>
+            <p className="text-xs text-[var(--text-secondary)] max-w-sm mx-auto mt-1 leading-relaxed">
               We couldn’t find underwriters meeting your extremely strict filters. Adjust the tracker filters or claim ratio parameters to fetch active plans.
             </p>
           </div>
@@ -708,7 +708,7 @@ export default function InsuranceComparisonTable() {
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-lg bg-black dark:bg-[#1C1C1E] text-white rounded-3xl px-6 py-4 flex items-center justify-between border border-white/10 shadow-2xl z-40"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-lg bg-black dark:bg-[var(--bg-raised)] text-white rounded-3xl px-6 py-4 flex items-center justify-between border border-white/10 shadow-2xl z-40"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-apple-blue/20 flex items-center justify-center text-apple-blue shrink-0">
@@ -716,7 +716,7 @@ export default function InsuranceComparisonTable() {
               </div>
               <div>
                 <h4 className="text-xs font-bold leading-none">Side-by-Side Matrix</h4>
-                <p className="text-[10px] text-[#86868B] block mt-1">
+                <p className="text-[10px] text-[var(--text-secondary)] block mt-1">
                   You have selected <span className="text-white font-bold">{comparedPlanIds.length}</span> plan{comparedPlanIds.length > 1 ? 's' : ''} to analyze.
                 </p>
               </div>
@@ -725,7 +725,7 @@ export default function InsuranceComparisonTable() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setComparedPlanIds([])}
-                className="text-[10px] text-[#86868B] hover:text-white font-extrabold uppercase tracking-wider"
+                className="text-[10px] text-[var(--text-secondary)] hover:text-white font-extrabold uppercase tracking-wider"
               >
                 Clear
               </button>
@@ -759,17 +759,17 @@ export default function InsuranceComparisonTable() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 350 }}
-              className="bg-white dark:bg-[#161617] rounded-[32px] border border-black/[0.04] dark:border-white/[0.04] w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 flex flex-col text-[#1D1D1F] dark:text-[#F5F5F7]"
+              className="bg-white dark:bg-[var(--bg-surface)] rounded-[32px] border border-black/[0.04] dark:border-white/[0.04] w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 flex flex-col text-[var(--text-primary)] dark:text-[var(--text-primary)]"
             >
               {/* Header */}
-              <div className="p-6 border-b border-black/[0.05] dark:border-white/5 flex justify-between items-center bg-[#F5F5F7] dark:bg-black/35">
+              <div className="p-6 border-b border-black/[0.05] dark:border-white/5 flex justify-between items-center bg-[var(--text-primary)] dark:bg-black/35">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-apple-blue flex items-center justify-center text-white shadow-md">
                     <Scale className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black tracking-tight">Insurance Coverage Matrix</h3>
-                    <p className="text-[10px] text-[#86868B] font-mono uppercase tracking-wider">
+                    <p className="text-[10px] text-[var(--text-secondary)] font-mono uppercase tracking-wider">
                       {propertyCategory} {propertyType} • PKR {carValue} Lacs Valuation Weight
                     </p>
                   </div>
@@ -777,7 +777,7 @@ export default function InsuranceComparisonTable() {
 
                 <button
                   onClick={() => setShowCompareModal(false)}
-                  className="p-2 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] rounded-full transition-colors text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  className="p-2 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] rounded-full transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -789,7 +789,7 @@ export default function InsuranceComparisonTable() {
                 <div className="hidden md:block">
                   <table className="w-full border-collapse text-left text-xs min-w-[650px]">
                     <thead>
-                      <tr className="border-b border-black/[0.06] dark:border-white/5 text-[9px] font-black uppercase text-[#86868B] tracking-wider">
+                      <tr className="border-b border-black/[0.06] dark:border-white/5 text-[9px] font-black uppercase text-[var(--text-secondary)] tracking-wider">
                         <th className="pb-4 font-bold w-[25%]">Policy Attributes</th>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId);
@@ -800,20 +800,20 @@ export default function InsuranceComparisonTable() {
                                   {comp?.logoUrl ? (
                                     <img src={comp.logoUrl} alt={comp?.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                                   ) : (
-                                    <span className="font-bold text-xs text-slate-700">{comp?.name?.[0] || 'I'}</span>
+                                    <span className="font-bold text-xs text-apple-text-muted">{comp?.name?.[0] || 'I'}</span>
                                   )}
                                 </div>
-                                <span className="text-xs font-black text-[#1D1D1F] dark:text-white block">{comp?.name}</span>
+                                <span className="text-xs font-black text-[var(--text-primary)] dark:text-white block">{comp?.name}</span>
                               </div>
                             </th>
                           );
                         })}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-black/[0.04] dark:divide-white/5 text-[11px] font-medium text-[#1D1D1F] dark:text-white/90">
+                    <tbody className="divide-y divide-black/[0.04] dark:divide-white/5 text-[11px] font-medium text-[var(--text-primary)] dark:text-white/90">
                       {/* Attribute: Premium */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Annual Premium</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Annual Premium</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           const stats = calculateCompanyPremium(comp);
@@ -822,7 +822,7 @@ export default function InsuranceComparisonTable() {
                               <p className="text-sm font-black text-apple-blue font-mono">
                                 PKR {Math.round(stats.premium).toLocaleString()}
                               </p>
-                              <span className="text-[9px] text-[#86868B]">({stats.rate.toFixed(2)}% Flat Rate)</span>
+                              <span className="text-[9px] text-[var(--text-secondary)]">({stats.rate.toFixed(2)}% Flat Rate)</span>
                             </td>
                           );
                         })}
@@ -830,12 +830,12 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: Installments */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Monthly Installment</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Monthly Installment</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           const stats = calculateCompanyPremium(comp);
                           return (
-                            <td key={pId} className="py-4 text-center font-bold text-emerald-500 font-mono text-xs">
+                            <td key={pId} className="py-4 text-center font-bold text-apple-green font-mono text-xs">
                               PKR {Math.round(stats.monthly).toLocaleString()} /mo (12x)
                             </td>
                           );
@@ -844,7 +844,7 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: Claim Ratio */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Claim Approval Ratio</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Claim Approval Ratio</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           return (
@@ -857,11 +857,11 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: Workshop network */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Repair Workshops Network</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Repair Workshops Network</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           return (
-                            <td key={pId} className="py-4 text-center text-[#86868B] text-[10px]">
+                            <td key={pId} className="py-4 text-center text-[var(--text-secondary)] text-[10px]">
                               {comp.workshopNetwork}
                             </td>
                           );
@@ -870,12 +870,12 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: Tracker fee */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">GPS Satellite Tracker Unit</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">GPS Satellite Tracker Unit</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           const isFree = comp.trackerFee.toLowerCase().includes('free') || comp.trackerFee === '-';
                           return (
-                            <td key={pId} className="py-4 text-center font-bold text-emerald-500">
+                            <td key={pId} className="py-4 text-center font-bold text-apple-green">
                               {isFree ? 'Complimentary (0 PKR)' : `PKR ${comp.trackerFee}`}
                             </td>
                           );
@@ -884,11 +884,11 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: Deductible */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Policy Deductible / Excess</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Policy Deductible / Excess</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           return (
-                            <td key={pId} className="py-4 text-center text-[#86868B] text-[10px]">
+                            <td key={pId} className="py-4 text-center text-[var(--text-secondary)] text-[10px]">
                               {comp.deductible}
                             </td>
                           );
@@ -897,7 +897,7 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: Theft Recovery Rate */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Theft Recovery Success</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Theft Recovery Success</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           return (
@@ -910,11 +910,11 @@ export default function InsuranceComparisonTable() {
 
                       {/* Attribute: USP */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Primary USP Benefit</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Primary USP Benefit</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           return (
-                            <td key={pId} className="py-4 text-center font-bold text-emerald-500">
+                            <td key={pId} className="py-4 text-center font-bold text-apple-green">
                               {comp.usp}
                             </td>
                           );
@@ -923,7 +923,7 @@ export default function InsuranceComparisonTable() {
 
                       {/* Actions row */}
                       <tr>
-                        <td className="py-4 font-black uppercase text-[8px] text-[#86868B] tracking-wider">Actions</td>
+                        <td className="py-4 font-black uppercase text-[8px] text-[var(--text-secondary)] tracking-wider">Actions</td>
                         {comparedPlanIds.map(pId => {
                           const comp = companies.find(c => c.id === pId)!;
                           return (
@@ -954,48 +954,48 @@ export default function InsuranceComparisonTable() {
                     const isFreeTracker = comp.trackerFee.toLowerCase().includes('free') || comp.trackerFee === '-';
 
                     return (
-                      <div key={`compare-mobile-${pId}`} className="p-4 rounded-2xl border border-black/10 dark:border-white/10 bg-[#F5F5F7]/40 dark:bg-white/5 space-y-3">
+                      <div key={`compare-mobile-${pId}`} className="p-4 rounded-2xl border border-black/10 dark:border-white/10 bg-[var(--text-primary)]/40 dark:bg-white/5 space-y-3">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-white p-1 border border-black/[0.06] flex items-center justify-center shrink-0">
                             {comp.logoUrl ? (
                               <img src={comp.logoUrl} alt={comp.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                             ) : (
-                              <span className="font-bold text-xs text-slate-700">{comp.name[0]}</span>
+                              <span className="font-bold text-xs text-apple-text-muted">{comp.name[0]}</span>
                             )}
                           </div>
                           <div>
-                            <h4 className="font-bold text-sm text-[#1D1D1F] dark:text-white">{comp.name}</h4>
-                            <p className="text-[10px] text-emerald-500 font-semibold">{comp.usp}</p>
+                            <h4 className="font-bold text-sm text-[var(--text-primary)] dark:text-white">{comp.name}</h4>
+                            <p className="text-[10px] text-apple-green font-semibold">{comp.usp}</p>
                           </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-white dark:bg-black/20 border border-black/5 dark:border-white/5">
                           <div>
-                            <span className="text-[9px] uppercase tracking-wider text-[#86868B] font-bold block">Annual Premium</span>
+                            <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] font-bold block">Annual Premium</span>
                             <span className="text-sm font-extrabold text-apple-blue font-mono">PKR {Math.round(stats.premium).toLocaleString()}</span>
-                            <span className="text-[9px] text-[#86868B] block">({stats.rate.toFixed(2)}%)</span>
+                            <span className="text-[9px] text-[var(--text-secondary)] block">({stats.rate.toFixed(2)}%)</span>
                           </div>
                           <div>
-                            <span className="text-[9px] uppercase tracking-wider text-[#86868B] font-bold block">Monthly (12x)</span>
-                            <span className="text-sm font-bold text-emerald-500 font-mono">PKR {Math.round(stats.monthly).toLocaleString()}</span>
+                            <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] font-bold block">Monthly (12x)</span>
+                            <span className="text-sm font-bold text-apple-green font-mono">PKR {Math.round(stats.monthly).toLocaleString()}</span>
                           </div>
                         </div>
 
                         <div className="space-y-1.5 text-xs">
                           <div className="flex justify-between py-1 border-b border-black/5 dark:border-white/5">
-                            <span className="text-[#86868B]">Approval Ratio:</span>
+                            <span className="text-[var(--text-secondary)]">Approval Ratio:</span>
                             <span className="font-bold text-apple-blue font-mono">{comp.claimRatio}</span>
                           </div>
                           <div className="flex justify-between py-1 border-b border-black/5 dark:border-white/5">
-                            <span className="text-[#86868B]">Satellite Tracker:</span>
-                            <span className="font-bold text-emerald-500">{isFreeTracker ? 'Complimentary' : `PKR ${comp.trackerFee}`}</span>
+                            <span className="text-[var(--text-secondary)]">Satellite Tracker:</span>
+                            <span className="font-bold text-apple-green">{isFreeTracker ? 'Complimentary' : `PKR ${comp.trackerFee}`}</span>
                           </div>
                           <div className="flex justify-between py-1 border-b border-black/5 dark:border-white/5">
-                            <span className="text-[#86868B]">Deductible:</span>
-                            <span className="font-medium text-[#1D1D1F] dark:text-white">{comp.deductible}</span>
+                            <span className="text-[var(--text-secondary)]">Deductible:</span>
+                            <span className="font-medium text-[var(--text-primary)] dark:text-white">{comp.deductible}</span>
                           </div>
                           <div className="flex justify-between py-1">
-                            <span className="text-[#86868B]">Theft Recovery:</span>
+                            <span className="text-[var(--text-secondary)]">Theft Recovery:</span>
                             <span className="font-bold text-apple-orange">{comp.recoveryRate}</span>
                           </div>
                         </div>
@@ -1036,26 +1036,26 @@ export default function InsuranceComparisonTable() {
               initial={{ scale: 0.95, opacity: 0, y: 15 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 15 }}
-              className="bg-white dark:bg-[#161617] rounded-[32px] border border-black/[0.04] dark:border-white/[0.04] w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col text-[#1D1D1F] dark:text-[#F5F5F7]"
+              className="bg-white dark:bg-[var(--bg-surface)] rounded-[32px] border border-black/[0.04] dark:border-white/[0.04] w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col text-[var(--text-primary)] dark:text-[var(--text-primary)]"
             >
-              <div className="p-6 border-b border-black/[0.05] dark:border-white/5 flex items-center justify-between bg-[#F5F5F7] dark:bg-black/35">
+              <div className="p-6 border-b border-black/[0.05] dark:border-white/5 flex items-center justify-between bg-[var(--text-primary)] dark:bg-black/35">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white rounded-xl p-2 border border-black/[0.04] flex items-center justify-center shadow-inner shrink-0">
                     {selectedDetails.logoUrl ? (
                       <img src={selectedDetails.logoUrl} alt={selectedDetails.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                     ) : (
-                      <span className="font-bold text-sm text-slate-700">{selectedDetails.name?.[0] || 'I'}</span>
+                      <span className="font-bold text-sm text-apple-text-muted">{selectedDetails.name?.[0] || 'I'}</span>
                     )}
                   </div>
                   <div>
                     <h3 className="text-base font-black tracking-tight">{selectedDetails.name}</h3>
-                    <p className="text-[10px] text-[#86868B] font-mono uppercase">Comprehensive Auto Coverage Matrix</p>
+                    <p className="text-[10px] text-[var(--text-secondary)] font-mono uppercase">Comprehensive Auto Coverage Matrix</p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setSelectedDetails(null)}
-                  className="p-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] rounded-full transition-colors text-[#86868B]"
+                  className="p-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] rounded-full transition-colors text-[var(--text-secondary)]"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1066,23 +1066,23 @@ export default function InsuranceComparisonTable() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/15 p-4 rounded-2xl">
                     <span className="text-[8px] font-extrabold text-apple-blue uppercase tracking-widest block font-mono">CALCULATED ANNUAL PREMIUM</span>
-                    <span className="text-2xl font-black font-mono text-[#1D1D1F] dark:text-white leading-none block mt-1">
+                    <span className="text-2xl font-black font-mono text-[var(--text-primary)] dark:text-white leading-none block mt-1">
                       PKR {Math.round(calculateCompanyPremium(selectedDetails).premium).toLocaleString()}
                     </span>
-                    <span className="text-[8px] text-[#86868B] block mt-1">Includes your selected add-ons.</span>
+                    <span className="text-[8px] text-[var(--text-secondary)] block mt-1">Includes your selected add-ons.</span>
                   </div>
 
-                  <div className="bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/15 p-4 rounded-2xl">
-                    <span className="text-[8px] font-extrabold text-emerald-500 uppercase tracking-widest block font-mono">CLAIM APPROVAL RATIO</span>
-                    <span className="text-2xl font-black font-mono text-emerald-500 leading-none block mt-1">
+                  <div className="bg-apple-green/5 dark:bg-apple-green/10 border border-apple-green/15 p-4 rounded-2xl">
+                    <span className="text-[8px] font-extrabold text-apple-green uppercase tracking-widest block font-mono">CLAIM APPROVAL RATIO</span>
+                    <span className="text-2xl font-black font-mono text-apple-green leading-none block mt-1">
                       {selectedDetails.claimRatio}
                     </span>
-                    <span className="text-[8px] text-[#86868B] block mt-1">Verifiable audit on actual claims.</span>
+                    <span className="text-[8px] text-[var(--text-secondary)] block mt-1">Verifiable audit on actual claims.</span>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="text-xs font-black text-[#86868B] uppercase tracking-wider block">PLAN SPECIFICATION BREAKDOWN</h4>
+                  <h4 className="text-xs font-black text-[var(--text-secondary)] uppercase tracking-wider block">PLAN SPECIFICATION BREAKDOWN</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     {[
                       { label: "Bumper-to-Bumper Accident Damage", val: "100% Market Value Protection" },
@@ -1094,9 +1094,9 @@ export default function InsuranceComparisonTable() {
                       { label: "Free Emergency Towing assistance", val: "Up to PKR 15,000 allowance" },
                       { label: "Primary Key Policy USP", val: selectedDetails.usp }
                     ].map((feat, idx) => (
-                      <div key={idx} className="p-3 bg-[#F5F5F7] dark:bg-black/25 rounded-xl border border-black/[0.02] dark:border-white/[0.02] flex flex-col gap-0.5">
-                        <span className="text-[8px] text-[#86868B] uppercase tracking-wider font-bold block">{feat.label}</span>
-                        <span className="font-bold text-[#1D1D1F] dark:text-white/90">{feat.val}</span>
+                      <div key={idx} className="p-3 bg-[var(--text-primary)] dark:bg-black/25 rounded-xl border border-black/[0.02] dark:border-white/[0.02] flex flex-col gap-0.5">
+                        <span className="text-[8px] text-[var(--text-secondary)] uppercase tracking-wider font-bold block">{feat.label}</span>
+                        <span className="font-bold text-[var(--text-primary)] dark:text-white/90">{feat.val}</span>
                       </div>
                     ))}
                   </div>
@@ -1104,7 +1104,7 @@ export default function InsuranceComparisonTable() {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-6 border-t border-black/[0.05] dark:border-white/5 bg-[#F5F5F7] dark:bg-black/35 flex gap-4">
+              <div className="p-6 border-t border-black/[0.05] dark:border-white/5 bg-[var(--text-primary)] dark:bg-black/35 flex gap-4">
                 <button
                   onClick={() => {
                     setSelectedDetails(null);
@@ -1116,7 +1116,7 @@ export default function InsuranceComparisonTable() {
                 </button>
                 <button
                   onClick={() => setSelectedDetails(null)}
-                  className="px-6 py-3 bg-white dark:bg-[#1C1C1E] hover:bg-black/[0.02] dark:hover:bg-white/[0.04] text-[11px] font-black rounded-full border border-black/[0.1] dark:border-white/10 text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white transition-all"
+                  className="px-6 py-3 bg-white dark:bg-[var(--bg-raised)] hover:bg-black/[0.02] dark:hover:bg-white/[0.04] text-[11px] font-black rounded-full border border-black/[0.1] dark:border-white/10 text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white transition-all"
                 >
                   Close Panel
                 </button>
@@ -1128,13 +1128,13 @@ export default function InsuranceComparisonTable() {
 
       {/* QUICK INFO VALUE BLOCKS */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-         <div className="p-6 rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-emerald-500/[0.02] dark:bg-emerald-500/[0.04] space-y-4">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shadow-sm">
+         <div className="p-6 rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-apple-green/[0.02] dark:bg-apple-green/[0.04] space-y-4">
+            <div className="w-9 h-9 rounded-xl bg-apple-green/10 flex items-center justify-center text-apple-green shadow-sm">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-[#86868B] mb-1">Claim Settlement Oath</h4>
-              <p className="text-xs text-[#86868B] font-medium leading-relaxed">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] mb-1">Claim Settlement Oath</h4>
+              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
                 Direct integration with underwriters bypasses third-party friction pools, allowing 48h emergency claim payouts or instant authorized workshop restoration.
               </p>
             </div>
@@ -1145,20 +1145,20 @@ export default function InsuranceComparisonTable() {
               <Zap className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-[#86868B] mb-1">Smart Underwriting Nodes</h4>
-              <p className="text-xs text-[#86868B] font-medium leading-relaxed">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] mb-1">Smart Underwriting Nodes</h4>
+              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
                 Underwriters dynamically push live price points through Centralized secure handshake channels, ensuring quotes are strictly calibrated with real-time market rates.
               </p>
             </div>
          </div>
 
-         <div className="p-6 rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-amber-500/[0.02] dark:bg-amber-500/[0.04] space-y-4">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shadow-sm">
+         <div className="p-6 rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-gold-decoration/[0.02] dark:bg-gold-decoration/[0.04] space-y-4">
+            <div className="w-9 h-9 rounded-xl bg-gold-decoration/10 flex items-center justify-center text-gold-decoration shadow-sm">
               <Info className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-[#86868B] mb-1">Transparency Shield Act</h4>
-              <p className="text-xs text-[#86868B] font-medium leading-relaxed">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] mb-1">Transparency Shield Act</h4>
+              <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
                 All tracker charges, excess clauses, and dealership network files are manually verified weekly by our transparency board for ultimate security.
               </p>
             </div>

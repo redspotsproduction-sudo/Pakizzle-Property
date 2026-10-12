@@ -79,28 +79,62 @@ export default function UserProfile() {
     const fetchProfileData = async () => {
       try {
         setLoading(true);
-        const userDoc = await getDoc(doc(db, "users", userId));
-        
-        if (userDoc.exists()) {
-          setProfile(userDoc.data());
-        } else if (userId === "user-redspots") {
-          // Fallback for mock seller
-          setProfile({
-            uid: "user-redspots",
-            displayName: "Redspots Productions",
-            isVerified: true,
-            rating: 5.0,
-            createdAt: new Date("2024-01-01").toISOString(),
-            photoURL: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200",
-            isOnline: true,
-            badgeType: "dealer",
-            username: "redspots_productions",
-            isEmailVerified: true,
-            isPhoneVerified: true,
-            isIdentityVerified: true,
-            nationality: "Pakistan",
-            gender: "Corporate"
-          });
+        // Try reading publicProfiles first for public display (non-PII isolation)
+        let found = false;
+        try {
+          const publicDoc = await getDoc(doc(db, "publicProfiles", userId));
+          if (publicDoc.exists()) {
+            const data = publicDoc.data();
+            setProfile({
+              uid: userId,
+              displayName: data.name || data.displayName || "Verified User",
+              photoURL: data.photo || data.photoURL || "",
+              badgeType: data.badge || data.badgeType || "none",
+              agencyName: data.agency || data.agencyName || "",
+              isVerified: Boolean(data.badge && data.badge !== "none"),
+              rating: data.rating || 4.9,
+              createdAt: data.createdAt || new Date("2024-01-01").toISOString(),
+              ...data
+            });
+            found = true;
+          }
+        } catch (pubErr) {
+          console.warn("Public profile fetch error:", pubErr);
+        }
+
+        // If not found or if the logged-in user is viewing their own profile, load from users collection
+        if (!found && user?.uid === userId) {
+          try {
+            const userDoc = await getDoc(doc(db, "users", userId));
+            if (userDoc.exists()) {
+              setProfile(userDoc.data());
+              found = true;
+            }
+          } catch (privErr) {
+            console.warn("Private profile fetch error:", privErr);
+          }
+        }
+
+        if (!found) {
+          if (userId === "user-redspots") {
+            // Fallback for mock seller
+            setProfile({
+              uid: "user-redspots",
+              displayName: "Redspots Real Estate",
+              isVerified: true,
+              rating: 5.0,
+              createdAt: new Date("2024-01-01").toISOString(),
+              photoURL: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200",
+              isOnline: true,
+              badgeType: "dealer",
+              username: "redspots_productions",
+              isEmailVerified: true,
+              isPhoneVerified: true,
+              isIdentityVerified: true,
+              nationality: "Pakistan",
+              gender: "Corporate"
+            });
+          }
         }
 
         // Fetch reviews

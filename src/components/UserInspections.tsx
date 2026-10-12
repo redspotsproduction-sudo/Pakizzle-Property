@@ -79,7 +79,7 @@ export default function UserInspections() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl animate-pulse">
+      <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl animate-pulse">
         <Clock4 className="w-8 h-8 text-apple-blue animate-spin mb-4" />
         <p className="text-xs text-[#86868B] font-semibold tracking-wide uppercase">Synchronizing inspection portfolio...</p>
       </div>
@@ -138,7 +138,7 @@ export default function UserInspections() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0 self-start md:self-end">
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0 self-start md:self-end">
            <div className="w-8 h-8 bg-apple-blue/5 rounded-lg flex items-center justify-center">
               <ClipboardList className="w-4 h-4 text-apple-blue" />
            </div>
@@ -157,7 +157,7 @@ export default function UserInspections() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              "bg-white dark:bg-[#161617] rounded-2xl border overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.01)]",
+              "bg-white dark:bg-[var(--surface-dark)] rounded-2xl border overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.01)]",
               expandedId === inspection.id ? "border-apple-blue/30 dark:border-apple-blue/30 ring-1 ring-apple-blue/10" : "border-black/[0.04] dark:border-white/[0.04] hover:border-black/[0.08] dark:hover:border-white/[0.08]"
             )}
           >
@@ -253,7 +253,7 @@ export default function UserInspections() {
                                    <div key={step} className="flex flex-col items-center">
                                       <div className={cn(
                                          "w-5 h-5 rounded-full border transition-all duration-500 z-10 flex items-center justify-center text-[10px]",
-                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[#161617] border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
+                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
                                       )}>
                                          {isCompleted && <CheckCircle2 className="w-3 h-3 stroke-[2.5px]" />}
                                       </div>

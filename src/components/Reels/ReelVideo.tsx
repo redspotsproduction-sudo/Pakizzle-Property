@@ -310,7 +310,7 @@ export default function ReelVideo({ id, videoUrl, isActive, isMuted, onDoubleTap
       {/* Micro Progress Line Tracker */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-30 pointer-events-none">
         <div 
-          className="h-full bg-gradient-to-r from-red-500 via-[#0071e3] to-blue-400 transition-all duration-150 ease-linear shadow-[0_0_8px_#0071e3]"
+          className="h-full bg-gradient-to-r from-red-500 via-[var(--brand-blue)] to-blue-400 transition-all duration-150 ease-linear shadow-[0_0_8px_var(--brand-blue)]"
           style={{ width: `${progress}%` }}
         />
       </div>

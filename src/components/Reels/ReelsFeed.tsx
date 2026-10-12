@@ -909,7 +909,7 @@ export default function ReelsFeed() {
           </div>
 
           {/* Search input bar aligned on the left next to logo/back */}
-          <div className="relative flex items-center bg-[#18191c]/90 border border-white/5 rounded-full px-3.5 py-2 w-full max-w-[140px] xs:max-w-[180px] sm:max-w-[220px] md:max-w-[260px] backdrop-blur-md ml-1 md:ml-2">
+          <div className="relative flex items-center bg-[var(--surface-dark)]/90 border border-white/5 rounded-full px-3.5 py-2 w-full max-w-[140px] xs:max-w-[180px] sm:max-w-[220px] md:max-w-[260px] backdrop-blur-md ml-1 md:ml-2">
             <Search className="w-4 h-4 text-apple-text-muted mr-2 shrink-0" />
             <input 
               type="text" 
@@ -943,7 +943,7 @@ export default function ReelsFeed() {
             </button>
 
             {/* Profile circular avatar placeholder */}
-            <button className="w-8.5 h-8.5 rounded-full bg-[#202124] border border-white/10 flex items-center justify-center text-apple-text-muted hover:text-white hover:bg-apple-surface transition-all">
+            <button className="w-8.5 h-8.5 rounded-full bg-[var(--bg-inset)] border border-white/10 flex items-center justify-center text-apple-text-muted hover:text-white hover:bg-apple-surface transition-all">
               <User className="w-4.5 h-4.5" />
             </button>
           </div>
@@ -1016,8 +1016,8 @@ export default function ReelsFeed() {
                       </span>
                     </div>
 
-                    <div className="bg-[#1b1c1e]/90 text-white/90 backdrop-blur-md px-2.5 py-1 md:px-3.5 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wider border border-white/10 flex items-center gap-1 z-10 select-none shadow-md">
-                      <span className="bg-[#605bff] rounded-full p-0.5 inline-flex items-center justify-center w-3 h-3 md:w-3.5 md:h-3.5">
+                    <div className="bg-[var(--surface-dark)]/90 text-white/90 backdrop-blur-md px-2.5 py-1 md:px-3.5 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black tracking-wider border border-white/10 flex items-center gap-1 z-10 select-none shadow-md">
+                      <span className="bg-[var(--brand-purple)] rounded-full p-0.5 inline-flex items-center justify-center w-3 h-3 md:w-3.5 md:h-3.5">
                         <Check className="w-2 md:w-2.5 h-2 md:h-2.5 text-white fill-white stroke-[4]" />
                       </span>
                       VERIFIED
@@ -1037,7 +1037,7 @@ export default function ReelsFeed() {
                           <div className="flex justify-between items-center border-b border-white/10 pb-3">
                             <div className="flex items-center gap-2">
                               <Sparkles className="w-4 h-4 text-blue-400" />
-                              <span className="font-mono text-[9px] uppercase tracking-widest text-[#0071e3] font-black">Vehicle Specifications</span>
+                              <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--brand-blue)] font-black">Vehicle Specifications</span>
                             </div>
                             <button 
                               onClick={() => setOpenSpecsReelId(null)}
@@ -1101,7 +1101,7 @@ export default function ReelsFeed() {
                   </AnimatePresence>
 
                   {/* Inside Frame overlay labels, caption and profile details within a unified rounded context card */}
-                  <div className="absolute bottom-[104px] md:bottom-5 left-3.5 right-20 md:right-4 z-20 rounded-2xl md:rounded-[32px] backdrop-blur-md md:backdrop-blur-xl bg-black/45 md:bg-[#131416]/90 border border-white/10 md:border-white/[0.06] p-3.5 md:p-5 flex flex-col gap-2.5 md:gap-4 pointer-events-auto shadow-lg md:shadow-[0_24px_50px_rgba(0,0,0,0.8)] text-left">
+                  <div className="absolute bottom-[104px] md:bottom-5 left-3.5 right-20 md:right-4 z-20 rounded-2xl md:rounded-[32px] backdrop-blur-md md:backdrop-blur-xl bg-black/45 md:bg-[var(--surface-dark)]/90 border border-white/10 md:border-white/[0.06] p-3.5 md:p-5 flex flex-col gap-2.5 md:gap-4 pointer-events-auto shadow-lg md:shadow-[0_24px_50px_rgba(0,0,0,0.8)] text-left">
                     
                     {/* 1. Profile Header Row */}
                     <div className="flex items-center justify-between w-full">
@@ -1110,7 +1110,7 @@ export default function ReelsFeed() {
                         onClick={() => navigate(`/profile/${reel.sellerId}`)}
                       >
                         {reel.sellerId === 'demo_seller_1' ? (
-                          <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-blue-500/60 p-[1.5px] bg-[#0c0d0e] flex-shrink-0 flex items-center justify-center shadow-lg shadow-blue-500/10">
+                          <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-blue-500/60 p-[1.5px] bg-black flex-shrink-0 flex items-center justify-center shadow-lg shadow-blue-500/10">
                             <div className="w-full h-full rounded-full bg-black border border-white/10 flex flex-col items-center justify-center p-0.5 font-sans">
                               {/* Sleek lowercase styled text with micro-logo */}
                               <div className="text-[4.5px] md:text-[5.5px] font-black text-white/95 tracking-[0.04em] leading-none mt-0.5 md:mt-1">REDSPOTS</div>
@@ -1138,7 +1138,7 @@ export default function ReelsFeed() {
                         <div className="text-left">
                           <h4 className="text-[13px] md:text-[14.5px] font-extrabold tracking-tight text-white flex items-center gap-1 hover:underline leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                             {reel.sellerId === 'demo_seller_1' ? 'redspots' : reel.sellerName}
-                            <span className="bg-[#3b82f6] rounded-full p-0.5 inline-flex items-center justify-center w-3.5 h-3.5 shadow">
+                            <span className="bg-[var(--brand-indigo)] rounded-full p-0.5 inline-flex items-center justify-center w-3.5 h-3.5 shadow">
                               <Check className="w-2.5 h-2.5 text-white fill-white stroke-[4]" />
                             </span>
                           </h4>
@@ -1167,14 +1167,14 @@ export default function ReelsFeed() {
                           <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-apple-green"></span>
                         </span>
                         <div className="text-left">
-                          <span className="text-[7.5px] md:text-[8.5px] font-black uppercase tracking-[0.12em] text-[#86868B] block leading-none mb-0.5">Showroom Audited</span>
+                          <span className="text-[7.5px] md:text-[8.5px] font-black uppercase tracking-[0.12em] text-[var(--text-secondary)] block leading-none mb-0.5">Showroom Audited</span>
                           <span className="text-[9.5px] md:text-[10.5px] font-extrabold text-white leading-none">
                             {reel.sellerId === 'demo_seller_1' ? "REDSPOTS GOLD" : "VERIFIED DEALER"}
                           </span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-[7.5px] md:text-[8.5px] font-black uppercase tracking-[0.12em] text-[#86868B] block leading-none mb-0.5">Confidence rating</span>
+                        <span className="text-[7.5px] md:text-[8.5px] font-black uppercase tracking-[0.12em] text-[var(--text-secondary)] block leading-none mb-0.5">Confidence rating</span>
                         <span className="text-[9.5px] md:text-[10.5px] font-black text-apple-green font-mono leading-none">
                           {reel.sellerId === 'demo_seller_1' ? "99.2% EXCELLENCE" : "97.8% COMPLIANT"}
                         </span>
@@ -1284,7 +1284,7 @@ export default function ReelsFeed() {
                     >
                       <ThumbsDown className="w-5 h-5" />
                     </button>
-                    <span className="text-[10px] sm:text-[11px] font-extrabold text-[#9ca3af] mt-1 font-mono select-none">
+                    <span className="text-[10px] sm:text-[11px] font-extrabold text-[var(--text-secondary)] mt-1 font-mono select-none">
                       Dislike
                     </span>
                   </div>
@@ -1295,7 +1295,7 @@ export default function ReelsFeed() {
                       onClick={() => setShowCommentDrawer(!showCommentDrawer)}
                       className={`w-12 h-12 rounded-full flex items-center justify-center transition-all backdrop-blur-md border hover:scale-110 active:scale-95 shadow-lg pointer-events-auto ${
                         showCommentDrawer 
-                          ? 'text-[#0071e3] border-[#0071e3]/40 bg-[#0071e3]/20' 
+                          ? 'text-[var(--brand-blue)] border-[var(--brand-blue)]/40 bg-[var(--brand-blue)]/20' 
                           : 'text-white border-white/10 bg-white/10'
                       }`}
                     >
@@ -1408,14 +1408,14 @@ export default function ReelsFeed() {
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
                             <div>
-                              <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Showroom Verification</span>
+                              <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] block font-extrabold font-mono">Showroom Verification</span>
                               <span className="text-[10px] font-bold text-white block">
                                 {reels[activeIndex].sellerId === 'demo_seller_1' ? "REDSPOTS GOLD DEALER" : "VERIFIED AUTO PARTNER"}
                               </span>
                             </div>
                           </div>
                           <div className="text-right">
-                            <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Confidence Rating</span>
+                            <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] block font-extrabold font-mono">Confidence Rating</span>
                             <span className="text-[10px] font-mono font-bold text-apple-green block">
                               {reels[activeIndex].sellerId === 'demo_seller_1' ? "99.2% EXCELLENCE" : "97.8% COMPLIANT"}
                             </span>
@@ -1632,14 +1632,14 @@ export default function ReelsFeed() {
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
                     <div>
-                      <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Showroom Verification</span>
+                      <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] block font-extrabold font-mono">Showroom Verification</span>
                       <span className="text-[10px] font-bold text-white block">
                         {reels[activeIndex].sellerId === 'demo_seller_1' ? "REDSPOTS GOLD DEALER" : "VERIFIED AUTO PARTNER"}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[9px] uppercase tracking-wider text-[#86868B] block font-extrabold font-mono">Confidence Rating</span>
+                    <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] block font-extrabold font-mono">Confidence Rating</span>
                     <span className="text-[10px] font-mono font-bold text-apple-green block">
                       {reels[activeIndex].sellerId === 'demo_seller_1' ? "99.2% EXCELLENCE" : "97.8% COMPLIANT"}
                     </span>
@@ -1672,7 +1672,7 @@ export default function ReelsFeed() {
                       )}
                     </div>
                     <div className="flex-1">
-                      <span className="text-[11px] font-extrabold text-[#0071e3]">{comment.userName}</span>
+                      <span className="text-[11px] font-extrabold text-[var(--brand-blue)]">{comment.userName}</span>
                       <p className="text-[11px] text-white/90 leading-relaxed mt-0.5 bg-white/5 px-2.5 py-2 rounded-xl">
                         {comment.text}
                       </p>

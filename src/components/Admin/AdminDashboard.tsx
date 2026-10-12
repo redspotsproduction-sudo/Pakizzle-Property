@@ -182,7 +182,7 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 relative group"
+            className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 relative group"
           >
             <div className="flex items-center justify-between mb-4">
               <div className={cn(
@@ -244,7 +244,7 @@ export default function AdminDashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="lg:col-span-8 flex flex-col"
         >
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-6 flex flex-col">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-6 flex flex-col">
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4 pb-6 mb-6 border-b border-black/[0.04] dark:border-white/[0.04]">
               <div className="space-y-1">
                 <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">Atmospheric Velocity</h3>
@@ -273,8 +273,8 @@ export default function AdminDashboard() {
                 <ComposedChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="metric-grad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={activeMetric === 'leads' ? "#0071E3" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} stopOpacity={0.25}/>
-                      <stop offset="100%" stopColor={activeMetric === 'leads' ? "#0071E3" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} stopOpacity={0}/>
+                      <stop offset="5%" stopColor={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} stopOpacity={0.25}/>
+                      <stop offset="100%" stopColor={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="1 10" vertical={false} stroke="rgba(0,0,0,0.06)" />
@@ -291,7 +291,7 @@ export default function AdminDashboard() {
                     tick={{ fontSize: 11, fontWeight: 600, fill: '#86868B' }}
                   />
                   <Tooltip 
-                    cursor={{ stroke: '#0071E3', strokeWidth: 1, strokeDasharray: '4 4' }}
+                    cursor={{ stroke: 'var(--brand-blue)', strokeWidth: 1, strokeDasharray: '4 4' }}
                     contentStyle={{ 
                       backgroundColor: 'rgba(255, 255, 255, 0.9)', 
                       backdropFilter: 'blur(20px)',
@@ -304,7 +304,7 @@ export default function AdminDashboard() {
                   <Area 
                     type="monotone" 
                     dataKey={activeMetric} 
-                    stroke={activeMetric === 'leads' ? "#0071E3" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} 
+                    stroke={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} 
                     strokeWidth={3} 
                     fill="url(#metric-grad)" 
                     animationDuration={1500}
@@ -312,7 +312,7 @@ export default function AdminDashboard() {
                   <Bar 
                     dataKey={activeMetric} 
                     barSize={10} 
-                    fill={activeMetric === 'leads' ? "#0071E3" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} 
+                    fill={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} 
                     opacity={0.06}
                     radius={[6, 6, 0, 0]}
                   />
@@ -330,7 +330,7 @@ export default function AdminDashboard() {
           className="lg:col-span-4 space-y-6"
         >
           {/* Geo Density */}
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-6 flex flex-col justify-between">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-6 flex flex-col justify-between">
             <div>
               <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-2 pb-4 mb-4 border-b border-black/[0.04] dark:border-white/[0.04]">
                 <MapPin className="w-5 h-5 text-apple-red" />
@@ -411,7 +411,7 @@ export default function AdminDashboard() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 relative group cursor-pointer"
+                className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 relative group cursor-pointer"
               >
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <TrendingUp className="w-3.5 h-3.5 text-apple-green" />
@@ -437,7 +437,7 @@ export default function AdminDashboard() {
             <Award className="w-6 h-6 text-apple-orange" />
             <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] dark:text-white">Alpha Shards</h2>
           </div>
-          <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between flex-1">
+          <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between flex-1">
             <div className="space-y-4">
               {dealerLeaderboard.map((dealer, i) => (
                 <div key={dealer.name} className="flex items-center justify-between group cursor-pointer">

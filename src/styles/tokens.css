@@ -49,6 +49,21 @@
   /* Gold (DECORATION ONLY on light surfaces: hairlines, fills, featured marker) */
   --gold-decoration: #C9A227;
 
+  /* Theme tokens migrated from hardcoded values */
+  --brand-blue: #0071e3;
+  --brand-indigo: #3b82f6;
+  --brand-purple: #605bff;
+  --surface-dark: #161617;
+  --border-chart-grid: #E2E8F0;
+
+  /* Chart spectrum palette via CSS variables */
+  --chart-primary: var(--accent);
+  --chart-secondary: var(--brand-purple);
+  --chart-tertiary: var(--brand-blue);
+  --chart-quaternary: var(--brand-indigo);
+  --chart-success: var(--success);
+  --chart-warning: var(--warning);
+
   /* Elevation Shadows (Soft shadows tinted with brand deep purple at low opacity) */
   --shadow-card: 0 4px 20px rgba(36, 18, 56, 0.06);
   --shadow-hover: 0 12px 32px rgba(36, 18, 56, 0.10);
@@ -131,6 +146,21 @@
   /* Gold (#C9A227 is 8.68:1 on black, 7.80:1 on #111113 - headline highlight, featured markers, hairlines) */
   --gold-decoration: #C9A227;
 
+  /* Theme tokens migrated from hardcoded values */
+  --brand-blue: #388bfd;
+  --brand-indigo: #60a5fa;
+  --brand-purple: #8b87ff;
+  --surface-dark: #161617;
+  --border-chart-grid: rgba(255, 255, 255, 0.12);
+
+  /* Chart spectrum palette via CSS variables */
+  --chart-primary: var(--accent);
+  --chart-secondary: var(--brand-purple);
+  --chart-tertiary: var(--brand-blue);
+  --chart-quaternary: var(--brand-indigo);
+  --chart-success: var(--success);
+  --chart-warning: var(--warning);
+
   /* Elevation: Little or no drop shadow; elevation comes from surface steps + 10% white border */
   --shadow-card: none;
   --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.50);
@@ -188,7 +218,7 @@
 }
 
 .photo-glass-panel {
-  background: rgba(18, 18, 20, 0.65) !important;
+  background: rgba(0, 0, 0, 0.40) !important;
   backdrop-filter: blur(28px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;

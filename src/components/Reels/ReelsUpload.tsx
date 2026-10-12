@@ -387,7 +387,7 @@ export default function ReelsUpload({ onClose }: ReelsUploadProps) {
             
             {/* Left side preview */}
             <div className="hidden sm:flex w-2/5 border-r border-white/5 bg-black p-6 flex-col justify-between items-center relative overflow-hidden">
-              <span className="absolute top-4 left-6 z-20 font-mono text-[9px] text-[#0071e3] tracking-widest font-bold uppercase">Aesthetic Preview</span>
+              <span className="absolute top-4 left-6 z-20 font-mono text-[9px] text-[var(--brand-blue)] tracking-widest font-bold uppercase">Aesthetic Preview</span>
               {videoUrl ? (
                 <video 
                   src={videoUrl} 
@@ -414,7 +414,7 @@ export default function ReelsUpload({ onClose }: ReelsUploadProps) {
                   <p className="text-[11px] text-white/95 leading-relaxed truncate-3-lines">
                     {caption || "Compose premium text script or tap the sparkling Gemini write icon to the right to load creative copies."}
                   </p>
-                  <p className="text-[10px] font-mono text-[#0071e3]">{tags}</p>
+                  <p className="text-[10px] font-mono text-[var(--brand-blue)]">{tags}</p>
                 </div>
               </div>
             </div>

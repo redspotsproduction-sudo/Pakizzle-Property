@@ -175,7 +175,7 @@ export default function FinancingComparisonTable() {
       </div>
 
       {/* 1. Desktop & Tablet Full Table (>=768px) */}
-      <div className="hidden md:block overflow-x-auto rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] shadow-[0_4px_30px_rgba(0,0,0,0.01)] transition-colors duration-300">
+      <div className="hidden md:block overflow-x-auto rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)] shadow-[0_4px_30px_rgba(0,0,0,0.01)] transition-colors duration-300">
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr className="border-b border-black/[0.03] dark:border-white/[0.02] bg-[#F5F5F7]/50 dark:bg-black/20 text-[10px] font-black uppercase text-[#86868B] tracking-wider">
@@ -301,7 +301,7 @@ export default function FinancingComparisonTable() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className={cn(
-                "rounded-2xl border p-4 bg-white dark:bg-[#161617] shadow-xs transition-all",
+                "rounded-2xl border p-4 bg-white dark:bg-[var(--surface-dark)] shadow-xs transition-all",
                 prod.isFeatured ? "border-amber-500/30 bg-amber-500/[0.015]" : "border-black/[0.06] dark:border-white/[0.06]"
               )}
             >
@@ -396,7 +396,7 @@ export default function FinancingComparisonTable() {
       </div>
 
       {/* Accordion Note / Expansion */}
-      <div className="mt-6 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
+      <div className="mt-6 bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors duration-300">
         <div className="flex gap-3 items-center text-center sm:text-left">
           <div className="w-9 h-9 rounded-full bg-apple-blue/5 dark:bg-apple-blue/10 flex items-center justify-center text-apple-blue shrink-0">
             <Info className="w-4 h-4" />

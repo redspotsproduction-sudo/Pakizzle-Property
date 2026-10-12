@@ -243,10 +243,8 @@ export default function Hero() {
               className="w-full h-full object-cover object-center animate-ken-burns"
             />
           </AnimatePresence>
-          {/* Lightest passing overlay: ~50% behind text column fading to ~25% on the right, heavier only behind bottom cards */}
-          <div className="absolute inset-0 bg-black/25 pointer-events-none" />
-          <div className="absolute inset-y-0 left-0 w-full lg:w-3/5 bg-gradient-to-r from-black/45 via-black/25 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent pointer-events-none" />
+          {/* Calibrated single photo gradient overlay: ~50% black over text column to ~46% across, easing smoothly to 25% by ~70% across */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0.50)_46%,rgba(0,0,0,0.38)_58%,rgba(0,0,0,0.25)_70%,rgba(0,0,0,0.25)_100%)] pointer-events-none" />
         </motion.div>
 
         {/* 
@@ -1007,9 +1005,7 @@ export default function Hero() {
 
           <h1 className="phi-h1 font-extrabold text-white tracking-tight drop-shadow-md text-balance">
             Architectural Sanctuaries. <br />
-            <span className={cn(
-              activeHero.id === "h-4" ? "text-white" : "text-[#C9A227]"
-            )}>
+            <span className="text-white drop-shadow-sm font-extrabold">
               Title Guaranteed.
             </span>
           </h1>

@@ -210,7 +210,7 @@ export default function UserCredits() {
       {/* Credit Balances Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Ad Upload Credits */}
-        <div className="relative overflow-hidden bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+        <div className="relative overflow-hidden bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
           <div className="flex justify-between items-start mb-4">
             <div className="w-9 h-9 bg-blue-500/5 dark:bg-blue-500/10 text-apple-blue rounded-xl flex items-center justify-center shrink-0">
               <Car className="w-4.5 h-4.5" />
@@ -229,7 +229,7 @@ export default function UserCredits() {
         </div>
 
         {/* Featured Ad Credits */}
-        <div className="relative overflow-hidden bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+        <div className="relative overflow-hidden bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
           <div className="flex justify-between items-start mb-4">
             <div className="w-9 h-9 bg-purple-500/5 dark:bg-purple-500/10 text-purple-500 rounded-xl flex items-center justify-center shrink-0">
               <Flame className="w-4.5 h-4.5" />
@@ -279,7 +279,7 @@ export default function UserCredits() {
               <div 
                 key={pkg.id}
                 className={cn(
-                  "relative flex flex-col bg-white dark:bg-[#161617] border rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)] transition-all duration-300 hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)]",
+                  "relative flex flex-col bg-white dark:bg-[var(--surface-dark)] border rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)] transition-all duration-300 hover:shadow-[0_12px_30px_rgba(0,0,0,0.02)]",
                   pkg.isPopular ? "border-apple-blue/30" : "border-black/[0.04] dark:border-white/[0.04]"
                 )}
               >
@@ -355,7 +355,7 @@ export default function UserCredits() {
             {userVehicles.map((car) => (
               <div 
                 key={car.id}
-                className="bg-white dark:bg-[#161617] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)] flex flex-col justify-between"
+                className="bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)] flex flex-col justify-between"
               >
                 <div className="relative w-full aspect-[16/10] bg-[#1C1C1E] overflow-hidden">
                   {car.images?.[0] ? (

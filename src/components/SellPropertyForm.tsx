@@ -140,6 +140,7 @@ export default function SellPropertyForm() {
         id: propertyId,
         reference_id: refId,
         purpose: "for-sale",
+        propertyType: formData.make,
         make: formData.make,
         model: formData.model || `${formData.areaSize} ${formData.areaUnit} ${formData.make}`,
         type: formData.make === "Commercial" ? "commercial" : (formData.make === "Plot" ? "plot" : "residential"),

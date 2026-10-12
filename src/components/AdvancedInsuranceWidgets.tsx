@@ -112,7 +112,7 @@ export function InsuranceCoverageExplorer() {
   const currentCoverage = coverages.find(c => c.id === activeCoverageId) || coverages[0];
 
   return (
-    <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+    <div className="bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
       <div className="absolute top-0 right-0 w-96 h-96 bg-apple-blue/5 rounded-full blur-[90px] pointer-events-none -mr-32 -mt-32" />
       
       <div className="relative z-10 space-y-2 mb-8">
@@ -335,7 +335,7 @@ export function LiveClaimsRadar() {
       </div>
 
       {/* Live Activity Feed (7 columns) */}
-      <div className="lg:col-span-7 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 flex flex-col justify-between shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+      <div className="lg:col-span-7 bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 flex flex-col justify-between shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-black/[0.05] dark:border-white/5 pb-4">
             <div className="space-y-1">
@@ -501,7 +501,7 @@ export function ClaimSettlementSimulator() {
       </div>
 
       {/* Dynamic Range Simulator (7 columns) */}
-      <div className="lg:col-span-7 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 flex flex-col justify-between shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+      <div className="lg:col-span-7 bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 flex flex-col justify-between shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
         <div className="space-y-6">
           <div className="space-y-2">
             <span className="px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-apple-blue bg-apple-blue/5 dark:bg-apple-blue/10 rounded-full border border-apple-blue/15 w-fit block">

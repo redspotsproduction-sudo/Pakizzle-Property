@@ -51,13 +51,12 @@ import { cn } from '@/lib/utils';
 import CategoryEditor from '@/components/Admin/Categories/CategoryEditor';
 import CategoryForm from '@/components/Admin/Categories/CategoryForm';
 import CustomFieldForm from '@/components/Admin/Categories/CustomFieldForm';
-import PopularVehicleStylesManagement from '@/components/Admin/PopularVehicleStylesManagement';
 import { categoryAdminService } from '@/services/categoryAdminService';
 import { toast } from 'sonner';
 import { CategoryField, CategoryFieldType } from '@/types';
 
 type ViewMode = 'table' | 'grid';
-type ManagementView = 'categories' | 'custom-fields' | 'field-editor' | 'editor' | 'popular-styles';
+type ManagementView = 'categories' | 'custom-fields' | 'field-editor' | 'editor';
 
 export default function CategoryManagement() {
   const location = useLocation();
@@ -464,18 +463,6 @@ export default function CategoryManagement() {
                 >
                   <FileText className="w-3.5 h-3.5" />
                   Custom Fields
-                </button>
-                <button
-                  onClick={() => setMgmtView('popular-styles')}
-                  className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all h-8",
-                    mgmtView === 'popular-styles'
-                      ? "bg-white dark:bg-[var(--bg-inset)] shadow-sm text-apple-blue dark:text-white"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
-                  )}
-                >
-                  <Sliders className="w-3.5 h-3.5" />
-                  Popular Styles
                 </button>
               </div>
 
@@ -917,18 +904,6 @@ export default function CategoryManagement() {
                 onCancel={() => setMgmtView('custom-fields')}
                 isLoading={isSyncing}
               />
-            </motion.div>
-          )}
-
-          {mgmtView === 'popular-styles' && (
-            <motion.div
-              key="popular-styles-view"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              className="w-full"
-            >
-              <PopularVehicleStylesManagement />
             </motion.div>
           )}
         </AnimatePresence>

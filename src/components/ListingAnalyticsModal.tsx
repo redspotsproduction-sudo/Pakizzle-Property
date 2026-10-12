@@ -308,7 +308,7 @@ export default function ListingAnalyticsModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 28, stiffness: 340 }}
-          className="relative w-full max-w-4xl bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.06] dark:border-white/[0.08] shadow-[0_30px_70px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col max-h-[92vh] z-10"
+          className="relative w-full max-w-4xl bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.06] dark:border-white/[0.08] shadow-[0_30px_70px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col max-h-[92vh] z-10"
         >
           {/* Header Bar */}
           <div className="p-5 sm:p-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06] flex items-start justify-between gap-4 bg-apple-surface/50 dark:bg-white/[0.01]">
@@ -568,33 +568,33 @@ export default function ListingAnalyticsModal({
                     <defs>
                       <linearGradient id="metricGradient" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor={
-                          selectedMetric === 'views' ? '#0071e3' :
-                          selectedMetric === 'uniqueViewers' ? '#8b5cf6' :
-                          selectedMetric === 'saves' ? '#f43f5e' : '#10b981'
+                          selectedMetric === 'views' ? 'var(--chart-tertiary)' :
+                          selectedMetric === 'uniqueViewers' ? 'var(--chart-secondary)' :
+                          selectedMetric === 'saves' ? 'var(--chart-primary)' : 'var(--chart-success)'
                         } stopOpacity={0.25} />
                         <stop offset="95%" stopColor={
-                          selectedMetric === 'views' ? '#0071e3' :
-                          selectedMetric === 'uniqueViewers' ? '#8b5cf6' :
-                          selectedMetric === 'saves' ? '#f43f5e' : '#10b981'
+                          selectedMetric === 'views' ? 'var(--chart-tertiary)' :
+                          selectedMetric === 'uniqueViewers' ? 'var(--chart-secondary)' :
+                          selectedMetric === 'saves' ? 'var(--chart-primary)' : 'var(--chart-success)'
                         } stopOpacity={0.0} />
                       </linearGradient>
                       <linearGradient id="marketGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.15} />
-                        <stop offset="95%" stopColor="#94a3b8" stopOpacity={0.0} />
+                        <stop offset="5%" stopColor="var(--text-tertiary)" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="var(--text-tertiary)" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.3} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-chart-grid)" opacity={0.3} />
                     <XAxis 
                       dataKey="dayLabel" 
                       tickLine={false} 
                       axisLine={false} 
-                      tick={{ fontSize: 10, fill: '#94a3b8' }} 
+                      tick={{ fontSize: 10, fill: 'var(--text-secondary)' }} 
                       interval={4}
                     />
                     <YAxis 
                       tickLine={false} 
                       axisLine={false} 
-                      tick={{ fontSize: 10, fill: '#94a3b8' }} 
+                      tick={{ fontSize: 10, fill: 'var(--text-secondary)' }} 
                     />
                     <Tooltip 
                       content={({ active, payload }) => {
@@ -619,9 +619,9 @@ export default function ListingAnalyticsModal({
                       type="monotone" 
                       dataKey={selectedMetric} 
                       stroke={
-                        selectedMetric === 'views' ? '#0071e3' :
-                        selectedMetric === 'uniqueViewers' ? '#8b5cf6' :
-                        selectedMetric === 'saves' ? '#f43f5e' : '#10b981'
+                        selectedMetric === 'views' ? 'var(--chart-tertiary)' :
+                        selectedMetric === 'uniqueViewers' ? 'var(--chart-secondary)' :
+                        selectedMetric === 'saves' ? 'var(--chart-primary)' : 'var(--chart-success)'
                       } 
                       strokeWidth={2.5} 
                       fill="url(#metricGradient)" 
@@ -630,7 +630,7 @@ export default function ListingAnalyticsModal({
                       <Area 
                         type="monotone" 
                         dataKey="marketAvgViews" 
-                        stroke="#94a3b8" 
+                        stroke="var(--text-tertiary)" 
                         strokeWidth={1.5} 
                         strokeDasharray="4 4" 
                         fill="none" 

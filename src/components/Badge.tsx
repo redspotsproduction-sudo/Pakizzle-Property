@@ -13,7 +13,7 @@ interface BadgeProps {
   showText?: boolean;
 }
 
-// 1. Identity Tier: Filled Brand Blue Rosette (--accent-blue: #4A90D2) with crisp white checkmark
+// 1. Identity Tier: Filled Brand Blue Rosette (--accent-blue: var(--accent)) with crisp white checkmark
 export function IdentityBadgeIcon({ className, size = 18 }: { className?: string; size?: number }) {
   return (
     <svg 
@@ -25,12 +25,12 @@ export function IdentityBadgeIcon({ className, size = 18 }: { className?: string
     >
       <path 
         d="M22.25 12c0-1.43-.79-2.67-1.94-3.26.14-.39.21-.82.21-1.27 0-2-1.55-3.61-3.46-3.61-.43 0-.85.09-1.22.24C15.24 2.91 14.05 2 12.69 2s-2.55.91-3.15 2.1c-.37-.15-.79-.24-1.22-.24-1.91 0-3.46 1.61-3.46 3.61 0 .45.07.88.21 1.27-1.15.59-1.94 1.83-1.94 3.26 0 1.43.79 2.67 1.94 3.26-.14.39-.21.82-.21 1.27 0 2 1.55 3.61 3.46 3.61.43 0 .85-.09 1.22-.24.6 1.19 1.79 2.1 3.15 2.1s2.55-.91 3.15-2.1c.37.15.79.24 1.22.24 1.91 0 3.46-1.61 3.46-3.61 0-.45-.07-.88-.21-1.27 1.15-.59 1.94-1.83 1.94-3.26z" 
-        fill="#4A90D2"
+        fill="var(--accent)"
       />
       <path 
         d="M8.8 12.2l2.2 2.2 4.4-4.5"
         fill="none"
-        stroke="#FFFFFF"
+        stroke="currentColor"
         strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -39,7 +39,7 @@ export function IdentityBadgeIcon({ className, size = 18 }: { className?: string
   );
 }
 
-// 2. Business Tier: Filled Brand Gold Rosette (--accent-gold: #F0A830) with distinct white Agency/Building icon
+// 2. Business Tier: Filled Brand Gold Rosette (--accent-gold: var(--gold-decoration)) with distinct white Agency/Building icon
 export function BusinessBadgeIcon({ className, size = 18 }: { className?: string; size?: number }) {
   return (
     <svg 
@@ -51,30 +51,30 @@ export function BusinessBadgeIcon({ className, size = 18 }: { className?: string
     >
       <path 
         d="M22.25 12c0-1.43-.79-2.67-1.94-3.26.14-.39.21-.82.21-1.27 0-2-1.55-3.61-3.46-3.61-.43 0-.85.09-1.22.24C15.24 2.91 14.05 2 12.69 2s-2.55.91-3.15 2.1c-.37-.15-.79-.24-1.22-.24-1.91 0-3.46 1.61-3.46 3.61 0 .45.07.88.21 1.27-1.15.59-1.94 1.83-1.94 3.26 0 1.43.79 2.67 1.94 3.26-.14.39-.21.82-.21 1.27 0 2 1.55 3.61 3.46 3.61.43 0 .85-.09 1.22-.24.6 1.19 1.79 2.1 3.15 2.1s2.55-.91 3.15-2.1c.37.15.79.24 1.22.24 1.91 0 3.46-1.61 3.46-3.61 0-.45-.07-.88-.21-1.27 1.15-.59 1.94-1.83 1.94-3.26z" 
-        fill="#F0A830"
+        fill="var(--gold-decoration)"
       />
       {/* Distinct Agency / Corporate Building Architectural Motif */}
       <path 
         d="M7.5 17.2V8.5L12 6.5L16.5 8.5V17.2H7.5Z" 
-        fill="#FFFFFF"
+        fill="currentColor"
       />
-      <rect x="9.5" y="10" width="1.6" height="1.6" rx="0.3" fill="#8C5E10" />
-      <rect x="12.9" y="10" width="1.6" height="1.6" rx="0.3" fill="#8C5E10" />
-      <rect x="9.5" y="12.5" width="1.6" height="1.6" rx="0.3" fill="#8C5E10" />
-      <rect x="12.9" y="12.5" width="1.6" height="1.6" rx="0.3" fill="#8C5E10" />
-      <path d="M11 17.2V15H13V17.2" fill="#8C5E10" />
+      <rect x="9.5" y="10" width="1.6" height="1.6" rx="0.3" fill="var(--gold-decoration)" />
+      <rect x="12.9" y="10" width="1.6" height="1.6" rx="0.3" fill="var(--gold-decoration)" />
+      <rect x="9.5" y="12.5" width="1.6" height="1.6" rx="0.3" fill="var(--gold-decoration)" />
+      <rect x="12.9" y="12.5" width="1.6" height="1.6" rx="0.3" fill="var(--gold-decoration)" />
+      <path d="M11 17.2V15H13V17.2" fill="var(--gold-decoration)" />
     </svg>
   );
 }
 
-// 3. Basic Tier: Outline badge with clean Brand Green check (--accent-green: #5FA84C)
+// 3. Basic Tier: Outline badge with clean Brand Green check (--accent-green: var(--success))
 export function BasicBadgeIcon({ className, size = 18 }: { className?: string; size?: number }) {
   return (
     <svg 
       viewBox="0 0 24 24" 
       width={size} 
       height={size} 
-      className={cn("inline-block shrink-0 select-none text-[#5FA84C]", className)}
+      className={cn("inline-block shrink-0 select-none text-[var(--success)]", className)}
       style={{ verticalAlign: 'middle' }}
     >
       <circle 
@@ -117,9 +117,9 @@ export default function Badge({ type, size = 'md', className, showText = false }
 
   const badgeConfigs = {
     basic: {
-      color: 'text-[#5FA84C]',
-      pillBg: 'bg-[#5FA84C]/10 border border-[#5FA84C]/30 hover:bg-[#5FA84C]/15',
-      tooltipBg: 'border-[#5FA84C]/30 shadow-[#5FA84C]/10',
+      color: 'text-[var(--success)]',
+      pillBg: 'bg-[var(--success)]/10 border border-[var(--success)]/30 hover:bg-[var(--success)]/15',
+      tooltipBg: 'border-[var(--success)]/30 shadow-[var(--success)]/10',
       label: 'Verified Contact',
       tag: 'Basic Tier',
       description: 'Phone number and primary email verified via SMS & email OTP security.',
@@ -127,9 +127,9 @@ export default function Badge({ type, size = 'md', className, showText = false }
       icon: (s: number) => <BasicBadgeIcon size={s} />
     },
     identity: {
-      color: 'text-[#4A90D2]',
-      pillBg: 'bg-[#4A90D2]/10 border border-[#4A90D2]/30 hover:bg-[#4A90D2]/15',
-      tooltipBg: 'border-[#4A90D2]/30 shadow-[#4A90D2]/10',
+      color: 'text-[var(--accent)]',
+      pillBg: 'bg-[var(--accent)]/10 border border-[var(--accent)]/30 hover:bg-[var(--accent)]/15',
+      tooltipBg: 'border-[var(--accent)]/30 shadow-[var(--accent)]/10',
       label: 'CNIC Verified',
       tag: 'Identity Tier',
       description: 'Government CNIC / National Identity verified and cross-checked by Pakizzle.',
@@ -137,9 +137,9 @@ export default function Badge({ type, size = 'md', className, showText = false }
       icon: (s: number) => <IdentityBadgeIcon size={s} />
     },
     business: {
-      color: 'text-[#F0A830]',
-      pillBg: 'bg-[#F0A830]/10 border border-[#F0A830]/30 hover:bg-[#F0A830]/15',
-      tooltipBg: 'border-[#F0A830]/30 shadow-[#F0A830]/10',
+      color: 'text-[var(--gold-decoration)]',
+      pillBg: 'bg-[var(--gold-decoration)]/10 border border-[var(--gold-decoration)]/30 hover:bg-[var(--gold-decoration)]/15',
+      tooltipBg: 'border-[var(--gold-decoration)]/30 shadow-[var(--gold-decoration)]/10',
       label: 'Verified Agency',
       tag: 'Business Tier',
       description: 'Corporate business license, NTN tax certificate, and agency credentials verified.',
@@ -188,7 +188,7 @@ export default function Badge({ type, size = 'md', className, showText = false }
             exit={{ opacity: 0, y: 3, scale: 0.96 }}
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-2xl border rounded-2xl shadow-xl z-[150] pointer-events-none text-left",
+              "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 bg-white/95 dark:bg-[var(--bg-raised)]/95 backdrop-blur-2xl border rounded-2xl shadow-xl z-[150] pointer-events-none text-left",
               config.tooltipBg
             )}
           >

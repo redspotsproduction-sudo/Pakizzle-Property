@@ -131,7 +131,7 @@ export function InspectionHotspotsExplorer() {
   const currentHotspot = hotspots.find(h => h.id === activeHotspotId) || hotspots[0];
 
   return (
-    <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+    <div className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
       <div className="absolute top-0 right-0 w-96 h-96 bg-apple-blue/5 rounded-full blur-[90px] pointer-events-none -mr-32 -mt-32" />
       
       <div className="relative z-10 space-y-2 mb-8">
@@ -139,27 +139,27 @@ export function InspectionHotspotsExplorer() {
           <span className="px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-apple-blue bg-apple-blue/5 dark:bg-apple-blue/10 rounded-full border border-apple-blue/15">
             Interactive Diagnostics Blueprint
           </span>
-          <span className="text-[10px] text-emerald-500 font-bold uppercase tracking-wider flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
+          <span className="text-[10px] text-apple-green font-bold uppercase tracking-wider flex items-center gap-1">
+            <span className="w-1.5 h-1.5 bg-apple-green rounded-full animate-ping" />
             240-Point Deep-Scan
           </span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-snug">
+        <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-snug">
           Pakizzle Forensic Telemetry Matrix
         </h2>
-        <p className="text-xs text-[#86868B] max-w-2xl leading-relaxed">
+        <p className="text-xs text-[var(--text-secondary)] max-w-2xl leading-relaxed">
           While competitors offer basic physical evaluations, Pakizzle uses advanced hardware telemetry to profile the vehicle's true mechanical DNA. Click on the hotspots to explore our scanning procedure.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Interactive CAD BluePrint (Left 5 Columns) */}
-        <div className="lg:col-span-5 flex justify-center bg-[#F5F5F7] dark:bg-[#111112] rounded-2xl p-6 border border-black/[0.02] dark:border-white/[0.02] relative min-h-[360px] sm:min-h-[420px] select-none overflow-hidden">
+        <div className="lg:col-span-5 flex justify-center bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] rounded-2xl p-6 border border-black/[0.02] dark:border-white/[0.02] relative min-h-[360px] sm:min-h-[420px] select-none overflow-hidden">
           {/* Blueprint Grid Lines */}
           <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
           
           {/* Premium Vector Car Chassis Outline (Top-Down) */}
-          <svg className="w-44 sm:w-52 h-auto text-[#1D1D1F]/20 dark:text-white/10 transition-colors" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-44 sm:w-52 h-auto text-[var(--text-primary)]/20 dark:text-white/10 transition-colors" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Main Body */}
             <path d="M50 100C50 60 70 40 100 40C130 40 150 60 150 100V300C150 340 130 360 100 360C70 360 50 340 50 300V100Z" stroke="currentColor" strokeWidth="2.5" />
             {/* Front Bumper */}
@@ -206,17 +206,17 @@ export function InspectionHotspotsExplorer() {
                   "w-4.5 h-4.5 rounded-full border flex items-center justify-center transition-all duration-300 relative z-10 shadow-md",
                   isActive 
                     ? "bg-apple-blue border-white text-white scale-110" 
-                    : "bg-white dark:bg-[#2C2C2E] border-[#86868B]/40 text-[#86868B] group-hover:border-apple-blue"
+                    : "bg-white dark:bg-[var(--bg-inset)] border-[var(--text-secondary)]/40 text-[var(--text-secondary)] group-hover:border-apple-blue"
                 )}>
                   <div className={cn(
                     "w-1.5 h-1.5 rounded-full transition-all duration-300",
-                    isActive ? "bg-white scale-125 animate-pulse" : "bg-[#86868B] group-hover:bg-apple-blue"
+                    isActive ? "bg-white scale-125 animate-pulse" : "bg-[var(--text-secondary)] group-hover:bg-apple-blue"
                   )} />
                 </div>
                 
                 {/* Micro Floating Tag */}
                 <div className={cn(
-                  "absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#1D1D1F] text-white px-2 py-0.5 rounded text-[8px] font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-md",
+                  "absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[var(--text-primary)] text-white px-2 py-0.5 rounded text-[8px] font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-md",
                   isActive && "opacity-100"
                 )}>
                   {hs.name.toUpperCase()}
@@ -235,48 +235,48 @@ export function InspectionHotspotsExplorer() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="space-y-5 bg-[#F5F5F7]/30 dark:bg-white/[0.01] rounded-2xl p-5 sm:p-6 border border-black/[0.03] dark:border-white/[0.02]"
+              className="space-y-5 bg-[var(--text-primary)]/30 dark:bg-white/[0.01] rounded-2xl p-5 sm:p-6 border border-black/[0.03] dark:border-white/[0.02]"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.04] dark:border-white/5 pb-4">
                 <div className="space-y-1">
                   <span className="text-[9px] font-extrabold text-apple-blue uppercase tracking-widest block font-mono">
                     SENSOR PORT: {currentHotspot.id.toUpperCase()}
                   </span>
-                  <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-1.5">
+                  <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-1.5">
                     <Activity className="w-4 h-4 text-apple-blue" />
                     {currentHotspot.name}
                   </h3>
                 </div>
                 
                 <div className="text-left sm:text-right">
-                  <span className="text-[9px] font-bold text-[#86868B] uppercase block">LIVE TELEMETRY STATUS</span>
+                  <span className="text-[9px] font-bold text-[var(--text-secondary)] uppercase block">LIVE TELEMETRY STATUS</span>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-bold text-emerald-500 font-mono tracking-tight">{currentHotspot.metricValue}</span>
+                    <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
+                    <span className="text-xs font-bold text-apple-green font-mono tracking-tight">{currentHotspot.metricValue}</span>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <span className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider block">Standard Core Diagnostic Equipment</span>
-                  <div className="px-3 py-2 bg-white dark:bg-[#1C1C1E] border border-black/[0.04] dark:border-white/5 rounded-xl text-[11px] font-bold text-apple-blue flex items-center gap-2 font-mono shadow-sm">
+                  <span className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block">Standard Core Diagnostic Equipment</span>
+                  <div className="px-3 py-2 bg-white dark:bg-[var(--bg-raised)] border border-black/[0.04] dark:border-white/5 rounded-xl text-[11px] font-bold text-apple-blue flex items-center gap-2 font-mono shadow-sm">
                     <Cpu className="w-3.5 h-3.5 text-apple-blue animate-pulse" />
                     {currentHotspot.tool}
                   </div>
                 </div>
 
-                <p className="text-[11px] text-[#86868B] leading-relaxed font-normal">
+                <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed font-normal">
                   {currentHotspot.description}
                 </p>
 
                 <div className="space-y-2">
-                  <span className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider block">Mandatory Verification Checklist</span>
+                  <span className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block">Mandatory Verification Checklist</span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {currentHotspot.checks.map((check, idx) => (
-                      <div key={idx} className="flex items-center gap-2 bg-white dark:bg-[#1C1C1E] px-3 py-2 border border-black/[0.03] dark:border-white/5 rounded-xl">
-                        <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                        <span className="text-[10px] text-[#1D1D1F] dark:text-white/90 font-medium leading-snug">{check}</span>
+                      <div key={idx} className="flex items-center gap-2 bg-white dark:bg-[var(--bg-raised)] px-3 py-2 border border-black/[0.03] dark:border-white/5 rounded-xl">
+                        <Check className="w-3.5 h-3.5 text-apple-green shrink-0" />
+                        <span className="text-[10px] text-[var(--text-primary)] dark:text-white/90 font-medium leading-snug">{check}</span>
                       </div>
                     ))}
                   </div>
@@ -296,7 +296,7 @@ export function InspectionHotspotsExplorer() {
                     "px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all border",
                     activeHotspotId === h.id
                       ? "bg-apple-blue border-apple-blue text-white shadow-sm"
-                      : "bg-[#F5F5F7] dark:bg-white/5 border-transparent text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                      : "bg-[var(--text-primary)] dark:bg-white/5 border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
                   {h.name.split(' ')[0]}
@@ -304,7 +304,7 @@ export function InspectionHotspotsExplorer() {
               ))}
             </div>
 
-            <span className="text-[10px] font-bold text-[#86868B] flex items-center gap-1 font-mono uppercase tracking-wide">
+            <span className="text-[10px] font-bold text-[var(--text-secondary)] flex items-center gap-1 font-mono uppercase tracking-wide">
               Selected 1 of 5 Nodes
               <ChevronRight className="w-3.5 h-3.5" />
             </span>
@@ -323,19 +323,19 @@ export function VerifiedBadgeBoost() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
       {/* Interactive Mockup Listing Card (Left 5 Columns) */}
-      <div className="lg:col-span-5 bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between relative overflow-hidden shadow-md">
+      <div className="lg:col-span-5 bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-5 flex flex-col justify-between relative overflow-hidden shadow-md">
         
         {/* Toggle Pills */}
         <div className="flex justify-between items-center mb-4">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B] font-mono">Simulated Ad Card</span>
-          <div className="bg-[#F5F5F7] dark:bg-white/5 p-0.5 rounded-lg flex gap-1 border border-black/[0.02] dark:border-white/5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] font-mono">Simulated Ad Card</span>
+          <div className="bg-[var(--text-primary)] dark:bg-white/5 p-0.5 rounded-lg flex gap-1 border border-black/[0.02] dark:border-white/5">
             <button
               onClick={() => setActiveTab('with')}
               className={cn(
                 "px-2.5 py-1 text-[9px] font-bold uppercase rounded-md transition-colors",
                 activeTab === 'with'
-                  ? "bg-white dark:bg-[#2C2C2E] text-apple-blue shadow-sm"
-                  : "text-[#86868B]"
+                  ? "bg-white dark:bg-[var(--bg-inset)] text-apple-blue shadow-sm"
+                  : "text-[var(--text-secondary)]"
               )}
             >
               With Badge
@@ -345,8 +345,8 @@ export function VerifiedBadgeBoost() {
               className={cn(
                 "px-2.5 py-1 text-[9px] font-bold uppercase rounded-md transition-colors",
                 activeTab === 'without'
-                  ? "bg-white dark:bg-[#2C2C2E] text-[#1D1D1F] dark:text-white/80 shadow-sm"
-                  : "text-[#86868B]"
+                  ? "bg-white dark:bg-[var(--bg-inset)] text-[var(--text-primary)] dark:text-white/80 shadow-sm"
+                  : "text-[var(--text-secondary)]"
               )}
             >
               Standard
@@ -355,7 +355,7 @@ export function VerifiedBadgeBoost() {
         </div>
 
         {/* Listing Mock Frame */}
-        <div className="bg-[#F5F5F7]/30 dark:bg-white/[0.005] border border-black/[0.03] dark:border-white/5 rounded-2xl p-4 space-y-4 relative">
+        <div className="bg-[var(--text-primary)]/30 dark:bg-white/[0.005] border border-black/[0.03] dark:border-white/5 rounded-2xl p-4 space-y-4 relative">
           
           {/* Card Media Simulator */}
           <div className="h-44 rounded-xl bg-gradient-to-tr from-neutral-800 to-neutral-700 flex flex-col justify-between p-3 relative overflow-hidden">
@@ -390,10 +390,10 @@ export function VerifiedBadgeBoost() {
           {/* Ad Details Info */}
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-base font-bold font-mono tracking-tight text-[#1D1D1F] dark:text-white">
+              <span className="text-base font-bold font-mono tracking-tight text-[var(--text-primary)] dark:text-white">
                 PKR 7,850,000
               </span>
-              <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+              <span className="text-[9px] font-bold text-apple-green bg-apple-green/10 border border-apple-green/20 px-2 py-0.5 rounded">
                 Verified Price Match
               </span>
             </div>
@@ -401,21 +401,21 @@ export function VerifiedBadgeBoost() {
             {/* Simulated Live Statistics */}
             <div className="grid grid-cols-2 gap-3 border-t border-black/[0.04] dark:border-white/5 pt-3 text-[10px]">
               <div className="space-y-0.5">
-                <span className="text-[#86868B] font-bold block uppercase tracking-wider">Search Impressions</span>
-                <span className="font-mono font-bold text-[#1D1D1F] dark:text-white">
+                <span className="text-[var(--text-secondary)] font-bold block uppercase tracking-wider">Search Impressions</span>
+                <span className="font-mono font-bold text-[var(--text-primary)] dark:text-white">
                   {activeTab === 'with' ? '42,890 / wk' : '11,200 / wk'}
                 </span>
-                <span className={cn("text-[8px] font-bold block", activeTab === 'with' ? 'text-emerald-500' : 'text-[#86868B]')}>
+                <span className={cn("text-[8px] font-bold block", activeTab === 'with' ? 'text-apple-green' : 'text-[var(--text-secondary)]')}>
                   {activeTab === 'with' ? '+380% Search Velocity' : 'Baseline performance'}
                 </span>
               </div>
 
               <div className="space-y-0.5">
-                <span className="text-[#86868B] font-bold block uppercase tracking-wider">Average Days to Sell</span>
-                <span className="font-mono font-bold text-[#1D1D1F] dark:text-white">
+                <span className="text-[var(--text-secondary)] font-bold block uppercase tracking-wider">Average Days to Sell</span>
+                <span className="font-mono font-bold text-[var(--text-primary)] dark:text-white">
                   {activeTab === 'with' ? '4 Days (Fastest)' : '32 Days (Typical)'}
                 </span>
-                <span className={cn("text-[8px] font-bold block", activeTab === 'with' ? 'text-emerald-500' : 'text-amber-500')}>
+                <span className={cn("text-[8px] font-bold block", activeTab === 'with' ? 'text-apple-green' : 'text-gold-decoration')}>
                   {activeTab === 'with' ? '8x Higher Click-Through' : 'Market average'}
                 </span>
               </div>
@@ -439,7 +439,7 @@ export function VerifiedBadgeBoost() {
       </div>
 
       {/* Advanced Performance Stats Panel (Right 7 Columns) */}
-      <div className="lg:col-span-7 bg-[#1D1D1F] dark:bg-[#111112] text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/5 flex flex-col justify-between shadow-lg">
+      <div className="lg:col-span-7 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/5 flex flex-col justify-between shadow-lg">
         <div className="absolute top-0 right-0 w-80 h-80 bg-apple-blue/15 rounded-full blur-[90px] pointer-events-none -mr-16 -mt-16" />
 
         <div className="relative z-10 space-y-5">
@@ -458,8 +458,8 @@ export function VerifiedBadgeBoost() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             {[
               { label: 'Odometer Integrity', value: '100% Genuine', note: 'Autel deep-ECU verification block', color: 'text-apple-blue' },
-              { label: 'Buyer Call Velocity', value: '4.8x Multiplier', note: 'Compared to standard listings', color: 'text-emerald-400' },
-              { label: 'Price Premium Boost', value: 'PKR 3.5 Lacs+', note: 'Secured via forensic reports', color: 'text-amber-400' }
+              { label: 'Buyer Call Velocity', value: '4.8x Multiplier', note: 'Compared to standard listings', color: 'text-apple-green' },
+              { label: 'Price Premium Boost', value: 'PKR 3.5 Lacs+', note: 'Secured via forensic reports', color: 'text-gold-decoration' }
             ].map((stat, idx) => (
               <div key={idx} className="bg-white/5 border border-white/5 rounded-2xl p-4 space-y-1">
                 <span className="text-[9px] font-bold text-white/55 uppercase block tracking-wider">{stat.label}</span>
@@ -498,7 +498,7 @@ export function VerifiedBadgeBoost() {
         <div className="relative z-10 pt-5 mt-6 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="space-y-0.5">
             <span className="text-[9px] font-extrabold text-white/40 uppercase tracking-widest block font-mono">ESTIMATED RETURN ON INITIATIVE</span>
-            <span className="text-sm font-bold text-emerald-400">
+            <span className="text-sm font-bold text-apple-green">
               Secures up to {Math.round(((priceMultiplier * 10000) / 8500))}x the inspection fee cost back on final sales price
             </span>
           </div>
@@ -518,17 +518,17 @@ export function VerifiedBadgeBoost() {
 
 export function DubizzleComparison() {
   return (
-    <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+    <div className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-apple-blue/5 rounded-full blur-[80px] pointer-events-none -ml-16 -mb-16" />
 
       <div className="relative z-10 space-y-2 mb-6">
         <span className="text-[9px] font-extrabold text-apple-blue uppercase tracking-[0.25em] block">
           THE GENERATIONAL AUTO-TECH JUMP
         </span>
-        <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white">
+        <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">
           Beyond Middle Eastern Standards: Pakizzle vs. Competitors
         </h3>
-        <p className="text-xs text-[#86868B] max-w-2xl leading-relaxed">
+        <p className="text-xs text-[var(--text-secondary)] max-w-2xl leading-relaxed">
           While Dubai's classic inspection sites provide manual checkpoints, Pakizzle's connected hardware network utilizes deep cloud diagnostics and blockchain encryption to establish foolproof vehicle pedigree.
         </p>
       </div>
@@ -536,14 +536,14 @@ export function DubizzleComparison() {
       <div className="relative z-10 overflow-x-auto">
         <table className="w-full text-left border-collapse min-w-[650px]">
           <thead>
-            <tr className="border-b border-black/[0.06] dark:border-white/10 text-[10px] font-bold text-[#86868B] uppercase tracking-wider">
+            <tr className="border-b border-black/[0.06] dark:border-white/10 text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
               <th className="py-3 px-4">Verification Capability</th>
               <th className="py-3 px-4 text-center bg-apple-blue/5 dark:bg-apple-blue/10 text-apple-blue border-x border-apple-blue/10">Pakizzle Forensic Audit</th>
               <th className="py-3 px-4 text-center">Typical Dubai Inspection</th>
               <th className="py-3 px-4 text-center">Standard Local Mechanic</th>
             </tr>
           </thead>
-          <tbody className="text-[11px] font-semibold text-[#1D1D1F] dark:text-white/90 divide-y divide-black/[0.03] dark:divide-white/5">
+          <tbody className="text-[11px] font-semibold text-[var(--text-primary)] dark:text-white/90 divide-y divide-black/[0.03] dark:divide-white/5">
             {[
               {
                 spec: "Odometer Anti-Tampering Engine Probes",
@@ -587,10 +587,10 @@ export function DubizzleComparison() {
                 <td className="py-4 px-4 text-center bg-apple-blue/[0.01] dark:bg-apple-blue/5 text-apple-blue border-x border-apple-blue/10 max-w-[250px] leading-normal font-bold">
                   {row.pakizzle}
                 </td>
-                <td className="py-4 px-4 text-center text-[#86868B] max-w-[200px] leading-normal font-medium">
+                <td className="py-4 px-4 text-center text-[var(--text-secondary)] max-w-[200px] leading-normal font-medium">
                   {row.dubizzle}
                 </td>
-                <td className="py-4 px-4 text-center text-[#86868B] max-w-[150px] leading-normal font-medium">
+                <td className="py-4 px-4 text-center text-[var(--text-secondary)] max-w-[150px] leading-normal font-medium">
                   {row.local}
                 </td>
               </tr>
@@ -635,52 +635,52 @@ export function LiveNodeRadar() {
   const details = cityDetails[selectedCity];
 
   return (
-    <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
-      <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none -mr-16 -mt-16" />
+    <div className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+      <div className="absolute top-0 right-0 w-80 h-80 bg-apple-green/5 rounded-full blur-[80px] pointer-events-none -mr-16 -mt-16" />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Animated Radar Graph (Left 4 Columns) */}
-        <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[#F5F5F7] dark:bg-[#111112] rounded-2xl p-6 border border-black/[0.02] dark:border-white/[0.02] relative min-h-[250px] select-none overflow-hidden">
+        <div className="lg:col-span-4 flex flex-col items-center justify-center bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] rounded-2xl p-6 border border-black/[0.02] dark:border-white/[0.02] relative min-h-[250px] select-none overflow-hidden">
           {/* Radar circle concentric lines */}
-          <div className="absolute w-44 h-44 border border-emerald-500/10 rounded-full flex items-center justify-center">
-            <div className="w-32 h-32 border border-emerald-500/15 rounded-full flex items-center justify-center">
-              <div className="w-20 h-20 border border-emerald-500/20 rounded-full flex items-center justify-center">
-                <div className="w-8 h-8 border border-emerald-500/30 rounded-full" />
+          <div className="absolute w-44 h-44 border border-apple-green/10 rounded-full flex items-center justify-center">
+            <div className="w-32 h-32 border border-apple-green/15 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 border border-apple-green/20 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 border border-apple-green/30 rounded-full" />
               </div>
             </div>
           </div>
 
           {/* Sweeper Arm line */}
           <motion.div 
-            className="absolute top-1/2 left-1/2 w-24 h-24 origin-top-left border-l border-emerald-500/40 bg-gradient-to-tr from-emerald-500/10 to-transparent pointer-events-none"
+            className="absolute top-1/2 left-1/2 w-24 h-24 origin-top-left border-l border-apple-green/40 bg-gradient-to-tr from-apple-green/10 to-transparent pointer-events-none"
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 4, ease: 'linear' }}
             style={{ x: 0, y: 0 }}
           />
 
           {/* Pulsing Active Blips */}
-          <div className="absolute top-1/3 left-1/4 w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
-          <div className="absolute bottom-1/4 right-1/3 w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
+          <div className="absolute top-1/3 left-1/4 w-2 h-2 bg-apple-green rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
+          <div className="absolute bottom-1/4 right-1/3 w-2 h-2 bg-apple-green rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
           <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-apple-blue rounded-full animate-pulse shadow-[0_0_10px_rgba(0,113,227,0.7)]" />
 
           {/* Micro telemetry label */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] font-bold font-mono tracking-widest text-[#86868B] uppercase">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] font-bold font-mono tracking-widest text-[var(--text-secondary)] uppercase">
             ACTIVE SCANNING LOCAL RADAR
           </div>
 
-          <Radar className="w-8 h-8 text-emerald-500 relative z-10 animate-bounce" />
+          <Radar className="w-8 h-8 text-apple-green relative z-10 animate-bounce" />
         </div>
 
         {/* Dynamic City Node Details (Right 8 Columns) */}
         <div className="lg:col-span-8 space-y-5">
           <div className="space-y-1.5">
-            <span className="text-[9px] font-extrabold text-[#86868B] uppercase tracking-[0.25em] block">
+            <span className="text-[9px] font-extrabold text-[var(--text-secondary)] uppercase tracking-[0.25em] block">
               PAKIZZLE ACTIVE COMMAND NETWORK
             </span>
-            <h3 className="text-lg font-semibold tracking-tight text-[#1D1D1F] dark:text-white">
+            <h3 className="text-lg font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">
               Dynamic Inspector Fleet Operations
             </h3>
-            <p className="text-xs text-[#86868B] leading-relaxed">
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
               We operate highly optimized logistics networks in core cities. This allows our certified engineers to arrive at the seller's doorstep within minutes of booking.
             </p>
           </div>
@@ -698,8 +698,8 @@ export function LiveNodeRadar() {
                 className={cn(
                   "px-4 py-2 text-[10px] font-bold rounded-xl transition-all border",
                   selectedCity === city.id
-                    ? "bg-[#1D1D1F] dark:bg-white text-white dark:text-black border-transparent shadow"
-                    : "bg-[#F5F5F7] dark:bg-white/5 border-transparent text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                    ? "bg-[var(--text-primary)] dark:bg-white text-white dark:text-black border-transparent shadow"
+                    : "bg-[var(--text-primary)] dark:bg-white/5 border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                 )}
               >
                 {city.label}
@@ -711,25 +711,25 @@ export function LiveNodeRadar() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Left side node list */}
             <div className="space-y-2">
-              <span className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider block">Active Dispatch Centers</span>
+              <span className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider block">Active Dispatch Centers</span>
               <div className="space-y-1.5">
                 {details.dispatchCenters.map((hub, idx) => (
-                  <div key={idx} className="flex items-center gap-2 bg-[#F5F5F7]/50 dark:bg-white/5 px-3 py-1.5 border border-black/[0.02] dark:border-white/[0.02] rounded-xl text-[10px] font-semibold">
-                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full shrink-0" />
-                    <span className="text-[#1D1D1F] dark:text-white/95">{hub}</span>
+                  <div key={idx} className="flex items-center gap-2 bg-[var(--text-primary)]/50 dark:bg-white/5 px-3 py-1.5 border border-black/[0.02] dark:border-white/[0.02] rounded-xl text-[10px] font-semibold">
+                    <span className="w-1.5 h-1.5 bg-apple-green rounded-full shrink-0" />
+                    <span className="text-[var(--text-primary)] dark:text-white/95">{hub}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Right side telemetry parameters */}
-            <div className="space-y-3.5 bg-[#F5F5F7]/30 dark:bg-white/[0.005] border border-black/[0.03] dark:border-white/5 rounded-2xl p-4">
-              <h4 className="text-[10px] font-bold text-[#1D1D1F] dark:text-white uppercase tracking-wider">{details.cityTitle}</h4>
+            <div className="space-y-3.5 bg-[var(--text-primary)]/30 dark:bg-white/[0.005] border border-black/[0.03] dark:border-white/5 rounded-2xl p-4">
+              <h4 className="text-[10px] font-bold text-[var(--text-primary)] dark:text-white uppercase tracking-wider">{details.cityTitle}</h4>
               
-              <div className="space-y-2 text-[10px] font-semibold text-[#86868B]">
+              <div className="space-y-2 text-[10px] font-semibold text-[var(--text-secondary)]">
                 <div className="flex justify-between border-b border-black/[0.03] dark:border-white/5 pb-1.5">
                   <span>Active Specialists On-Duty</span>
-                  <span className="text-[#1D1D1F] dark:text-white">{details.activeNodes} Engineers</span>
+                  <span className="text-[var(--text-primary)] dark:text-white">{details.activeNodes} Engineers</span>
                 </div>
                 <div className="flex justify-between border-b border-black/[0.03] dark:border-white/5 pb-1.5">
                   <span>Average Response ETA</span>
@@ -737,11 +737,11 @@ export function LiveNodeRadar() {
                 </div>
                 <div className="flex justify-between border-b border-black/[0.03] dark:border-white/5 pb-1.5">
                   <span>Hub Coordinator</span>
-                  <span className="text-[#1D1D1F] dark:text-white">{details.leadEngineer}</span>
+                  <span className="text-[var(--text-primary)] dark:text-white">{details.leadEngineer}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Mobile Telemetry Rig Fleet</span>
-                  <span className="text-emerald-500 font-bold">{details.specializedFleet}</span>
+                  <span className="text-apple-green font-bold">{details.specializedFleet}</span>
                 </div>
               </div>
             </div>
@@ -795,7 +795,7 @@ export function InteractiveLuxuryShowcase() {
   ];
 
   return (
-    <div className="bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
+    <div className="bg-white dark:bg-[var(--bg-surface)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] p-6 sm:p-8 relative overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.01)]">
       
       {/* Title block */}
       <div className="relative z-10 space-y-2 mb-8">
@@ -808,10 +808,10 @@ export function InteractiveLuxuryShowcase() {
             Interactive Simulation
           </span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-snug">
+        <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-snug">
           Explore the Pakizzle Verification Suite
         </h2>
-        <p className="text-xs text-[#86868B] max-w-2xl leading-relaxed">
+        <p className="text-xs text-[var(--text-secondary)] max-w-2xl leading-relaxed">
           Hover or click on the floating diagnostic cards or directly on the luxury vehicle profile hotspots to trigger active telemetry readings.
         </p>
       </div>
@@ -863,7 +863,7 @@ export function InteractiveLuxuryShowcase() {
                     "w-4 h-4 rounded-full border flex items-center justify-center transition-all duration-300 relative z-10 shadow-md",
                     isActive 
                       ? "bg-red-500 border-white text-white scale-110" 
-                      : "bg-white dark:bg-[#2C2C2E] border-red-500/40 text-red-500 group-hover:border-red-500"
+                      : "bg-white dark:bg-[var(--bg-inset)] border-red-500/40 text-red-500 group-hover:border-red-500"
                   )}>
                     <div className={cn(
                       "w-1.5 h-1.5 rounded-full transition-all duration-300",
@@ -892,8 +892,8 @@ export function InteractiveLuxuryShowcase() {
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold text-[#1D1D1F] dark:text-white leading-tight">Instant</div>
-              <div className="text-[10px] font-semibold text-[#86868B] leading-tight">Inspection Report</div>
+              <div className="text-[11px] font-bold text-[var(--text-primary)] dark:text-white leading-tight">Instant</div>
+              <div className="text-[10px] font-semibold text-[var(--text-secondary)] leading-tight">Inspection Report</div>
             </div>
           </div>
 
@@ -912,8 +912,8 @@ export function InteractiveLuxuryShowcase() {
               <Radar className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold text-[#1D1D1F] dark:text-white leading-tight">Inspect</div>
-              <div className="text-[10px] font-semibold text-[#86868B] leading-tight">Anywhere!</div>
+              <div className="text-[11px] font-bold text-[var(--text-primary)] dark:text-white leading-tight">Inspect</div>
+              <div className="text-[10px] font-semibold text-[var(--text-secondary)] leading-tight">Anywhere!</div>
             </div>
           </div>
 
@@ -925,22 +925,22 @@ export function InteractiveLuxuryShowcase() {
             }}
             className={cn(
               "absolute bottom-4 left-1/2 -translate-x-1/2 bg-white dark:bg-[#1E1E1F] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl p-3 flex items-center gap-3 shadow-[0_8px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_10px_25px_rgba(0,0,0,0.3)] cursor-pointer hover:scale-[1.03] transition-all z-20 whitespace-nowrap",
-              activeTab === 'points' ? "ring-2 ring-emerald-500/50 dark:ring-emerald-500" : ""
+              activeTab === 'points' ? "ring-2 ring-apple-green/50 dark:ring-apple-green" : ""
             )}
           >
-            <div className="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold shadow-sm">
+            <div className="w-9 h-9 rounded-full bg-apple-green/10 text-apple-green flex items-center justify-center font-bold shadow-sm">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold text-[#1D1D1F] dark:text-white leading-tight">120 - 240</div>
-              <div className="text-[10px] font-semibold text-[#86868B] leading-tight">Points Covered</div>
+              <div className="text-[11px] font-bold text-[var(--text-primary)] dark:text-white leading-tight">120 - 240</div>
+              <div className="text-[10px] font-semibold text-[var(--text-secondary)] leading-tight">Points Covered</div>
             </div>
           </div>
 
         </div>
 
         {/* Dynamic Telemetry Inspector Dashboard (Right 5 Columns) */}
-        <div className="lg:col-span-5 bg-[#FAFAFA] dark:bg-[#19191B] rounded-2xl p-5 sm:p-6 border border-black/[0.03] dark:border-white/[0.02] flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-[var(--bg-surface)] dark:bg-[#19191B] rounded-2xl p-5 sm:p-6 border border-black/[0.03] dark:border-white/[0.02] flex flex-col justify-between">
           
           <AnimatePresence mode="wait">
             <motion.div
@@ -955,28 +955,28 @@ export function InteractiveLuxuryShowcase() {
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <span className="text-[9px] font-bold text-apple-blue uppercase tracking-widest font-mono">MODULE METRIC DEEP-LINK</span>
-                    <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-1.5">
+                    <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-1.5">
                       <Cpu className="w-4 h-4 text-apple-blue" />
                       Instant Telemetry Digital Feedback
                     </h3>
                   </div>
 
-                  <p className="text-[11px] text-[#86868B] leading-relaxed">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                     Once our doorstep sweep concludes, we translate pure mechanical engine vibrations and digital fault memories into a gorgeous, cloud-hosted dashboard sent to your phone.
                   </p>
 
-                  <div className="bg-white dark:bg-[#2C2C2E] p-3 rounded-xl border border-black/[0.03] dark:border-white/5 space-y-2.5">
+                  <div className="bg-white dark:bg-[var(--bg-inset)] p-3 rounded-xl border border-black/[0.03] dark:border-white/5 space-y-2.5">
                     <div className="flex justify-between items-center text-[10px] font-semibold">
-                      <span className="text-[#86868B]">Odometer ODB-II Hash</span>
-                      <span className="text-emerald-500 font-mono font-bold">100% Intact</span>
+                      <span className="text-[var(--text-secondary)]">Odometer ODB-II Hash</span>
+                      <span className="text-apple-green font-mono font-bold">100% Intact</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px] font-semibold">
-                      <span className="text-[#86868B]">Airbag Circuit Deploy Log</span>
-                      <span className="text-emerald-500 font-mono font-bold">Passed (Factory Spec)</span>
+                      <span className="text-[var(--text-secondary)]">Airbag Circuit Deploy Log</span>
+                      <span className="text-apple-green font-mono font-bold">Passed (Factory Spec)</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px] font-semibold">
-                      <span className="text-[#86868B]">ECU Warning Shadows</span>
-                      <span className="text-emerald-500 font-mono font-bold">0 Errors Found</span>
+                      <span className="text-[var(--text-secondary)]">ECU Warning Shadows</span>
+                      <span className="text-apple-green font-mono font-bold">0 Errors Found</span>
                     </div>
                   </div>
 
@@ -986,7 +986,7 @@ export function InteractiveLuxuryShowcase() {
                         <Zap className="w-3.5 h-3.5 animate-pulse" />
                         Selected Hotspot: {hotspots.find(h => h.id === selectedHotspot)?.name}
                       </div>
-                      <p className="text-[#86868B] leading-normal">{hotspots.find(h => h.id === selectedHotspot)?.desc}</p>
+                      <p className="text-[var(--text-secondary)] leading-normal">{hotspots.find(h => h.id === selectedHotspot)?.desc}</p>
                     </div>
                   )}
                 </div>
@@ -996,13 +996,13 @@ export function InteractiveLuxuryShowcase() {
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <span className="text-[9px] font-bold text-purple-500 uppercase tracking-widest font-mono">60-MIN DOORSTEP DISPATCH</span>
-                    <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-1.5">
+                    <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-1.5">
                       <Radar className="w-4 h-4 text-purple-500" />
                       Doorstep Mobile Fleet Nodes
                     </h3>
                   </div>
 
-                  <p className="text-[11px] text-[#86868B] leading-relaxed">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                     You do not need to pull the seller away or drive the car to standard workshops. Our connected dispatch network has active teams waiting to execute inspections across Lahore, Karachi, and Islamabad.
                   </p>
 
@@ -1012,9 +1012,9 @@ export function InteractiveLuxuryShowcase() {
                       { city: 'Karachi', nodes: '12 Active Nodes', eta: '45m ETA' },
                       { city: 'Islamabad', nodes: '8 Active Nodes', eta: '52m ETA' }
                     ].map((c, i) => (
-                      <div key={i} className="bg-white dark:bg-[#2C2C2E] p-2 rounded-xl text-center border border-black/[0.03] dark:border-white/5">
-                        <div className="text-[10px] font-bold text-[#1D1D1F] dark:text-white">{c.city}</div>
-                        <div className="text-[8px] text-[#86868B] mt-0.5">{c.nodes}</div>
+                      <div key={i} className="bg-white dark:bg-[var(--bg-inset)] p-2 rounded-xl text-center border border-black/[0.03] dark:border-white/5">
+                        <div className="text-[10px] font-bold text-[var(--text-primary)] dark:text-white">{c.city}</div>
+                        <div className="text-[8px] text-[var(--text-secondary)] mt-0.5">{c.nodes}</div>
                         <div className="text-[9px] text-purple-500 font-bold font-mono mt-1">{c.eta}</div>
                       </div>
                     ))}
@@ -1030,14 +1030,14 @@ export function InteractiveLuxuryShowcase() {
               {activeTab === 'points' && (
                 <div className="space-y-4">
                   <div className="space-y-1">
-                    <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest font-mono">MANDATORY 240-POINT MATRIX</span>
-                    <h3 className="text-base font-semibold text-[#1D1D1F] dark:text-white flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                    <span className="text-[9px] font-bold text-apple-green uppercase tracking-widest font-mono">MANDATORY 240-POINT MATRIX</span>
+                    <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-apple-green" />
                       Deep Forensic Inspection Coverage
                     </h3>
                   </div>
 
-                  <p className="text-[11px] text-[#86868B] leading-relaxed">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                     Unlike manual mechanic checkups, we scan everything under extreme hardware calibration. Every panel, cylinder, brake pads, steering joint, and hybrid cell state of health is certified.
                   </p>
 
@@ -1049,15 +1049,15 @@ export function InteractiveLuxuryShowcase() {
                         className={cn(
                           "w-full text-left p-2.5 rounded-xl border text-[10px] flex items-center justify-between transition-colors",
                           selectedHotspot === h.id
-                            ? "bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/20 text-[#1D1D1F] dark:text-white"
-                            : "bg-white dark:bg-[#2C2C2E] border-black/[0.03] dark:border-white/5 text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                            ? "bg-apple-green/5 dark:bg-apple-green/10 border-apple-green/20 text-[var(--text-primary)] dark:text-white"
+                            : "bg-white dark:bg-[var(--bg-inset)] border-black/[0.03] dark:border-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                         )}
                       >
                         <span className="font-bold flex items-center gap-1.5">
-                          <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <Check className="w-3.5 h-3.5 text-apple-green shrink-0" />
                           {h.name}
                         </span>
-                        <span className="font-mono font-semibold text-[9px] text-emerald-600 dark:text-emerald-400 shrink-0">
+                        <span className="font-mono font-semibold text-[9px] text-apple-green dark:text-apple-green shrink-0">
                           {h.metric}
                         </span>
                       </button>
@@ -1069,7 +1069,7 @@ export function InteractiveLuxuryShowcase() {
           </AnimatePresence>
 
           <div className="pt-4 border-t border-black/[0.04] dark:border-white/5 flex items-center justify-between">
-            <span className="text-[10px] font-semibold text-[#86868B]">Select tabs or car blips to sweep</span>
+            <span className="text-[10px] font-semibold text-[var(--text-secondary)]">Select tabs or car blips to sweep</span>
             <span className="text-[9px] font-bold uppercase text-red-500 font-mono tracking-wider flex items-center gap-1">
               LIVE SIGNAL ACTIVE
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />

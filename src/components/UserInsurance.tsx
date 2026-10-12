@@ -108,7 +108,7 @@ export default function UserInsurance() {
 
   if (requests.length === 0) {
     return (
-      <div className="bg-white dark:bg-[#161617] rounded-3xl p-12 text-center border border-black/[0.04] dark:border-white/[0.04]">
+      <div className="bg-white dark:bg-[var(--surface-dark)] rounded-3xl p-12 text-center border border-black/[0.04] dark:border-white/[0.04]">
         <div className="w-16 h-16 bg-[#F5F5F7] dark:bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-5">
           <Shield className="w-7 h-7 text-[#86868B]" />
         </div>
@@ -142,7 +142,7 @@ export default function UserInsurance() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              "bg-white dark:bg-[#161617] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden transition-all duration-300",
+              "bg-white dark:bg-[var(--surface-dark)] rounded-3xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden transition-all duration-300",
               expandedId === request.id ? "shadow-md bg-[#FAFAFC] dark:bg-[#1C1C1E]" : "hover:bg-[#FAFAFC] dark:hover:bg-[#1C1C1E]"
             )}
           >
@@ -244,7 +244,7 @@ export default function UserInsurance() {
                                    <div key={step} className="flex flex-col items-center">
                                       <div className={cn(
                                          "w-5 h-5 rounded-full border transition-all duration-700 z-10 flex items-center justify-center text-[10px]",
-                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[#161617] border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
+                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
                                       )}>
                                          {isCompleted && <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5px]" />}
                                       </div>

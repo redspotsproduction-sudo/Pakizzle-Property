@@ -238,7 +238,7 @@ export default function PaymentManagement() {
           { label: 'Net Profit', value: '₨ 924k', sub: 'After Tax & Fees', icon: DollarSign, color: 'text-apple-green', bg: 'bg-apple-green/10' },
           { label: 'System Health', value: '99.98%', sub: 'SLA Compliant', icon: ShieldCheck, color: 'text-purple-500', bg: 'bg-purple-500/10' },
         ].map((stat, i) => (
-          <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+          <div key={i} className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
             <div className="flex items-start justify-between">
               <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                 <stat.icon className={cn("w-5 h-5", stat.color)} />
@@ -270,7 +270,7 @@ export default function PaymentManagement() {
       </div>
 
       {/* Ledger Table */}
-      <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+      <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
         <div className="overflow-x-auto custom-scrollbar">
           {activeTab === 'transactions' ? (
             <Table>

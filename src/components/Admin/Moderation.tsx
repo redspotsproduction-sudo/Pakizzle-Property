@@ -186,7 +186,7 @@ export default function Moderation() {
           </div>
           <Button 
             variant="outline" 
-            className="rounded-xl border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[#161617] h-9 px-4 text-xs font-bold shadow-sm hover:bg-[#F5F5F7] dark:hover:bg-white/5 text-[#1D1D1F] dark:text-white"
+            className="rounded-xl border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)] h-9 px-4 text-xs font-bold shadow-sm hover:bg-[#F5F5F7] dark:hover:bg-white/5 text-[#1D1D1F] dark:text-white"
             onClick={() => toast.success("Transcript Exported", { description: "Current flagged reports have been archived." })}
           >
             <Download className="w-3.5 h-3.5 mr-1.5" /> Export Logs
@@ -208,7 +208,7 @@ export default function Moderation() {
           { label: 'Spam Prevented', value: '892', change: '99.9% Catch', icon: ShieldCheck, color: 'text-apple-green', bg: 'bg-apple-green/10' },
           { label: 'Banned Entities', value: '156', change: '+3 Today', icon: UserX, color: 'text-apple-red', bg: 'bg-apple-red/10' },
         ].map((stat, i) => (
-          <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+          <div key={i} className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
             <div className="flex items-start justify-between">
               <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                 <stat.icon className={cn("w-5 h-5", stat.color)} />
@@ -240,7 +240,7 @@ export default function Moderation() {
                 "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                 isActive
                   ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                  : "bg-white dark:bg-[#161617] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
               )}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
@@ -250,7 +250,7 @@ export default function Moderation() {
       </div>
 
       {/* Table List - EXACT border, background and hover transition as Approval Center card */}
-      <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+      <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
         <div className="overflow-x-auto custom-scrollbar">
           <Table>
             <TableHeader>
@@ -273,11 +273,11 @@ export default function Moderation() {
                     <TableCell className="px-6 py-4 pl-6">
                       <div className="flex items-center gap-5">
                         <div className="flex -space-x-4">
-                          <Avatar className="h-10 w-10 rounded-xl border-2 border-white dark:border-[#161617] shadow-sm group-hover:scale-105 transition-transform">
+                          <Avatar className="h-10 w-10 rounded-xl border-2 border-white dark:border-[var(--surface-dark)] shadow-sm group-hover:scale-105 transition-transform">
                             <AvatarImage src={conv.participants[0].photoURL} />
                             <AvatarFallback>{conv.participants[0].name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          <Avatar className="h-10 w-10 rounded-xl border-2 border-white dark:border-[#161617] shadow-sm group-hover:scale-105 transition-transform">
+                          <Avatar className="h-10 w-10 rounded-xl border-2 border-white dark:border-[var(--surface-dark)] shadow-sm group-hover:scale-105 transition-transform">
                             <AvatarImage src={conv.participants[1].photoURL} />
                             <AvatarFallback>{conv.participants[1].name.charAt(0)}</AvatarFallback>
                           </Avatar>
@@ -329,7 +329,7 @@ export default function Moderation() {
                             <MoreVertical className="w-4 h-4" />
                           </button>
                         } />
-                        <DropdownMenuContent align="end" className="w-64 rounded-2xl border-black/[0.04] dark:border-white/[0.04] p-2 bg-white/95 dark:bg-[#161617]/95 shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
+                        <DropdownMenuContent align="end" className="w-64 rounded-2xl border-black/[0.04] dark:border-white/[0.04] p-2 bg-white/95 dark:bg-[var(--surface-dark)]/95 shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
                           <DropdownMenuItem onClick={() => handleAction('inspect', conv)} className="rounded-xl py-2 px-3 font-semibold text-xs cursor-pointer">
                              <Eye className="w-4 h-4 mr-3 text-apple-blue" /> Full Transcript Access
                           </DropdownMenuItem>

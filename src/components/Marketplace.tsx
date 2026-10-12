@@ -445,23 +445,20 @@ export default function Marketplace() {
           v.city?.toLowerCase() === topFilters.city.toLowerCase() ||
           (selectedCities.length > 0 && selectedCities.includes(v.city || ""));
 
-        // 3. Property Type Filter (Supports multi-select from sidebar or single-select from top bar)
+        // 3. Property Type Filter (using clean propertyType field)
         const targetType = topFilters.propertyType?.toLowerCase();
         const matchesType = (selectedPropertyTypes.length === 0 && !targetType) ||
           (selectedPropertyTypes.length > 0 && selectedPropertyTypes.some(t => {
             const tl = t.toLowerCase();
-            return v.make?.toLowerCase().includes(tl) || 
-                   v.fuelType?.toLowerCase().includes(tl) || 
-                   v.type?.toLowerCase().includes(tl) ||
-                   (tl === "plot" && (v.fuelType === "plot" || v.type === "plot" || v.make?.toLowerCase().includes("plot"))) ||
-                   (tl === "commercial" && (v.fuelType === "commercial" || v.type === "commercial" || v.make?.toLowerCase().includes("commercial")));
+            const pType = (v.propertyType || v.type || "").toLowerCase();
+            return pType.includes(tl) ||
+                   (tl === "plot" && pType.includes("plot")) ||
+                   (tl === "commercial" && pType.includes("commercial"));
           })) ||
           (targetType && (
-            v.make?.toLowerCase().includes(targetType) ||
-            v.fuelType?.toLowerCase().includes(targetType) ||
-            v.type?.toLowerCase().includes(targetType) ||
-            (targetType === "plot" && (v.fuelType === "plot" || v.type === "plot" || v.make?.toLowerCase().includes("plot"))) ||
-            (targetType === "commercial" && (v.fuelType === "commercial" || v.type === "commercial" || v.make?.toLowerCase().includes("commercial")))
+            (v.propertyType || v.type || "").toLowerCase().includes(targetType) ||
+            (targetType === "plot" && (v.propertyType || v.type || "").toLowerCase().includes("plot")) ||
+            (targetType === "commercial" && (v.propertyType || v.type || "").toLowerCase().includes("commercial"))
           ));
 
         // 4. Price Filter (Scaled based on Buy vs Rent)

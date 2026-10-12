@@ -84,7 +84,6 @@ const ProfileRedirect = () => {
   return <Navigate to="/" replace />;
 };
 
-const AuctionVerification = lazy(() => import("./components/AuctionVerification"));
 const VerificationPage = lazy(() => import("./components/VerificationPage"));
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
@@ -116,14 +115,13 @@ const CategoryManagement = lazy(() => import('./components/Admin/Categories/Cate
 const CustomFieldManagement = lazy(() => import('./components/Admin/CustomFields/CustomFieldManagement'));
 const DealerManagement = lazy(() => import('./components/Admin/DealerManagement'));
 const CompanyManagement = lazy(() => import('./components/Admin/CompanyManagement'));
-const AuctionVerificationAdmin = lazy(() => import('./components/Admin/AuctionVerification'));
+const AuctionVerificationAdmin = lazy(() => import('./components/VerificationPage'));
 const Moderation = lazy(() => import('./components/Admin/Moderation'));
 const PaymentManagement = lazy(() => import('./components/Admin/PaymentManagement'));
 const ReportManagement = lazy(() => import('./components/Admin/ReportManagement'));
 const ContentManagement = lazy(() => import('./components/Admin/ContentManagement'));
 const BannerManagement = lazy(() => import('./components/Admin/BannerManagement'));
 const AdManagement = lazy(() => import('./components/Admin/AdManagement'));
-const PopularVehicleStylesManagement = lazy(() => import('./components/Admin/PopularVehicleStylesManagement'));
 const AdminSettings = lazy(() => import('./components/Admin/AdminSettings'));
 const VehicleDataManagement = lazy(() => import('./components/Admin/VehicleDataManagement'));
 const InsuranceManagement = lazy(() => import('./components/Admin/InsuranceManagement'));
@@ -652,7 +650,7 @@ export default function App() {
             </PageTransition>
           </ProtectedRoute>
         } />
-        <Route path="/auction-verification" element={<PageTransition><AuctionVerification /></PageTransition>} />
+        <Route path="/auction-verification" element={<Navigate to="/verification" replace />} />
         <Route path="/profile" element={
           <ProtectedRoute>
             <ProfileRedirect />
@@ -809,7 +807,7 @@ export default function App() {
         <Route path="/admin/verifications" element={
           <AdminRoute>
             <AdminLayout>
-              <AuctionVerificationAdmin />
+              <ApprovalCenter />
             </AdminLayout>
           </AdminRoute>
         } />

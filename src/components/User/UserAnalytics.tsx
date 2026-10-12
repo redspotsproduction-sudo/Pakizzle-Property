@@ -42,7 +42,7 @@ const sectorData = [
   { name: 'Faisalabad Industrial', value: 200 },
 ];
 
-const COLORS = ['#0071e3', '#34c759', '#ff9f0a', '#af52de'];
+const COLORS = ['var(--chart-primary)', 'var(--chart-secondary)', 'var(--chart-tertiary)', 'var(--chart-quaternary)'];
 
 export default function UserAnalytics() {
   return (
@@ -57,30 +57,30 @@ export default function UserAnalytics() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Performance Velocity
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Real-time analytical decryption of your automotive marketplace presence and user conversion funnels.
           </p>
         </div>
       </div>
 
       {/* Main Performance Chart Card */}
-      <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+      <section className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[var(--text-primary)] dark:text-white flex items-center gap-2">
               <TrendingUp className="w-3.5 h-3.5 text-apple-blue" />
               Inventory Engagement
             </h2>
-            <p className="text-[11px] text-[#86868B] font-normal mt-0.5">Cross-Sector View Metrics (7-Day Cycle)</p>
+            <p className="text-[11px] text-[var(--text-secondary)] font-normal mt-0.5">Cross-Sector View Metrics (7-Day Cycle)</p>
           </div>
           <div className="flex items-center gap-4">
              <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 rounded-full bg-apple-blue" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Impressions</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Impressions</span>
              </div>
              <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 rounded-full bg-apple-green" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Inquiries</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Inquiries</span>
              </div>
           </div>
         </div>
@@ -90,26 +90,26 @@ export default function UserAnalytics() {
             <AreaChart data={performanceData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#0071e3" stopOpacity={0.1}/>
-                  <stop offset="95%" stopColor="#0071e3" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="var(--chart-tertiary)" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="var(--chart-tertiary)" stopOpacity={0}/>
                 </linearGradient>
                 <linearGradient id="colorInquiries" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#34c759" stopOpacity={0.1}/>
-                  <stop offset="95%" stopColor="#34c759" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="var(--chart-success)" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="var(--chart-success)" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.03)" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-chart-grid)" />
               <XAxis 
                 dataKey="name" 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fill: '#86868b', fontSize: 10, fontWeight: 600 }} 
+                tick={{ fill: 'var(--text-secondary)', fontSize: 10, fontWeight: 600 }} 
                 dy={10}
               />
               <YAxis 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fill: '#86868b', fontSize: 10, fontWeight: 600 }} 
+                tick={{ fill: 'var(--text-secondary)', fontSize: 10, fontWeight: 600 }} 
               />
               <Tooltip 
                 contentStyle={{ 
@@ -125,7 +125,7 @@ export default function UserAnalytics() {
               <Area 
                 type="monotone" 
                 dataKey="views" 
-                stroke="#0071e3" 
+                stroke="var(--chart-tertiary)" 
                 strokeWidth={2.5} 
                 fillOpacity={1} 
                 fill="url(#colorViews)" 
@@ -133,7 +133,7 @@ export default function UserAnalytics() {
               <Area 
                 type="monotone" 
                 dataKey="inquiries" 
-                stroke="#34c759" 
+                stroke="var(--chart-success)" 
                 strokeWidth={2.5} 
                 fillOpacity={1} 
                 fill="url(#colorInquiries)" 
@@ -145,14 +145,14 @@ export default function UserAnalytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Geographic Distribution */}
-        <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+        <section className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
            <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 bg-blue-500/5 dark:bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0">
                  <Globe className="w-4.5 h-4.5 text-apple-blue" />
               </div>
               <div>
                  <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[var(--text-primary)] dark:text-white">Geographic Resonance</h2>
-                 <p className="text-[10px] text-[#86868B] font-normal mt-0.5">Lead Origin Mapping</p>
+                 <p className="text-[10px] text-[var(--text-secondary)] font-normal mt-0.5">Lead Origin Mapping</p>
               </div>
            </div>
 
@@ -179,10 +179,10 @@ export default function UserAnalytics() {
 
            <div className="grid grid-cols-2 gap-3 mt-4">
               {sectorData.map((sector, i) => (
-                 <div key={sector.name} className="flex items-center gap-3 p-3 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                 <div key={sector.name} className="flex items-center gap-3 p-3 rounded-xl bg-apple-gray dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[i] }} />
                     <div className="min-w-0">
-                       <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] truncate">{sector.name}</p>
+                       <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] truncate">{sector.name}</p>
                        <p className="text-sm font-semibold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">{((sector.value / 1200) * 100).toFixed(0)}%</p>
                     </div>
                  </div>
@@ -191,7 +191,7 @@ export default function UserAnalytics() {
         </section>
 
         {/* Device Distribution */}
-        <section className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+        <section className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.01)] flex flex-col justify-between">
            <div>
              <div className="flex items-center gap-3 mb-6">
                 <div className="w-8 h-8 bg-apple-green/5 dark:bg-apple-green/10 rounded-xl flex items-center justify-center shrink-0">
@@ -199,7 +199,7 @@ export default function UserAnalytics() {
                 </div>
                 <div>
                    <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-[var(--text-primary)] dark:text-white">Access Modalities</h2>
-                   <p className="text-[10px] text-[#86868B] font-normal mt-0.5">Device-Type Analysis</p>
+                   <p className="text-[10px] text-[var(--text-secondary)] font-normal mt-0.5">Device-Type Analysis</p>
                 </div>
              </div>
 
@@ -212,7 +212,7 @@ export default function UserAnalytics() {
                       </div>
                       <span className="font-mono text-[var(--text-primary)] dark:text-white">84%</span>
                    </div>
-                   <div className="h-2 bg-[#E5E5E7] dark:bg-white/10 rounded-full overflow-hidden">
+                   <div className="h-2 bg-apple-border dark:bg-white/10 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: "84%" }}

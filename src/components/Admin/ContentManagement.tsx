@@ -201,7 +201,7 @@ export default function ContentManagement() {
           { label: 'Narrative Shard', value: '12.4%', sub: 'Avg engagement depth', icon: BarChart3, color: 'text-purple-500', bg: 'bg-purple-500/10' },
           { label: 'Editor Nodes', value: '18', sub: 'Authoritative entities', icon: Users, color: 'text-apple-orange', bg: 'bg-apple-orange/10' },
         ].map((stat, i) => (
-          <div key={i} className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
+          <div key={i} className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-5 hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300 group">
             <div className="flex items-start justify-between">
               <div className={cn("p-3 rounded-xl group-hover:scale-105 transition-transform duration-500", stat.bg)}>
                 <stat.icon className={cn("w-5 h-5", stat.color)} />
@@ -233,7 +233,7 @@ export default function ContentManagement() {
       </div>
 
       {/* Narrative Manifest Shard */}
-      <div className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
+      <div className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
         <div className="overflow-x-auto custom-scrollbar">
           <Table>
             <TableHeader>

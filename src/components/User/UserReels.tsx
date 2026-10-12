@@ -225,7 +225,7 @@ export default function UserReels() {
           {reels.map((reel) => (
             <div 
               key={reel.id}
-              className="bg-white dark:bg-[#161617] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4 flex flex-col justify-between group shadow-[0_4px_24px_rgba(0,0,0,0.01)]"
+              className="bg-white dark:bg-[var(--surface-dark)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] p-4 flex flex-col justify-between group shadow-[0_4px_24px_rgba(0,0,0,0.01)]"
             >
               {/* Media Preview Area */}
               <div className="relative aspect-[4/5] w-full bg-black rounded-xl overflow-hidden border border-black/5 dark:border-white/10">

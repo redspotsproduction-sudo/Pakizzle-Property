@@ -14,6 +14,8 @@ import {
 import { toast } from "sonner";
 import { cn, formatPrice } from "../../../lib/utils";
 import { ListingWizardState } from "../types";
+import { useProperties } from "../../../context/PropertyContext";
+import { Property } from "../../../types";
 
 interface StepReviewProps {
   state: ListingWizardState;
@@ -28,6 +30,7 @@ export const StepReview: React.FC<StepReviewProps> = ({
   onSubmit,
   onBack,
 }) => {
+  const { addProperty } = useProperties();
   const [isEnhancingAi, setIsEnhancingAi] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -135,6 +138,50 @@ export const StepReview: React.FC<StepReviewProps> = ({
       }
 
       const result = await response.json();
+
+      // Add to PropertyContext so the listing immediately populates client catalog and appears under Plots
+      const propTypeTitle = state.propertyType === 'plot' ? 'Plot' : (state.propertyType === 'commercial' ? 'Commercial' : (state.propertyType === 'apartment' ? 'Apartment' : (state.propertyType === 'penthouse' ? 'Penthouse' : 'House')));
+      const newProp: Property = {
+        id: `prop-${result.listing?.id || Date.now()}`,
+        reference_id: result.listing?.reference_id || String(Math.floor(1000000 + Math.random() * 9000000)),
+        purpose: state.purpose,
+        propertyType: propTypeTitle,
+        make: propTypeTitle,
+        model: state.title || `${state.size} ${state.sizeUnit} ${propTypeTitle} in ${state.areaName}`,
+        type: state.propertyType === 'plot' ? 'plot' : (state.propertyType === 'commercial' ? 'commercial' : 'residential'),
+        price: Number(state.price),
+        mileage: state.sizeSqFt || Number(state.size) * 225,
+        location: `${state.areaName}, ${state.city}`,
+        city: state.city,
+        area: state.areaName,
+        bedrooms: state.bedrooms,
+        bathrooms: state.bathrooms,
+        areaUnit: state.sizeUnit as any,
+        areaSize: Number(state.size),
+        condition: state.condition as any,
+        transmission: state.furnished as any,
+        fuelType: state.propertyType as any,
+        engineSize: `${state.size} ${state.sizeUnit}`,
+        images: state.photos.length > 0 ? state.photos.map(p => p.url) : ["https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200"],
+        features: ["LDA / CDA Verified", "Prime Sector", "Direct Transfer"],
+        description: state.description,
+        seller: {
+          name: "Verified Lister",
+          isVerified: true,
+          rating: 5.0,
+          badgeType: "business"
+        },
+        status: "active",
+        createdAt: new Date().toISOString(),
+        year: 2024
+      };
+
+      try {
+        await addProperty(newProp);
+      } catch (addErr) {
+        console.warn("Could not dual-sync property into local state:", addErr);
+      }
+
       toast.success("Listing submitted successfully for Shanakht™ title approval!");
       onSubmit(result);
     } catch (err: any) {
