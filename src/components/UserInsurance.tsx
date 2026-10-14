@@ -80,7 +80,7 @@ export default function UserInsurance() {
       case 'expired': return <AlertCircle className="w-3 h-3 text-apple-red" />;
       case 'payment_received': return <CreditCard className="w-3 h-3 text-[#1D1D1F] dark:text-white" />;
       case 'quote_sent': return <FileText className="w-3 h-3 text-apple-blue" />;
-      default: return <Clock4 className="w-3 h-3 text-[#86868B]" />;
+      default: return <Clock4 className="w-3 h-3 text-apple-text-muted" />;
     }
   };
 
@@ -91,7 +91,7 @@ export default function UserInsurance() {
       case 'expired': return 'bg-apple-red/10 text-apple-red';
       case 'payment_received': return 'bg-black/[0.04] dark:bg-white/10 text-[#1D1D1F] dark:text-white';
       case 'quote_sent': return 'bg-apple-blue/10 text-apple-blue';
-      default: return 'bg-black/[0.04] dark:bg-white/5 text-[#86868B]';
+      default: return 'bg-black/[0.04] dark:bg-white/5 text-apple-text-muted';
     }
   };
 
@@ -101,7 +101,7 @@ export default function UserInsurance() {
     return (
       <div className="flex flex-col items-center justify-center py-24">
         <div className="w-10 h-10 border-2 border-apple-blue/20 border-t-apple-blue rounded-full animate-spin mb-4" />
-        <p className="text-[#86868B] text-xs font-semibold">Retrieving your insurance portfolio...</p>
+        <p className="text-apple-text-muted text-xs font-semibold">Retrieving your insurance portfolio...</p>
       </div>
     );
   }
@@ -110,10 +110,10 @@ export default function UserInsurance() {
     return (
       <div className="bg-white dark:bg-[var(--surface-dark)] rounded-3xl p-12 text-center border border-black/[0.04] dark:border-white/[0.04]">
         <div className="w-16 h-16 bg-[#F5F5F7] dark:bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-5">
-          <Shield className="w-7 h-7 text-[#86868B]" />
+          <Shield className="w-7 h-7 text-apple-text-muted" />
         </div>
         <h3 className="text-lg font-bold tracking-tight text-[#1D1D1F] dark:text-white mb-2">No Policies Found</h3>
-        <p className="text-[#86868B] text-xs font-medium mb-6 max-w-xs mx-auto leading-relaxed">
+        <p className="text-apple-text-muted text-xs font-medium mb-6 max-w-xs mx-auto leading-relaxed">
           Protect your assets with Pakizzle Secure. Get instant quotes and real-time policy management.
         </p>
         <Link to="/insurance" className="px-5 py-2.5 bg-apple-blue hover:bg-blue-600 text-white rounded-full text-xs font-semibold shadow-sm transition-all inline-block border-none">Secure a Vehicle</Link>
@@ -126,11 +126,11 @@ export default function UserInsurance() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white">Insurance Policies</h2>
-          <p className="text-xs font-semibold text-[#86868B] mt-1">Manage your active coverages, premium schedules, and underwriters.</p>
+          <p className="text-xs font-semibold text-apple-text-muted mt-1">Manage your active coverages, premium schedules, and underwriters.</p>
         </div>
         <div className="flex items-center gap-2 self-start sm:self-center px-4 py-1.5 rounded-full border border-black/[0.04] dark:border-white/[0.04] bg-[#F5F5F7]/50 dark:bg-white/[0.02]">
           <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
-          <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Real-Time Sync</span>
+          <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted">Real-Time Sync</span>
         </div>
       </div>
 
@@ -168,17 +168,17 @@ export default function UserInsurance() {
                         {request.status.replace('_', ' ')}
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] font-semibold text-[#86868B]">
+                  <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] font-semibold text-apple-text-muted">
                     <div className="flex items-center gap-1">
                       <Zap className="w-3.5 h-3.5" />
                       {request.insuranceType.replace('_', ' ')}
                     </div>
-                    <span className="w-1 h-1 rounded-full bg-[#86868B]/30" />
+                    <span className="w-1 h-1 rounded-full bg-[var(--text-tertiary)]/30" />
                     <div className="flex items-center gap-1">
                       <FileText className="w-3.5 h-3.5" />
                       Policy: {request.policyNumber || 'Pending'}
                     </div>
-                    <span className="w-1 h-1 rounded-full bg-[#86868B]/30" />
+                    <span className="w-1 h-1 rounded-full bg-[var(--text-tertiary)]/30" />
                     <span className="font-mono text-[9px] opacity-60">ID: {request.id.slice(0, 8)}</span>
                   </div>
                 </div>
@@ -188,7 +188,7 @@ export default function UserInsurance() {
                 <div className="flex-1 md:flex-none">
                   {request.status === 'active' ? (
                     <div className="text-left md:text-right">
-                       <p className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider mb-0.5">Expires On</p>
+                       <p className="text-[8px] font-bold text-apple-text-muted uppercase tracking-wider mb-0.5">Expires On</p>
                        <p className="text-xs font-bold text-apple-red">{request.expiryDate ? new Date(request.expiryDate).toLocaleDateString() : 'TBD'}</p>
                     </div>
                   ) : request.status === 'quote_sent' ? (
@@ -198,14 +198,14 @@ export default function UserInsurance() {
                     </button>
                   ) : (
                     <div className="text-left md:text-right">
-                       <p className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider mb-0.5">Estimated Premium</p>
+                       <p className="text-[8px] font-bold text-apple-text-muted uppercase tracking-wider mb-0.5">Estimated Premium</p>
                        <p className="text-xs font-bold text-[#1D1D1F] dark:text-white">{formatPrice(request.quoteAmount || 0)}</p>
                     </div>
                   )}
                 </div>
                 <button className={cn(
                   "p-2 bg-[#F5F5F7] dark:bg-white/5 rounded-xl transition-all duration-300 border-none",
-                  expandedId === request.id ? "rotate-180 bg-apple-blue/10 text-apple-blue" : "text-[#86868B]"
+                  expandedId === request.id ? "rotate-180 bg-apple-blue/10 text-apple-blue" : "text-apple-text-muted"
                 )}>
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -244,13 +244,13 @@ export default function UserInsurance() {
                                    <div key={step} className="flex flex-col items-center">
                                       <div className={cn(
                                          "w-5 h-5 rounded-full border transition-all duration-700 z-10 flex items-center justify-center text-[10px]",
-                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
+                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.08] dark:border-white/[0.08] text-apple-text-muted"
                                       )}>
                                          {isCompleted && <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5px]" />}
                                       </div>
                                       <span className={cn(
                                          "absolute top-7 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-500",
-                                         isCurrent ? "text-apple-blue" : isCompleted ? "text-[#1D1D1F] dark:text-white" : "text-[#86868B] opacity-40 text-[9px]"
+                                         isCurrent ? "text-apple-blue" : isCompleted ? "text-[#1D1D1F] dark:text-white" : "text-apple-text-muted opacity-40 text-[9px]"
                                       )}>
                                          {step.replace('_', ' ')}
                                       </span>
@@ -264,21 +264,21 @@ export default function UserInsurance() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                        {/* Details Section */}
                        <div className="space-y-6">
-                          <h4 className="text-[10px] font-bold text-[#86868B] uppercase tracking-[0.15em] flex items-center gap-1.5">
+                          <h4 className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.15em] flex items-center gap-1.5">
                              <CreditCard className="w-3.5 h-3.5 text-apple-blue" />
                              Policy Breakdown
                           </h4>
                           <div className="space-y-4">
                              <div className="flex justify-between items-center py-1.5 border-b border-black/[0.04] dark:border-white/[0.04]">
-                               <span className="text-xs font-medium text-[#86868B]">Vehicle Value</span>
+                               <span className="text-xs font-medium text-apple-text-muted">Vehicle Value</span>
                                <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white">{formatPrice(request.vehicleValue)}</span>
                              </div>
                              <div className="flex justify-between items-center py-1.5 border-b border-black/[0.04] dark:border-white/[0.04]">
-                               <span className="text-xs font-medium text-[#86868B]">Coverage Period</span>
+                               <span className="text-xs font-medium text-apple-text-muted">Coverage Period</span>
                                <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white">{request.coveragePeriod.replace('_', ' ')}</span>
                              </div>
                              <div className="flex justify-between items-center py-1.5 border-b border-black/[0.04] dark:border-white/[0.04]">
-                               <span className="text-xs font-medium text-[#86868B]">City of Registration</span>
+                               <span className="text-xs font-medium text-apple-text-muted">City of Registration</span>
                                <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white">{request.city}</span>
                              </div>
                           </div>
@@ -286,7 +286,7 @@ export default function UserInsurance() {
 
                        {/* Admin Notes Section */}
                        <div className="space-y-4">
-                          <h4 className="text-[10px] font-bold text-[#86868B] uppercase tracking-[0.15em] flex items-center gap-1.5">
+                          <h4 className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.15em] flex items-center gap-1.5">
                              <AlertCircle className="w-3.5 h-3.5 text-apple-blue" />
                              Underwriter Memo
                           </h4>
@@ -296,7 +296,7 @@ export default function UserInsurance() {
                                    {request.adminNotes}
                                 </p>
                              ) : (
-                                <p className="text-xs italic text-[#86868B] font-semibold leading-relaxed">
+                                <p className="text-xs italic text-apple-text-muted font-semibold leading-relaxed">
                                    Your profile is undergoing risk assessment. We will update this memo with technical details shortly.
                                 </p>
                              )}
@@ -305,7 +305,7 @@ export default function UserInsurance() {
 
                        {/* Action Section */}
                        <div className="space-y-4">
-                            <h4 className="text-[10px] font-bold text-[#86868B] uppercase tracking-[0.15em] flex items-center gap-1.5">
+                            <h4 className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.15em] flex items-center gap-1.5">
                              <Zap className="w-3.5 h-3.5 text-apple-blue" />
                              Policy Actions
                           </h4>
@@ -325,7 +325,7 @@ export default function UserInsurance() {
                                 <ExternalLink className="w-3.5 h-3.5" />
                                 Support Terminal
                              </button>
-                             <p className="text-[10px] text-center text-[#86868B] font-medium mt-3 leading-relaxed">
+                             <p className="text-[10px] text-center text-apple-text-muted font-medium mt-3 leading-relaxed">
                                 Questions about your coverage? <br /> Our priority support line is encrypted and active.
                              </p>
                           </div>

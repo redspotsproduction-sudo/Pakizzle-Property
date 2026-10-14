@@ -241,7 +241,7 @@ export default function CompanyManagement() {
               placeholder="Search enterprises..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300"
+              className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300"
             />
           </div>
         </div>
@@ -400,7 +400,7 @@ export default function CompanyManagement() {
 
       {/* 1. INSPECT DIALOG */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--bg-surface)] shadow-2xl flex flex-col">
           {selectedCompany && editCompany && (
             <Tabs defaultValue="dossier" className="flex flex-col h-full overflow-hidden">
               {/* Header */}
@@ -429,7 +429,7 @@ export default function CompanyManagement() {
                         {selectedCompany.category || 'Enterprise'} Category
                       </Badge>
                       {selectedCompany.branches && (
-                        <Badge className="bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)] text-[8px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full border border-apple-border/5">
+                        <Badge className="bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)] text-[8px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full border border-apple-border/5">
                           {selectedCompany.branches} Branches
                         </Badge>
                       )}
@@ -438,7 +438,7 @@ export default function CompanyManagement() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <TabsList className="bg-[var(--text-primary)] dark:bg-white/5 p-1 rounded-xl">
+                  <TabsList className="bg-[var(--bg-inset)] dark:bg-white/5 p-1 rounded-xl">
                     <TabsTrigger value="dossier" className="rounded-lg text-xs font-bold px-3 py-1.5 data-[state=active]:bg-white dark:data-[state=active]:bg-apple-surface data-[state=active]:text-apple-blue">
                       Corporate Dossier
                     </TabsTrigger>
@@ -446,7 +446,7 @@ export default function CompanyManagement() {
                       <Shield className="w-3.5 h-3.5" /> Overrule Control
                     </TabsTrigger>
                   </TabsList>
-                  <Button variant="ghost" className="rounded-full h-8 w-8 p-0 hover:bg-[var(--text-primary)] dark:hover:bg-white/5" onClick={() => setIsDetailsOpen(false)}>
+                  <Button variant="ghost" className="rounded-full h-8 w-8 p-0 hover:bg-[var(--bg-inset)] dark:hover:bg-white/5" onClick={() => setIsDetailsOpen(false)}>
                     ✕
                   </Button>
                 </div>
@@ -458,7 +458,7 @@ export default function CompanyManagement() {
                 {/* Corporate Dossier Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Left: General & Legal Records */}
-                  <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                  <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)] flex items-center gap-2">
                       <Building2 className="w-3.5 h-3.5 text-apple-blue" /> Corporate Dossier
                     </h4>
@@ -483,7 +483,7 @@ export default function CompanyManagement() {
                   </div>
 
                   {/* Right: Telephony & Digital Reach */}
-                  <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                  <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)] flex items-center gap-2">
                       <Phone className="w-3.5 h-3.5 text-apple-green" /> Headquarters & Telephony
                     </h4>
@@ -523,7 +523,7 @@ export default function CompanyManagement() {
 
                 {/* Additional Info (Departments & Branches) */}
                 {((selectedCompany.departments && selectedCompany.departments.length > 0) || selectedCompany.branches) && (
-                  <div className="space-y-3 bg-[var(--text-primary)] dark:bg-white/[0.02] p-6 rounded-[2rem] border border-apple-border/5">
+                  <div className="space-y-3 bg-[var(--bg-inset)] dark:bg-white/[0.02] p-6 rounded-[2rem] border border-apple-border/5">
                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Enterprise Structure</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                       {selectedCompany.departments && selectedCompany.departments.length > 0 && (
@@ -552,7 +552,7 @@ export default function CompanyManagement() {
                 {selectedCompany.description && (
                   <div className="space-y-3">
                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)] px-1">Corporate Statement & Narrative</h4>
-                    <div className="p-5 rounded-3xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5">
+                    <div className="p-5 rounded-3xl bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5">
                       <p className="text-xs font-semibold leading-relaxed text-[var(--text-primary)]/80 dark:text-apple-border">
                         {selectedCompany.description}
                       </p>
@@ -568,7 +568,7 @@ export default function CompanyManagement() {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     {/* Attachment 1: Trade License */}
-                    <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
+                    <div className="bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-[8px] font-black uppercase tracking-wider text-apple-blue">Trade License</span>
@@ -605,7 +605,7 @@ export default function CompanyManagement() {
                     </div>
 
                     {/* Attachment 2: Tax Certificate */}
-                    <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
+                    <div className="bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-[8px] font-black uppercase tracking-wider text-apple-blue">Tax Certificate / NTN</span>
@@ -642,7 +642,7 @@ export default function CompanyManagement() {
                     </div>
 
                     {/* Attachment 3: Company Registration */}
-                    <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
+                    <div className="bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 rounded-[2rem] p-5 flex flex-col justify-between space-y-4">
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-[8px] font-black uppercase tracking-wider text-apple-blue">SEC / SECP Registration</span>
@@ -702,7 +702,7 @@ export default function CompanyManagement() {
               {/* Tab 2: Overrule Control (Attributes Form) */}
               <TabsContent value="override" className="flex-1 m-0 outline-none flex flex-col overflow-hidden">
                 <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar">
-                  <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
+                  <div className="bg-[var(--bg-inset)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
                     <h3 className="text-sm font-bold flex items-center gap-1.5 text-apple-blue">
                       <Shield className="w-4 h-4" /> Enterprise administrative overrides
                     </h3>
@@ -716,7 +716,7 @@ export default function CompanyManagement() {
                     <div className="space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-wider text-[var(--text-secondary)] px-1">Corporate & Identity Settings</h4>
                       
-                      <div className="space-y-3 bg-[var(--text-primary)] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
+                      <div className="space-y-3 bg-[var(--bg-inset)] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
                         <div>
                           <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Company / Enterprise Name</label>
                           <Input 
@@ -809,7 +809,7 @@ export default function CompanyManagement() {
                     <div className="space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-wider text-[var(--text-secondary)] px-1">Ecosystem Clearance & Communications</h4>
 
-                      <div className="space-y-3 bg-[var(--text-primary)] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
+                      <div className="space-y-3 bg-[var(--bg-inset)] dark:bg-white/[0.01] p-5 rounded-3xl border border-apple-border/5">
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <label className="text-[10px] font-bold text-[var(--text-secondary)] uppercase block mb-1">Corporate Status</label>
@@ -898,7 +898,7 @@ export default function CompanyManagement() {
                       value={editCompany.address || ""} 
                       onChange={(e) => setEditCompany({ ...editCompany, address: e.target.value })}
                       placeholder="Input verified corporate physical coordinates..."
-                      className="w-full h-16 p-4 bg-[var(--text-primary)] dark:bg-white/[0.01] border border-apple-border/10 focus:border-apple-blue/30 rounded-3xl text-xs font-semibold focus:ring-0 outline-none text-stone-900 dark:text-white"
+                      className="w-full h-16 p-4 bg-[var(--bg-inset)] dark:bg-white/[0.01] border border-apple-border/10 focus:border-apple-blue/30 rounded-3xl text-xs font-semibold focus:ring-0 outline-none text-stone-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -907,7 +907,7 @@ export default function CompanyManagement() {
                 <footer className="p-6 border-t border-apple-border/10 bg-neutral-50 dark:bg-white/[0.02] flex justify-end gap-3 shrink-0 flex-wrap">
                   <Button 
                     variant="outline" 
-                    className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--text-primary)] dark:hover:bg-white/5" 
+                    className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--bg-inset)] dark:hover:bg-white/5" 
                     onClick={() => setIsDetailsOpen(false)}
                   >
                     Cancel

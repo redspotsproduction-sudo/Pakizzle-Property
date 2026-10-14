@@ -164,11 +164,10 @@ export default function SellPropertyForm() {
         seller: {
           uid: user?.uid || "user-seller",
           name: profile?.displayName || user?.email?.split("@")[0] || "Authorized Real Estate Agent",
-          isVerified: true,
-          badgeType: (profile?.verified_badge_type as any) || "business",
+          isVerified: profile?.isVerified ?? false,
           rating: 4.9
         },
-        status: "active",
+        status: "pending",
         createdAt: new Date().toISOString(),
         specs: {
           bedrooms: Number(formData.bedrooms) || 0,

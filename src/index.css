@@ -14,7 +14,7 @@
   font-display: swap;
 }
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: "Plus Jakarta Sans", "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -231,9 +231,11 @@
   html, body {
     @apply w-full overflow-x-hidden;
     max-width: 100%;
+    background-color: var(--apple-bg);
+    color: var(--apple-text);
   }
   body {
-    @apply font-sans antialiased text-foreground selection:bg-apple-blue selection:text-white relative;
+    @apply font-sans antialiased text-foreground selection:bg-apple-blue selection:text-white relative min-h-screen;
     background-color: var(--apple-bg);
   }
 

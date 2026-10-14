@@ -36,7 +36,7 @@ import { toast } from "sonner";
 import { useProperties } from "@/context/PropertyContext";
 import { useAuth } from "@/context/AuthContext";
 import { listingFreshnessService } from "@/services/listingFreshnessService";
-import { parsePropertyUrlParam, formatPropertyUrl } from "@/lib/referenceId";
+import { parsePropertyUrlParam, formatPropertyUrl, formatPropertyTitle } from "@/lib/referenceId";
 import RecentlyViewed from "./RecentlyViewed";
 import { useChat } from "@/context/ChatContext";
 import { cn, formatPrice } from "@/lib/utils";
@@ -184,7 +184,7 @@ export default function PropertyDetails() {
       },
       { 
         id: property.id, 
-        name: `${property.make} - ${property.model}`,
+        name: formatPropertyTitle(property),
         price: property.price,
         image: property.images[0]
       }

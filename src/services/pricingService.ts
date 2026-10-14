@@ -34,7 +34,7 @@ const DEFAULT_PLANS: PricingPlan[] = [
     isSponsoredBannerAllowed: false,
     supportSla: '24h',
     teamSlotsCount: 1,
-    colorTheme: '#007AFF',
+    colorTheme: '#4A90D2',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
@@ -72,7 +72,7 @@ const DEFAULT_PLANS: PricingPlan[] = [
     isSponsoredBannerAllowed: false,
     supportSla: '4h',
     teamSlotsCount: 5,
-    colorTheme: '#34C759',
+    colorTheme: '#5FA84C',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
@@ -109,7 +109,7 @@ const DEFAULT_PLANS: PricingPlan[] = [
     isSponsoredBannerAllowed: true,
     supportSla: '1h',
     teamSlotsCount: 20,
-    colorTheme: '#5856D6',
+    colorTheme: '#7A1E5E',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }

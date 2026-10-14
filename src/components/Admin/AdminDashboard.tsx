@@ -152,7 +152,7 @@ export default function AdminDashboard() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Ecosystem Pulse
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Dubizzle-grade classifieds infrastructure orchestrating cross-network car liquidity.
           </p>
         </div>
@@ -190,7 +190,7 @@ export default function AdminDashboard() {
                 stat.color === 'blue' && "bg-apple-blue shadow-apple-blue/10",
                 stat.color === 'green' && "bg-apple-green shadow-apple-green/10",
                 stat.color === 'orange' && "bg-apple-orange shadow-apple-orange/10",
-                stat.color === 'purple' && "bg-[#AF52DE] shadow-purple-500/10"
+                stat.color === 'purple' && "bg-[var(--spectrum-plum)] shadow-purple-500/10"
               )}>
                 <stat.icon className="w-5 h-5" />
               </div>
@@ -203,11 +203,11 @@ export default function AdminDashboard() {
             </div>
 
             <div className="space-y-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">
                 {stat.label}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] dark:text-white font-sans">{stat.value}</h3>
-              <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">{stat.description}</p>
+              <p className="text-[10px] text-apple-text-muted font-normal leading-relaxed">{stat.description}</p>
             </div>
 
             <div className="flex items-center justify-between mt-4 pt-4 border-t border-black/[0.02] dark:border-white/[0.02]">
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4 pb-6 mb-6 border-b border-black/[0.04] dark:border-white/[0.04]">
               <div className="space-y-1">
                 <h3 className="text-base font-semibold text-[var(--text-primary)] dark:text-white">Atmospheric Velocity</h3>
-                <p className="text-xs text-[#86868B]">Dynamic throughput of car enquiries & VAS revenue.</p>
+                <p className="text-xs text-apple-text-muted">Dynamic throughput of car enquiries & VAS revenue.</p>
               </div>
               <div className="flex bg-[#F5F5F7] dark:bg-white/5 p-1 rounded-xl">
                 {['Leads', 'Views', 'Revenue'].map((tab) => (
@@ -259,7 +259,7 @@ export default function AdminDashboard() {
                       "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap",
                       activeMetric === tab.toLowerCase() 
                         ? "bg-white dark:bg-[#2C2C2E] shadow-sm text-[var(--text-primary)] dark:text-white" 
-                        : "text-[#86868B] hover:text-[var(--text-primary)] dark:hover:text-white"
+                        : "text-apple-text-muted hover:text-[var(--text-primary)] dark:hover:text-white"
                     )}
                   >
                     {tab}
@@ -273,8 +273,8 @@ export default function AdminDashboard() {
                 <ComposedChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="metric-grad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} stopOpacity={0.25}/>
-                      <stop offset="100%" stopColor={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} stopOpacity={0}/>
+                      <stop offset="5%" stopColor={activeMetric === 'leads' ? "var(--spectrum-blue)" : activeMetric === 'views' ? "var(--spectrum-plum)" : "var(--spectrum-green)"} stopOpacity={0.25}/>
+                      <stop offset="100%" stopColor={activeMetric === 'leads' ? "var(--spectrum-blue)" : activeMetric === 'views' ? "var(--spectrum-plum)" : "var(--spectrum-green)"} stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="1 10" vertical={false} stroke="rgba(0,0,0,0.06)" />
@@ -282,16 +282,16 @@ export default function AdminDashboard() {
                     dataKey="name" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 11, fontWeight: 600, fill: '#86868B' }}
+                    tick={{ fontSize: 11, fontWeight: 600, fill: 'var(--text-tertiary)' }}
                     dy={10}
                   />
                   <YAxis 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 11, fontWeight: 600, fill: '#86868B' }}
+                    tick={{ fontSize: 11, fontWeight: 600, fill: 'var(--text-tertiary)' }}
                   />
                   <Tooltip 
-                    cursor={{ stroke: 'var(--brand-blue)', strokeWidth: 1, strokeDasharray: '4 4' }}
+                    cursor={{ stroke: 'var(--spectrum-blue)', strokeWidth: 1, strokeDasharray: '4 4' }}
                     contentStyle={{ 
                       backgroundColor: 'rgba(255, 255, 255, 0.9)', 
                       backdropFilter: 'blur(20px)',
@@ -304,7 +304,7 @@ export default function AdminDashboard() {
                   <Area 
                     type="monotone" 
                     dataKey={activeMetric} 
-                    stroke={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} 
+                    stroke={activeMetric === 'leads' ? "var(--spectrum-blue)" : activeMetric === 'views' ? "var(--spectrum-plum)" : "var(--spectrum-green)"} 
                     strokeWidth={3} 
                     fill="url(#metric-grad)" 
                     animationDuration={1500}
@@ -312,7 +312,7 @@ export default function AdminDashboard() {
                   <Bar 
                     dataKey={activeMetric} 
                     barSize={10} 
-                    fill={activeMetric === 'leads' ? "var(--brand-blue)" : activeMetric === 'views' ? "#AF52DE" : "#34C759"} 
+                    fill={activeMetric === 'leads' ? "var(--spectrum-blue)" : activeMetric === 'views' ? "var(--spectrum-plum)" : "var(--spectrum-green)"} 
                     opacity={0.06}
                     radius={[6, 6, 0, 0]}
                   />
@@ -400,7 +400,7 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">Live Stream</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">Live Stream</span>
             </div>
           </div>
           
@@ -419,11 +419,11 @@ export default function AdminDashboard() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[9px] font-bold uppercase tracking-wider text-apple-blue">{lead.action}</span>
-                    <span className="text-[9px] font-semibold text-[#86868B]">{lead.time}</span>
+                    <span className="text-[9px] font-semibold text-apple-text-muted">{lead.time}</span>
                   </div>
                   <div>
                     <h6 className="font-semibold text-sm text-[var(--text-primary)] dark:text-white truncate"> {lead.user}</h6>
-                    <p className="text-[11px] text-[#86868B] truncate mt-0.5">{lead.car}</p>
+                    <p className="text-[11px] text-apple-text-muted truncate mt-0.5">{lead.car}</p>
                   </div>
                 </div>
               </motion.div>
@@ -447,7 +447,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <h6 className="font-semibold text-xs tracking-tight text-[var(--text-primary)] dark:text-white group-hover:text-apple-blue transition-colors">{dealer.name}</h6>
-                      <span className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">{dealer.conversion} CV</span>
+                      <span className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">{dealer.conversion} CV</span>
                     </div>
                   </div>
                   <div className="text-right">
@@ -471,7 +471,7 @@ export default function AdminDashboard() {
         className="rounded-2xl bg-black dark:bg-[var(--bg-raised)] text-white p-8 lg:p-12 overflow-hidden relative shadow-lg border border-white/5 mt-6"
       >
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-apple-blue/20 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#AF52DE]/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[var(--spectrum-plum)]/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none" />
         
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="max-w-xl space-y-4">

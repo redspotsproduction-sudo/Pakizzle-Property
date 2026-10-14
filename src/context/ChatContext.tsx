@@ -18,6 +18,7 @@ import {
   increment
 } from 'firebase/firestore';
 import { notificationService } from '../services/notificationService';
+import { toast } from 'sonner';
 
 interface ChatContextType {
   conversations: Conversation[];
@@ -28,7 +29,7 @@ interface ChatContextType {
   toggleBlock: (id: string) => void;
   rateUser: (userId: string, rating: number, type: 'buyer' | 'seller') => Promise<void>;
   markAsRead: (id: string) => void;
-  startConversation: (participant: { uid: string, name: string, photoURL?: string }, vehicle: { id: string, name: string }, initialMessage?: string) => void;
+  startConversation: (participant: { uid: string, name: string, photoURL?: string }, listing: { id: string, name: string, price?: number, image?: string }, initialMessage?: string) => void;
   notification: string | null;
   setNotification: (msg: string | null) => void;
   messages: Message[];
@@ -112,8 +113,9 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         const data = doc.data({ serverTimestamps: 'estimate' });
         const metadata = data.metadata?.[user.uid] || {};
         
-        // Determine if user is seller for this vehicle
-        const isSeller = data.sellerUid === user.uid || vehicles.find(v => v.id === data.vehicleId)?.seller.uid === user.uid;
+        // Determine if user is seller for this property listing
+        const propId = data.propertyId || data.vehicleId;
+        const isSeller = data.sellerUid === user.uid || vehicles.find(v => v.id === propId)?.seller.uid === user.uid;
         
         // Map Firestore data to Conversation type
         return {
@@ -127,8 +129,13 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
           isPinned: metadata.isPinned || false,
           isBlocked: metadata.isBlocked || false,
           type: isSeller ? 'selling' : 'buying',
-          vehicleId: data.vehicleId,
-          vehicleName: data.vehicleName,
+          propertyId: propId,
+          propertyName: data.propertyName || data.listingTitle || data.vehicleName,
+          listingTitle: data.listingTitle || data.propertyName || data.vehicleName,
+          listingImage: data.listingImage || data.vehicleImage,
+          listingPrice: data.listingPrice || data.price,
+          vehicleId: propId,
+          vehicleName: data.propertyName || data.listingTitle || data.vehicleName,
           updatedAt: data.updatedAt?.toDate?.()?.toISOString() || data.updatedAt || new Date().toISOString()
         } as any;
       });
@@ -255,10 +262,25 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     try {
       const conv = conversations.find(c => c.id === id);
       if (!conv) return;
+      const nextBlocked = !conv.isBlocked;
       await updateDoc(doc(db, 'conversations', id), {
-        [`metadata.${user.uid}.isBlocked`]: !conv.isBlocked
+        [`metadata.${user.uid}.isBlocked`]: nextBlocked
       });
-      setNotification(conv.isBlocked ? "User unblocked" : "User blocked");
+      toast(nextBlocked ? "User blocked" : "User unblocked", {
+        action: {
+          label: "Undo",
+          onClick: async () => {
+            try {
+              await updateDoc(doc(db, 'conversations', id), {
+                [`metadata.${user.uid}.isBlocked`]: !nextBlocked
+              });
+              toast.success("Action undone");
+            } catch (err) {
+              console.error("Undo failed:", err);
+            }
+          }
+        }
+      });
     } catch (error) {
       handleFirestoreError(error, OperationType.UPDATE, `conversations/${id}`);
     }
@@ -315,7 +337,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user]);
 
-  const startConversation = useCallback(async (participant: { uid: string, name: string, photoURL?: string }, vehicle: { id: string, name: string, price?: number, image?: string }, initialMessage?: string) => {
+  const startConversation = useCallback(async (participant: { uid: string, name: string, photoURL?: string }, listing: { id: string, name: string, price?: number, image?: string }, initialMessage?: string) => {
     if (!user) return;
 
     try {
@@ -338,10 +360,15 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         const data = existingDoc.data();
         
         // Update context if listing changed, but don't send message automatically
-        if (data.vehicleId !== vehicle.id) {
+        if ((data.propertyId || data.vehicleId) !== listing.id) {
           await updateDoc(doc(db, 'conversations', convId), {
-            vehicleId: vehicle.id,
-            vehicleName: vehicle.name,
+            propertyId: listing.id,
+            propertyName: listing.name,
+            listingTitle: listing.name,
+            listingPrice: listing.price || null,
+            listingImage: listing.image || null,
+            vehicleId: listing.id,
+            vehicleName: listing.name,
             updatedAt: serverTimestamp()
           });
         }
@@ -359,8 +386,13 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
             { uid: participant.uid, name: participant.name, photoURL: participant.photoURL || '' }
           ],
           updatedAt: serverTimestamp(),
-          vehicleId: vehicle.id,
-          vehicleName: vehicle.name,
+          propertyId: listing.id,
+          propertyName: listing.name,
+          listingTitle: listing.name,
+          listingPrice: listing.price || null,
+          listingImage: listing.image || null,
+          vehicleId: listing.id,
+          vehicleName: listing.name,
           sellerUid: participant.uid, // The person being contacted is the seller
           metadata: {
             [user.uid]: { unreadCount: 0, isPinned: false, isBlocked: false },
@@ -397,13 +429,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         // Send a notification alert for the first message
         await notificationService.sendNotification({
           userId: participant.uid,
-          title: `${user.displayName || 'User'} is interested in your ${vehicle.name}`,
+          title: `${user.displayName || 'User'} is interested in: ${listing.name}`,
           message: initialMessage.length > 60 ? initialMessage.substring(0, 60) + '...' : initialMessage,
           type: 'listing',
           link: `/chat?id=${convId}`,
           metadata: {
             conversationId: convId,
-            vehicleId: vehicle.id
+            propertyId: listing.id,
+            vehicleId: listing.id
           }
         });
 

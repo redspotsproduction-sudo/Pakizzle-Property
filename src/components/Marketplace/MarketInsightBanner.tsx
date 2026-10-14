@@ -88,33 +88,32 @@ export default function MarketInsightBanner({
     setCurrentIndex((prev) => (prev - 1 + insights.length) % insights.length);
   }, [insights.length]);
 
-  // Honest handling: If no real data is available, do not fabricate numbers
-  if (!hasRealData || insights.length === 0) {
+  // Honest handling: If no real data is available or sample is below threshold (min 15), hide module
+  const currentInsight = insights[currentIndex];
+  if (!hasRealData || insights.length === 0 || !currentInsight || (currentInsight.sampleSize && currentInsight.sampleSize < 15)) {
     return null;
   }
-
-  const currentInsight = insights[currentIndex];
 
   const getMetricBadge = (type: MarketInsightItem["metricType"], change: string) => {
     switch (type) {
       case "price_index":
         return (
-          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-apple-green/15 text-apple-green dark:text-apple-green border border-apple-green/30/20">
+          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-apple-green/15 text-apple-green border border-apple-green/20">
             <TrendingUp className="w-3.5 h-3.5" />
             <span>Price Trend {change}</span>
           </span>
         );
       case "demand_signal":
         return (
-          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-brand-primary/15 text-brand-primary dark:text-apple-orange border border-brand-primary/20">
-            <Flame className="w-3.5 h-3.5 text-apple-orange" />
+          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-primary/15 text-brand-primary border border-brand-primary/20">
+            <Flame className="w-3.5 h-3.5" />
             <span>Demand Surge {change}</span>
           </span>
         );
       case "new_listings":
         return (
-          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-            <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+          <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-apple-blue/15 text-apple-blue border border-apple-blue/20">
+            <Sparkles className="w-3.5 h-3.5" />
             <span>Fresh Inventory</span>
           </span>
         );
@@ -149,7 +148,7 @@ export default function MarketInsightBanner({
     onApplyInsight({
       city: q.city || effectiveCity,
       area: q.area,
-      propertyType: (q as any).propertyType || q.make,
+      propertyType: q.propertyType || (q as any).make,
       verifiedOnly: q.verifiedOnly,
       minArea,
       maxArea,
@@ -166,33 +165,33 @@ export default function MarketInsightBanner({
       <motion.div
         layout
         onClick={handleClick}
-        className="w-full p-4 rounded-3xl bg-gradient-to-r from-apple-green/10 via-brand-primary/5 to-apple-green/5 dark:from-emerald-950/30 dark:via-apple-text/60 dark:to-emerald-950/20 border border-apple-green/30/20 dark:border-apple-green/30/30 shadow-sm hover:shadow-md hover:border-apple-green/30/40 transition-all cursor-pointer overflow-hidden backdrop-blur-md"
+        className="w-full p-4 rounded-2xl bg-apple-surface border border-apple-border/40 hover:border-brand-primary/40 shadow-apple-card transition-all cursor-pointer overflow-hidden backdrop-blur-md"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           {/* Left section: Icon + Content */}
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-11 h-11 rounded-2xl bg-white dark:bg-white/5 shadow-sm border border-apple-green/30/20 text-apple-green dark:text-apple-green flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-apple-gray dark:bg-white/5 shadow-xs border border-apple-border/30 text-brand-primary flex items-center justify-center shrink-0">
               {currentInsight.metricType === "new_listings" ? (
-                <ShieldCheck className="w-6 h-6 text-apple-green" />
+                <ShieldCheck className="w-5 h-5 text-apple-blue" />
               ) : currentInsight.metricType === "demand_signal" ? (
-                <Flame className="w-6 h-6 text-apple-orange" />
+                <Flame className="w-5 h-5 text-brand-primary" />
               ) : (
-                <TrendingUp className="w-6 h-6 text-apple-green" />
+                <TrendingUp className="w-5 h-5 text-apple-green" />
               )}
             </div>
 
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap mb-1">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-green dark:text-apple-green flex items-center gap-1">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary flex items-center gap-1">
                   <span>Market Pulse</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
                 </span>
 
                 {getMetricBadge(currentInsight.metricType, currentInsight.change)}
 
-                <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-bold text-apple-text-muted dark:text-apple-text-muted">
+                <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-semibold text-apple-text-muted">
                   <Info className="w-3 h-3" />
-                  <span>Real Aggregate Data</span>
+                  <span>Real Aggregate Data ({currentInsight.sampleSize} listings)</span>
                 </span>
               </div>
 
@@ -205,11 +204,11 @@ export default function MarketInsightBanner({
                   transition={{ duration: 0.25 }}
                   className="space-y-0.5"
                 >
-                  <p className="text-sm font-black text-apple-text dark:text-white truncate">
+                  <p className="text-sm font-bold text-apple-text truncate">
                     {currentInsight.title}
                   </p>
-                  <p className="text-xs text-apple-text-muted dark:text-apple-text-muted truncate">
-                    {currentInsight.subtitle} · <span className="text-brand-primary dark:text-apple-orange font-semibold underline underline-offset-2">Tap to view matching properties</span>
+                  <p className="text-xs text-apple-text-muted truncate">
+                    {currentInsight.subtitle} · <span className="text-brand-primary font-semibold underline underline-offset-2">Tap to view matching properties</span>
                   </p>
                 </motion.div>
               </AnimatePresence>

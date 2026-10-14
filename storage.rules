@@ -30,51 +30,73 @@ service firebase.storage {
       allow update, delete: if isAdmin();
     }
 
-    // 2. Property listings images
+    // 2. Property listings images:
     // Read: public
-    // Create/Update: signed-in users, images up to 10 MB
-    // Delete: signed-in users or admin
+    // Create: signed-in users, images up to 10 MB
+    // Delete/Update: ONLY by owning user or admin, found via firestore.get of property document
     match /properties/{propertyId}/{fileName} {
       allow read: if true;
-      allow create, update: if isSignedIn() && 
-                            request.resource.size <= 10 * 1024 * 1024 && 
-                            request.resource.contentType.matches('image/.*');
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && 
+                    request.resource.size <= 10 * 1024 * 1024 && 
+                    request.resource.contentType.matches('image/.*');
+      allow update, delete: if isSignedIn() && (
+        (firestore.exists(/databases/(default)/documents/properties/$(propertyId)) &&
+         firestore.get(/databases/(default)/documents/properties/$(propertyId)).data.seller.uid == request.auth.uid) ||
+        isAdmin()
+      );
     }
 
-    // 3. Property & Community Videos
+    // 3. Property & Community Videos:
     // Read: public
-    // Create/Update: signed-in users, video format up to 100 MB
-    // Delete: signed-in users or admin
+    // Create: signed-in users, video format up to 100 MB
+    // Delete/Update: ONLY by owning user or admin, found via firestore.get of video document
     match /videos/{videoId}/{fileName} {
       allow read: if true;
-      allow create, update: if isSignedIn() && 
-                            request.resource.size <= 100 * 1024 * 1024 && 
-                            request.resource.contentType.matches('video/.*');
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && 
+                    request.resource.size <= 100 * 1024 * 1024 && 
+                    request.resource.contentType.matches('video/.*');
+      allow update, delete: if isSignedIn() && (
+        (firestore.exists(/databases/(default)/documents/property_videos/$(videoId)) &&
+         firestore.get(/databases/(default)/documents/property_videos/$(videoId)).data.creatorId == request.auth.uid) ||
+        isAdmin()
+      );
     }
 
-    // 4. Reels & PakStories (Short Videos and cover images)
+    // 4. Reels:
     // Read: public
-    // Create/Update: signed-in users, media up to 50 MB
-    // Delete: signed-in users or admin
+    // Create: signed-in users, media up to 50 MB
+    // Delete/Update: ONLY by owning user or admin, found via firestore.get of reel document
     match /reels/{reelId}/{fileName} {
       allow read: if true;
-      allow create, update: if isSignedIn() && 
-                            request.resource.size <= 50 * 1024 * 1024 && 
-                            (request.resource.contentType.matches('video/.*') || request.resource.contentType.matches('image/.*'));
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && 
+                    request.resource.size <= 50 * 1024 * 1024 && 
+                    (request.resource.contentType.matches('video/.*') || request.resource.contentType.matches('image/.*'));
+      allow update, delete: if isSignedIn() && (
+        (firestore.exists(/databases/(default)/documents/reels/$(reelId)) &&
+         firestore.get(/databases/(default)/documents/reels/$(reelId)).data.sellerId == request.auth.uid) ||
+        isAdmin()
+      );
     }
 
+    // 5. PakStories:
+    // Read: public
+    // Create: signed-in users, media up to 50 MB
+    // Delete/Update: ONLY by owning user or admin, found via firestore.get of reel / video document
     match /pakstories/{storyId}/{fileName} {
       allow read: if true;
-      allow create, update: if isSignedIn() && 
-                            request.resource.size <= 50 * 1024 * 1024 && 
-                            (request.resource.contentType.matches('video/.*') || request.resource.contentType.matches('image/.*'));
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && 
+                    request.resource.size <= 50 * 1024 * 1024 && 
+                    (request.resource.contentType.matches('video/.*') || request.resource.contentType.matches('image/.*'));
+      allow update, delete: if isSignedIn() && (
+        (firestore.exists(/databases/(default)/documents/reels/$(storyId)) &&
+         firestore.get(/databases/(default)/documents/reels/$(storyId)).data.sellerId == request.auth.uid) ||
+        (firestore.exists(/databases/(default)/documents/property_videos/$(storyId)) &&
+         firestore.get(/databases/(default)/documents/property_videos/$(storyId)).data.creatorId == request.auth.uid) ||
+        isAdmin()
+      );
     }
 
-    // 5. User Avatars & Profile Photos
+    // 6. User Avatars & Profile Photos:
     // Read: public
     // Create/Update: owner only, images up to 5 MB
     // Delete: owner or admin
@@ -84,6 +106,70 @@ service firebase.storage {
                             request.resource.size <= 5 * 1024 * 1024 && 
                             request.resource.contentType.matches('image/.*');
       allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // 7. Banners & Promotional Media:
+    // Read: public
+    // Create, Update, Delete: Admin only
+    match /banners/{bannerId}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 8. Advertisement Assets:
+    // Read: public
+    // Create, Update, Delete: Admin only
+    match /ads/{adId}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 9. Chat Attachments:
+    // Read: conversation participants or admin
+    // Create: participant only, up to 10 MB
+    // Delete: admin only
+    match /chat_attachments/{convId}/{fileName} {
+      allow read: if isSignedIn() && (
+        (firestore.exists(/databases/(default)/documents/conversations/$(convId)) &&
+         request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(convId)).data.participantIds) ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && 
+                    (firestore.exists(/databases/(default)/documents/conversations/$(convId)) &&
+                     request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(convId)).data.participantIds) &&
+                    request.resource.size <= 10 * 1024 * 1024;
+      allow delete: if isAdmin();
+    }
+
+    // 10. Business Licences (Agency / Developer compliance):
+    // Read: owner and admin only
+    // Create: owner only, up to 10 MB
+    // Update/Delete: admin only
+    match /business_licenses/{userId}/{fileName} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && 
+                    request.resource.size <= 10 * 1024 * 1024 && 
+                    (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf');
+      allow update, delete: if isAdmin();
+    }
+
+    // 11. Property Title Deeds (Shanakht™ Verification Vault):
+    // Read: property owner and admin only
+    // Create: property owner, up to 10 MB
+    // Update/Delete: admin only
+    match /title_deeds/{propertyId}/{fileName} {
+      allow read: if isSignedIn() && (
+        (firestore.exists(/databases/(default)/documents/properties/$(propertyId)) &&
+         firestore.get(/databases/(default)/documents/properties/$(propertyId)).data.seller.uid == request.auth.uid) ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && (
+        firestore.exists(/databases/(default)/documents/properties/$(propertyId)) &&
+        firestore.get(/databases/(default)/documents/properties/$(propertyId)).data.seller.uid == request.auth.uid
+      ) && 
+      request.resource.size <= 10 * 1024 * 1024 && 
+      (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf');
+      allow update, delete: if isAdmin();
     }
   }
 }

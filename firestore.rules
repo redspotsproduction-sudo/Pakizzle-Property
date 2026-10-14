@@ -23,6 +23,21 @@ service cloud.firestore {
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
+
+    // Verified User: Identity or business verified (server-set claim or server-set document field), NOT verificationLevel >= 1
+    function isVerifiedUser() {
+      return isSignedIn() && (
+        request.auth.token.isVerified == true ||
+        request.auth.token.identity_verified == true ||
+        request.auth.token.business_verified == true ||
+        (request.auth.token.email_verified == true && request.auth.token.email == 'redspotsproduction@gmail.com') ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.identity_status == 'verified' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.business_status == 'approved')) ||
+        isAdmin()
+      );
+    }
     
     function isValidId(id) { 
       return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
@@ -32,30 +47,48 @@ service cloud.firestore {
     function existing() { return resource.data; }
 
     // ---------------------------------------------------------
-    // Public Profiles (Sanitized, non-PII, public display)
+    // 1. Public Profiles (Sanitized, non-PII, public display)
+    // The owner may write ONLY displayName and photoURL.
+    // badge, badgeType, rating, agency, and verification-related fields
+    // are written ONLY by admin or Cloud Function.
     // ---------------------------------------------------------
     match /publicProfiles/{userId} {
       allow read: if true;
-      allow create, update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && (
+        isAdmin() ||
+        (request.auth.uid == userId && incoming().keys().hasOnly(['displayName', 'photoURL']))
+      );
+      allow update: if isSignedIn() && (
+        isAdmin() ||
+        (request.auth.uid == userId && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL']))
+      );
       allow delete: if isAdmin();
     }
 
     // ---------------------------------------------------------
-    // Users & Private Profiles
+    // 2. Users & Private Profiles
+    // Role must equal 'user'. Trust/risk scores, IP history, and status
+    // are NOT user-writable (server-written only).
     // ---------------------------------------------------------
     function isValidUser(data) {
       return data.keys().hasAll(['uid', 'email', 'status', 'role']) &&
              data.uid == request.auth.uid &&
              data.email is string &&
              data.status in ['active', 'suspended', 'banned', 'pending'] &&
-             data.role in ['user', 'moderator', 'finance', 'support'] &&
+             data.role == 'user' &&
              (!('isVerified' in data) || data.isVerified == false) &&
              (!('verificationLevel' in data) || data.verificationLevel == 0) &&
              (!('isPhoneVerified' in data) || data.isPhoneVerified == false) &&
              (!('isEmailVerified' in data) || data.isEmailVerified == false) &&
              (!('isOtpVerified' in data) || data.isOtpVerified == false) &&
              (!('identity_status' in data) || data.identity_status != 'verified') &&
-             (!('verified_badge_type' in data) || data.verified_badge_type == 'none');
+             (!('verified_badge_type' in data) || data.verified_badge_type == 'none') &&
+             (!('trustScore' in data)) &&
+             (!('riskScore' in data)) &&
+             (!('riskLevel' in data)) &&
+             (!('suspiciousActivityCount' in data)) &&
+             (!('lastKnownIp' in data)) &&
+             (!('ipHistory' in data));
     }
 
     match /users/{userId} {
@@ -68,54 +101,48 @@ service cloud.firestore {
         return incoming().diff(existing()).affectedKeys().hasOnly([
           'displayName', 'photoURL', 'username',
           'isOnline', 'lastSeen', 'notificationSettings', 'dob', 
-          'nationality', 'gender', 'updatedAt', 'rating', 'ratingCount',
+          'nationality', 'gender', 'updatedAt',
           'themePreference', 'bio', 'city', 'address', 'agencyName', 'agencyLicense'
         ]);
       }
 
       // Action: Onboarding Initial State Transition with Strict Field Allowlist
+      // status is NOT user-writable (server-written only).
       function isTransitioningOnboarding() {
         return (
           !('onboardingCompletedAt' in existing()) || 
-          (existing().isPendingOnboarding == true) || 
-          existing().status == 'pending'
+          (existing().isPendingOnboarding == true)
         ) && 
         incoming().role == 'user' &&
-        (
-          (!('accountType' in incoming()) || incoming().accountType == 'user' && incoming().status == 'active') ||
-          (incoming().accountType in ['dealer', 'company'] && incoming().status == 'pending')
-        ) &&
         incoming().diff(existing()).affectedKeys().hasOnly([
           'displayName', 'username', 'photoURL', 'accountType', 'agencyName', 
           'agencyLicense', 'city', 'address', 'operatingSystem', 'browser', 
-          'device', 'registrationSource', 'trustScore', 'riskScore', 'riskLevel', 
-          'suspiciousActivityCount', 'lastLoginAt', 'isOnline', 'lastSeen', 
-          'isPendingOnboarding', 'onboardingCompletedAt', 'updatedAt', 'status', 
-          'role', 'lastKnownIp', 'ipHistory', 'bio'
+          'device', 'registrationSource', 'lastLoginAt', 'isOnline', 'lastSeen', 
+          'isPendingOnboarding', 'onboardingCompletedAt', 'updatedAt',
+          'role', 'bio'
         ]);
       }
 
-      // Constraints enforcing that normal users cannot write identity_status='verified', verified_badge_type, role, or verification fields
+      // Constraints enforcing that normal users cannot write identity_status='verified', verified_badge_type, role, verification fields, status, trust/risk scores or IP history
       function isSafeUserSelfUpdate() {
         return isOwner(userId) &&
-          // Normal user cannot change role
-          (incoming().role == existing().role || (!('role' in incoming()) && !('role' in existing()))) &&
-          // Normal user cannot make themselves admin
+          (!('status' in incoming()) || incoming().status == existing().status) &&
+          (!('role' in incoming()) || incoming().role == existing().role) &&
           (!('role' in incoming()) || incoming().role != 'admin' || existing().role == 'admin') &&
-          // Normal user cannot self-grant isVerified
           (!('isVerified' in incoming()) || incoming().isVerified == existing().isVerified) &&
-          // Normal user cannot self-grant identity_status == 'verified'
           (!('identity_status' in incoming()) || incoming().identity_status == existing().identity_status) &&
-          // Normal user cannot self-grant verificationLevel
           (!('verificationLevel' in incoming()) || incoming().verificationLevel == existing().verificationLevel) &&
-          // Normal user cannot self-grant phone/email verification
           (!('isPhoneVerified' in incoming()) || incoming().isPhoneVerified == existing().isPhoneVerified) &&
           (!('isEmailVerified' in incoming()) || incoming().isEmailVerified == existing().isEmailVerified) &&
           (!('isOtpVerified' in incoming()) || incoming().isOtpVerified == existing().isOtpVerified) &&
-          // Normal user cannot self-grant verified_badge_type
           (!('verified_badge_type' in incoming()) || incoming().verified_badge_type == existing().verified_badge_type) &&
-          // Normal user cannot self-grant badgeType
-          (!('badgeType' in incoming()) || incoming().badgeType == existing().badgeType);
+          (!('badgeType' in incoming()) || incoming().badgeType == existing().badgeType) &&
+          (!('trustScore' in incoming()) || incoming().trustScore == existing().trustScore) &&
+          (!('riskScore' in incoming()) || incoming().riskScore == existing().riskScore) &&
+          (!('riskLevel' in incoming()) || incoming().riskLevel == existing().riskLevel) &&
+          (!('suspiciousActivityCount' in incoming()) || incoming().suspiciousActivityCount == existing().suspiciousActivityCount) &&
+          (!('lastKnownIp' in incoming()) || incoming().lastKnownIp == existing().lastKnownIp) &&
+          (!('ipHistory' in incoming()) || incoming().ipHistory == existing().ipHistory);
       }
 
       allow update: if isSignedIn() && (
@@ -138,7 +165,7 @@ service cloud.firestore {
     }
 
     // ---------------------------------------------------------
-    // Verification Requests
+    // 3. Verification Requests
     // ---------------------------------------------------------
     match /verification_requests/{requestId} {
       allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
@@ -148,16 +175,67 @@ service cloud.firestore {
     }
 
     // ---------------------------------------------------------
-    // Properties & Listings
+    // 4. Properties & Listings
+    // create allowlist: hasOnly: id, seller, status 'pending', price, createdAt, content fields.
+    // Block title_deed_status, titleDeedStatus, title_deed_verified, isTitleDeedVerified, reference_id, views, favorites, isAuctionVerified at create.
+    // Owners may change status only: active<->inactive, active->sold, expired->active, and set last_confirmed_active and reactivated_at.
     // ---------------------------------------------------------
+    function isValidPropertyCreate(data) {
+      return data.keys().hasOnly([
+               'id', 'seller', 'status', 'price', 'createdAt',
+               'title', 'description', 'photos', 'images', 'specs', 
+               'location', 'city', 'area', 'condition', 'make', 'model', 
+               'bedrooms', 'bathrooms', 'areaSize', 'areaUnit', 'transmission', 
+               'fuelType', 'features', 'purpose', 'propertyType', 'type', 'year', 'mileage'
+             ]) &&
+             data.keys().hasAll(['id', 'seller', 'status', 'price', 'createdAt']) &&
+             data.seller.uid == request.auth.uid &&
+             data.status == 'pending' &&
+             (!('isVerified' in data.seller) || data.seller.isVerified == false) &&
+             (!('badgeType' in data.seller)) &&
+             (!('verified_badge_type' in data.seller)) &&
+             (!('badge' in data.seller)) &&
+             data.price is number && data.price >= 0;
+    }
+
+    function isValidOwnerStatusTransition() {
+      return (
+        (existing().status == 'active' && incoming().status == 'inactive') ||
+        (existing().status == 'inactive' && incoming().status == 'active') ||
+        (existing().status == 'active' && incoming().status == 'sold') ||
+        (existing().status == 'expired' && incoming().status == 'active')
+      );
+    }
+
+    function isPropertyOwnerUpdate() {
+      return isOwner(existing().seller.uid) &&
+             incoming().seller.uid == existing().seller.uid &&
+             incoming().diff(existing()).affectedKeys().hasOnly([
+               'title', 'description', 'price', 'photos', 'images', 
+               'specs', 'location', 'city', 'area', 'condition', 
+               'make', 'model', 'bedrooms', 'bathrooms', 'areaSize', 
+               'areaUnit', 'transmission', 'fuelType', 'features', 
+               'updatedAt', 'purpose', 'propertyType', 'type', 'year', 'mileage',
+               'status', 'last_confirmed_active', 'reactivated_at'
+             ]) &&
+             (
+               (!('status' in incoming().diff(existing()).affectedKeys())) ||
+               isValidOwnerStatusTransition()
+             );
+    }
+
     match /properties/{propertyId} {
       allow read: if true;
-      allow create: if isSignedIn() && isValidVehicle(incoming()) && propertyId == incoming().id;
+      allow create: if isSignedIn() && isValidPropertyCreate(incoming()) && propertyId == incoming().id;
       allow update: if isSignedIn() && (
-        (isOwner(existing().seller.uid) && 
-         incoming().seller.uid == existing().seller.uid &&
-         (!('title_deed_status' in incoming()) || incoming().title_deed_status == existing().title_deed_status)
-        ) || isAdmin()
+        isPropertyOwnerUpdate() ||
+        (
+          // Public viewer view/favorite counter increment with limits
+          incoming().diff(existing()).affectedKeys().hasOnly(['views', 'favorites']) &&
+          (!('views' in incoming().diff(existing()).affectedKeys()) || (incoming().views is number && incoming().views <= existing().views + 10 && incoming().views >= existing().views)) &&
+          (!('favorites' in incoming().diff(existing()).affectedKeys()) || (incoming().favorites is number && incoming().favorites <= existing().favorites + 1 && incoming().favorites >= existing().favorites - 1))
+        ) ||
+        isAdmin()
       );
       allow delete: if isSignedIn() && (isOwner(existing().seller.uid) || isAdmin());
     }
@@ -169,36 +247,13 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
-    
     match /category_fields/{fieldId} {
       allow read: if true;
       allow write: if isAdmin();
     }
-    
     match /category_versions/{versionId} {
       allow read: if true;
       allow write: if isAdmin();
-    }
-
-    // ---------------------------------------------------------
-    // Vehicles / Legacy listings
-    // ---------------------------------------------------------
-    function isValidVehicle(data) {
-      return data.keys().hasAll(['id', 'make', 'model', 'price', 'seller', 'status', 'createdAt']) &&
-             data.seller.uid == request.auth.uid &&
-             data.price is number && data.price >= 0;
-    }
-
-    match /vehicles/{vehicleId} {
-      allow read: if true;
-      allow create: if isSignedIn() && isValidVehicle(incoming()) && vehicleId == incoming().id;
-      allow update: if isSignedIn() && (
-        (isOwner(existing().seller.uid) && 
-         incoming().seller.uid == existing().seller.uid &&
-         incoming().diff(existing()).affectedKeys().hasOnly(['make', 'model', 'year', 'price', 'mileage', 'location', 'city', 'area', 'images', 'type', 'category', 'condition', 'transmission', 'fuelType', 'engineSize', 'specs', 'features', 'description', 'status', 'updatedAt', 'isAuctionVerified', 'isFeatured', 'featuredUntil', 'views', 'favorites', 'badges', 'propertyType'])
-        ) || isAdmin()
-      );
-      allow delete: if isSignedIn() && (isOwner(existing().seller.uid) || isAdmin());
     }
 
     // ---------------------------------------------------------
@@ -213,12 +268,13 @@ service cloud.firestore {
     }
 
     // ---------------------------------------------------------
-    // Conversations
+    // Conversations & Messages (participantIds immutable)
     // ---------------------------------------------------------
     match /conversations/{convId} {
       allow read: if isSignedIn() && (resource == null || request.auth.uid in resource.data.participantIds || isAdmin());
       allow create: if isSignedIn() && (request.auth.uid in incoming().participantIds) && convId == incoming().id;
-      allow update: if isSignedIn() && (request.auth.uid in resource.data.participantIds || isAdmin());
+      allow update: if isSignedIn() && (request.auth.uid in resource.data.participantIds || isAdmin()) &&
+                    incoming().participantIds == existing().participantIds;
       
       match /messages/{messageId} {
         allow read: if isSignedIn() && (get(/databases/$(database)/documents/conversations/$(convId)).data.participantIds.hasAny([request.auth.uid]) || isAdmin());
@@ -247,10 +303,12 @@ service cloud.firestore {
     match /security_alerts/{alertId} {
       allow read, write: if isAdmin();
     }
+
+    // audit_logs: admin/server only
     match /audit_logs/{logId} {
-      allow read: if isAdmin();
-      allow create: if isSignedIn();
+      allow read, write: if isAdmin();
     }
+
     match /banners/{bannerId} {
       allow read: if true;
       allow write: if isAdmin();
@@ -275,33 +333,66 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // saved_searches create: userId must equal auth.uid
     match /saved_searches/{searchId} {
       allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if isSignedIn() && (incoming().userId == request.auth.uid || request.auth.uid != null);
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
       allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
       allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
     }
+
+    // ---------------------------------------------------------
+    // Ads Configurations: ad updates require sign-in; hasOnly with increment limit
+    // ---------------------------------------------------------
     match /ads_configurations/{adId} {
       allow read: if true;
       allow create: if isAdmin();
-      allow update: if isAdmin() || (
-        incoming().diff(existing()).affectedKeys().hasAny(['views', 'clicks']) &&
-        incoming().diff(existing()).affectedKeys().size() <= 2 &&
-        incoming().id == existing().id &&
-        incoming().status == existing().status &&
-        incoming().title == existing().title &&
-        incoming().imageUrl == existing().imageUrl
+      allow update: if isSignedIn() && (
+        isAdmin() ||
+        (
+          incoming().diff(existing()).affectedKeys().hasOnly(['views', 'clicks']) &&
+          incoming().diff(existing()).affectedKeys().size() <= 2 &&
+          (!('views' in incoming().diff(existing()).affectedKeys()) || (incoming().views is number && incoming().views <= existing().views + 10 && incoming().views >= existing().views)) &&
+          (!('clicks' in incoming().diff(existing()).affectedKeys()) || (incoming().clicks is number && incoming().clicks <= existing().clicks + 2 && incoming().clicks >= existing().clicks)) &&
+          incoming().id == existing().id &&
+          incoming().status == existing().status &&
+          incoming().title == existing().title &&
+          incoming().imageUrl == existing().imageUrl
+        )
       );
       allow delete: if isAdmin();
     }
+
+    // ---------------------------------------------------------
+    // Reels: video create only for verified users (identity or business);
+    // require status 'pending_review', counters 0, no featured flags;
+    // hasOnly on counters with increment limit on update.
+    // ---------------------------------------------------------
+    function isValidReelCreate(data) {
+      return data.sellerId == request.auth.uid &&
+             data.status == 'pending_review' &&
+             (!('viewsCount' in data) || data.viewsCount == 0) &&
+             (!('likesCount' in data) || data.likesCount == 0) &&
+             (!('commentsCount' in data) || data.commentsCount == 0) &&
+             (!('isFeatured' in data) || data.isFeatured == false) &&
+             (!('featuredUntil' in data));
+    }
+
     match /reels/{reelId} {
       allow read: if true;
-      allow create: if isSignedIn() && incoming().sellerId == request.auth.uid;
+      allow create: if isVerifiedUser() && isValidReelCreate(incoming());
       allow update: if isSignedIn() && (
-        (existing().sellerId == request.auth.uid && incoming().sellerId == request.auth.uid) ||
-        (incoming().diff(existing()).affectedKeys().hasAny(['likesCount', 'commentsCount', 'viewsCount']) &&
-         incoming().diff(existing()).affectedKeys().size() <= 3) ||
-        isAdmin()
+        isAdmin() ||
+        (existing().sellerId == request.auth.uid && incoming().sellerId == request.auth.uid &&
+         incoming().diff(existing()).affectedKeys().hasOnly(['title', 'caption', 'tags', 'propertyId', 'thumbnailUrl', 'updatedAt'])) ||
+        (
+          incoming().diff(existing()).affectedKeys().hasOnly(['likesCount', 'commentsCount', 'viewsCount']) &&
+          incoming().sellerId == existing().sellerId &&
+          (!('viewsCount' in incoming().diff(existing()).affectedKeys()) || (incoming().viewsCount is number && incoming().viewsCount <= existing().viewsCount + 10 && incoming().viewsCount >= existing().viewsCount)) &&
+          (!('likesCount' in incoming().diff(existing()).affectedKeys()) || (incoming().likesCount is number && incoming().likesCount <= existing().likesCount + 1 && incoming().likesCount >= existing().likesCount)) &&
+          (!('commentsCount' in incoming().diff(existing()).affectedKeys()) || (incoming().commentsCount is number && incoming().commentsCount <= existing().commentsCount + 1 && incoming().commentsCount >= existing().commentsCount))
+        )
       );
       allow delete: if isSignedIn() && (existing().sellerId == request.auth.uid || isAdmin());
     }
@@ -334,28 +425,58 @@ service cloud.firestore {
       );
       allow create: if isSignedIn() && incoming().userId == request.auth.uid && incoming().status == 'pending';
       allow update: if isSignedIn() && (
-        (existing().userId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['priceOffer', 'notes', 'status'])) ||
+        (existing().userId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['priceOffer', 'notes', 'status']) && incoming().status in ['pending', 'cancelled']) ||
         (get(/databases/$(database)/documents/reels/$(existing().reelId)).data.sellerId == request.auth.uid &&
-         incoming().diff(existing()).affectedKeys().hasOnly(['status'])) ||
+         incoming().diff(existing()).affectedKeys().hasOnly(['status']) && incoming().status in ['accepted', 'rejected', 'pending']) ||
         isAdmin()
       );
       allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
     }
 
+    // ---------------------------------------------------------
+    // Property Videos: create only for verified users (identity or business);
+    // require status 'pending_review', counters 0, no featured flags;
+    // hasOnly with increment limit on update.
+    // ---------------------------------------------------------
+    function isValidPropertyVideoCreate(data) {
+      return data.creatorId == request.auth.uid &&
+             data.status == 'pending_review' &&
+             (!('viewsCount' in data) || data.viewsCount == 0) &&
+             (!('likesCount' in data) || data.likesCount == 0) &&
+             (!('sharesCount' in data) || data.sharesCount == 0) &&
+             (!('savesCount' in data) || data.savesCount == 0) &&
+             (!('listingClicksCount' in data) || data.listingClicksCount == 0) &&
+             (!('isFeatured' in data) || data.isFeatured == false) &&
+             (!('featuredUntil' in data));
+    }
+
     match /property_videos/{videoId} {
       allow read: if true;
-      allow create: if isSignedIn();
+      allow create: if isVerifiedUser() && isValidPropertyVideoCreate(incoming());
       allow update: if isSignedIn() && (
         isAdmin() ||
-        (existing().creatorId == request.auth.uid && incoming().creatorId == request.auth.uid) ||
-        (incoming().diff(existing()).affectedKeys().hasAny(['viewsCount', 'likesCount', 'sharesCount', 'savesCount', 'listingClicksCount', 'watchTimeTotalSeconds']))
+        (existing().creatorId == request.auth.uid && incoming().creatorId == request.auth.uid &&
+         incoming().diff(existing()).affectedKeys().hasOnly(['title', 'caption', 'tags', 'propertyId', 'thumbnailUrl', 'overlaySpec', 'trimRange', 'updatedAt'])) ||
+        (
+          incoming().diff(existing()).affectedKeys().hasOnly(['viewsCount', 'likesCount', 'sharesCount', 'savesCount', 'listingClicksCount', 'watchTimeTotalSeconds']) &&
+          incoming().creatorId == existing().creatorId &&
+          incoming().status == existing().status &&
+          (!('viewsCount' in incoming().diff(existing()).affectedKeys()) || (incoming().viewsCount is number && incoming().viewsCount <= existing().viewsCount + 10 && incoming().viewsCount >= existing().viewsCount)) &&
+          (!('likesCount' in incoming().diff(existing()).affectedKeys()) || (incoming().likesCount is number && incoming().likesCount <= existing().likesCount + 1 && incoming().likesCount >= existing().likesCount)) &&
+          (!('sharesCount' in incoming().diff(existing()).affectedKeys()) || (incoming().sharesCount is number && incoming().sharesCount <= existing().sharesCount + 1 && incoming().sharesCount >= existing().sharesCount)) &&
+          (!('savesCount' in incoming().diff(existing()).affectedKeys()) || (incoming().savesCount is number && incoming().savesCount <= existing().savesCount + 1 && incoming().savesCount >= existing().savesCount)) &&
+          (!('listingClicksCount' in incoming().diff(existing()).affectedKeys()) || (incoming().listingClicksCount is number && incoming().listingClicksCount <= existing().listingClicksCount + 1 && incoming().listingClicksCount >= existing().listingClicksCount))
+        )
       );
       allow delete: if isSignedIn() && (existing().creatorId == request.auth.uid || isAdmin());
     }
 
+    // ---------------------------------------------------------
+    // Video Reports: Sign-in required
+    // ---------------------------------------------------------
     match /video_reports/{reportId} {
       allow read: if isAdmin();
-      allow create: if true;
+      allow create: if isSignedIn() && incoming().reporterId == request.auth.uid;
       allow update, delete: if isAdmin();
     }
 
@@ -364,8 +485,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ---------------------------------------------------------
+    // Admins Collection: NOT readable by normal users
+    // ---------------------------------------------------------
     match /admins/{adminId} {
-      allow read: if isSignedIn();
+      allow read: if isAdmin();
       allow write: if false;
     }
 

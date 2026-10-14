@@ -375,7 +375,7 @@ export default function InsuranceManagement() {
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {/* Tab Switcher modeled after standard segment controls */}
-          <div className="flex p-0.5 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
+          <div className="flex p-0.5 bg-[var(--bg-inset)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
             <button
               onClick={() => setActiveTab('requests')}
               className={cn(
@@ -408,7 +408,7 @@ export default function InsuranceManagement() {
                 placeholder="Search policies, vehicles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           )}
@@ -419,7 +419,7 @@ export default function InsuranceManagement() {
                 <button 
                   onClick={seedProviders}
                   disabled={isUpdating}
-                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[var(--text-primary)] dark:hover:bg-white/5 text-[var(--text-primary)] dark:text-white transition-all flex items-center justify-center"
+                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[var(--bg-inset)] dark:hover:bg-white/5 text-[var(--text-primary)] dark:text-white transition-all flex items-center justify-center"
                 >
                   <Activity className="w-3.5 h-3.5 mr-1.5 text-apple-blue" /> Seed Providers
                 </button>
@@ -484,7 +484,7 @@ export default function InsuranceManagement() {
                       : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
@@ -602,7 +602,7 @@ export default function InsuranceManagement() {
                 >
                   <div className="p-6 flex-1 space-y-6">
                     <div className="flex justify-between items-start">
-                      <div className="w-16 h-16 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                      <div className="w-16 h-16 rounded-xl bg-[var(--bg-inset)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                         <img 
                           src={company.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=007AFF&color=fff`} 
                           alt={company.name}

@@ -201,14 +201,14 @@ export default function AuditLog() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
             Audit Ledger
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-apple-text-muted dark:text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Review cryptographically signed administrative audit trails and systemic integrity diagnostics.
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           <div className="relative group min-w-[200px] sm:w-64">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-focus-within:text-apple-blue transition-colors duration-300" />
             <input
               type="text"
               placeholder="Search audit logs..."
@@ -236,7 +236,7 @@ export default function AuditLog() {
                 stat.color === 'blue' && "bg-apple-blue shadow-apple-blue/10",
                 stat.color === 'orange' && "bg-apple-orange shadow-apple-orange/10",
                 stat.color === 'green' && "bg-apple-green shadow-apple-green/10",
-                stat.color === 'purple' && "bg-[#AF52DE] shadow-purple-500/10"
+                stat.color === 'purple' && "bg-[var(--spectrum-plum)] shadow-purple-500/10"
               )}>
                 <stat.icon className="w-5 h-5" />
               </div>
@@ -249,11 +249,11 @@ export default function AuditLog() {
             </div>
 
             <div className="space-y-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">
                 {stat.label}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white font-sans">{stat.value}</h3>
-              <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">{stat.description}</p>
+              <p className="text-[10px] text-apple-text-muted font-normal leading-relaxed">{stat.description}</p>
             </div>
           </motion.div>
         ))}
@@ -272,10 +272,10 @@ export default function AuditLog() {
                 "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                 isActive
                   ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                  : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
               )}
             >
-              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-apple-text-muted")}>{count}</span>
             </button>
           );
         })}
@@ -319,8 +319,8 @@ export default function AuditLog() {
                   {/* Log Details */}
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                     <div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#86868B] uppercase tracking-wider mb-1">
-                         <Clock className="w-3 h-3 text-[#86868B]" />
+                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-apple-text-muted uppercase tracking-wider mb-1">
+                         <Clock className="w-3 h-3 text-apple-text-muted" />
                          Log ID #{log.id}
                          <span className="opacity-30">•</span>
                          <span>Actor: {log.adminId}</span>
@@ -332,7 +332,7 @@ export default function AuditLog() {
                         Action: <span className="font-bold text-apple-blue font-mono">{log.action.replace(/_/g, ' ')}</span>
                       </h2>
                       
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[#86868B] font-normal">
+                      <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-apple-text-muted font-normal">
                          <span className="font-semibold text-purple-500">Target: {log.targetType} ({log.targetId})</span>
                          <span className="opacity-30">/</span>
                          <span className="truncate max-w-[400px]">{log.details}</span>
@@ -342,23 +342,23 @@ export default function AuditLog() {
                     {/* Bento Micro-Stats box matrix matching Seller Console layout precisely */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Origin IP</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Origin IP</p>
                           <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-mono mt-0.5">
                             {log.ipAddress || '0.0.0.0'}
                           </p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Device/Client</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Device/Client</p>
                           <p className="text-xs font-bold text-apple-blue truncate mt-0.5" title={log.userAgent}>
                             {log.userAgent.split('/')[0] || 'Unknown'}
                           </p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Integrity check</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Integrity check</p>
                           <p className="text-xs font-bold text-apple-green font-mono mt-0.5">Verified</p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Platform Security</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Platform Security</p>
                           <p className="text-xs font-bold text-apple-green font-mono mt-0.5">SSL Secured</p>
                        </div>
                     </div>
@@ -397,7 +397,7 @@ export default function AuditLog() {
             >
               <CheckCircle2 className="w-10 h-10 text-apple-green/60 mx-auto mb-3" />
               <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">Audit Log Empty</h3>
-              <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
+              <p className="text-xs text-apple-text-muted max-w-xs mx-auto mb-4 leading-relaxed font-normal">
                 No log messages match your search criteria.
               </p>
               <button 
@@ -422,13 +422,13 @@ export default function AuditLog() {
             </div>
             <div className="flex-1 text-center sm:text-left min-w-0">
                <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white mb-0.5">Automated Risk Analysis Active</h4>
-               <p className="text-[11px] text-[#86868B] font-normal leading-relaxed">
+               <p className="text-[11px] text-apple-text-muted font-normal leading-relaxed">
                  All platform actions and admin decisions are dynamically indexed, verified via cryptographic integrity protocols, and securely synchronized in real-time.
                </p>
                <div className="flex items-center justify-center sm:justify-start gap-3 mt-2">
                   <div className="flex items-center gap-1.5">
                      <div className="w-1.5 h-1.5 rounded-full bg-apple-green animate-pulse" />
-                     <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Scanning Active</span>
+                     <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted">Scanning Active</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                      <div className="w-1.5 h-1.5 rounded-full bg-apple-blue" />

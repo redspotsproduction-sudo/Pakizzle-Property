@@ -131,7 +131,7 @@ export default function FinancingComparisonTable() {
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
             Compare Pakizzle Capital vs Top Banks
           </h2>
-          <p className="text-xs text-[#86868B] max-w-2xl leading-relaxed">
+          <p className="text-xs text-apple-text-muted max-w-2xl leading-relaxed">
             Choose from Pakistan's leading auto leasing products. Select and lock preferred rates instantly.
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function FinancingComparisonTable() {
               "px-4 py-1.5 text-[10px] font-bold rounded-full transition-all",
               filterType === 'all'
                 ? "bg-white dark:bg-[#1C1C1E] text-[#1D1D1F] dark:text-white shadow-sm"
-                : "text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                : "text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
             )}
           >
             All Products
@@ -155,7 +155,7 @@ export default function FinancingComparisonTable() {
               "px-4 py-1.5 text-[10px] font-bold rounded-full transition-all",
               filterType === 'islamic'
                 ? "bg-emerald-500 text-white shadow-sm"
-                : "text-[#86868B] hover:text-emerald-500"
+                : "text-apple-text-muted hover:text-emerald-500"
             )}
           >
             Islamic (Ijarah)
@@ -166,7 +166,7 @@ export default function FinancingComparisonTable() {
               "px-4 py-1.5 text-[10px] font-bold rounded-full transition-all",
               filterType === 'conventional'
                 ? "bg-apple-blue text-white shadow-sm"
-                : "text-[#86868B] hover:text-apple-blue"
+                : "text-apple-text-muted hover:text-apple-blue"
             )}
           >
             Conventional
@@ -178,7 +178,7 @@ export default function FinancingComparisonTable() {
       <div className="hidden md:block overflow-x-auto rounded-3xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--surface-dark)] shadow-[0_4px_30px_rgba(0,0,0,0.01)] transition-colors duration-300">
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
-            <tr className="border-b border-black/[0.03] dark:border-white/[0.02] bg-[#F5F5F7]/50 dark:bg-black/20 text-[10px] font-black uppercase text-[#86868B] tracking-wider">
+            <tr className="border-b border-black/[0.03] dark:border-white/[0.02] bg-[#F5F5F7]/50 dark:bg-black/20 text-[10px] font-black uppercase text-apple-text-muted tracking-wider">
               <th className="py-5 px-6">Financing Solution</th>
               <th className="py-5 px-4">Type / Markup</th>
               <th className="py-5 px-4">Processing Fee</th>
@@ -203,8 +203,8 @@ export default function FinancingComparisonTable() {
                   {/* Name and logo */}
                   <td className="py-6 px-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.05] dark:border-white/10 shrink-0 flex items-center justify-center font-bold text-[#86868B] text-[10px]">
-                        <Building2 className="w-5 h-5 text-[#86868B]" />
+                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.05] dark:border-white/10 shrink-0 flex items-center justify-center font-bold text-apple-text-muted text-[10px]">
+                        <Building2 className="w-5 h-5 text-apple-text-muted" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -216,7 +216,7 @@ export default function FinancingComparisonTable() {
                             </span>
                           )}
                         </div>
-                        <p className="text-[10px] text-[#86868B] mt-0.5 line-clamp-1 max-w-[280px]">{prod.usp}</p>
+                        <p className="text-[10px] text-apple-text-muted mt-0.5 line-clamp-1 max-w-[280px]">{prod.usp}</p>
                       </div>
                     </div>
                   </td>
@@ -240,14 +240,14 @@ export default function FinancingComparisonTable() {
                   <td className="py-6 px-4">
                     <div className="space-y-0.5">
                       <span className="font-bold text-[#1D1D1F] dark:text-white block">{prod.processingFee}</span>
-                      <span className="text-[9px] text-[#86868B]">{prod.minDownPayment}</span>
+                      <span className="text-[9px] text-apple-text-muted">{prod.minDownPayment}</span>
                     </div>
                   </td>
 
                   {/* Speed */}
                   <td className="py-6 px-4">
                     <div className="flex items-center gap-1.5">
-                      <Clock className={cn("w-3.5 h-3.5 shrink-0", prod.id === 'pakizzle_capital' ? "text-amber-500" : "text-[#86868B]")} />
+                      <Clock className={cn("w-3.5 h-3.5 shrink-0", prod.id === 'pakizzle_capital' ? "text-amber-500" : "text-apple-text-muted")} />
                       <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.approvalSpeed}</span>
                     </div>
                   </td>
@@ -308,8 +308,8 @@ export default function FinancingComparisonTable() {
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/5 dark:border-white/10 shrink-0 flex items-center justify-center font-bold text-[#86868B]">
-                    <Building2 className="w-5 h-5 text-[#86868B]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/5 dark:border-white/10 shrink-0 flex items-center justify-center font-bold text-apple-text-muted">
+                    <Building2 className="w-5 h-5 text-apple-text-muted" />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -334,15 +334,15 @@ export default function FinancingComparisonTable() {
               {/* 3-Column Key Spec Matrix */}
               <div className="grid grid-cols-3 gap-2 py-2.5 px-3 rounded-xl bg-[#F5F5F7]/70 dark:bg-white/[0.02] border border-black/[0.03] dark:border-white/[0.03] mb-3">
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] block">Markup</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted block">Markup</span>
                   <span className="font-extrabold font-mono text-xs text-[#1D1D1F] dark:text-white mt-0.5 block truncate">{prod.apr}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] block">Processing</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted block">Processing</span>
                   <span className="font-bold text-xs text-[#1D1D1F] dark:text-white mt-0.5 block truncate">{prod.processingFee}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] block">Speed</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted block">Speed</span>
                   <span className="font-semibold text-xs text-[#1D1D1F] dark:text-white mt-0.5 block truncate">{prod.approvalSpeed}</span>
                 </div>
               </div>
@@ -360,17 +360,17 @@ export default function FinancingComparisonTable() {
 
                 {isSelected && (
                   <div className="pt-2 pb-1 border-t border-black/[0.04] dark:border-white/[0.04] space-y-2 text-xs">
-                    <p className="text-[11px] text-[#86868B] leading-relaxed">{prod.usp}</p>
+                    <p className="text-[11px] text-apple-text-muted leading-relaxed">{prod.usp}</p>
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#86868B]">Documentation:</span>
+                      <span className="text-apple-text-muted">Documentation:</span>
                       <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.documentsLevel}</span>
                     </div>
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#86868B]">Down Payment:</span>
+                      <span className="text-apple-text-muted">Down Payment:</span>
                       <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.minDownPayment}</span>
                     </div>
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#86868B]">Insurance/Takaful:</span>
+                      <span className="text-apple-text-muted">Insurance/Takaful:</span>
                       <span className="font-semibold text-[#1D1D1F] dark:text-white">{prod.insuranceRequired}</span>
                     </div>
                   </div>
@@ -401,7 +401,7 @@ export default function FinancingComparisonTable() {
           <div className="w-9 h-9 rounded-full bg-apple-blue/5 dark:bg-apple-blue/10 flex items-center justify-center text-apple-blue shrink-0">
             <Info className="w-4 h-4" />
           </div>
-          <p className="text-[10px] text-[#86868B] max-w-xl leading-relaxed">
+          <p className="text-[10px] text-apple-text-muted max-w-xl leading-relaxed">
             <strong>Regulatory Guidelines Note:</strong> Under current prudential regulations of Pakistan, the maximum loan amount for locally assembled vehicles is subject to salary limits, and some imported cars might carry restriction thresholds. Our credit team handles full verification for you.
           </p>
         </div>

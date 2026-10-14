@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { Search, User, Menu, Car, Plus, Heart, LogOut, LayoutDashboard, ShieldCheck, MessageSquare, CheckCircle2, MoreHorizontal, Settings, MapPin, ChevronDown, Sun, Moon, Monitor, Bell, Sparkles, Video, Home } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation as useRouterLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
@@ -17,6 +17,8 @@ import AuthModal from "./AuthModal";
 import PakizzleLogo from "./PakizzleLogo";
 
 export default function Header() {
+  const routerLocation = useRouterLocation();
+  const isMessagesActive = routerLocation.pathname === '/chat' || routerLocation.pathname === '/messages' || routerLocation.pathname.startsWith('/dashboard/messages');
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMessagesDropdown, setShowMessagesDropdown] = useState(false);
@@ -281,7 +283,9 @@ export default function Header() {
               onClick={() => setShowMessagesDropdown(!showMessagesDropdown)}
               className={cn(
                 "relative p-2.5 rounded-full transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group flex flex-col items-center",
-                showMessagesDropdown ? "bg-apple-blue/10 text-apple-blue" : "hover:bg-apple-card-bg text-apple-text-muted hover:text-apple-text"
+                (showMessagesDropdown || isMessagesActive) 
+                  ? "bg-apple-blue/15 text-apple-blue" 
+                  : "hover:bg-apple-card-bg text-apple-text-muted hover:text-apple-text"
               )}
             >
               <MessageSquare className="w-5 h-5" />

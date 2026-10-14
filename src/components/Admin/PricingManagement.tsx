@@ -333,7 +333,7 @@ export default function PricingManagement() {
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {/* Main SubTab togglers */}
-          <div className="flex p-0.5 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
+          <div className="flex p-0.5 bg-[var(--bg-inset)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
             <button
               onClick={() => setActiveSubTab('plans')}
               className={cn(
@@ -427,12 +427,12 @@ export default function PricingManagement() {
                   placeholder="Search Tiers, Descriptions..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                  className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
                 />
               </div>
 
               {/* Segment Segment filters */}
-              <div className="flex p-0.5 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start sm:self-auto">
+              <div className="flex p-0.5 bg-[var(--bg-inset)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start sm:self-auto">
                 {[
                   { id: 'all', label: 'All Segments' },
                   { id: 'user', label: '👤 Users' },
@@ -469,7 +469,7 @@ export default function PricingManagement() {
                 <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
                   <Table>
                     <TableHeader>
-                      <TableRow className="border-apple-border/10 bg-[var(--text-primary)] dark:bg-white/[0.02]">
+                      <TableRow className="border-apple-border/10 bg-[var(--bg-inset)] dark:bg-white/[0.02]">
                         <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 pl-6 w-[200px]">Tier Info & Target</TableHead>
                         <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 w-[120px]">Monetization Rate</TableHead>
                         <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4">Listing & Featured Limits</TableHead>
@@ -526,22 +526,22 @@ export default function PricingManagement() {
                             {/* Limits */}
                             <TableCell className="py-4">
                               <div className="flex flex-wrap gap-1.5 max-w-[240px]">
-                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--text-primary)] dark:bg-white/5 py-0.5 px-2 font-medium">
+                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--bg-inset)] dark:bg-white/5 py-0.5 px-2 font-medium">
                                   Listings: {plan.listingLimit === 9999 ? "Unlimited" : plan.listingLimit ?? 1}
                                 </Badge>
-                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--text-primary)] dark:bg-white/5 py-0.5 px-2 font-medium">
+                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--bg-inset)] dark:bg-white/5 py-0.5 px-2 font-medium">
                                   Featured Boosts: {plan.featuredLimit ?? 0}
                                 </Badge>
-                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--text-primary)] dark:bg-white/5 py-0.5 px-2 font-medium">
+                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--bg-inset)] dark:bg-white/5 py-0.5 px-2 font-medium">
                                   Images Max: {plan.imageLimit ?? 10}
                                 </Badge>
                                 <Badge variant="outline" className={cn(
                                   "text-[9px] border-black/[0.06] dark:border-white/[0.06] py-0.5 px-2 font-medium",
-                                  plan.isVideoAllowed ? "bg-apple-green/10 text-apple-green border-apple-green/20" : "bg-[var(--text-primary)] dark:bg-white/5 opacity-50"
+                                  plan.isVideoAllowed ? "bg-apple-green/10 text-apple-green border-apple-green/20" : "bg-[var(--bg-inset)] dark:bg-white/5 opacity-50"
                                 )}>
                                   Video Uploads: {plan.isVideoAllowed ? "Allowed" : "No"}
                                 </Badge>
-                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--text-primary)] dark:bg-white/5 py-0.5 px-2 font-medium">
+                                <Badge variant="outline" className="text-[9px] border-black/[0.06] dark:border-white/[0.06] bg-[var(--bg-inset)] dark:bg-white/5 py-0.5 px-2 font-medium">
                                   Bump: Every {plan.boostIntervalDays ?? 7} Days
                                 </Badge>
                               </div>
@@ -636,7 +636,7 @@ export default function PricingManagement() {
                 placeholder="Search Categories, Slugs..." 
                 value={catSearch}
                 onChange={(e) => setCatSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
 
@@ -644,7 +644,7 @@ export default function PricingManagement() {
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-apple-border/10 bg-[var(--text-primary)] dark:bg-white/[0.02]">
+                  <TableRow className="border-apple-border/10 bg-[var(--bg-inset)] dark:bg-white/[0.02]">
                     <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 pl-6">Classification Node</TableHead>
                     <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 text-center w-[180px]">Congestion State</TableHead>
                     <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 text-center w-[200px]">Deduction Price (Token)</TableHead>
@@ -672,7 +672,7 @@ export default function PricingManagement() {
                             onClick={() => handleUpdateCategoryRule(cat.id, !localIsCrowded, localCost)}
                             className={cn(
                               "px-3 py-1 text-[8px] font-bold uppercase tracking-wider rounded-full border-none shadow-sm transition-all duration-300",
-                              localIsCrowded ? "bg-red-500 text-white animate-pulse" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)] dark:text-white/60 hover:bg-black/[0.04]"
+                              localIsCrowded ? "bg-red-500 text-white animate-pulse" : "bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)] dark:text-white/60 hover:bg-black/[0.04]"
                             )}
                           >
                             {localIsCrowded ? "CROWDED - Dynamic Penalty" : "CLEAR - Standard"}
@@ -682,7 +682,7 @@ export default function PricingManagement() {
                           <div className="flex items-center justify-center gap-2">
                             <input 
                               type="number" 
-                              className="w-16 h-8 rounded-lg bg-[var(--text-primary)] dark:bg-white/5 border border-black/[0.06] dark:border-white/[0.06] text-center font-bold text-xs outline-none focus:border-apple-blue/40"
+                              className="w-16 h-8 rounded-lg bg-[var(--bg-inset)] dark:bg-white/5 border border-black/[0.06] dark:border-white/[0.06] text-center font-bold text-xs outline-none focus:border-apple-blue/40"
                               defaultValue={localCost}
                               onBlur={(e) => {
                                 const newval = parseInt(e.target.value) || 0;
@@ -722,7 +722,7 @@ export default function PricingManagement() {
                 placeholder="Lookup user by display name or email..." 
                 value={userSearch}
                 onChange={(e) => setUserSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
 
@@ -730,7 +730,7 @@ export default function PricingManagement() {
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden hover:shadow-[0_4px_24px_rgba(0,0,0,0.015)] transition-all duration-300">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-apple-border/10 bg-[var(--text-primary)] dark:bg-white/[0.02]">
+                  <TableRow className="border-apple-border/10 bg-[var(--bg-inset)] dark:bg-white/[0.02]">
                     <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 pl-6">User Identity</TableHead>
                     <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 text-center">Regular Credits Balance</TableHead>
                     <TableHead className="font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] text-[9px] py-4 text-center">Featured Token Balance</TableHead>
@@ -756,7 +756,7 @@ export default function PricingManagement() {
                           {isCurrentUserEditing ? (
                             <input 
                               type="number" 
-                              className="w-16 h-8 rounded-lg bg-[var(--text-primary)] dark:bg-white/5 border border-black/[0.06] dark:border-white/[0.06] text-center font-bold text-xs outline-none"
+                              className="w-16 h-8 rounded-lg bg-[var(--bg-inset)] dark:bg-white/5 border border-black/[0.06] dark:border-white/[0.06] text-center font-bold text-xs outline-none"
                               value={newCredits}
                               onChange={(e) => setNewCredits(parseInt(e.target.value) || 0)}
                             />
@@ -768,7 +768,7 @@ export default function PricingManagement() {
                           {isCurrentUserEditing ? (
                             <input 
                               type="number" 
-                              className="w-16 h-8 rounded-lg bg-[var(--text-primary)] dark:bg-white/5 border border-black/[0.06] dark:border-white/[0.06] text-center font-bold text-xs outline-none"
+                              className="w-16 h-8 rounded-lg bg-[var(--bg-inset)] dark:bg-white/5 border border-black/[0.06] dark:border-white/[0.06] text-center font-bold text-xs outline-none"
                               value={newFeatured}
                               onChange={(e) => setNewFeatured(parseInt(e.target.value) || 0)}
                             />
@@ -808,7 +808,7 @@ export default function PricingManagement() {
 
       {/* Advanced pricing configuration modal with dynamic interactive live preview */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-[92vw] lg:max-w-5xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-5xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--bg-surface)] shadow-2xl flex flex-col">
           <Tabs defaultValue="configure" className="flex flex-col h-full overflow-hidden">
             {/* Header */}
             <header className="p-6 border-b border-apple-border/10 flex items-center justify-between bg-neutral-50 dark:bg-white/[0.02] shrink-0">
@@ -850,7 +850,7 @@ export default function PricingManagement() {
               </div>
 
               <div className="flex items-center gap-4">
-                <TabsList className="bg-[var(--text-primary)] dark:bg-white/5 p-1 rounded-xl">
+                <TabsList className="bg-[var(--bg-inset)] dark:bg-white/5 p-1 rounded-xl">
                   <TabsTrigger value="configure" className="rounded-lg text-xs font-bold px-3 py-1.5 data-[state=active]:bg-white dark:data-[state=active]:bg-apple-surface data-[state=active]:text-apple-blue flex items-center gap-1.5">
                     <Sliders className="w-3.5 h-3.5" /> Plan Configurations
                   </TabsTrigger>
@@ -858,7 +858,7 @@ export default function PricingManagement() {
                     <Sparkles className="w-3.5 h-3.5" /> Sandbox & Economics
                   </TabsTrigger>
                 </TabsList>
-                <Button variant="ghost" className="rounded-full h-8 w-8 p-0 hover:bg-[var(--text-primary)] dark:hover:bg-white/5 flex items-center justify-center text-xs" onClick={() => setIsModalOpen(false)}>
+                <Button variant="ghost" className="rounded-full h-8 w-8 p-0 hover:bg-[var(--bg-inset)] dark:hover:bg-white/5 flex items-center justify-center text-xs" onClick={() => setIsModalOpen(false)}>
                   ✕
                 </Button>
               </div>
@@ -868,7 +868,7 @@ export default function PricingManagement() {
             <TabsContent value="configure" className="flex-1 overflow-hidden m-0 outline-none flex flex-col">
               <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar">
                 {/* Upper description / help banner matching User Dossier style */}
-                <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
+                <div className="bg-[var(--bg-inset)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
                   <h3 className="text-sm font-bold flex items-center gap-1.5 text-apple-blue">
                     <Sliders className="w-4 h-4" /> Comprehensive Service Plan Architect
                   </h3>
@@ -880,7 +880,7 @@ export default function PricingManagement() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Column 1: Core Parameters & Aesthetics */}
                   <div className="space-y-6">
-                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                    <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-text-muted flex items-center gap-2">
                         <CreditCard className="w-3.5 h-3.5 text-apple-blue" /> Core Identity & Branding
                       </h4>
@@ -963,7 +963,7 @@ export default function PricingManagement() {
                       </div>
                     </div>
 
-                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                    <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-text-muted flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-apple-orange" /> Segment & Billing Terms
                       </h4>
@@ -1010,7 +1010,7 @@ export default function PricingManagement() {
 
                   {/* Column 2: Allocations, SLA & Advanced Switches */}
                   <div className="space-y-6">
-                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                    <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-text-muted flex items-center gap-2">
                         <Layers className="w-3.5 h-3.5 text-apple-green" /> Performance Limits & Allocations
                       </h4>
@@ -1058,7 +1058,7 @@ export default function PricingManagement() {
                       </div>
                     </div>
 
-                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
+                    <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-4">
                       <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-apple-text-muted flex items-center gap-2">
                         <ShieldCheck className="w-3.5 h-3.5 text-purple-500" /> Enterprise SLA & Integrations
                       </h4>
@@ -1113,7 +1113,7 @@ export default function PricingManagement() {
                       </div>
                     </div>
 
-                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-2">
+                    <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-wider text-apple-text-muted px-1 block">Custom Highlight Bullet Points (One Per Line)</label>
                       <textarea 
                         value={prevFeaturesText}
@@ -1132,7 +1132,7 @@ export default function PricingManagement() {
                 <Button 
                   type="button" 
                   variant="outline" 
-                  className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--text-primary)] dark:hover:bg-white/5" 
+                  className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--bg-inset)] dark:hover:bg-white/5" 
                   onClick={() => setIsModalOpen(false)}
                 >
                   Cancel
@@ -1151,7 +1151,7 @@ export default function PricingManagement() {
             <TabsContent value="preview" className="flex-1 overflow-hidden m-0 outline-none flex flex-col">
               <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar">
                 {/* Upper description */}
-                <div className="bg-[var(--text-primary)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
+                <div className="bg-[var(--bg-inset)] dark:bg-white/[0.02] p-6 rounded-3xl border border-apple-border/5 space-y-2">
                   <h3 className="text-sm font-bold flex items-center gap-1.5 text-apple-orange">
                     <Sparkles className="w-4 h-4 animate-spin text-apple-orange" style={{ animationDuration: '4s' }} /> Real-Time Economy & Financial Simulator
                   </h3>
@@ -1292,7 +1292,7 @@ export default function PricingManagement() {
                   <div className="space-y-4">
                     <h4 className="text-[10px] font-black uppercase tracking-wider text-apple-text-muted px-1">Interactive Economic Simulator</h4>
                     
-                    <div className="p-6 rounded-[2rem] bg-[var(--text-primary)] dark:bg-white/[0.02] border border-apple-border/5 space-y-6">
+                    <div className="p-6 rounded-[2rem] bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-apple-border/5 space-y-6">
                       <div className="space-y-2">
                         <div className="flex justify-between items-center pl-0.5">
                           <label className="text-[10px] font-black uppercase text-[var(--text-secondary)] tracking-wider">Simulated Subscribers</label>
@@ -1381,7 +1381,7 @@ export default function PricingManagement() {
                 <Button 
                   type="button" 
                   variant="outline" 
-                  className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--text-primary)] dark:hover:bg-white/5" 
+                  className="rounded-xl px-5 font-bold text-xs hover:bg-[var(--bg-inset)] dark:hover:bg-white/5" 
                   onClick={() => setIsModalOpen(false)}
                 >
                   Close Sandbox

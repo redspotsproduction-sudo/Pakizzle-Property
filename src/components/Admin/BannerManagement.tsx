@@ -40,6 +40,8 @@ import { categoryAdminService } from "@/services/categoryAdminService";
 import { Banner, Category } from "@/types";
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { storage } from '../../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function BannerManagement() {
   const [banners, setBanners] = useState<Banner[]>([]);
@@ -73,21 +75,28 @@ export default function BannerManagement() {
     return () => unsubscribeBanners();
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 800 * 1024) {
-      toast.error('Image size must be less than 800KB for database performance');
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Creative asset must be less than 10MB');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData(prev => ({ ...prev, image: reader.result as string }));
+    const toastId = toast.loading('Uploading banner creative asset to Storage CDN...');
+    try {
+      const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const storageRef = ref(storage, `banners/banner_${Date.now()}_${cleanName}`);
+      await uploadBytes(storageRef, file, { contentType: file.type || 'image/jpeg' });
+      const cdnUrl = await getDownloadURL(storageRef);
+      setFormData(prev => ({ ...prev, image: cdnUrl }));
       setImageError(false);
-    };
-    reader.readAsDataURL(file);
+      toast.success('Asset uploaded to CDN Storage successfully', { id: toastId });
+    } catch (uploadErr: any) {
+      console.error('Storage upload error for banner:', uploadErr);
+      toast.error(uploadErr.message || 'Failed to upload creative to Storage', { id: toastId });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -165,7 +174,7 @@ export default function BannerManagement() {
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
-          <Badge className="rounded-lg h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)] border-none shadow-sm">
+          <Badge className="rounded-lg h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)] border-none shadow-sm">
             {banners.length} Active Nodes
           </Badge>
         </div>
@@ -442,7 +451,7 @@ export default function BannerManagement() {
                 placeholder="Search creative..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           </div>

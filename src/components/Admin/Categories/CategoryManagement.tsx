@@ -439,7 +439,7 @@ export default function CategoryManagement() {
             
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
               {/* Workspace Pill Switcher */}
-              <div className="flex bg-[var(--text-primary)] dark:bg-white/5 p-1 rounded-xl border border-black/[0.04] dark:border-white/[0.04] mr-1.5 h-10 items-center">
+              <div className="flex bg-[var(--bg-inset)] dark:bg-white/5 p-1 rounded-xl border border-black/[0.04] dark:border-white/[0.04] mr-1.5 h-10 items-center">
                 <button
                   onClick={() => { setMgmtView('categories'); setCurrentParentId(null); setPath([]); }}
                   className={cn(
@@ -476,7 +476,7 @@ export default function CategoryManagement() {
                         <ChevronDown className="w-3.5 h-3.5 opacity-60 ml-0.5" />
                       </Button>
                     } />
-                    <DropdownMenuContent align="end" className="w-56 rounded-xl p-1.5 border-black/[0.06] dark:border-white/[0.06] bg-white/95 dark:bg-[var(--text-primary)]/95 backdrop-blur-xl">
+                    <DropdownMenuContent align="end" className="w-56 rounded-xl p-1.5 border-black/[0.06] dark:border-white/[0.06] bg-white/95 dark:bg-[var(--bg-surface)]/95 backdrop-blur-xl">
                       <DropdownMenuGroup>
                         <DropdownMenuLabel className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Creation Options</DropdownMenuLabel>
                         <DropdownMenuItem onClick={handleAdd} className="rounded-lg py-2.5 px-3 font-semibold text-xs gap-2.5 cursor-pointer">
@@ -518,7 +518,7 @@ export default function CategoryManagement() {
             <div className="flex flex-wrap items-center gap-4 flex-1">
               {mgmtView === 'categories' && (
                 <>
-                  <div className="flex gap-1 p-1 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04]">
+                  <div className="flex gap-1 p-1 bg-[var(--bg-inset)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04]">
                     <button 
                       onClick={() => setViewMode('table')}
                       className={cn("p-1.5 rounded-lg transition-all", viewMode === 'table' ? "bg-white dark:bg-[var(--bg-inset)] shadow-sm text-apple-blue dark:text-white" : "text-[var(--text-secondary)]")}
@@ -539,7 +539,7 @@ export default function CategoryManagement() {
                       placeholder="Search categories..." 
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                      className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
                     />
                   </div>
                 </>
@@ -550,7 +550,7 @@ export default function CategoryManagement() {
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Category Filter</span>
                     <select 
-                      className="h-10 bg-white dark:bg-[var(--text-primary)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl text-xs font-semibold px-3 w-56 outline-none"
+                      className="h-10 bg-white dark:bg-[var(--bg-surface)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl text-xs font-semibold px-3 w-56 outline-none"
                       value={fieldCategoryFilter}
                       onChange={(e) => setFieldCategoryFilter(e.target.value)}
                     >
@@ -564,7 +564,7 @@ export default function CategoryManagement() {
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Type Filter</span>
                     <select 
-                      className="h-10 bg-white dark:bg-[var(--text-primary)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl text-xs font-semibold px-3 w-48 outline-none"
+                      className="h-10 bg-white dark:bg-[var(--bg-surface)] border border-black/[0.06] dark:border-white/[0.06] rounded-xl text-xs font-semibold px-3 w-48 outline-none"
                       value={fieldTypeFilter}
                       onChange={(e) => setFieldTypeFilter(e.target.value)}
                     >
@@ -585,7 +585,7 @@ export default function CategoryManagement() {
                         placeholder="Search fields..." 
                         value={fieldSearchQuery}
                         onChange={(e) => setFieldSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                        className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
                       />
                     </div>
                   </div>
@@ -639,7 +639,7 @@ export default function CategoryManagement() {
                 <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)]/40 dark:bg-white/[0.02]">
+                      <tr className="border-b border-black/[0.04] dark:border-white/[0.04] bg-[var(--bg-inset)]/40 dark:bg-white/[0.02]">
                         <th className="px-8 py-4.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">ID</th>
                         <th className="px-6 py-4.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Name</th>
                         <th className="px-6 py-4.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Image / Icon</th>
@@ -653,7 +653,7 @@ export default function CategoryManagement() {
                       {filteredCategories.map((cat, idx) => {
                         const subCount = categories.filter(c => c.parentId === cat.id).length;
                         return (
-                          <tr key={`tier-row-${cat.id}-${idx}`} className="group hover:bg-[var(--text-primary)]/30 dark:hover:bg-white/[0.01] transition-colors cursor-pointer">
+                          <tr key={`tier-row-${cat.id}-${idx}`} className="group hover:bg-[var(--bg-inset)]/30 dark:hover:bg-white/[0.01] transition-colors cursor-pointer">
                             <td className="px-8 py-5.5 font-mono text-[11px] text-[var(--text-secondary)]">{cat.id.slice(0, 8)}</td>
                             <td className="px-6 py-5.5">
                               <div className="flex items-center gap-3">
@@ -667,7 +667,7 @@ export default function CategoryManagement() {
                               </div>
                             </td>
                             <td className="px-6 py-5.5">
-                              <div className="w-9 h-9 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-center text-lg">
+                              <div className="w-9 h-9 rounded-xl bg-[var(--bg-inset)] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-center text-lg">
                                 {cat.icon || "📁"}
                               </div>
                             </td>
@@ -711,7 +711,7 @@ export default function CategoryManagement() {
                                 <Button 
                                   variant="ghost" 
                                   size="icon" 
-                                  className="w-8.5 h-8.5 rounded-lg hover:bg-[var(--text-primary)] dark:hover:bg-white/5 transition-all text-[var(--text-secondary)]"
+                                  className="w-8.5 h-8.5 rounded-lg hover:bg-[var(--bg-inset)] dark:hover:bg-white/5 transition-all text-[var(--text-secondary)]"
                                   onClick={() => handleLevelDown(cat.id)}
                                 >
                                   <List className="w-4 h-4" />
@@ -774,7 +774,7 @@ export default function CategoryManagement() {
               <div className="bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)]/40 dark:bg-white/[0.02]">
+                    <tr className="border-b border-black/[0.04] dark:border-white/[0.04] bg-[var(--bg-inset)]/40 dark:bg-white/[0.02]">
                       <th className="px-8 py-4.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Type & Key</th>
                       <th className="px-6 py-4.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Display Name</th>
                       <th className="px-6 py-4.5 text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] w-1/4">Scope / Categories</th>
@@ -787,7 +787,7 @@ export default function CategoryManagement() {
                       filteredFields.map((field, idx) => (
                         <tr 
                           key={`field-row-${field.id}-${idx}`}
-                          className="group hover:bg-[var(--text-primary)]/30 dark:hover:bg-white/[0.01] transition-colors cursor-pointer"
+                          className="group hover:bg-[var(--bg-inset)]/30 dark:hover:bg-white/[0.01] transition-colors cursor-pointer"
                           onClick={() => handleEditField(field)}
                         >
                           <td className="px-8 py-5.5">
@@ -815,7 +815,7 @@ export default function CategoryManagement() {
                             <div className="flex flex-wrap gap-1.5 max-w-[280px]">
                               {field.categoryIds?.length ? (
                                 field.categoryIds.slice(0, 3).map(cid => (
-                                  <span key={`field-cat-${field.id}-${cid}`} className="px-2 py-0.5 rounded border border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-white/5 text-[9px] font-bold text-[var(--text-secondary)] h-5 flex items-center">
+                                  <span key={`field-cat-${field.id}-${cid}`} className="px-2 py-0.5 rounded border border-black/[0.04] dark:border-white/[0.04] bg-[var(--bg-inset)] dark:bg-white/5 text-[9px] font-bold text-[var(--text-secondary)] h-5 flex items-center">
                                     {categories.find(c => c.id === cid)?.name || 'Unknown'}
                                   </span>
                                 ))

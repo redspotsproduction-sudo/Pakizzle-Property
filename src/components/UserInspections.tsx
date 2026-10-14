@@ -81,7 +81,7 @@ export default function UserInspections() {
     return (
       <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-[var(--surface-dark)] border border-black/[0.04] dark:border-white/[0.04] rounded-2xl animate-pulse">
         <Clock4 className="w-8 h-8 text-apple-blue animate-spin mb-4" />
-        <p className="text-xs text-[#86868B] font-semibold tracking-wide uppercase">Synchronizing inspection portfolio...</p>
+        <p className="text-xs text-apple-text-muted font-semibold tracking-wide uppercase">Synchronizing inspection portfolio...</p>
       </div>
     );
   }
@@ -99,7 +99,7 @@ export default function UserInspections() {
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
               Car Inspections
             </h1>
-            <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+            <p className="text-xs text-apple-text-muted dark:text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
               Detailed hardware validation, digital diagnostics, and machine audits for your marketplace vehicles.
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function UserInspections() {
             <History className="w-5 h-5 text-apple-blue/70 animate-pulse" />
           </div>
           <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">No Inspections History</h3>
-          <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
+          <p className="text-xs text-apple-text-muted max-w-xs mx-auto mb-4 leading-relaxed font-normal">
             You haven't booked any car inspections yet. Get professional diagnostic reports for your vehicles.
           </p>
           <Link to="/inspection" className="inline-flex items-center gap-1.5 px-4 py-2 bg-apple-blue hover:bg-blue-600 text-white rounded-full text-xs font-semibold transition-all shadow-sm border-none">
@@ -133,7 +133,7 @@ export default function UserInspections() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
             Car Inspections
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-apple-text-muted dark:text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Detailed hardware validation, digital diagnostics, and machine audits for your marketplace vehicles.
           </p>
         </div>
@@ -143,7 +143,7 @@ export default function UserInspections() {
               <ClipboardList className="w-4 h-4 text-apple-blue" />
            </div>
            <div>
-              <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Audit Node</p>
+              <p className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted">Audit Node</p>
               <p className="text-xs font-semibold text-[#1D1D1F] dark:text-white font-mono">{inspections.length} Reports</p>
            </div>
         </div>
@@ -182,17 +182,17 @@ export default function UserInspections() {
                         {inspection.status.replace('_', ' ')}
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-3 text-[10px] font-semibold text-[#86868B] uppercase tracking-wider">
+                  <div className="flex flex-wrap items-center gap-3 text-[10px] font-semibold text-apple-text-muted uppercase tracking-wider">
                     <div className="flex items-center gap-1">
                       <Clock4 className="w-3 h-3" />
                       {inspection.date} @ {inspection.time}
                     </div>
-                    <span className="w-1 h-1 rounded-full bg-[#86868B]/30" />
+                    <span className="w-1 h-1 rounded-full bg-[var(--text-tertiary)]/30" />
                     <div className="flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
                       {inspection.city}
                     </div>
-                    <span className="w-1 h-1 rounded-full bg-[#86868B]/30" />
+                    <span className="w-1 h-1 rounded-full bg-[var(--text-tertiary)]/30" />
                     <span className="font-mono text-[9px] opacity-60">ID: {inspection.id.slice(0, 8)}</span>
                   </div>
                 </div>
@@ -207,14 +207,14 @@ export default function UserInspections() {
                     </button>
                   ) : (
                     <div className="text-left md:text-right">
-                       <p className="text-[8px] font-bold text-[#86868B] uppercase tracking-wider mb-0.5">Technician</p>
+                       <p className="text-[8px] font-bold text-apple-text-muted uppercase tracking-wider mb-0.5">Technician</p>
                        <p className="text-xs font-semibold text-[#1D1D1F] dark:text-white">{(inspection as any).assignedEngineer || 'Assigning soon...'}</p>
                     </div>
                   )}
                 </div>
                 <button className={cn(
                   "p-2 bg-[#F5F5F7] dark:bg-white/5 rounded-xl transition-all duration-300 border-none",
-                  expandedId === inspection.id ? "rotate-180 bg-apple-blue/10 text-apple-blue" : "text-[#86868B]"
+                  expandedId === inspection.id ? "rotate-180 bg-apple-blue/10 text-apple-blue" : "text-apple-text-muted"
                 )}>
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -253,13 +253,13 @@ export default function UserInspections() {
                                    <div key={step} className="flex flex-col items-center">
                                       <div className={cn(
                                          "w-5 h-5 rounded-full border transition-all duration-500 z-10 flex items-center justify-center text-[10px]",
-                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.08] dark:border-white/[0.08] text-[#86868B]"
+                                         isCompleted ? "bg-apple-blue border-apple-blue text-white" : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.08] dark:border-white/[0.08] text-apple-text-muted"
                                       )}>
                                          {isCompleted && <CheckCircle2 className="w-3 h-3 stroke-[2.5px]" />}
                                       </div>
                                       <span className={cn(
                                          "absolute top-7 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-500",
-                                         isCurrent ? "text-apple-blue" : isCompleted ? "text-[#1D1D1F] dark:text-white" : "text-[#86868B] opacity-50"
+                                         isCurrent ? "text-apple-blue" : isCompleted ? "text-[#1D1D1F] dark:text-white" : "text-apple-text-muted opacity-50"
                                       )}>
                                          {step.replace('_', ' ')}
                                       </span>
@@ -273,21 +273,21 @@ export default function UserInspections() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                        {/* Details Section */}
                        <div className="space-y-4">
-                          <h4 className="text-[10px] font-bold text-[#86868B] uppercase tracking-[0.15em] flex items-center gap-1.5">
+                          <h4 className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.15em] flex items-center gap-1.5">
                              <ShieldCheck className="w-3.5 h-3.5 text-apple-blue" />
                              Audit Parameters
                           </h4>
                           <div className="space-y-2.5">
                              <div className="flex justify-between items-center py-1.5 border-b border-black/[0.04] dark:border-white/[0.04]">
-                                <span className="text-xs font-medium text-[#86868B]">Rendezvous Point</span>
+                                <span className="text-xs font-medium text-apple-text-muted">Rendezvous Point</span>
                                 <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white">{inspection.address}</span>
                              </div>
                              <div className="flex justify-between items-center py-1.5 border-b border-black/[0.04] dark:border-white/[0.04]">
-                                <span className="text-xs font-medium text-[#86868B]">Communication Node</span>
+                                <span className="text-xs font-medium text-apple-text-muted">Communication Node</span>
                                 <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white">{inspection.phone}</span>
                              </div>
                              <div className="flex justify-between items-center py-1.5 border-b border-black/[0.04] dark:border-white/[0.04]">
-                                <span className="text-xs font-medium text-[#86868B]">Diagnostics Fee</span>
+                                <span className="text-xs font-medium text-apple-text-muted">Diagnostics Fee</span>
                                 <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white">PKR 7,500</span>
                              </div>
                           </div>
@@ -295,7 +295,7 @@ export default function UserInspections() {
 
                        {/* Admin Notes Section */}
                        <div className="space-y-4">
-                          <h4 className="text-[10px] font-bold text-[#86868B] uppercase tracking-[0.15em] flex items-center gap-1.5">
+                          <h4 className="text-[10px] font-bold text-apple-text-muted uppercase tracking-[0.15em] flex items-center gap-1.5">
                              <AlertCircle className="w-3.5 h-3.5 text-apple-blue" />
                              Technical Memo
                           </h4>
@@ -305,7 +305,7 @@ export default function UserInspections() {
                                    {inspection.adminNotes}
                                 </p>
                              ) : (
-                                <p className="text-xs italic text-[#86868B] font-medium leading-relaxed">
+                                <p className="text-xs italic text-apple-text-muted font-medium leading-relaxed">
                                    No technical notes available yet. Our node is currently processing the deployment request.
                                 </p>
                              )}
@@ -328,7 +328,7 @@ export default function UserInspections() {
                                 <MessageSquare className="w-4 h-4" />
                                 Support Interface
                              </button>
-                             <p className="text-[9px] text-center text-[#86868B] font-medium mt-2 leading-relaxed">
+                             <p className="text-[9px] text-center text-apple-text-muted font-medium mt-2 leading-relaxed">
                                 Need immediate assistance? <br /> Contact our technical dispatch at +92 300 0000000
                              </p>
                           </div>

@@ -173,7 +173,7 @@ export default function ReportManagement() {
       case 'critical': return 'text-apple-red bg-apple-red/10';
       case 'high': return 'text-apple-orange bg-apple-orange/10';
       case 'medium': return 'text-apple-blue bg-apple-blue/10';
-      default: return 'text-[#86868B] bg-[#F5F5F7] dark:bg-white/5';
+      default: return 'text-apple-text-muted bg-[#F5F5F7] dark:bg-white/5';
     }
   };
 
@@ -225,14 +225,14 @@ export default function ReportManagement() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
             Incident Cockpit
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-apple-text-muted dark:text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Monitor, moderate, and resolve all community flags and system-critical incidents with advanced forensic scans.
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           <div className="relative group min-w-[200px] sm:w-64">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-focus-within:text-apple-blue transition-colors duration-300" />
             <input
               type="text"
               placeholder="Search incident logs..."
@@ -260,7 +260,7 @@ export default function ReportManagement() {
                 stat.color === 'blue' && "bg-apple-blue shadow-apple-blue/10",
                 stat.color === 'orange' && "bg-apple-orange shadow-apple-orange/10",
                 stat.color === 'green' && "bg-apple-green shadow-apple-green/10",
-                stat.color === 'purple' && "bg-[#AF52DE] shadow-purple-500/10"
+                stat.color === 'purple' && "bg-[var(--spectrum-plum)] shadow-purple-500/10"
               )}>
                 <stat.icon className="w-5 h-5" />
               </div>
@@ -273,11 +273,11 @@ export default function ReportManagement() {
             </div>
 
             <div className="space-y-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">
                 {stat.label}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white font-sans">{stat.value}</h3>
-              <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">{stat.description}</p>
+              <p className="text-[10px] text-apple-text-muted font-normal leading-relaxed">{stat.description}</p>
             </div>
           </motion.div>
         ))}
@@ -296,10 +296,10 @@ export default function ReportManagement() {
                 "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                 isActive
                   ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                  : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                  : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
               )}
             >
-              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-apple-text-muted")}>{count}</span>
             </button>
           );
         })}
@@ -346,7 +346,7 @@ export default function ReportManagement() {
                   {/* Report Details */}
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                     <div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#86868B] uppercase tracking-wider mb-1">
+                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-apple-text-muted uppercase tracking-wider mb-1">
                          <ShieldAlert className="w-3 h-3 text-apple-red" />
                          Incident ID #{report.id}
                          <span className="opacity-30">•</span>
@@ -359,7 +359,7 @@ export default function ReportManagement() {
                         Category: <span className="text-apple-red font-bold capitalize">{report.category}</span>
                       </h2>
                       
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-[#86868B] font-normal">
+                      <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-apple-text-muted font-normal">
                          <span className="font-semibold text-apple-blue">Target ID: {report.targetId}</span>
                          <span className="opacity-30">/</span>
                          <span className="truncate max-w-[400px]">{report.description}</span>
@@ -369,7 +369,7 @@ export default function ReportManagement() {
                     {/* Bento Micro-Stats box matrix matching Seller Console layout precisely */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Priority Risk</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Priority Risk</p>
                           <p className={cn(
                             "text-xs font-bold font-mono mt-0.5 capitalize flex items-center gap-1",
                             report.priority === 'critical' ? 'text-apple-red' : report.priority === 'high' ? 'text-apple-orange' : 'text-apple-blue'
@@ -379,18 +379,18 @@ export default function ReportManagement() {
                           </p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Operational State</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Operational State</p>
                           <p className={cn(
                             "text-xs font-bold font-mono mt-0.5 capitalize",
                             report.status === 'open' ? 'text-apple-orange' : report.status === 'investigating' ? 'text-apple-blue' : 'text-apple-green'
                           )}>{report.status}</p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Decision Matrix</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Decision Matrix</p>
                           <p className="text-xs font-bold text-[#1D1D1F] dark:text-white font-sans mt-0.5">Pending Action</p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Platform Security</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Platform Security</p>
                           <p className="text-xs font-bold text-apple-green font-mono mt-0.5">SSL Secured</p>
                        </div>
                     </div>
@@ -460,7 +460,7 @@ export default function ReportManagement() {
             >
               <CheckCircle2 className="w-10 h-10 text-apple-green/60 mx-auto mb-3" />
               <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">Incident Queue Clear</h3>
-              <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
+              <p className="text-xs text-apple-text-muted max-w-xs mx-auto mb-4 leading-relaxed font-normal">
                 All community-submitted reports and platform flags have been handled. Zero threat latency.
               </p>
               <button 
@@ -485,13 +485,13 @@ export default function ReportManagement() {
             </div>
             <div className="flex-1 text-center sm:text-left min-w-0">
                <h4 className="text-xs font-semibold text-[#1D1D1F] dark:text-white mb-0.5">Automated Threat Scans Active</h4>
-               <p className="text-[11px] text-[#86868B] font-normal leading-relaxed">
+               <p className="text-[11px] text-apple-text-muted font-normal leading-relaxed">
                  All platform flags and reports are dynamically analyzed via cryptographic trust registers, user telemetry records, and pattern matching layers.
                </p>
                <div className="flex items-center justify-center sm:justify-start gap-3 mt-2">
                   <div className="flex items-center gap-1.5">
                      <div className="w-1.5 h-1.5 rounded-full bg-apple-red animate-pulse" />
-                     <span className="text-[9px] font-bold uppercase tracking-wider text-[#86868B]">Scanning Active</span>
+                     <span className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted">Scanning Active</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                      <div className="w-1.5 h-1.5 rounded-full bg-apple-blue" />

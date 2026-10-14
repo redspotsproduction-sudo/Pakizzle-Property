@@ -208,7 +208,7 @@ export default function ReelsManagement() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1D1D1F] dark:text-white leading-tight">
             Reels Management
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-apple-text-muted dark:text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Supervise, edit metadata, audit interactions, and moderate immersive vertical video feeds.
           </p>
         </div>
@@ -251,7 +251,7 @@ export default function ReelsManagement() {
                 stat.color === 'blue' && "bg-apple-blue shadow-apple-blue/10",
                 stat.color === 'orange' && "bg-apple-orange shadow-apple-orange/10",
                 stat.color === 'green' && "bg-apple-green shadow-apple-green/10",
-                stat.color === 'purple' && "bg-[#AF52DE] shadow-purple-500/10"
+                stat.color === 'purple' && "bg-[var(--spectrum-plum)] shadow-purple-500/10"
               )}>
                 <stat.icon className="w-5 h-5" />
               </div>
@@ -264,11 +264,11 @@ export default function ReelsManagement() {
             </div>
 
             <div className="space-y-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#86868B]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-apple-text-muted">
                 {stat.label}
               </p>
               <h3 className="text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-white font-sans">{stat.value}</h3>
-              <p className="text-[10px] text-[#86868B] font-normal leading-relaxed">{stat.description}</p>
+              <p className="text-[10px] text-apple-text-muted font-normal leading-relaxed">{stat.description}</p>
             </div>
           </motion.div>
         ))}
@@ -300,17 +300,17 @@ export default function ReelsManagement() {
                   "px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border",
                   isActive
                     ? "bg-apple-blue text-white border-apple-blue shadow-sm"
-                    : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-[#86868B] hover:text-[#1D1D1F] dark:hover:text-white"
+                    : "bg-white dark:bg-[var(--surface-dark)] border-black/[0.04] dark:border-white/[0.04] text-apple-text-muted hover:text-[#1D1D1F] dark:hover:text-white"
                 )}
               >
-                {cat.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-[#86868B]")}>{count}</span>
+                {cat.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[#F5F5F7] dark:bg-white/5 text-apple-text-muted")}>{count}</span>
               </button>
             );
           })}
         </div>
 
         <div className="relative group min-w-[200px] sm:w-64">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B] group-focus-within:text-apple-blue transition-colors duration-300" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-text-muted group-focus-within:text-apple-blue transition-colors duration-300" />
           <input
             type="text"
             placeholder="Search captions or publisher..."
@@ -328,9 +328,9 @@ export default function ReelsManagement() {
         </div>
       ) : filteredReels.length === 0 ? (
         <div className="p-16 border border-dashed border-black/[0.06] dark:border-white/[0.06] text-center rounded-[32px] bg-[#F5F5F7]/30 dark:bg-white/[0.005]">
-          <Film className="w-12 h-12 text-[#86868B]/40 mx-auto mb-4" />
+          <Film className="w-12 h-12 text-apple-text-muted/40 mx-auto mb-4" />
           <h3 className="text-sm font-semibold text-[#1D1D1F] dark:text-white mb-1">No Reels Match the Filter</h3>
-          <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-4 leading-relaxed font-normal">
+          <p className="text-xs text-apple-text-muted max-w-xs mx-auto mb-4 leading-relaxed font-normal">
             Adjust your search queries or switch filter categories to view items.
           </p>
           <button 
@@ -394,7 +394,7 @@ export default function ReelsManagement() {
                   {/* Reel Details */}
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                     <div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#86868B] uppercase tracking-wider mb-1">
+                      <div className="flex items-center gap-1.5 text-[9px] font-bold text-apple-text-muted uppercase tracking-wider mb-1">
                          <Zap className="w-3 h-3 text-apple-blue" />
                          Reel ID #{reel.id.slice(-8).toUpperCase()}
                          <span className="opacity-30">•</span>
@@ -406,7 +406,7 @@ export default function ReelsManagement() {
                         {reel.caption || <span className="italic text-apple-text-muted font-normal text-[10px]">No caption</span>}
                       </p>
                       
-                      <div className="flex flex-wrap items-center gap-2 mt-2.5 text-[11px] text-[#86868B] font-normal">
+                      <div className="flex flex-wrap items-center gap-2 mt-2.5 text-[11px] text-apple-text-muted font-normal">
                          {reel.make ? (
                            <div className="flex items-center gap-1 bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/10 px-2.5 py-0.5 rounded-lg text-apple-blue font-bold text-[10px]">
                              <Car className="w-3 h-3" /> Linked: {reel.year} {reel.make} {reel.model}
@@ -425,19 +425,19 @@ export default function ReelsManagement() {
                     {/* Bento Micro-Stats box matrix */}
                     <div className="grid grid-cols-3 gap-2 mt-3.5 max-w-md">
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Impressions</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Impressions</p>
                           <p className="text-xs font-bold text-apple-green font-mono mt-0.5">
                             {(reel.viewsCount || 0).toLocaleString()} Views
                           </p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Favorites</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Favorites</p>
                           <p className="text-xs font-bold text-red-500 font-mono mt-0.5">
                             {(reel.likesCount || 0).toLocaleString()} Likes
                           </p>
                        </div>
                        <div className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
-                          <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-wider">Comments</p>
+                          <p className="text-[9px] font-bold text-apple-text-muted uppercase tracking-wider">Comments</p>
                           <p className="text-xs font-bold text-apple-blue font-mono mt-0.5">
                             {(reel.commentsCount || 0).toLocaleString()}
                           </p>
@@ -457,7 +457,7 @@ export default function ReelsManagement() {
 
                     <button 
                       onClick={() => handleDeleteReel(reel.id)}
-                      className="w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-red-500/10 text-[#86868B] hover:text-red-500 dark:bg-white/5 flex items-center justify-center transition-colors border border-black/[0.02] dark:border-white/[0.02]"
+                      className="w-8.5 h-8.5 rounded-lg bg-[#F5F5F7] hover:bg-red-500/10 text-apple-text-muted hover:text-red-500 dark:bg-white/5 flex items-center justify-center transition-colors border border-black/[0.02] dark:border-white/[0.02]"
                       title="Purge record"
                     >
                       <Trash2 className="w-4 h-4" />

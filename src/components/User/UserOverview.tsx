@@ -124,7 +124,7 @@ export default function UserOverview() {
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)] dark:text-white leading-tight">
             Welcome, <span className="text-apple-text-muted">{profile?.displayName?.split(' ')[0] || 'User'}</span>
           </h1>
-          <p className="text-xs text-[#86868B] dark:text-[#86868B] mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
+          <p className="text-xs text-apple-text-muted mt-1 max-w-xl leading-relaxed font-normal tracking-wide">
             Your automotive portfolio is currently performing 12% above market average in Pakistan.
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function UserOverview() {
             <Sparkles className="w-4.5 h-4.5 text-apple-blue shrink-0" />
             <h3 className="text-xs font-semibold tracking-tight text-[var(--text-primary)] dark:text-white">Listing Allocation Status</h3>
           </div>
-          <p className="text-[11px] text-[#86868B] max-w-lg leading-relaxed font-normal">
+          <p className="text-[11px] text-apple-text-muted max-w-lg leading-relaxed font-normal">
             Optimize your dealership exposure. You have premium post allocation credits and custom featured boosters ready for deployment.
           </p>
           {/* Progress bar */}
@@ -174,7 +174,7 @@ export default function UserOverview() {
 
           <Link 
             to="/dashboard/credits"
-            className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-[#86868B] hover:text-[var(--text-primary)] dark:hover:text-white"
+            className="px-3 py-1.5 rounded-xl bg-[#F5F5F7] dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.04] hover:border-apple-blue hover:text-apple-blue transition-colors flex items-center gap-1.5 text-[10px] font-semibold text-apple-text-muted hover:text-[var(--text-primary)] dark:hover:text-white"
           >
             <span>Get Credits</span>
             <ArrowUpRight className="w-3 h-3" />
@@ -340,7 +340,7 @@ export default function UserOverview() {
                             </span>
                           </div>
                           
-                          <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#86868B] mt-1 font-normal">
+                          <div className="flex flex-wrap items-center gap-2 text-[11px] text-apple-text-muted mt-1 font-normal">
                             <span className="font-mono">{v.mileage ? v.mileage.toLocaleString() : "45,000"} km</span>
                             <span className="opacity-30">/</span>
                             <span className="capitalize">{v.transmission || "Automatic"}</span>
@@ -350,9 +350,9 @@ export default function UserOverview() {
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-4 text-[10px] font-semibold font-mono text-[#86868B] mt-2.5">
-                            <span className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5 text-[#86868B]/70" /> {views} views</span>
-                            <span className="flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-[#86868B]/70" /> {inquiries} chats</span>
+                          <div className="flex items-center gap-4 text-[10px] font-semibold font-mono text-apple-text-muted mt-2.5">
+                            <span className="flex items-center gap-1.5"><Eye className="w-3.5 h-3.5 text-apple-text-muted/70" /> {views} views</span>
+                            <span className="flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-apple-text-muted/70" /> {inquiries} chats</span>
                             <span className="flex items-center gap-1.5 text-apple-blue"><Sparkles className="w-3.5 h-3.5" /> {healthScore}% ranking</span>
                           </div>
                         </div>
@@ -362,11 +362,11 @@ export default function UserOverview() {
                 </div>
               ) : (
                 <div className="text-center py-16 px-6 border border-dashed border-[#E5E5E7] dark:border-white/10 rounded-2xl bg-[#F5F5F7]/30 dark:bg-white/[0.005]">
-                  <div className="w-14 h-14 rounded-full bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center mx-auto mb-4 text-[#86868B]">
+                  <div className="w-14 h-14 rounded-full bg-[#F5F5F7] dark:bg-white/5 flex items-center justify-center mx-auto mb-4 text-apple-text-muted">
                     <Car className="w-7 h-7" />
                   </div>
                   <h3 className="text-sm font-semibold mb-1 text-[var(--text-primary)] dark:text-white">Launch Your Portfolio</h3>
-                  <p className="text-xs text-[#86868B] max-w-xs mx-auto mb-6 leading-relaxed">
+                  <p className="text-xs text-apple-text-muted max-w-xs mx-auto mb-6 leading-relaxed">
                     No active listings detected. Start selling today to leverage Pakistan's most advanced automotive network.
                   </p>
                   <Link to="/sell" className="px-4.5 py-2 bg-white dark:bg-[#2C2C2E] border border-[#E5E5E7] dark:border-white/10 hover:border-apple-blue rounded-full inline-flex items-center gap-1.5 text-xs font-semibold transition-colors shadow-sm">
@@ -417,7 +417,7 @@ export default function UserOverview() {
                         )}
                       </div>
                       <div className="text-xs font-semibold text-[var(--text-primary)] dark:text-white leading-tight group-hover:translate-x-0.5 transition-transform truncate">{item.desc}</div>
-                      <div className="text-[9px] text-[#86868B] uppercase tracking-wider mt-0.5">
+                      <div className="text-[9px] text-apple-text-muted uppercase tracking-wider mt-0.5">
                         {new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -425,8 +425,8 @@ export default function UserOverview() {
                 ))
               ) : (
                 <div className="text-center py-8">
-                  <Activity className="w-8 h-8 text-[#86868B]/40 mx-auto mb-2" />
-                  <div className="text-[10px] font-bold text-[#86868B] uppercase tracking-wider">Zero Latency Detected</div>
+                  <Activity className="w-8 h-8 text-apple-text-muted/40 mx-auto mb-2" />
+                  <div className="text-[10px] font-bold text-apple-text-muted uppercase tracking-wider">Zero Latency Detected</div>
                 </div>
               )}
             </div>
@@ -446,21 +446,21 @@ export default function UserOverview() {
                 <div className="w-7 h-7 bg-purple-500/10 rounded-lg flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-purple-500" />
                 </div>
-                <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#86868B]">Market Intelligence</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-apple-text-muted">Market Intelligence</span>
               </div>
               <h3 className="text-sm font-semibold tracking-tight text-[var(--text-primary)] dark:text-white mb-2">
                 Demand Spike: <span className="text-purple-500">Luxury EVs</span>
               </h3>
-              <p className="text-[11px] text-[#86868B] leading-relaxed font-normal mb-4">
+              <p className="text-[11px] text-apple-text-muted leading-relaxed font-normal mb-4">
                 Analytics point to 22% user interest growth in High-End Electric Vehicles within Islamabad sector over current cycle.
               </p>
               <div className="flex items-center gap-4 border-t border-[#E5E5E7]/50 dark:border-white/5 pt-4">
                 <div className="flex-1">
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] mb-0.5">Impact Score</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted mb-0.5">Impact Score</p>
                   <p className="text-base font-bold text-apple-green font-mono">+8.4%</p>
                 </div>
                 <div className="flex-1">
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-[#86868B] mb-0.5">Time Horizon</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-apple-text-muted mb-0.5">Time Horizon</p>
                   <p className="text-base font-bold text-[var(--text-primary)] dark:text-white font-mono">14 Days</p>
                 </div>
               </div>

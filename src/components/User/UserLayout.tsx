@@ -22,10 +22,14 @@ import {
   CheckCircle2,
   Lock,
   Video,
-  BarChart3
+  BarChart3,
+  Sun,
+  Moon,
+  Monitor
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
@@ -69,6 +73,7 @@ const navItems: NavItem[] = [
 
 export default function UserLayout({ children }: UserLayoutProps) {
   const { profile, logout, user } = useAuth();
+  const { themeMode, setThemeMode } = useTheme();
   const { conversations } = useChat();
   const location = useLocation();
   const navigate = useNavigate();
@@ -262,15 +267,65 @@ export default function UserLayout({ children }: UserLayoutProps) {
               <Search className="w-5 h-5" />
             </button>
             
+            {/* Theme Toggle in User Dashboard Header */}
+            <div 
+              className="flex items-center p-0.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 shrink-0"
+              role="radiogroup"
+              aria-label="Theme selection"
+            >
+              <button
+                type="button"
+                onClick={() => setThemeMode("light")}
+                className={cn(
+                  "p-1.5 rounded-full transition-all cursor-pointer focus-ring-pakizzle",
+                  themeMode === "light" 
+                    ? "bg-white text-apple-text shadow-xs" 
+                    : "text-apple-text-muted hover:text-apple-text"
+                )}
+                title="Light Theme"
+                aria-label="Light Theme"
+              >
+                <Sun className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setThemeMode("dark")}
+                className={cn(
+                  "p-1.5 rounded-full transition-all cursor-pointer focus-ring-pakizzle",
+                  themeMode === "dark" 
+                    ? "bg-white/20 text-white shadow-xs" 
+                    : "text-apple-text-muted hover:text-apple-text"
+                )}
+                title="Dark Theme"
+                aria-label="Dark Theme"
+              >
+                <Moon className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setThemeMode("system")}
+                className={cn(
+                  "p-1.5 rounded-full transition-all cursor-pointer focus-ring-pakizzle",
+                  themeMode === "system" 
+                    ? "bg-white dark:bg-white/20 text-apple-text shadow-xs" 
+                    : "text-apple-text-muted hover:text-apple-text"
+                )}
+                title="System Theme"
+                aria-label="System Theme"
+              >
+                <Monitor className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
             <div className="flex items-center gap-2">
               <button className="relative w-11 h-11 flex items-center justify-center bg-apple-gray/50 dark:bg-white/5 rounded-2xl hover:scale-105 transition-all group overflow-hidden">
                 <Bell className="w-5 h-5 text-apple-text-muted group-hover:text-apple-text transition-colors duration-500" />
                 <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-apple-red rounded-full border-2 border-white dark:border-[#000000]" />
               </button>
               
-              <Link to="/sell" className="hidden lg:flex items-center gap-2 px-5 py-3 bg-apple-blue/10 hover:bg-apple-blue text-apple-blue hover:text-white rounded-2xl font-bold text-[13px] transition-all duration-500 group shadow-lg shadow-apple-blue/5">
+              <Link to="/post-ad" className="hidden lg:flex items-center gap-2 px-5 py-3 bg-apple-blue/10 hover:bg-apple-blue text-apple-blue hover:text-white rounded-2xl font-bold text-[13px] transition-all duration-500 group shadow-lg shadow-apple-blue/5">
                 <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
-                List Vehicle
+                List Property
               </Link>
             </div>
 

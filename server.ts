@@ -1750,6 +1750,30 @@ async function startServer() {
     res.json({ success: true, message: "Business verification request submitted (Images optimized to AVIF)" });
   });
 
+  // Server endpoint setting identity_status to pending (client is blocked by security rules from writing this field)
+  app.post("/api/verifications/submit-identity", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ error: "userId is required" });
+      }
+      const user = users.find(u => u.id === userId || u.fb_uid === userId);
+      if (user) {
+        user.identity_status = 'pending';
+      }
+      console.log(`[VERIFICATION] Server set identity_status to pending for user: ${userId}`);
+      res.json({
+        success: true,
+        userId,
+        identity_status: 'pending',
+        message: "Identity verification status set to pending server-side."
+      });
+    } catch (err: any) {
+      console.error("[VERIFICATION] submit-identity error:", err);
+      res.status(500).json({ error: "Failed to transition identity verification status" });
+    }
+  });
+
   // Dedicated optimization endpoint for frontend use (e.g. car photos)
   app.post("/api/utils/optimize-to-avif", upload.single('image'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No image provided" });

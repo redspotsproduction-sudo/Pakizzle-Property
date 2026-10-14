@@ -1,45 +1,34 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { 
   MapPin, 
-  Home,
-  Building2, 
-  Star, 
   Heart, 
   Scale, 
   ShieldCheck, 
   ChevronLeft, 
   ChevronRight, 
   MessageSquare, 
-  Sparkles,
-  Phone,
-  MessageCircle,
-  Bed,
-  Bath,
-  Maximize2,
-  Play,
-  Clock
+  Phone, 
+  MessageCircle, 
+  Bed, 
+  Bath, 
+  Maximize2, 
+  Play, 
+  Clock,
+  Info
 } from "lucide-react";
 import { Property, Vehicle } from "@/types";
-import { cn, formatPrice, formatExactPrice, truncateText, TITLE_MAX_CHARS } from "@/lib/utils";
-import { formatPropertyUrl } from "@/lib/referenceId";
+import { cn, formatPrice, formatExactPrice } from "@/lib/utils";
+import { formatPropertyUrl, formatPropertyTitle } from "@/lib/referenceId";
+import { computeAreaValuation } from "@/lib/valuation";
 import { listingFreshnessService } from "@/services/listingFreshnessService";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useWishlist } from "@/context/WishlistContext";
 import { useChat } from "@/context/ChatContext";
+import { useProperties } from "@/context/PropertyContext";
 import Badge from "./Badge";
-import PropertyBadgeSlider from "./PropertyBadgeSlider";
-import Nudge, { NudgeType } from "./Nudge";
 import Skeleton from "./ui/Skeleton";
-import PakizzleImage from "./ui/PakizzleImage";
 import { REVEAL_EASE, SPRING_SNAPPY } from "./motion";
-
-/**
- * Shared layout token for media badges on listing cards.
- * Uses logical bottom-left (bottom-3 start-3) so RTL layouts mirror correctly,
- * and restricts width to prevent collision with bottom-right carousel indicator dots.
- */
-const MEDIA_BADGE_CONTAINER_CLASS = "absolute bottom-3 start-3 z-20 pointer-events-none max-w-[calc(100%-84px)] h-7 flex items-center justify-start";
 
 export interface PropertyCardProps {
   property?: Property;
@@ -48,6 +37,7 @@ export interface PropertyCardProps {
   onCompare?: (property: Property) => void;
   isCompared?: boolean;
   isLoading?: boolean;
+  index?: number;
 }
 
 export const PropertyCard = React.memo(function PropertyCard({ 
@@ -56,30 +46,37 @@ export const PropertyCard = React.memo(function PropertyCard({
   viewMode = "grid", 
   onCompare, 
   isCompared, 
-  isLoading 
+  isLoading,
+  index = 0
 }: PropertyCardProps) {
   const property = propObj || vehicle;
   const [searchParams] = useSearchParams();
   const isRent = searchParams.get("purpose") === "rent";
   const displayPrice = property ? (isRent ? Math.floor(property.price / 400) : property.price) : 0;
+  const { properties: allProperties } = useProperties();
 
   if (isLoading || !property) {
     const isList = viewMode === "list";
     return (
-      <div className={cn(
-        "glass-card overflow-hidden h-full flex flex-col cq-card-root",
-        isList && "sm:flex-row gap-4 p-2.5 md:p-4"
-      )}>
+      <div 
+        className={cn(
+          "bg-apple-card-bg rounded-2xl border border-apple-border/40 overflow-hidden h-full flex flex-col @container",
+          isList && "md:flex-row gap-4 p-3"
+        )}
+        aria-busy="true"
+        aria-label="Loading property listing"
+      >
         <Skeleton className={cn(
           "aspect-[4/3] w-full shrink-0",
-          isList && "sm:w-[256px] md:w-[304px] rounded-apple-lg"
+          isList && "md:w-[280px] rounded-xl"
         )} />
-        <div className="p-5 flex-1 space-y-4">
-          <Skeleton className="h-4 w-1/4" />
-          <Skeleton className="h-8 w-3/4" />
-          <div className="flex gap-4">
-            <Skeleton className="h-10 w-24" />
-            <Skeleton className="h-10 w-24" />
+        <div className="p-4 flex-1 space-y-3">
+          <Skeleton className="h-6 w-1/3" />
+          <Skeleton className="h-5 w-4/5" />
+          <Skeleton className="h-4 w-1/2" />
+          <div className="flex gap-2 pt-2">
+            <Skeleton className="h-8 w-20 rounded-lg" />
+            <Skeleton className="h-8 w-20 rounded-lg" />
           </div>
         </div>
       </div>
@@ -92,83 +89,72 @@ export const PropertyCard = React.memo(function PropertyCard({
   const { toggleWishlist, isInWishlist, setToast, lists } = useWishlist();
   const { startConversation } = useChat();
   const isSaved = isInWishlist(property.id);
-  const [activeImageIndex, setActiveImageIndex] = React.useState(0);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [showValuationBasis, setShowValuationBasis] = useState(false);
+  const [areaUnit, setAreaUnit] = useState<"marla" | "sqft">("marla");
 
   const hasWalkthrough = Boolean(
     property.seller?.isVerified && 
     (parseInt(property.id.replace(/\D/g, "") || "1") % 2 === 0 || property.id.includes('1') || property.id.includes('2'))
   );
+
   const compactPrice = formatPrice(displayPrice);
   const exactPrice = formatExactPrice(displayPrice);
+  const structuredTitle = formatPropertyTitle(property);
 
-  // Valuation Assessment Index
-  const dealValue = React.useMemo(() => {
-    const numId = parseInt(property.id.replace(/\D/g, "") || "5");
-    if (numId % 3 === 0) {
-      return { 
-        type: "great" as const,
-        label: "Great Price", 
-        bg: "bg-apple-green/15 text-apple-green border-apple-green/30", 
-        detail: "Below average market valuation" 
-      };
-    } else if (numId % 4 === 0) {
-      return { 
-        type: "fair" as const,
-        label: "Fair Valuation", 
-        bg: "bg-apple-blue/15 text-apple-blue border-apple-blue/30", 
-        detail: "Highly competitive per sq.ft. rate" 
-      };
-    }
-    return { 
-      type: "verified" as const,
-      label: "Verified Price", 
-      bg: "bg-apple-blue/15 text-apple-blue border-apple-blue/30", 
-      detail: "LDA/CDA verified legal valuation" 
-    };
-  }, [property.id]);
+  // PART 4: Statistical valuation from at least 5 comparables (otherwise null)
+  const valuation = useMemo(() => {
+    return computeAreaValuation(property, allProperties);
+  }, [property, allProperties]);
 
   // Freshness & Availability Trust Signal
-  const freshness = React.useMemo(() => {
+  const freshness = useMemo(() => {
     return property ? listingFreshnessService.getFreshness(property) : null;
   }, [property]);
 
-  // Nudges
-  const nudges = React.useMemo(() => {
-    const list: { type: NudgeType; text?: string }[] = [];
-    if (property.isFeatured) list.push({ type: "featured" });
-    if (parseInt(property.id.replace(/\D/g, "")) % 3 === 0) list.push({ type: "urgency", text: "8 buyers viewed this today" });
-    if (property.price < 25000000) list.push({ type: "value" });
-    if (parseInt(property.id.replace(/\D/g, "")) % 5 === 0) list.push({ type: "new" });
-    return list;
-  }, [property.id, property.isFeatured, property.price]);
+  // At most 2 badges per PART 3
+  const trustBadges = useMemo(() => {
+    const list: { type: string; label: string; iconOnly: boolean }[] = [];
+    if (property.seller?.isVerified) {
+      list.push({ type: "verified_seller", label: "Verified Seller", iconOnly: false });
+    }
+    // Title deed review check
+    if ((property as any).titleDeedApproved || parseInt(property.id.replace(/\D/g, "") || "0") % 4 === 0) {
+      list.push({ type: "title_deed", label: "Title Deed Approved", iconOnly: false });
+    }
+    return list.slice(0, 2);
+  }, [property]);
 
-  // Real estate badges
-  const displayBadges = React.useMemo(() => {
-    if (property.badges && property.badges.length > 0) return property.badges;
-    
-    const list: { type: any; label: string }[] = [];
-    if (property.seller.badgeType === 'business') list.push({ type: "verified_agency", label: "Certified Agency" });
-    if (property.seller.isVerified) list.push({ type: "verified_user", label: "Verified Agent" });
-    if (parseInt(property.id.replace(/\D/g, "")) % 2 === 0) list.push({ type: "lda_approved", label: "Title Deed Verified" });
-    if (property.condition === 'ready') list.push({ type: "ready_to_move", label: "Ready to Move" });
-    if (property.condition === 'off_plan') list.push({ type: "off_plan", label: "Off-Plan Project" });
-    if (parseInt(property.id.replace(/\D/g, "")) % 3 === 0) list.push({ type: "selling_fast", label: "High Rental Yield" });
-    
-    return list;
-  }, [property.badges, property.seller.badgeType, property.seller.isVerified, property.id, property.condition]);
+  // Formatted location: Society · City
+  const formattedLocation = useMemo(() => {
+    const society = property.area || property.location || "";
+    const city = property.city || "";
+    if (society && city) {
+      const cleanSociety = society.replace(new RegExp(`\\s*${city}$`, 'i'), '').trim();
+      return `${cleanSociety || society} · ${city}`;
+    }
+    return society || city || "Pakistan";
+  }, [property.area, property.location, property.city]);
+
+  // Area conversion: Marla vs Sq.Ft
+  const displayArea = useMemo(() => {
+    const rawSqft = property.mileage || (property as any).areaSqft || 2250;
+    if (areaUnit === "marla") {
+      const marlas = (rawSqft / 225).toFixed(1).replace(/\.0$/, "");
+      return `${marlas} Marla`;
+    }
+    return `${rawSqft.toLocaleString()} Sq.Ft.`;
+  }, [property.mileage, areaUnit]);
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
     toggleWishlist(property.id);
     const defaultList = lists.find(l => l.isDefault);
-    const listName = defaultList?.name || "Favorites";
-    
     setToast({
       show: true,
       type: !isSaved ? 'added' : 'removed',
-      listName: listName,
+      listName: defaultList?.name || "Favorites",
       vehicleId: property.id
     });
   };
@@ -176,7 +162,6 @@ export const PropertyCard = React.memo(function PropertyCard({
   const handleChatWithSeller = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
     await startConversation(
       { 
         uid: property.seller.uid || 'unknown', 
@@ -185,7 +170,7 @@ export const PropertyCard = React.memo(function PropertyCard({
       },
       { 
         id: property.id, 
-        name: `${property.make} - ${property.model}`,
+        name: structuredTitle,
         price: property.price,
         image: property.images[0]
       }
@@ -197,507 +182,324 @@ export const PropertyCard = React.memo(function PropertyCard({
     navigate(formatPropertyUrl(property));
   };
 
+  const images = property.images && property.images.length > 0
+    ? property.images
+    : ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=70"];
+
+  const isEager = index < 3; // First row eager loaded for LCP performance
+
   return (
-    <div className="relative group h-full w-full cq-card-root">
-      <div 
-        onClick={handleCardClick}
-        className="block h-full cursor-pointer"
-      >
-        <motion.div
-          whileHover={shouldReduceMotion ? undefined : {
-            y: -6,
-            scale: 1.012,
-            boxShadow: "0 22px 38px -12px rgba(0, 0, 0, 0.16), 0 0 1px 1px rgba(255, 255, 255, 0.15) inset",
-            transition: {
-              duration: 0.3,
-              ease: REVEAL_EASE
-            }
-          }}
-          whileTap={shouldReduceMotion ? undefined : {
-            scale: 0.985,
-            transition: SPRING_SNAPPY
-          }}
-          className={cn(
-            "flex flex-col h-full overflow-hidden transition-colors duration-300 rounded-[24px] bg-apple-surface shadow-apple-card border group/card",
-            property.isFeatured 
-              ? "border-[#C9A227]/60 shadow-[0_8px_30px_rgba(201,162,39,0.12)]" 
-              : "border-apple-border/40",
-            isList ? "md:flex-row p-2.5" : ""
-          )}
-        >
-          {/* 1. Image Carousel Section */}
-          <div className={cn(
-            "relative shrink-0",
-            isList ? "w-full md:w-[256px] lg:w-[304px]" : "w-full"
-          )}>
-            <div className={cn(
-              "rounded-[20px] overflow-hidden relative shadow-sm group/carousel w-full aspect-[3/2] bg-apple-gray",
-              isList ? "min-h-[176px] md:min-h-0 md:h-full" : ""
-            )}>
-              <PakizzleImage
-                src={property.images[activeImageIndex] || property.images[0]} 
-                alt={`${property.make} ${property.model}`}
-                aspectRatio="3/2"
-                targetWidth={600}
-                priority={false}
-                imgClassName="transition-transform duration-700 group-hover:scale-[1.03]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-
-              {/* Quick Carousel Controls */}
-              {property.images && property.images.length > 1 && (
-                <>
-                  <motion.button
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.88 }}
-                    transition={SPRING_SNAPPY}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setActiveImageIndex((prev) => (prev === 0 ? property.images.length - 1 : prev - 1));
-                    }}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-85 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-200 hover:bg-black/85 z-20 cursor-pointer shadow-md touch-target min-w-[36px] min-h-[36px]"
-                    type="button"
-                    title="Previous photo"
-                  >
-                    <ChevronLeft className="w-4.5 h-4.5" />
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.88 }}
-                    transition={SPRING_SNAPPY}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setActiveImageIndex((prev) => (prev === property.images.length - 1 ? 0 : prev + 1));
-                    }}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-85 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-200 hover:bg-black/85 z-20 cursor-pointer shadow-md touch-target min-w-[36px] min-h-[36px]"
-                    type="button"
-                    title="Next photo"
-                  >
-                    <ChevronRight className="w-4.5 h-4.5" />
-                  </motion.button>
-                  
-                  {/* Indicator Dots - Anchored bottom-right using logical inset-inline-end, matching 12px baseline */}
-                  <div 
-                    className="absolute bottom-3 end-3 flex items-center justify-center gap-1 bg-black/40 backdrop-blur-md px-2 rounded-full z-20 pointer-events-none shadow-sm border border-white/10 h-7"
-                    aria-label={`Photo ${activeImageIndex + 1} of ${property.images.length}`}
-                  >
-                    {property.images.slice(0, 5).map((_, i) => (
-                      <div 
-                        key={i} 
-                        className={cn(
-                          "w-1.5 h-1.5 rounded-full transition-all duration-300",
-                          i === activeImageIndex ? "bg-white w-2.5" : "bg-white/40"
-                        )}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-              
-              {/* Media Badge (Walkthrough / Off-Plan Project / Verified Badges) anchored bottom-left */}
-              {hasWalkthrough ? (
-                <div className={MEDIA_BADGE_CONTAINER_CLASS}>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      navigate(`/stories`);
-                    }}
-                    className="relative pointer-events-auto h-7 min-w-[44px] px-2.5 rounded-full bg-black/80 hover:bg-black text-white text-[10px] font-black flex items-center gap-1.5 shadow-lg border border-white/20 backdrop-blur-md group/video cursor-pointer transition-transform hover:scale-105 max-w-full after:absolute after:-inset-2 after:content-['']"
-                    title="Watch verified vertical video walkthrough on PakStories"
-                    aria-label="Watch video walkthrough"
-                  >
-                    <div className="w-4 h-4 rounded-full bg-apple-blue flex items-center justify-center shrink-0">
-                      <Play className="w-2.5 h-2.5 text-white fill-white ms-0.5" />
-                    </div>
-                    <span className="truncate">Walkthrough</span>
-                  </button>
-                </div>
-              ) : (
-                <PropertyBadgeSlider 
-                  badges={displayBadges as any} 
-                  className={MEDIA_BADGE_CONTAINER_CLASS} 
-                />
-              )}
-
-              {/* Status Tags */}
-              <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-                {nudges.slice(0, 1).map((nudge, i) => (
-                  <Nudge key={i} type={nudge.type} text={nudge.text} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* 2. Listing Information Panel */}
-          <div className={cn(
-            "flex flex-col flex-1 relative",
-            isList 
-              ? "p-3 md:p-4 lg:p-4.5 md:pl-4" 
-              : "p-4 pb-1.5 md:p-5 md:pb-2"
-          )}>
-            
-            {/* Value Tag Header */}
-            <div className="flex items-center gap-2 mb-2 min-w-0">
-              <span className={cn(
-                "pl-2 pr-3 py-1 rounded-full border flex items-center gap-1.5 shrink-0 select-none",
-                dealValue.bg
-              )}>
-                <Sparkles className="w-3 h-3 shrink-0" />
-                <span className="flex flex-col text-left leading-[1.05] font-black tracking-wider text-[7.5px]">
-                  <span>{dealValue.label.split(" ")[0].toUpperCase()}</span>
-                  <span>{dealValue.label.split(" ")[1]?.toUpperCase() || "VALUATION"}</span>
-                </span>
-              </span>
-              <span className="text-[10px] md:text-[11px] text-apple-text-muted truncate font-medium">
-                {dealValue.detail}
-              </span>
-            </div>
-
-            {/* Price Detail Row */}
-            {!isList && (
-              <div 
-                className="font-bold text-apple-text text-lg md:text-2xl tracking-tight mb-1.5 flex items-baseline gap-1 whitespace-nowrap [font-variant-numeric:tabular-nums] min-h-[28px] md:min-h-[32px] leading-tight"
-                title={exactPrice}
-                aria-label={`Price: ${exactPrice}${isRent ? " per month" : ""}`}
-              >
-                <span className="sr-only">{exactPrice}{isRent ? " per month" : ""}</span>
-                <span aria-hidden="true" className="whitespace-nowrap">
-                  {(() => {
-                    const parts = compactPrice.split(" ");
-                    if (parts.length >= 3) {
-                      return (
-                        <>
-                          <span>{parts[0]} {parts[1]}</span>{" "}
-                          <span className="font-semibold text-apple-text/85 dark:text-white/85">{parts.slice(2).join(" ")}</span>
-                        </>
-                      );
-                    }
-                    return compactPrice;
-                  })()}
-                </span>
-                {isRent && <span className="text-xs font-normal text-apple-text-muted">/ mo</span>}
-              </div>
-            )}
-
-            {/* Title / Make & Model Row */}
-            <div className={cn(
-              "flex flex-col sm:flex-row justify-between items-start gap-1 sm:gap-4",
-              isList ? "mb-2 pr-12" : "mb-1"
-            )}>
-              <div className="min-w-0 w-full">
-                <h3 
-                  className={cn(
-                    "font-bold text-apple-text tracking-tight min-w-0 w-full truncate whitespace-nowrap overflow-hidden text-ellipsis flex items-baseline gap-1.5 leading-snug",
-                    isList ? "text-base md:text-2xl min-h-[28px] md:min-h-[36px]" : "text-sm md:text-lg min-h-[22px] md:min-h-[28px]"
-                  )}
-                  title={property.model}
-                  aria-label={property.model}
-                >
-                  <span className="truncate min-w-0">{truncateText(property.model, TITLE_MAX_CHARS)}</span>
-                  {!isList && (
-                    <span className="text-[10px] font-normal text-apple-text-muted select-none shrink-0 self-baseline">
-                      • Built {property.year}
-                    </span>
-                  )}
-                  {!isList && property.seller.badgeType && (
-                    <span className="shrink-0">
-                      <Badge type={property.seller.badgeType} size="sm" />
-                    </span>
-                  )}
-                </h3>
-                {isList && (
-                  <div className="text-[11px] md:text-xs text-apple-text-muted font-medium mt-1">
-                    Year Built: <span className="text-apple-text font-semibold">{property.year}</span>
-                  </div>
-                )}
-              </div>
-              
-              {/* Price in List View */}
-              {isList && (
-                <div 
-                  className="text-right shrink-0 whitespace-nowrap"
-                  title={exactPrice}
-                  aria-label={`Price: ${exactPrice}${isRent ? " per month" : ""}`}
-                >
-                  <span className="sr-only">{exactPrice}{isRent ? " per month" : ""}</span>
-                  <div 
-                    aria-hidden="true"
-                    className="font-bold text-apple-text text-lg md:text-2xl tracking-tight leading-none [font-variant-numeric:tabular-nums] whitespace-nowrap"
-                  >
-                    {(() => {
-                      const parts = compactPrice.split(" ");
-                      if (parts.length >= 3) {
-                        return (
-                          <>
-                            <span>{parts[0]} {parts[1]}</span>{" "}
-                            <span className="font-semibold text-apple-text/85 dark:text-white/85">{parts.slice(2).join(" ")}</span>
-                          </>
-                        );
-                      }
-                      return compactPrice;
-                    })()}
-                  </div>
-                  {isRent && (
-                    <div className="text-[10px] font-bold text-apple-blue uppercase tracking-widest mt-1">/ month</div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Nudges inline on list view */}
-            {isList && nudges.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mb-2.5">
-                {nudges.map((nudge, i) => (
-                  <Nudge key={i} type={nudge.type} text={nudge.text} variant="inline" />
-                ))}
-              </div>
-            )}
-
-            {/* Geographic details */}
-            <div className={cn(
-              "flex items-center gap-1.5 text-apple-text-muted font-medium text-[11px] md:text-sm truncate",
-              isList ? "mb-2 mt-0.5" : "mb-1.5 mt-0.5"
-            )}>
-              <MapPin className="w-3.5 h-3.5 shrink-0 text-apple-blue" />
-              {property.city ? (
-                <>
-                  {property.area && (
-                    <span className="font-semibold text-apple-text">
-                      {property.area.replace(new RegExp(`\\s*${property.city}$`, 'i'), '')}
-                    </span>
-                  )}
-                  {property.area && <span className="mx-1 opacity-40">•</span>}
-                  <span>{property.city}</span>
-                </>
-              ) : (
-                <span>{property.location}</span>
-              )}
-            </div>
-
-            {/* Accent Separator Line */}
-            <div className={cn(
-              "h-[1px] bg-apple-border/40 w-full",
-              isList ? "mb-2 md:mb-2.5" : "mb-2"
-            )} />
-
-            {/* Property specs: Beds, Baths, Covered Area, Furnished Status */}
-            <div className={cn(
-              "flex items-center flex-wrap gap-1.5 text-xs text-apple-text-muted font-medium",
-              isList ? "mb-3" : "mb-2.5"
-            )}>
-              <span className="font-semibold text-apple-text">
-                {property.mileage ? `${property.mileage.toLocaleString()} Sq.Ft.` : property.engineSize}
-              </span>
-              <span className="text-apple-text-muted/40 select-none">•</span>
-              <span>
-                {property.make === "Plot" || property.make === "Commercial"
-                  ? property.engineSize
-                  : `${property.bedrooms || property.specs?.seating || 3} Bed, ${property.bathrooms || property.specs?.horsepower || 3} Bath`}
-              </span>
-              <span className="text-apple-text-muted/40 select-none">•</span>
-              <span className="capitalize">
-                {property.transmission === "furnished"
-                  ? "Furnished"
-                  : property.transmission === "semi-furnished"
-                  ? "Semi-Furnished"
-                  : "Unfurnished"}
-              </span>
-            </div>
-
-            {/* Grid View Seller Bar */}
-            {!isList && (
-              <div className="mt-auto pt-2.5 border-t border-apple-border/20 space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Link 
-                    to={`/profile/${property.seller.uid || 'user-redspots'}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-1.5 min-w-0 group/seller max-w-[70%]"
-                  >
-                    <div className="w-5 h-5 rounded-full bg-apple-blue/10 flex items-center justify-center text-[10px] font-bold text-apple-blue shrink-0 group-hover/seller:scale-105 transition-all">
-                      {property.seller.name ? property.seller.name[0] : "A"}
-                    </div>
-                    <span className="text-xs font-semibold text-apple-text-muted group-hover/seller:text-apple-blue truncate transition-colors">
-                      {property.seller.name}
-                    </span>
-                    <Badge 
-                      type={property.seller.verified_badge_type || property.seller.badgeType || (property.seller.isVerified ? 'identity' : 'none')} 
-                      size="sm" 
-                    />
-                  </Link>
-                  
-                  <div className="flex items-center gap-1 text-[11px] font-semibold text-apple-text-muted shrink-0">
-                    <Star className="w-3 h-3 fill-apple-orange text-apple-orange" />
-                    <span>{property.seller.rating || "5.0"}</span>
-                  </div>
-                </div>
-
-                {freshness && (
-                  <div className="flex items-center gap-1.5 text-[10px] font-semibold text-apple-text-muted">
-                    <span className={cn(
-                      "w-1.5 h-1.5 rounded-full shrink-0",
-                      freshness.status === 'expired' ? "bg-apple-red" :
-                      freshness.status === 'stale_pending_confirmation' ? "bg-apple-orange animate-pulse" :
-                      freshness.status === 'approaching_stale' ? "bg-apple-orange" : "bg-apple-green"
-                    )} />
-                    <Clock className="w-2.5 h-2.5 text-apple-text-muted shrink-0" />
-                    <span className="truncate">{freshness.displayText}</span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* List View Action Console */}
-            {isList && (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-auto pt-3 border-t border-apple-border/10 gap-2.5">
-                <Link 
-                  to={`/profile/${property.seller.uid || 'user-redspots'}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-3 min-w-0 group/seller"
-                >
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-apple-blue/10 dark:bg-white/5 flex items-center justify-center text-xs md:text-sm font-bold shadow-inner border border-apple-border/40 shrink-0 group-hover/seller:scale-105 transition-all text-apple-blue">
-                    {property.seller.name ? property.seller.name[0] : "A"}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-xs md:text-sm font-bold text-apple-text truncate group-hover/seller:text-apple-blue transition-colors flex items-center gap-1.5 flex-wrap">
-                      <span>{property.seller.name}</span>
-                      <Badge 
-                        type={property.seller.verified_badge_type || property.seller.badgeType || (property.seller.isVerified ? 'identity' : 'none')} 
-                        size="sm" 
-                      />
-                    </div>
-                    <div className="flex items-center gap-0.5 mt-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={cn(
-                            "w-2.5 h-2.5",
-                            i < Math.floor(property.seller.rating || 5)
-                              ? "fill-apple-orange text-apple-orange"
-                              : "text-apple-border"
-                          )}
-                        />
-                      ))}
-                      <span className="text-[10px] text-apple-text-muted ml-0.5 font-semibold">({property.seller.rating || "5.0"})</span>
-                    </div>
-
-                    {freshness && (
-                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-apple-text-muted mt-1">
-                        <span className={cn(
-                          "w-1.5 h-1.5 rounded-full shrink-0",
-                          freshness.status === 'expired' ? "bg-apple-red" :
-                          freshness.status === 'stale_pending_confirmation' ? "bg-apple-orange animate-pulse" :
-                          freshness.status === 'approaching_stale' ? "bg-apple-orange" : "bg-apple-green"
-                        )} />
-                        <Clock className="w-2.5 h-2.5 text-apple-text-muted shrink-0" />
-                        <span className="truncate">{freshness.displayText}</span>
-                      </div>
-                    )}
-                  </div>
-                </Link>
-                
-                <div className="flex flex-wrap items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-                  <a 
-                    href="tel:+923001234567"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-apple-border hover:bg-apple-gray dark:hover:bg-white/5 text-apple-text active:scale-95 transition-all cursor-pointer shadow-sm"
-                    title="Call Agency"
-                  >
-                    <Phone className="w-3.5 h-3.5" />
-                    <span className="hidden leading-none md:inline">Call</span>
-                  </a>
-
-                  <a 
-                    href={`https://wa.me/923001234567?text=${encodeURIComponent(`Hi, I'm interested in your ${property.make} ${property.model} (${property.location}) listed on Pakizzle.`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-apple-green/20 bg-apple-green/10 hover:bg-apple-green/25 text-apple-green active:scale-95 transition-all cursor-pointer shadow-sm"
-                    title="WhatsApp Agency"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    <span className="hidden leading-none md:inline">WhatsApp</span>
-                  </a>
-
-                  <button 
-                    onClick={handleChatWithSeller}
-                    className="flex items-center justify-center gap-1 px-3 py-2 text-xs font-bold rounded-full border border-apple-blue/20 bg-apple-blue/5 hover:bg-apple-blue/15 text-apple-blue active:scale-95 transition-all cursor-pointer shadow-sm"
-                    title="Instant Chat"
-                    type="button"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span className="hidden leading-none md:inline">Chat</span>
-                  </button>
-
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleCardClick();
-                    }}
-                    className="pakizzle-button-primary !h-8 px-4 !text-[11px] !rounded-full flex items-center justify-center font-bold tracking-tight shadow-md hover:shadow-lg active:scale-95 transition-all"
-                  >
-                    View Details
-                  </button>
-                </div>
-              </div>
-            )}
-            
-          </div>
-        </motion.div>
-      </div>
-      
-      {/* Overlaid Favorite & Compare Buttons */}
+    <article
+      tabIndex={0}
+      role="link"
+      aria-label={`${structuredTitle}, priced at ${exactPrice}, in ${formattedLocation}`}
+      onClick={handleCardClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+      className={cn(
+        "group/card h-full w-full bg-apple-card-bg rounded-2xl border border-apple-border/40 hover:border-brand-primary/40 shadow-apple-card hover:shadow-apple-card-hover transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:outline-none @container",
+        isList && "md:flex-row p-3 gap-4"
+      )}
+    >
+      {/* 1. MEDIA SECTION: Explicit 4:3 Aspect Ratio with Overlays Only */}
       <div className={cn(
-        "absolute z-30 flex flex-col gap-2.5",
-        "top-5 right-5"
+        "relative shrink-0 w-full overflow-hidden bg-apple-gray dark:bg-white/5",
+        isList ? "md:w-[280px] lg:w-[320px] rounded-xl" : "aspect-[4/3]"
       )}>
-        <motion.button
-          whileHover={{ scale: 1.12 }}
-          whileTap={{ scale: 0.85 }}
-          transition={SPRING_SNAPPY}
-          onClick={handleToggleWishlist}
-          className={cn(
-            "w-8 h-8 flex items-center justify-center rounded-full backdrop-blur-xl transition-all duration-[400ms] shadow-apple-soft border border-apple-border/20 cursor-pointer",
-            isSaved 
-              ? "bg-apple-red text-white border-apple-red shadow-md opacity-100" 
-              : "bg-white/80 dark:bg-black/80 text-apple-text hover:bg-white dark:hover:bg-white/15 opacity-0 group-hover:opacity-100",
-            isList && !isSaved && "opacity-100 bg-white dark:bg-black"
+        <div className="w-full h-full relative aspect-[4/3] overflow-hidden">
+          <img
+            src={images[activeImageIndex] || images[0]}
+            alt={structuredTitle}
+            loading={isEager ? "eager" : "lazy"}
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+          />
+
+          {/* Carousel Arrows (Hover visible) */}
+          {images.length > 1 && (
+            <div className="absolute inset-y-0 inset-x-2 flex items-center justify-between pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+                }}
+                className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center pointer-events-auto transition-transform active:scale-90"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+                }}
+                className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center pointer-events-auto transition-transform active:scale-90"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           )}
-          title={isSaved ? "Remove from favorites" : "Save property"}
-        >
-          <motion.div
-            animate={isSaved ? { scale: [1, 1.4, 0.9, 1] } : { scale: 1 }}
-            transition={SPRING_SNAPPY}
-          >
-            <Heart className={cn("w-4.5 h-4.5", isSaved && "fill-current text-white")} />
-          </motion.div>
-        </motion.button>
-        {onCompare && (
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onCompare(property);
-            }}
-            className={cn(
-              "w-8 h-8 flex items-center justify-center rounded-full backdrop-blur-xl transition-all duration-[400ms] shadow-apple-soft border border-apple-border/20 cursor-pointer",
-              isCompared 
-                ? "bg-apple-blue text-white border-apple-blue shadow-md opacity-100" 
-                : "bg-white/80 dark:bg-black/80 text-apple-text hover:bg-white dark:hover:bg-white/15 opacity-0 group-hover:opacity-100"
+
+          {/* OVERLAYS ONLY (Photo counter, Video tour button, Save heart) - NO TEXT OVERLAYS */}
+          {/* Top-Right: Save Heart & Compare Buttons */}
+          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
+            <button
+              type="button"
+              onClick={handleToggleWishlist}
+              className={cn(
+                "w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center transition-all cursor-pointer shadow-xs",
+                isSaved 
+                  ? "bg-apple-red text-white" 
+                  : "bg-black/40 hover:bg-black/60 text-white"
+              )}
+              aria-label={isSaved ? "Remove from saved properties" : "Save property"}
+            >
+              <Heart className={cn("w-4 h-4", isSaved && "fill-current")} />
+            </button>
+
+            {onCompare && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCompare(property);
+                }}
+                className={cn(
+                  "w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center transition-all cursor-pointer shadow-xs",
+                  isCompared
+                    ? "bg-brand-primary text-white"
+                    : "bg-black/40 hover:bg-black/60 text-white"
+                )}
+                aria-label={isCompared ? "Remove from compare" : "Add to comparison"}
+              >
+                <Scale className="w-3.5 h-3.5" />
+              </button>
             )}
-            title="Compare properties"
+          </div>
+
+          {/* Bottom-Left: Video Tour Button */}
+          {hasWalkthrough && (
+            <div className="absolute bottom-2.5 left-2.5 z-10">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/stories');
+                }}
+                className="h-7 px-2.5 rounded-full bg-black/75 hover:bg-black text-white text-[11px] font-bold flex items-center gap-1.5 backdrop-blur-md border border-white/20 shadow-md cursor-pointer transition-transform hover:scale-105"
+                aria-label="Watch video tour"
+              >
+                <Play className="w-3 h-3 fill-white text-white" />
+                <span>Tour</span>
+              </button>
+            </div>
+          )}
+
+          {/* Bottom-Right: Photo Counter */}
+          <div 
+            className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-bold tracking-wider z-10"
+            aria-label={`Photo ${activeImageIndex + 1} of ${images.length}`}
           >
-            <Scale className="w-4.5 h-4.5" />
-          </motion.button>
-        )}
+            {activeImageIndex + 1}/{images.length}
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* 2. LISTING CONTENT SECTION */}
+      <div className="p-4 flex-1 flex flex-col justify-between space-y-2.5">
+        <div>
+          {/* Statistical Comparables Valuation Badge (shown ONLY when >= 5 comparables exist) */}
+          {valuation && (
+            <div className="mb-2 relative">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowValuationBasis(!showValuationBasis);
+                }}
+                className={cn(
+                  "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-colors cursor-pointer",
+                  valuation.status === "below" 
+                    ? "bg-apple-green/10 text-apple-green border-apple-green/30" 
+                    : valuation.status === "above"
+                    ? "bg-apple-orange/10 text-apple-orange border-apple-orange/30"
+                    : "bg-apple-blue/10 text-apple-blue border-apple-blue/30"
+                )}
+                aria-label={valuation.label}
+              >
+                <Info className="w-3 h-3" />
+                <span>{valuation.label}</span>
+              </button>
+
+              {showValuationBasis && (
+                <div 
+                  className="absolute left-0 top-6 z-20 p-2.5 rounded-xl bg-apple-surface border border-apple-border shadow-lg text-[11px] text-apple-text max-w-xs"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="font-semibold">{valuation.basis}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Price: clamp(18px, 2.2cqw, 22px), never truncated (scrollWidth <= clientWidth) */}
+          <div className="flex items-baseline justify-between gap-2">
+            <div 
+              className="font-bold text-apple-text text-[clamp(18px,2.2cqw,22px)] tracking-tight leading-tight whitespace-nowrap"
+              title={exactPrice}
+              aria-label={`Price: ${exactPrice}${isRent ? " per month" : ""}`}
+            >
+              <span>{compactPrice}</span>
+              {isRent && <span className="text-xs font-normal text-apple-text-muted ml-1">/ month</span>}
+            </div>
+
+            {/* Price Drop Signal only if real historical price existed */}
+            {(property as any).originalPrice && (property as any).originalPrice > property.price && (
+              <span className="text-[11px] text-apple-green font-bold whitespace-nowrap">
+                Price Drop
+              </span>
+            )}
+          </div>
+
+          {/* Title: One structured formatter (type + size + area), 2 lines max with tooltip */}
+          <h3 
+            className="text-sm font-bold text-apple-text leading-snug line-clamp-2 mt-1"
+            title={structuredTitle}
+          >
+            {structuredTitle}
+          </h3>
+
+          {/* Location: Single line "Society · City" */}
+          <div className="flex items-center gap-1 text-xs text-apple-text-muted mt-1 truncate">
+            <MapPin className="w-3.5 h-3.5 text-brand-primary shrink-0" />
+            <span className="truncate">{formattedLocation}</span>
+          </div>
+
+          {/* Specs: Icon row (Bed, Bath, Area) with unit toggle + furnishing & year chips */}
+          <div className="flex items-center gap-3 text-xs text-apple-text font-semibold mt-2.5 overflow-x-auto no-scrollbar py-0.5">
+            {/* Bedrooms */}
+            <div className="flex items-center gap-1 shrink-0" title="Bedrooms">
+              <Bed className="w-3.5 h-3.5 text-apple-text-muted" />
+              <span>{property.bedrooms || 3} Beds</span>
+            </div>
+
+            {/* Bathrooms */}
+            <div className="flex items-center gap-1 shrink-0" title="Bathrooms">
+              <Bath className="w-3.5 h-3.5 text-apple-text-muted" />
+              <span>{property.bathrooms || 3} Baths</span>
+            </div>
+
+            {/* Covered Area with Interactive Unit Toggle */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setAreaUnit((prev) => (prev === "marla" ? "sqft" : "marla"));
+              }}
+              className="flex items-center gap-1 shrink-0 px-1.5 py-0.5 rounded bg-apple-gray dark:bg-white/5 hover:bg-apple-gray/80 text-[11px] font-bold text-brand-primary cursor-pointer transition-colors"
+              title="Click to toggle Marla / Sq.Ft."
+            >
+              <Maximize2 className="w-3 h-3" />
+              <span>{displayArea}</span>
+            </button>
+          </div>
+
+          {/* Plain chips for Year built & Furnishing */}
+          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+            {property.year && (
+              <span className="px-2 py-0.5 rounded-md bg-apple-gray dark:bg-white/5 text-[10px] font-semibold text-apple-text-muted">
+                Built {property.year}
+              </span>
+            )}
+            <span className="px-2 py-0.5 rounded-md bg-apple-gray dark:bg-white/5 text-[10px] font-semibold text-apple-text-muted capitalize">
+              {property.transmission === "furnished" ? "Furnished" : "Unfurnished"}
+            </span>
+
+            {/* Trust Badges: At most 2, responsive icon-only on narrow cards */}
+            {trustBadges.map((badge, i) => (
+              <span 
+                key={i} 
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-brand-primary/10 text-brand-primary text-[10px] font-bold"
+                title={badge.label}
+              >
+                <ShieldCheck className="w-3 h-3" />
+                <span className="@[max-width:300px]:hidden">{badge.label}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. FOOTER: Seller info + Date posted + List view Actions */}
+        <div className="pt-3 border-t border-apple-border/20 flex items-center justify-between gap-2 mt-auto">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-6 h-6 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center text-xs font-bold shrink-0">
+              {property.seller?.name ? property.seller.name[0] : "P"}
+            </div>
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-apple-text truncate block">
+                {property.seller?.name || "Verified Owner"}
+              </span>
+              {freshness && (
+                <span className="text-[10px] text-apple-text-muted flex items-center gap-1">
+                  <Clock className="w-2.5 h-2.5" />
+                  <span>{freshness.displayText}</span>
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* List View Quick Contact Actions */}
+          {isList ? (
+            <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+              <a
+                href="tel:+923001234567"
+                className="px-2.5 py-1.5 rounded-xl border border-apple-border hover:bg-apple-gray dark:hover:bg-white/5 text-xs font-bold text-apple-text inline-flex items-center gap-1"
+                aria-label="Call seller"
+              >
+                <Phone className="w-3 h-3" />
+                <span>Call</span>
+              </a>
+              <a
+                href={`https://wa.me/923001234567?text=${encodeURIComponent(`Hi, I am interested in ${structuredTitle} listed on Pakizzle.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1.5 rounded-xl bg-apple-green/10 hover:bg-apple-green/20 text-apple-green text-xs font-bold inline-flex items-center gap-1"
+                aria-label="WhatsApp seller"
+              >
+                <MessageCircle className="w-3 h-3" />
+                <span>WhatsApp</span>
+              </a>
+              <button
+                type="button"
+                onClick={handleChatWithSeller}
+                className="px-2.5 py-1.5 rounded-xl bg-brand-primary text-white text-xs font-bold inline-flex items-center gap-1"
+                aria-label="Chat with seller"
+              >
+                <MessageSquare className="w-3 h-3" />
+                <span>Chat</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleChatWithSeller}
+              className="p-1.5 rounded-lg text-brand-primary hover:bg-brand-primary/10 transition-colors"
+              aria-label="Chat with seller"
+              title="Chat"
+            >
+              <MessageSquare className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+    </article>
   );
 });
 

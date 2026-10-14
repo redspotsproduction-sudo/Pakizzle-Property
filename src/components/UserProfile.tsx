@@ -39,6 +39,7 @@ import { toast } from "sonner";
 
 import { useProperties } from "../context/PropertyContext";
 import { useChat } from "../context/ChatContext";
+import { useAuth } from "../context/AuthContext";
 
 type Tab = "Ads" | "Ratings" | "Security";
 type RatingFilter = "All" | "Buyer" | "Seller";
@@ -46,6 +47,7 @@ type RatingFilter = "All" | "Buyer" | "Seller";
 export default function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { properties: allVehicles } = useProperties();
   const { startConversation } = useChat();
   const [profile, setProfile] = useState<any>(null);
@@ -229,7 +231,7 @@ export default function UserProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--text-primary)] dark:bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-page)] dark:bg-black flex items-center justify-center">
         <motion.div 
           animate={{ rotate: 360 }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
@@ -240,7 +242,7 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="text-[var(--text-primary)] dark:text-[var(--text-primary)] antialiased min-h-screen bg-[var(--text-primary)] dark:bg-black transition-colors duration-500 selection:bg-apple-blue/10 selection:text-apple-blue">
+    <div className="text-[var(--text-primary)] dark:text-[var(--text-primary)] antialiased min-h-screen bg-[var(--bg-page)] dark:bg-black transition-colors duration-500 selection:bg-apple-blue/10 selection:text-apple-blue">
       <Header />
       
       <main className="max-w-[1280px] mx-auto px-6 sm:px-8 pt-32 pb-24 relative z-10">

@@ -47,7 +47,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { cn, formatPrice } from "../../lib/utils";
 import { db, storage } from "../../firebase";
-import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp, addDoc, getDocs } from "firebase/firestore";
+import { collection, query, where, onSnapshot, doc, updateDoc, setDoc, serverTimestamp, addDoc, getDocs } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 
 export interface PendingQueueItem {
@@ -374,6 +374,15 @@ export default function ApprovalCenter() {
             business_status: item.type === "agency_verification" ? 'approved' : 'none',
             updatedAt: new Date().toISOString()
           });
+
+          // Sync publicProfiles for public display
+          await setDoc(doc(db, 'publicProfiles', uDoc.id), {
+            badge: badgeTier,
+            badgeType: badgeTier,
+            isVerified: true,
+            verificationLevel: 3,
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
 
           // Sync all listings owned by this user
           const pQuery = query(collection(db, 'properties'), where('seller.uid', '==', uDoc.id));

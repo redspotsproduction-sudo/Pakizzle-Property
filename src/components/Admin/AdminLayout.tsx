@@ -25,13 +25,16 @@ import {
   Sliders,
   Megaphone,
   Video,
-  Plus,
   Building2,
   Home,
-  Sparkles
+  Sparkles,
+  Sun,
+  Moon,
+  Monitor
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -88,6 +91,7 @@ const navItems: NavItem[] = [
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const { profile, logout, isAdmin, isModerator } = useAuth();
+  const { themeMode, setThemeMode } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -365,6 +369,56 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <Search className="w-5 h-5" />
             </button>
             
+            {/* Theme Toggle in Admin Header */}
+            <div 
+              className="flex items-center p-0.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 shrink-0"
+              role="radiogroup"
+              aria-label="Theme selection"
+            >
+              <button
+                type="button"
+                onClick={() => setThemeMode("light")}
+                className={cn(
+                  "p-1.5 rounded-full transition-all cursor-pointer focus-ring-pakizzle",
+                  themeMode === "light" 
+                    ? "bg-white text-apple-text shadow-xs" 
+                    : "text-apple-text-muted hover:text-apple-text"
+                )}
+                title="Light Theme"
+                aria-label="Light Theme"
+              >
+                <Sun className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setThemeMode("dark")}
+                className={cn(
+                  "p-1.5 rounded-full transition-all cursor-pointer focus-ring-pakizzle",
+                  themeMode === "dark" 
+                    ? "bg-white/20 text-white shadow-xs" 
+                    : "text-apple-text-muted hover:text-apple-text"
+                )}
+                title="Dark Theme"
+                aria-label="Dark Theme"
+              >
+                <Moon className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setThemeMode("system")}
+                className={cn(
+                  "p-1.5 rounded-full transition-all cursor-pointer focus-ring-pakizzle",
+                  themeMode === "system" 
+                    ? "bg-white dark:bg-white/20 text-apple-text shadow-xs" 
+                    : "text-apple-text-muted hover:text-apple-text"
+                )}
+                title="System Theme"
+                aria-label="System Theme"
+              >
+                <Monitor className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
             <div className="flex items-center gap-2">
               <button className="relative w-11 h-11 flex items-center justify-center bg-apple-gray/50 dark:bg-white/5 rounded-2xl hover:scale-105 transition-all group overflow-hidden">
                 <Bell className="w-5 h-5 text-apple-text-muted group-hover:text-apple-text transition-colors duration-500" />
@@ -415,8 +469,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {location.pathname !== '/admin/chats' && (
               <footer className="mt-20 pt-8 border-t border-apple-border/20 flex items-center justify-between opacity-30 select-none pointer-events-none">
                 <div className="flex items-center gap-2">
-                  <Car className="w-4 h-4" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Neural Terminal V2.4.0</span>
+                  <Building2 className="w-4 h-4" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Pakizzle Real Estate Portal</span>
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-wider text-right">
                   Authorized: {profile?.displayName?.toUpperCase()}

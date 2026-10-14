@@ -99,7 +99,7 @@ export default function UserReels() {
       if (!currentUser) return;
       try {
         const q = query(
-          collection(db, 'vehicles'),
+          collection(db, 'properties'),
           where('seller.uid', '==', currentUser.uid)
         );
         const querySnapshot = await getDocs(q);

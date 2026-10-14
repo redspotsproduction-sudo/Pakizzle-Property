@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 export type ThemeMode = "light" | "dark" | "system";
@@ -29,11 +29,37 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         return saved as ThemeMode;
       }
     } catch (e) {}
-    // Default to System as per Part 7 specifications
+    // Default to System as per specifications
     return "system";
   });
 
   const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(getSystemTheme);
+
+  // Sync user themePreference from Firestore on sign in
+  useEffect(() => {
+    try {
+      const auth = getAuth();
+      const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+        if (currentUser) {
+          try {
+            const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+            if (userSnap.exists()) {
+              const pref = userSnap.data()?.themePreference;
+              if (pref === "light" || pref === "dark" || pref === "system") {
+                setThemeModeState(pref);
+                try {
+                  localStorage.setItem("pakizzle-theme", pref);
+                } catch (e) {}
+              }
+            }
+          } catch (e) {
+            // Silently fallback to current state
+          }
+        }
+      });
+      return () => unsubscribe();
+    } catch (e) {}
+  }, []);
 
   // Listen to system color-scheme changes
   useEffect(() => {
@@ -64,6 +90,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(resolvedTheme);
+    root.setAttribute("data-theme", resolvedTheme);
     root.style.colorScheme = resolvedTheme;
 
     // Set mobile browser bar / theme-color meta tag

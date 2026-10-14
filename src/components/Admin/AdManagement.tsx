@@ -612,7 +612,7 @@ export default function AdManagement() {
                   className={cn(
                     "py-2 px-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all duration-300",
                     activeTab === 'editor' 
-                      ? "bg-white dark:bg-[var(--text-primary)] text-gold-decoration shadow-sm" 
+                      ? "bg-white dark:bg-[var(--bg-surface)] text-gold-decoration shadow-sm" 
                       : "text-apple-text-muted hover:text-apple-text dark:hover:text-apple-gray"
                   )}
                 >
@@ -624,7 +624,7 @@ export default function AdManagement() {
                   className={cn(
                     "py-2 px-3 text-xs font-black uppercase tracking-wider rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5",
                     activeTab === 'templates' 
-                      ? "bg-white dark:bg-[var(--text-primary)] text-gold-decoration shadow-sm" 
+                      ? "bg-white dark:bg-[var(--bg-surface)] text-gold-decoration shadow-sm" 
                       : "text-apple-text-muted hover:text-apple-text dark:hover:text-apple-gray"
                   )}
                 >

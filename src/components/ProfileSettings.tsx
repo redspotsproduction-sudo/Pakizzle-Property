@@ -35,8 +35,12 @@ import {
   Fingerprint,
   AlertTriangle,
   Shield,
-  Mail
+  Mail,
+  Sun,
+  Moon,
+  Monitor
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
 import { cn } from '../lib/utils';
@@ -76,6 +80,7 @@ export default function ProfileSettings() {
     setDefaultPaymentMethod
   } = useAuth();
   const { setNotification } = useChat();
+  const { themeMode, setThemeMode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
@@ -1216,6 +1221,55 @@ export default function ProfileSettings() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-8">
+                      {/* Theme & Sensory Appearance Card */}
+                      <div className="bg-apple-card-bg rounded-[40px] p-8 md:p-10 shadow-apple-soft border border-apple-border/50">
+                        <div className="flex items-center gap-4 mb-6">
+                          <div className="w-12 h-12 bg-apple-blue/10 rounded-2xl flex items-center justify-center">
+                            <Sun className="w-6 h-6 text-apple-blue" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold">Theme & Appearance</h3>
+                            <p className="text-sm text-apple-text-muted font-medium">Select your interface visual appearance. Synced across all your devices.</p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                          {[
+                            { id: 'light' as const, label: 'Luminous Light', desc: 'Warm Brand Cream (#FAF3E6)', icon: Sun, color: 'bg-white text-apple-text border-apple-border dark:bg-apple-surface dark:text-white dark:border-white/10' },
+                            { id: 'dark' as const, label: 'Nocturnal Dark', desc: 'True Neutral Black (#000000)', icon: Moon, color: 'bg-black text-white border-white/20' },
+                            { id: 'system' as const, label: 'Auto System', desc: 'Syncs with device settings', icon: Monitor, color: 'bg-gradient-to-br from-white to-[var(--bg-inset)] text-apple-text border-apple-border dark:border-white/10' },
+                          ].map((theme) => {
+                            const isSelected = themeMode === theme.id;
+                            return (
+                              <button
+                                key={theme.id}
+                                type="button"
+                                onClick={() => {
+                                  setThemeMode(theme.id);
+                                  toast.success(`Theme set to ${theme.label}`);
+                                }}
+                                className={cn(
+                                  "h-28 rounded-2xl border flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden group cursor-pointer",
+                                  theme.color,
+                                  isSelected 
+                                    ? "ring-2 ring-apple-blue border-transparent scale-[1.02] shadow-md" 
+                                    : "hover:scale-[1.01] opacity-75 hover:opacity-100 duration-300 shadow-sm"
+                                )}
+                              >
+                                {isSelected && (
+                                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-apple-blue animate-pulse" />
+                                )}
+                                <theme.icon className="w-5 h-5 relative z-10" />
+                                <div className="text-center px-2">
+                                  <span className="text-[11px] font-bold uppercase tracking-wider block relative z-10">{theme.label}</span>
+                                  <span className="text-[9px] text-apple-text-muted font-medium block truncate">{theme.desc}</span>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
                       {/* Sign-In & Security Card */}
                       <div className="bg-apple-card-bg rounded-[40px] p-8 md:p-10 shadow-apple-soft border border-apple-border/50">
                         <div className="flex items-center gap-4 mb-8">

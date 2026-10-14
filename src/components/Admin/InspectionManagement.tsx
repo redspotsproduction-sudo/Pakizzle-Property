@@ -378,7 +378,7 @@ export default function InspectionManagement() {
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 self-start md:self-end">
           {/* Tab Switcher modeled after standard segment controls */}
-          <div className="flex p-0.5 bg-[var(--text-primary)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
+          <div className="flex p-0.5 bg-[var(--bg-inset)] dark:bg-white/5 rounded-xl border border-black/[0.04] dark:border-white/[0.04] self-start">
             <button
               onClick={() => setActiveTab('requests')}
               className={cn(
@@ -411,7 +411,7 @@ export default function InspectionManagement() {
                 placeholder="Search by vehicle, phone, email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           )}
@@ -422,7 +422,7 @@ export default function InspectionManagement() {
                 <button 
                   onClick={seedCompanies}
                   disabled={isUpdating}
-                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[var(--text-primary)] dark:hover:bg-white/5 text-[var(--text-primary)] dark:text-white transition-all flex items-center justify-center"
+                  className="rounded-xl border border-black/[0.04] dark:border-white/[0.04] bg-white dark:bg-[var(--bg-surface)] h-9 px-4 text-xs font-semibold shadow-sm hover:bg-[var(--bg-inset)] dark:hover:bg-white/5 text-[var(--text-primary)] dark:text-white transition-all flex items-center justify-center"
                 >
                   <Activity className="w-3.5 h-3.5 mr-1.5 text-apple-blue" /> Seed Providers
                 </button>
@@ -487,7 +487,7 @@ export default function InspectionManagement() {
                       : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1)} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
@@ -574,24 +574,24 @@ export default function InspectionManagement() {
 
                         {/* Bento Micro-Stats box matrix matching Seller Console layout precisely */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3.5">
-                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                             <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Operational Node</p>
                             <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-mono mt-0.5">
                               {request.city}
                               <span className="text-[9px] text-apple-green font-semibold font-sans ml-0.5">Active</span>
                             </p>
                           </div>
-                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                             <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Field Engineer</p>
                             <p className="text-xs font-bold text-apple-blue font-mono mt-0.5 truncate max-w-full">
                               {request.assignedEngineer || 'Assigning...'}
                             </p>
                           </div>
-                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
                             <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Workflow Phase</p>
                             <p className="text-xs font-bold text-[var(--text-primary)] dark:text-white font-sans mt-0.5 capitalize">{request.status}</p>
                           </div>
-                          <div className="px-3 py-1.5 rounded-xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
+                          <div className="px-3 py-1.5 rounded-xl bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] sm:block hidden">
                             <p className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Platform Security</p>
                             <p className="text-xs font-bold text-apple-green font-mono mt-0.5">SSL Secured</p>
                           </div>
@@ -611,7 +611,7 @@ export default function InspectionManagement() {
 
                           <DropdownMenu>
                             <DropdownMenuTrigger className={cn(
-                              "w-8.5 h-8.5 rounded-lg bg-[var(--text-primary)] dark:bg-white/5 flex items-center justify-center transition-all hover:bg-apple-gray dark:hover:bg-white/10 text-apple-text-muted"
+                              "w-8.5 h-8.5 rounded-lg bg-[var(--bg-inset)] dark:bg-white/5 flex items-center justify-center transition-all hover:bg-apple-gray dark:hover:bg-white/10 text-apple-text-muted"
                             )}>
                               <MoreVertical className="w-4 h-4" />
                             </DropdownMenuTrigger>
@@ -680,7 +680,7 @@ export default function InspectionManagement() {
                 >
                   <div className="p-6 flex-1 space-y-6">
                     <div className="flex justify-between items-start">
-                      <div className="w-16 h-16 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                      <div className="w-16 h-16 rounded-xl bg-[var(--bg-inset)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                         <img 
                           src={company.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=007AFF&color=fff`} 
                           alt={company.name}
@@ -763,7 +763,7 @@ export default function InspectionManagement() {
 
       {/* Edit Modal */}
       <Dialog open={!!selectedRequest} onOpenChange={(open) => { if (!open) setSelectedRequest(null); }}>
-        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-4xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--bg-surface)] shadow-2xl flex flex-col">
           {selectedRequest && (
             <div className="flex flex-col h-full overflow-hidden">
               <div className="p-8 border-b border-apple-border flex items-center justify-between bg-apple-gray/10 dark:bg-white/[0.02]">
@@ -904,7 +904,7 @@ export default function InspectionManagement() {
 
       {/* Provider Modal */}
       <Dialog open={isCompanyModalOpen} onOpenChange={(open) => { if (!open) { setIsCompanyModalOpen(false); setEditingCompany(null); } }}>
-        <DialogContent className="max-w-[92vw] lg:max-w-2xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--text-primary)] shadow-2xl flex flex-col">
+        <DialogContent className="max-w-[92vw] lg:max-w-2xl h-[85vh] max-h-[85vh] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white dark:bg-[var(--bg-surface)] shadow-2xl flex flex-col">
           <form onSubmit={handleUpdateCompany} className="flex flex-col h-full overflow-hidden">
             <div className="p-8 border-b border-apple-border flex items-center justify-between bg-apple-gray/10 dark:bg-white/[0.02]">
               <div>
@@ -929,7 +929,7 @@ export default function InspectionManagement() {
                 {/* Logo and Identity */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div className="flex flex-col items-center">
-                    <div className="relative group w-28 h-28 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06] shadow-inner">
+                    <div className="relative group w-28 h-28 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06] shadow-inner">
                       {companyForm.logoUrl ? (
                         <img 
                           src={companyForm.logoUrl} 
@@ -1051,7 +1051,7 @@ export default function InspectionManagement() {
                 </div>
 
                 {/* Presentation Settings */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4.5 rounded-2xl bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4.5 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02]">
                   <div className="flex items-center justify-between sm:justify-start gap-3">
                     <input 
                       type="checkbox" 

@@ -225,7 +225,7 @@ export default function App() {
     location.pathname.startsWith('/financing/apply') ||
     location.pathname === '/sell' ||
     location.pathname === '/settings' ||
-    (location.pathname === '/chat' && activeConversationId !== null);
+    ((location.pathname === '/chat' || location.pathname === '/messages') && activeConversationId !== null);
 
   const LoadingScreen = () => (
     <div className="min-h-screen flex items-center justify-center bg-apple-bg text-apple-text overflow-hidden">
@@ -639,6 +639,11 @@ export default function App() {
           </ProtectedRoute>
         } />
         <Route path="/chat" element={
+          <ProtectedRoute>
+            <ChatContainer />
+          </ProtectedRoute>
+        } />
+        <Route path="/messages" element={
           <ProtectedRoute>
             <ChatContainer />
           </ProtectedRoute>

@@ -47,10 +47,13 @@ export interface MarketInsightItem {
   change: string;
   direction: 'up' | 'down' | 'neutral';
   subtitle: string;
+  sampleSize: number;
+  period: string;
   filterQuery: {
     city?: string;
     area?: string;
     make?: string;
+    propertyType?: string;
     verifiedOnly?: boolean;
   };
   metricType: 'price_index' | 'demand_signal' | 'new_listings';
@@ -62,15 +65,30 @@ export interface MarketInsightsResponse {
   insights: MarketInsightItem[];
 }
 
-// Fallbacks strictly matching the real DB schema in case of network interruption
+// Fallbacks strictly matching the 17-item unified schema across selector and sidebar
 export const CANONICAL_PROPERTY_TYPES: PropertyTypeItem[] = [
-  { id: 1, name: "House", slug: "house", category: "residential", icon: "Home", sortOrder: 1, isActive: true },
-  { id: 2, name: "Flat / Apartment", slug: "flat-apartment", category: "residential", icon: "Building2", sortOrder: 2, isActive: true },
-  { id: 3, name: "Plot", slug: "plot", category: "plot", icon: "LandPlot", sortOrder: 3, isActive: true },
-  { id: 4, name: "Commercial", slug: "commercial", category: "commercial", icon: "Store", sortOrder: 4, isActive: true },
-  { id: 5, name: "Farmhouse", slug: "farmhouse", category: "residential", icon: "Trees", sortOrder: 5, isActive: true },
-  { id: 6, name: "Room", slug: "room", category: "residential", icon: "BedDouble", sortOrder: 6, isActive: true },
-  { id: 7, name: "Penthouse", slug: "penthouse", category: "residential", icon: "Sparkles", sortOrder: 7, isActive: true },
+  // Residential (7)
+  { id: 1, name: "House / Villa", slug: "house", category: "residential", icon: "Home", sortOrder: 1, isActive: true },
+  { id: 2, name: "Flat / Apartment", slug: "flat", category: "residential", icon: "Building2", sortOrder: 2, isActive: true },
+  { id: 3, name: "Upper Portion", slug: "upper-portion", category: "residential", icon: "Layers", sortOrder: 3, isActive: true },
+  { id: 4, name: "Lower Portion", slug: "lower-portion", category: "residential", icon: "Layers", sortOrder: 4, isActive: true },
+  { id: 5, name: "Penthouse", slug: "penthouse", category: "residential", icon: "Sparkles", sortOrder: 5, isActive: true },
+  { id: 6, name: "Farm House", slug: "farmhouse", category: "residential", icon: "Trees", sortOrder: 6, isActive: true },
+  { id: 7, name: "Room / Studio", slug: "room", category: "residential", icon: "BedDouble", sortOrder: 7, isActive: true },
+
+  // Plots & Land (5)
+  { id: 8, name: "Residential Plot", slug: "residential-plot", category: "plot", icon: "LandPlot", sortOrder: 8, isActive: true },
+  { id: 9, name: "Commercial Plot", slug: "commercial-plot", category: "plot", icon: "Store", sortOrder: 9, isActive: true },
+  { id: 10, name: "Agricultural Land", slug: "agricultural-land", category: "plot", icon: "Trees", sortOrder: 10, isActive: true },
+  { id: 11, name: "Industrial Land", slug: "industrial-land", category: "plot", icon: "Building2", sortOrder: 11, isActive: true },
+  { id: 12, name: "Plot File", slug: "plot-file", category: "plot", icon: "Layers", sortOrder: 12, isActive: true },
+
+  // Commercial (5)
+  { id: 13, name: "Office Space", slug: "office", category: "commercial", icon: "Building2", sortOrder: 13, isActive: true },
+  { id: 14, name: "Retail Shop", slug: "shop", category: "commercial", icon: "Store", sortOrder: 14, isActive: true },
+  { id: 15, name: "Commercial Plaza", slug: "plaza", category: "commercial", icon: "Building2", sortOrder: 15, isActive: true },
+  { id: 16, name: "Warehouse / Godown", slug: "warehouse", category: "commercial", icon: "Building2", sortOrder: 16, isActive: true },
+  { id: 17, name: "Factory / Industrial Unit", slug: "factory", category: "commercial", icon: "Building2", sortOrder: 17, isActive: true },
 ];
 
 export const CANONICAL_CITIES: CityItem[] = [
@@ -226,20 +244,24 @@ class PropertySchemaService {
       insights: [
         {
           id: "trend-1",
-          title: `Average price in DHA Phase 6, ${city}`,
+          title: `Average price per marla in DHA Phase 6 up 6% over 30 days, 24 listings`,
           change: "+6%",
           direction: "up",
-          subtitle: "Monthly capital growth based on verified 1-Kanal transactions",
-          filterQuery: { city, area: "DHA Phase 6", make: "House" },
+          subtitle: "Based on 24 verified transactions in DHA Phase 6 over past 30 days",
+          sampleSize: 24,
+          period: "30 days",
+          filterQuery: { city, area: "DHA Phase 6", propertyType: "House" },
           metricType: "price_index"
         },
         {
           id: "demand-1",
-          title: `Searches for 10-Marla plots in Bahria Town, ${city}`,
+          title: `Searches for 10-Marla plots in Bahria Town up 18% over 7 days, 38 inquiries`,
           change: "+18%",
           direction: "up",
-          subtitle: "First-party buyer interest surge this week",
-          filterQuery: { city, area: "Bahria Town", make: "Plot" },
+          subtitle: "Based on 38 unique verified buyer inquiries over past week",
+          sampleSize: 38,
+          period: "7 days",
+          filterQuery: { city, area: "Bahria Town", propertyType: "Plot" },
           metricType: "demand_signal"
         }
       ]

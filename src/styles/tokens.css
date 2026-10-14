@@ -7,6 +7,17 @@
 
 :root {
   /* =========================================================================
+     GLOBAL LAYOUT CONTRACT & Z-INDEX TOKENS
+     ========================================================================= */
+  --header-h: calc(4.5rem + env(safe-area-inset-top, 0px));
+  --z-base: 0;
+  --z-sticky: 20;
+  --z-header: 40;
+  --z-popover: 50;
+  --z-modal: 60;
+  --z-toast: 70;
+
+  /* =========================================================================
      LIGHT THEME: BRAND WARM CREAM & DEEP PURPLE ACCENT
      ========================================================================= */
   
@@ -49,20 +60,35 @@
   /* Gold (DECORATION ONLY on light surfaces: hairlines, fills, featured marker) */
   --gold-decoration: #C9A227;
 
-  /* Theme tokens migrated from hardcoded values */
-  --brand-blue: #0071e3;
-  --brand-indigo: #3b82f6;
-  --brand-purple: #605bff;
+  /* Brand Spectrum Palette (#4A90D2, #5FA84C, #F0A830, #D93A45, #7A1E5E) */
+  --spectrum-blue: #4A90D2;
+  --spectrum-green: #5FA84C;
+  --spectrum-amber: #F0A830;
+  --spectrum-crimson: #D93A45;
+  --spectrum-plum: #7A1E5E;
+
+  /* Renamed brand tokens to actual functional roles */
+  --chart-accent-indigo: #4F46E5;
+  --chart-accent-purple: #7A1E5E;
+  --brand-blue: var(--spectrum-blue);
+  --brand-indigo: var(--chart-accent-indigo);
+  --brand-purple: var(--chart-accent-purple);
   --surface-dark: #161617;
   --border-chart-grid: #E2E8F0;
 
-  /* Chart spectrum palette via CSS variables */
-  --chart-primary: var(--accent);
-  --chart-secondary: var(--brand-purple);
-  --chart-tertiary: var(--brand-blue);
-  --chart-quaternary: var(--brand-indigo);
-  --chart-success: var(--success);
-  --chart-warning: var(--warning);
+  /* Chart per-theme series (Light Mode: calibrated >= 3:1 on cream #FAF3E6 & white) */
+  --chart-series-1: #1D68BD;      /* 5.2:1 contrast on cream */
+  --chart-series-2: #1E7A38;      /* Deep botanical green: 4.88:1 on cream (>= 3:1 graphical) */
+  --chart-series-3: #9A4800;      /* Deep amber gold: 5.76:1 on cream (>= 3:1 graphical) */
+  --chart-series-4: #B91C1C;      /* Deep crimson: 5.8:1 on cream */
+  --chart-series-5: #5B2A86;      /* Imperial plum: 8.97:1 on cream */
+  --chart-primary: var(--chart-series-1);
+  --chart-secondary: var(--chart-series-2);
+  --chart-tertiary: var(--chart-series-3);
+  --chart-quaternary: var(--chart-series-4);
+  --chart-quinary: var(--chart-series-5);
+  --chart-success: var(--chart-series-2);
+  --chart-warning: var(--chart-series-3);
 
   /* Elevation Shadows (Soft shadows tinted with brand deep purple at low opacity) */
   --shadow-card: 0 4px 20px rgba(36, 18, 56, 0.06);
@@ -146,20 +172,35 @@
   /* Gold (#C9A227 is 8.68:1 on black, 7.80:1 on #111113 - headline highlight, featured markers, hairlines) */
   --gold-decoration: #C9A227;
 
-  /* Theme tokens migrated from hardcoded values */
-  --brand-blue: #388bfd;
-  --brand-indigo: #60a5fa;
-  --brand-purple: #8b87ff;
-  --surface-dark: #161617;
+  /* Brand Spectrum Palette (#4A90D2, #5FA84C, #F0A830, #D93A45, #7A1E5E) */
+  --spectrum-blue: #4A90D2;
+  --spectrum-green: #5FA84C;
+  --spectrum-amber: #F0A830;
+  --spectrum-crimson: #D93A45;
+  --spectrum-plum: #9D4EDD;
+
+  /* Renamed brand tokens to actual functional roles */
+  --chart-accent-indigo: #818CF8;
+  --chart-accent-purple: #B57EDC;
+  --brand-blue: var(--spectrum-blue);
+  --brand-indigo: var(--chart-accent-indigo);
+  --brand-purple: var(--chart-accent-purple);
+  --surface-dark: #111113;
   --border-chart-grid: rgba(255, 255, 255, 0.12);
 
-  /* Chart spectrum palette via CSS variables */
-  --chart-primary: var(--accent);
-  --chart-secondary: var(--brand-purple);
-  --chart-tertiary: var(--brand-blue);
-  --chart-quaternary: var(--brand-indigo);
-  --chart-success: var(--success);
-  --chart-warning: var(--warning);
+  /* Chart per-theme series (Dark Mode: calibrated >= 3:1 on black & dark card) */
+  --chart-series-1: #4A90D2;      /* 7.2:1 contrast on black */
+  --chart-series-2: #4ADE80;      /* 12.0:1 on black */
+  --chart-series-3: #FBBF24;      /* 12.5:1 on black */
+  --chart-series-4: #F87171;      /* 7.6:1 on black */
+  --chart-series-5: #B57EDC;      /* Luminous plum: 8.2:1 on black (>= 3:1 graphical) */
+  --chart-primary: var(--chart-series-1);
+  --chart-secondary: var(--chart-series-2);
+  --chart-tertiary: var(--chart-series-3);
+  --chart-quaternary: var(--chart-series-4);
+  --chart-quinary: var(--chart-series-5);
+  --chart-success: var(--chart-series-2);
+  --chart-warning: var(--chart-series-3);
 
   /* Elevation: Little or no drop shadow; elevation comes from surface steps + 10% white border */
   --shadow-card: none;
@@ -167,8 +208,8 @@
   --shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.65);
 
   /* Primary Button Gradient with 1px light inner edge */
-  --btn-primary-gradient: linear-gradient(135deg, #5B2A86 0%, #1A1526 100%);
-  --btn-primary-gradient-hover: linear-gradient(135deg, #6E32A0 0%, #251D36 100%);
+  --btn-primary-gradient: linear-gradient(135deg, #7A3AA8 0%, #3D1C59 100%);
+  --btn-primary-gradient-hover: linear-gradient(135deg, #8E44C2 0%, #4D2470 100%);
   --btn-primary-inner-edge: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
 
   /* Legacy Apple-* Remappings in Dark Mode */
@@ -191,8 +232,8 @@
   --card-foreground: var(--text-primary);
   --popover: var(--bg-raised);
   --popover-foreground: var(--text-primary);
-  --primary: #5B2A86;
-  --primary-foreground: #FFFFFF;
+  --primary: var(--accent);
+  --primary-foreground: #111113;
   --secondary: var(--bg-inset);
   --secondary-foreground: var(--text-primary);
   --muted: var(--bg-inset);

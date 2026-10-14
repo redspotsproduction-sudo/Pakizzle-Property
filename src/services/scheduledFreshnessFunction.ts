@@ -29,7 +29,7 @@ export async function runScheduledFreshnessSweep(): Promise<{
   let processed = 0;
 
   try {
-    const colls = ['properties', 'vehicles'];
+    const colls = ['properties'];
 
     for (const collName of colls) {
       const snap = await getDocs(collection(db, collName));

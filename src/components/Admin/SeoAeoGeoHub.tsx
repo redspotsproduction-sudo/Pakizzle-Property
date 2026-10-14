@@ -303,7 +303,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
               )}
             >
-              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
+              {tab.label} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
             </button>
           );
         })}
@@ -561,7 +561,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                         </p>
                       </div>
                     ) : (
-                      <div className="p-3.5 bg-[var(--text-primary)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] rounded-xl">
+                      <div className="p-3.5 bg-[var(--bg-inset)] dark:bg-white/[0.02] border border-black/[0.02] dark:border-white/[0.02] rounded-xl">
                         <div className="flex gap-2 items-start">
                           <Zap className="w-4 h-4 text-gold-decoration shrink-0 mt-0.5" />
                           <p className="text-[10px] text-[var(--text-secondary)] font-normal leading-relaxed">
@@ -616,7 +616,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                         "p-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3",
                         issue.resolved 
                           ? "border-apple-green/30 bg-apple-green/[0.01] opacity-60" 
-                          : "border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-white/5 hover:bg-black/[0.04]"
+                          : "border-black/[0.04] dark:border-white/[0.04] bg-[var(--bg-inset)] dark:bg-white/5 hover:bg-black/[0.04]"
                       )}
                     >
                       <div className={cn(
@@ -825,7 +825,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
+                  <div className="p-4 bg-[var(--bg-inset)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-lg bg-apple-blue/5 dark:bg-apple-blue/10 flex items-center justify-center shrink-0">
                         <span className="font-bold text-xs text-apple-blue">1</span>
@@ -839,7 +839,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
+                  <div className="p-4 bg-[var(--bg-inset)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-lg bg-apple-green/5 dark:bg-apple-green/10 flex items-center justify-center shrink-0">
                         <span className="font-bold text-xs text-apple-green">2</span>
@@ -853,7 +853,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                     </div>
                   </div>
 
-                  <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
+                  <div className="p-4 bg-[var(--bg-inset)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02]">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-lg bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center shrink-0">
                         <span className="font-bold text-xs text-purple-500">3</span>
@@ -868,7 +868,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   </div>
                 </div>
 
-                <div className="flex flex-col justify-center bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.02] dark:border-white/[0.02] space-y-4">
+                <div className="flex flex-col justify-center bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] p-5 rounded-2xl border border-black/[0.02] dark:border-white/[0.02] space-y-4">
                   <div className="space-y-1 text-center">
                     <span className="px-2 py-0.5 bg-apple-blue/10 rounded text-[9px] font-bold uppercase text-apple-blue tracking-wider">Optimization Paradigm</span>
                     <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Comparison of Visibility Drivers</h4>
@@ -949,7 +949,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       "w-full p-3.5 rounded-xl flex items-center justify-between text-left border transition-all duration-200",
                       selectedVehicleId === v.id 
                         ? "border-apple-blue bg-apple-blue/[0.02] dark:bg-apple-blue/10" 
-                        : "border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-white/5 hover:bg-black/[0.04]"
+                        : "border-black/[0.04] dark:border-white/[0.04] bg-[var(--bg-inset)] dark:bg-white/5 hover:bg-black/[0.04]"
                     )}
                   >
                     <div className="space-y-1 truncate">
@@ -1035,7 +1035,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                       </div>
                       
                       {/* Search Snippet Preview */}
-                      <div className="p-4 bg-[var(--text-primary)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02] space-y-1">
+                      <div className="p-4 bg-[var(--bg-inset)] dark:bg-white/[0.02] rounded-xl border border-black/[0.02] dark:border-white/[0.02] space-y-1">
                         <div className="flex items-center gap-1 text-[10px] text-[var(--text-secondary)] font-medium">
                           <span className="font-semibold">pakizzle.com</span>
                           <span>›</span>
@@ -1057,7 +1057,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                           <h5 className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Local SEO Keyword Targets</h5>
                           <div className="space-y-1.5">
                             {optimizationData.seoKeywordDensity.map((kw, idx) => (
-                              <div key={idx} className="flex items-center justify-between p-2.5 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl text-xs font-medium">
+                              <div key={idx} className="flex items-center justify-between p-2.5 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl text-xs font-medium">
                                 <span className="text-[var(--text-primary)] dark:text-white truncate">{kw.keyword}</span>
                                 <div className="flex items-center gap-2 shrink-0">
                                   <span className="text-[var(--text-secondary)] font-mono">{kw.count}x</span>
@@ -1191,7 +1191,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
               </div>
 
               <div className="space-y-4">
-                <div className="p-4 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-2">
+                <div className="p-4 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-2">
                   <h4 className="text-xs font-semibold text-[var(--text-primary)] dark:text-white">Try these prompt formats:</h4>
                   <ul className="text-[11px] text-[var(--text-secondary)] font-medium space-y-1.5 list-disc pl-4 leading-relaxed">
                     <li>"Sedans in Lahore under 30 Lakhs"</li>
@@ -1200,7 +1200,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   </ul>
                 </div>
 
-                <div className="p-4 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-1.5">
+                <div className="p-4 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl space-y-1.5">
                   <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase text-[var(--text-secondary)] tracking-wider">
                     <Sparkles className="w-3.5 h-3.5 text-purple-500" /> Grounding Signal
                   </div>
@@ -1214,7 +1214,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
             {/* Sandbox Chat Window */}
             <div className="lg:col-span-2 bg-white dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] overflow-hidden flex flex-col h-[560px]">
               {/* Chat Title bar */}
-              <div className="p-4 border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between bg-[var(--text-primary)] dark:bg-[var(--bg-surface)]">
+              <div className="p-4 border-b border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)]">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-purple-500/5 dark:bg-purple-500/10 flex items-center justify-center">
                     <Brain className="w-5 h-5 text-purple-500" />
@@ -1245,7 +1245,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                         "p-4 rounded-xl max-w-[85%] text-xs font-medium leading-relaxed border shadow-sm",
                         msg.role === 'user' 
                           ? 'bg-apple-blue border-apple-blue text-white rounded-tr-none' 
-                          : 'bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border-black/[0.02] dark:border-white/[0.02] text-[var(--text-secondary)] rounded-tl-none space-y-3'
+                          : 'bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] border-black/[0.02] dark:border-white/[0.02] text-[var(--text-secondary)] rounded-tl-none space-y-3'
                       )}>
                         {msg.role === 'user' ? (
                           msg.content
@@ -1274,7 +1274,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
                   {isSandboxTyping && (
                     <div className="flex flex-col items-start gap-1.5">
                       <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] px-1">Generative RAG Node</span>
-                      <div className="p-3 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl rounded-tl-none flex items-center gap-1.5">
+                      <div className="p-3 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] border border-black/[0.02] dark:border-white/[0.02] rounded-xl rounded-tl-none flex items-center gap-1.5">
                         <span className="w-1.2 h-1.2 rounded-full bg-purple-500 animate-bounce"></span>
                         <span className="w-1.2 h-1.2 rounded-full bg-purple-500 animate-bounce delay-100"></span>
                         <span className="w-1.2 h-1.2 rounded-full bg-purple-500 animate-bounce delay-200"></span>
@@ -1285,7 +1285,7 @@ This answer was compiled using RAG (Retrieval-Augmented Generation) based on the
               </ScrollArea>
 
               {/* Chat Input */}
-              <form onSubmit={handleSandboxSubmit} className="p-3.5 border-t border-black/[0.04] dark:border-white/[0.04] bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] flex gap-3">
+              <form onSubmit={handleSandboxSubmit} className="p-3.5 border-t border-black/[0.04] dark:border-white/[0.04] bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] flex gap-3">
                 <input
                   type="text"
                   placeholder="Ask the AI simulator to search for vehicles..."

@@ -235,16 +235,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         phone_verified: false,
         email_verified: false,
         identity_status: 'unverified',
-        trustScore: 30, // base trust score
-        riskScore: 5,
+        verificationLevel: 0,
+        trustScore: 100,
+        riskScore: 0,
         riskLevel: 'low',
         suspiciousActivityCount: 0,
-        verificationLevel: 0,
         createdAt: new Date().toISOString(),
         isOnline: true,
         lastSeen: new Date().toISOString()
       };
       await setDoc(userDocRef, newProfile);
+
+      // Create initial public profile (owner writes only displayName and photoURL)
+      try {
+        await setDoc(doc(db, 'publicProfiles', firebaseUser.uid), {
+          displayName: name,
+          photoURL: ''
+        });
+      } catch (pubErr) {
+        console.warn('Initial publicProfiles sync note:', pubErr);
+      }
     } catch (error: any) {
       console.error('Error signing up with Email:', error);
       if (error.code === 'auth/email-already-in-use') {
@@ -560,40 +570,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         browser,
         device,
         registrationSource,
-        trustScore: 50,
-        riskScore,
-        riskLevel: riskScore > 75 ? 'critical' : riskScore > 50 ? 'high' : riskScore > 25 ? 'medium' : 'low',
-        suspiciousActivityCount: 0,
         lastLoginAt: new Date().toISOString(),
         isOnline: true,
         lastSeen: new Date().toISOString(),
         isPendingOnboarding: false,
         onboardingCompletedAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        status: profileData.accountType === 'user' ? 'active' : 'pending',
         role: 'user',
-        lastKnownIp: '182.180.89.21',
-        ipHistory: [{ ip: '182.180.89.21', timestamp: new Date().toISOString(), location: 'Karachi, Pakistan' }],
         bio: profileData.bio || ''
       };
 
       await setDoc(userDocRef, onboardingPayload, { merge: true });
 
-      // Create/Update publicProfiles/{uid} for public display
+      // Create/Update publicProfiles/{uid} (restricted to displayName and photoURL)
       try {
         await setDoc(doc(db, 'publicProfiles', user.uid), {
-          uid: user.uid,
-          name: onboardingPayload.displayName,
           displayName: onboardingPayload.displayName,
-          photo: onboardingPayload.photoURL,
-          photoURL: onboardingPayload.photoURL,
-          badge: profileData.accountType === 'dealer' ? 'business' : 'none',
-          badgeType: profileData.accountType === 'dealer' ? 'business' : 'none',
-          agency: onboardingPayload.agencyName,
-          agencyName: onboardingPayload.agencyName,
-          rating: 5.0,
-          isVerified: false,
-          updatedAt: new Date().toISOString()
+          photoURL: onboardingPayload.photoURL || ''
         }, { merge: true });
       } catch (pubErr) {
         console.warn('Failed to sync publicProfiles document:', pubErr);
@@ -622,22 +615,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         updatedAt: new Date().toISOString()
       }, { merge: true });
 
-      // Synchronize publicProfiles/{uid} document
+      // Synchronize publicProfiles/{uid} document (owner allowed keys: displayName, photoURL)
       try {
-        const publicUpdates: Record<string, any> = { updatedAt: new Date().toISOString() };
-        if (data.displayName) {
-          publicUpdates.name = data.displayName;
+        const publicUpdates: Record<string, any> = {};
+        if (data.displayName !== undefined) {
           publicUpdates.displayName = data.displayName;
         }
-        if (data.photoURL) {
-          publicUpdates.photo = data.photoURL;
+        if (data.photoURL !== undefined) {
           publicUpdates.photoURL = data.photoURL;
         }
-        if (data.agencyName) {
-          publicUpdates.agency = data.agencyName;
-          publicUpdates.agencyName = data.agencyName;
+        if (Object.keys(publicUpdates).length > 0) {
+          await setDoc(doc(db, 'publicProfiles', user.uid), publicUpdates, { merge: true });
         }
-        await setDoc(doc(db, 'publicProfiles', user.uid), publicUpdates, { merge: true });
       } catch (pubErr) {
         console.warn('Could not sync public profile update:', pubErr);
       }

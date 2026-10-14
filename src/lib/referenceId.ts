@@ -203,3 +203,45 @@ export function extractReferenceIdFromInput(input: string): string | null {
 }
 
 export const extractReferenceId = extractReferenceIdFromInput;
+
+/**
+ * ONE title formatter (type + size + area + purpose) used in the list, header and listing card.
+ * Never year/make/model.
+ * E.g. "Apartment • 10 Marla • DHA Phase 6 • For Sale"
+ */
+export function formatPropertyTitle(property?: {
+  propertyType?: string;
+  type?: string;
+  size?: string;
+  areaSize?: string | number;
+  area?: string;
+  location?: string;
+  city?: string;
+  purpose?: string;
+  [key: string]: any;
+}): string {
+  if (!property) return "Property Listing";
+  const type = property.propertyType || property.type || "";
+  const size = property.size ? String(property.size) : (property.areaSize ? `${property.areaSize} Marla` : "");
+  const area = property.area || property.location || property.city || "";
+  const purpose = property.purpose
+    ? property.purpose === "rent" || property.purpose === "for-rent"
+      ? "For Rent"
+      : "For Sale"
+    : "";
+  const parts = [type, size, area, purpose].filter(Boolean);
+  return parts.length > 0 ? parts.join(" • ") : "Property Listing";
+}
+
+/**
+ * Structured listing summary for list rows (type • area • formatted PKR price)
+ * e.g. "Apartment • Dubai Mahal Road • Rs 26.69 Cr"
+ */
+export function formatListingSummary(property?: any, priceFormatter?: (val?: number) => string): string {
+  if (!property) return "Property Inquiry";
+  const type = property.propertyType || property.type || "Property";
+  const area = property.area || property.location || property.city || "";
+  const price = property.price && priceFormatter ? priceFormatter(property.price) : "";
+  const parts = [type, area, price].filter(Boolean);
+  return parts.length > 0 ? parts.join(" • ") : "Property Inquiry";
+}

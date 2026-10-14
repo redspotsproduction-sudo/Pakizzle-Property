@@ -96,7 +96,7 @@ export default function ReelsUpload({ onClose }: ReelsUploadProps) {
       setIsLoadingVehicles(true);
       try {
         const q = query(
-          collection(db, 'vehicles'),
+          collection(db, 'properties'),
           where('seller.uid', '==', currentUser.uid)
         );
         const querySnapshot = await getDocs(q);

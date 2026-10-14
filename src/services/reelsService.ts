@@ -32,6 +32,7 @@ export interface Reel {
   price?: number;
   year?: number;
   coverImage?: string;
+  status?: 'pending_review' | 'active' | 'rejected' | string;
 }
 
 export interface ReelComment {
@@ -125,13 +126,13 @@ export const reelsService = {
     let price = 0;
     let year = 2024;
     try {
-      const vehicleDoc = await getDoc(doc(db, 'vehicles', reelData.listingId));
-      if (vehicleDoc.exists()) {
-        const vData = vehicleDoc.data();
-        make = vData.make || '';
-        model = vData.model || '';
-        price = vData.price || 0;
-        year = vData.year || 2024;
+      const propertyDoc = await getDoc(doc(db, 'properties', reelData.listingId));
+      if (propertyDoc.exists()) {
+        const pData = propertyDoc.data();
+        make = pData.make || pData.propertyType || '';
+        model = pData.model || pData.title || '';
+        price = pData.price || 0;
+        year = pData.year || 2024;
       }
     } catch (e) {
       console.warn("Could not cache listing info for reel link:", e);
@@ -140,6 +141,7 @@ export const reelsService = {
     const completeReel: Reel = {
       ...reelData,
       id,
+      status: 'pending_review' as any,
       likesCount: 0,
       commentsCount: 0,
       viewsCount: 0,

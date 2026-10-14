@@ -63,55 +63,66 @@ export default function ChatContainer({ isDashboardView = false }: ChatContainer
     setIsDragging(true);
   };
 
+  const isMobileThread = isMobile && activeConversationId !== null;
+
   return (
     <div 
       ref={containerRef}
       className={cn(
-        "flex flex-col overflow-hidden relative w-full h-full",
-        isDragging && "select-none cursor-col-resize",
-        isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg"
+        "flex flex-col overflow-hidden relative w-full select-none",
+        isDragging && "cursor-col-resize",
+        isDashboardView ? "h-full bg-apple-surface" : "h-[100dvh] bg-apple-bg",
+        !isDashboardView && (isMobileThread ? "pt-0" : "pt-[var(--header-h)]")
       )}
+      style={{
+        height: isDashboardView ? '100%' : '100dvh',
+      }}
     >
-      {!isDashboardView && <Header />}
-      <main className="flex-1 flex overflow-hidden h-full">
-        <div className="w-full flex h-full overflow-hidden relative">
-          {/* Chat List - Hidden on mobile if a chat is active */}
+      {/* Global Header: Only shown on full route when NOT in mobile immersive thread */}
+      {!isDashboardView && !isMobileThread && <Header />}
+
+      <main className="flex-1 flex overflow-hidden h-full min-h-0 w-full">
+        <div className="w-full flex h-full overflow-hidden relative min-h-0">
+          {/* Chat List:
+              - Below 768: visible only if no active conversation
+              - 768 to 1023: visible as two panes (list + thread)
+              - 1024+: visible in 360px resizable column
+          */}
           <div 
             className={cn(
-              "h-full border-r shrink-0 relative flex flex-col min-w-0",
+              "h-full border-r shrink-0 relative flex flex-col min-w-0 overflow-hidden",
               !isDragging && "transition-all duration-300",
-              isDashboardView ? "border-black/[0.04] dark:border-white/[0.04]" : "border-apple-border",
+              "border-apple-border",
               activeConversationId ? "hidden md:flex" : "flex w-full md:flex"
             )}
-            style={!isMobile ? { width: `${chatListWidth}px` } : undefined}
+            style={!isMobile ? { width: `${Math.max(320, Math.min(400, chatListWidth))}px` } : undefined}
           >
             <ChatList isDashboardView={isDashboardView} />
 
-            {/* Resize Handle - Only on desktop */}
-            {!isMobile && (
-              <div
-                onMouseDown={handleMouseDown}
-                className={cn(
-                  "absolute top-0 right-[-4px] w-[8px] h-full cursor-col-resize z-50 group hover:bg-apple-blue/20 transition-colors duration-200 flex items-center justify-center",
-                  isDragging && "bg-apple-blue/30"
-                )}
-              >
-                {/* Visual indicator line */}
-                <div className={cn(
-                  "w-[1.5px] h-full transition-colors",
-                  isDragging 
-                    ? "bg-apple-blue" 
-                    : "bg-transparent group-hover:bg-apple-blue/40"
-                )} />
-              </div>
-            )}
+            {/* Resize Handle - Only on desktop (>= 1024px) */}
+            <div
+              onMouseDown={handleMouseDown}
+              className={cn(
+                "hidden lg:flex absolute top-0 right-[-4px] w-[8px] h-full cursor-col-resize z-30 group hover:bg-apple-blue/20 transition-colors duration-200 items-center justify-center",
+                isDragging && "bg-apple-blue/30"
+              )}
+              aria-label="Resize chat list pane"
+            >
+              <div className={cn(
+                "w-[1.5px] h-full transition-colors",
+                isDragging ? "bg-apple-blue" : "bg-transparent group-hover:bg-apple-blue/40"
+              )} />
+            </div>
           </div>
 
-          {/* Chat Window - Hidden on mobile if no chat is active */}
+          {/* Chat Thread Window:
+              - Below 768: visible only if active conversation exists
+              - 768+: always visible
+          */}
           <div className={cn(
-            "flex-1 h-full min-w-0",
+            "flex-1 h-full min-w-0 flex flex-col overflow-hidden min-h-0",
             !isDragging && "transition-all duration-300",
-            isDashboardView ? "bg-white dark:bg-[var(--surface-dark)]" : "bg-apple-bg",
+            isDashboardView ? "bg-apple-surface" : "bg-apple-bg",
             !activeConversationId ? "hidden md:flex" : "flex"
           )}>
             <ChatWindow isDashboardView={isDashboardView} />

@@ -132,11 +132,16 @@ export default function UploadIdentityForm() {
         }
       });
 
-      // 2. Update user profile to mark identity status as pending
-      await updateProfile({ 
-        identity_status: 'pending', 
-        verificationLevel: 1 
-      });
+      // 2. Delegate identity_status transition to server endpoint (server-only managed security field)
+      try {
+        await fetch('/api/verifications/submit-identity', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId })
+        });
+      } catch (srvErr) {
+        console.warn("Server identity status transition note:", srvErr);
+      }
 
       toast.success("Documents Submitted Successfully", {
         description: "Your verification request has been queued for Administrative review."

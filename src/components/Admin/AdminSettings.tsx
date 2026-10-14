@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useTheme } from "../../context/ThemeContext";
 import { 
   Settings, 
   ShieldCheck, 
@@ -45,6 +46,7 @@ const Label = ({ children, className, ...props }: any) => (
 );
 
 export default function AdminSettings() {
+  const { themeMode, setThemeMode } = useTheme();
   const [activeTab, setActiveTab] = useState("general");
   const [isSaving, setIsSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,11 +122,11 @@ export default function AdminSettings() {
               placeholder="Search sections..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
             />
           </div>
 
-          <nav className="p-1.5 bg-[var(--text-primary)] dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex lg:flex-col overflow-x-auto no-scrollbar gap-1">
+          <nav className="p-1.5 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface)] rounded-2xl border border-black/[0.04] dark:border-white/[0.04] flex lg:flex-col overflow-x-auto no-scrollbar gap-1">
             {filteredNavItems.map((item) => (
               <button
                 key={item.id}
@@ -132,7 +134,7 @@ export default function AdminSettings() {
                 className={cn(
                   "flex items-center gap-3 rounded-xl lg:w-full text-left py-2.5 px-4 transition-all duration-300 shrink-0 text-xs font-semibold uppercase tracking-wider",
                   activeTab === item.id 
-                    ? "bg-white dark:bg-[var(--text-primary)] text-[var(--accent)] shadow-sm" 
+                    ? "bg-white dark:bg-[var(--bg-surface)] text-[var(--accent)] shadow-sm" 
                     : "text-apple-text-muted hover:text-apple-text dark:hover:text-apple-gray"
                 )}
               >
@@ -186,16 +188,16 @@ export default function AdminSettings() {
                       <input 
                         type="text"
                         defaultValue="AutoHedge Pakistan" 
-                        className="w-full h-10 px-4 bg-[var(--text-primary)] dark:bg-apple-text border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
+                        className="w-full h-10 px-4 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
                       />
                     </div>
                     <div className="space-y-1.5">
                       <Label>Sovereign Base Currency</Label>
                       <Select defaultValue="pkr">
-                        <SelectTrigger className="h-10 rounded-xl bg-[var(--text-primary)] dark:bg-apple-text border-transparent text-xs font-semibold">
+                        <SelectTrigger className="h-10 rounded-xl bg-[var(--bg-inset)] dark:bg-white/5 border-transparent text-xs font-semibold">
                           <SelectValue placeholder="Select Base Currency" />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl border-black/[0.04] bg-white dark:bg-[var(--text-primary)]">
+                        <SelectContent className="rounded-xl border-black/[0.04] bg-white dark:bg-[var(--bg-surface)]">
                           <SelectItem value="pkr" className="text-xs py-2">PKR (Pakistani Rupee)</SelectItem>
                           <SelectItem value="usd" className="text-xs py-2">USD (United States Dollar)</SelectItem>
                           <SelectItem value="aed" className="text-xs py-2">AED (UAE Dirham)</SelectItem>
@@ -222,7 +224,7 @@ export default function AdminSettings() {
                     <input 
                       type="email"
                       defaultValue="governance@autohedge.pk" 
-                      className="w-full h-10 px-4 bg-[var(--text-primary)] dark:bg-apple-text border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
+                      className="w-full h-10 px-4 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-semibold focus:ring-0 outline-none transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -278,22 +280,38 @@ export default function AdminSettings() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     {[
-                      { id: 'light', label: 'Luminous', icon: Sun, color: 'bg-white text-apple-text border-apple-border dark:bg-apple-surface dark:text-white dark:border-apple-text-muted' },
-                      { id: 'dark', label: 'Nocturnal', icon: Moon, color: 'bg-[var(--text-primary)] text-white border-apple-surface' },
-                      { id: 'system', label: 'Adaptive', icon: Monitor, color: 'bg-gradient-to-br from-white to-[var(--text-primary)] text-apple-text-muted border-apple-border dark:border-apple-surface' },
-                    ].map((theme) => (
-                      <button
-                        key={theme.id}
-                        className={cn(
-                          "h-28 rounded-2xl border flex flex-col items-center justify-center gap-3 transition-all relative overflow-hidden group",
-                          theme.color,
-                          "hover:scale-[1.02] active:scale-95 duration-300 shadow-sm"
-                        )}
-                      >
-                        <theme.icon className="w-5 h-5 relative z-10" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider relative z-10">{theme.label} Mode</span>
-                      </button>
-                    ))}
+                      { id: 'light' as const, label: 'Luminous', desc: 'Light Cream (#FAF3E6)', icon: Sun, color: 'bg-white text-apple-text border-apple-border dark:bg-apple-surface dark:text-white dark:border-white/10' },
+                      { id: 'dark' as const, label: 'Nocturnal', desc: 'True Black (#000000)', icon: Moon, color: 'bg-black text-white border-white/20' },
+                      { id: 'system' as const, label: 'Adaptive', desc: 'System OS Sync', icon: Monitor, color: 'bg-gradient-to-br from-white to-[var(--bg-inset)] text-apple-text border-apple-border dark:border-white/10' },
+                    ].map((theme) => {
+                      const isSelected = themeMode === theme.id;
+                      return (
+                        <button
+                          key={theme.id}
+                          type="button"
+                          onClick={() => {
+                            setThemeMode(theme.id);
+                            toast.success(`Theme switched to ${theme.label} (${theme.id})`);
+                          }}
+                          className={cn(
+                            "h-28 rounded-2xl border flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden group cursor-pointer",
+                            theme.color,
+                            isSelected 
+                              ? "ring-2 ring-[var(--accent)] border-transparent scale-[1.02] shadow-md" 
+                              : "hover:scale-[1.01] opacity-75 hover:opacity-100 duration-300 shadow-sm"
+                          )}
+                        >
+                          {isSelected && (
+                            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
+                          )}
+                          <theme.icon className="w-5 h-5 relative z-10" />
+                          <div className="text-center">
+                            <span className="text-[11px] font-bold uppercase tracking-wider block relative z-10">{theme.label}</span>
+                            <span className="text-[9px] text-apple-text-muted font-medium block">{theme.desc}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <div className="space-y-4 pt-2">

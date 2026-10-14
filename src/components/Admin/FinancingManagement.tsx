@@ -300,7 +300,7 @@ export default function FinancingManagement() {
                 placeholder="Search credits, applicants..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 rounded-xl text-xs font-medium focus:ring-0 outline-none transition-all duration-300 shadow-inner"
               />
             </div>
           ) : (
@@ -389,7 +389,7 @@ export default function FinancingManagement() {
                       : "bg-white dark:bg-[var(--bg-surface)] border-black/[0.04] dark:border-white/[0.04] text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:hover:text-white"
                   )}
                 >
-                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--text-primary)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
+                  {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')} <span className={cn("ml-1 py-0.5 px-1.5 rounded-full text-[9px] font-bold font-mono", isActive ? "bg-white/25 text-white" : "bg-[var(--bg-inset)] dark:bg-white/5 text-[var(--text-secondary)]")}>{count}</span>
                 </button>
               );
             })}
@@ -508,7 +508,7 @@ export default function FinancingManagement() {
                 >
                   <div className="p-6 flex-1 space-y-6">
                     <div className="flex justify-between items-start">
-                      <div className="w-16 h-16 rounded-xl bg-[var(--text-primary)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
+                      <div className="w-16 h-16 rounded-xl bg-[var(--bg-inset)] dark:bg-white/5 p-2 flex items-center justify-center overflow-hidden border border-black/[0.06] dark:border-white/[0.06]">
                         <img 
                           src={company.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(company.name)}&background=007AFF&color=fff`} 
                           alt={company.name}
@@ -742,7 +742,7 @@ export default function FinancingManagement() {
 
       {/* Capital Provider Registration/Edit Dialog */}
       <Dialog open={isCompanyModalOpen} onOpenChange={setIsCompanyModalOpen}>
-        <DialogContent className="max-w-2xl rounded-[40px] border-apple-border/10 bg-white dark:bg-[var(--text-primary)] p-8 overflow-hidden max-h-[90vh] flex flex-col gap-0 shadow-2xl">
+        <DialogContent className="max-w-2xl rounded-[40px] border-apple-border/10 bg-white dark:bg-[var(--bg-surface)] p-8 overflow-hidden max-h-[90vh] flex flex-col gap-0 shadow-2xl">
           <div className="text-center pb-6 shrink-0 relative">
             <div className="w-20 h-20 rounded-[28px] bg-apple-blue/10 dark:bg-apple-blue/20 flex items-center justify-center mx-auto mb-4 transition-transform hover:scale-105">
               <Building2 className="w-10 h-10 text-apple-blue" />
@@ -791,7 +791,7 @@ export default function FinancingManagement() {
                       type="text" 
                       required
                       placeholder="e.g. Chase Commercial, Standard Chartered"
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.name}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, name: e.target.value }))}
                     />
@@ -803,7 +803,7 @@ export default function FinancingManagement() {
                       type="text" 
                       required
                       placeholder="e.g. 11.5%"
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.minInterestRate}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, minInterestRate: e.target.value }))}
                     />
@@ -816,7 +816,7 @@ export default function FinancingManagement() {
                       required
                       min={1}
                       max={20}
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.maxTenureYears}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, maxTenureYears: Number(e.target.value) }))}
                     />
@@ -827,7 +827,7 @@ export default function FinancingManagement() {
                     <input 
                       type="text" 
                       placeholder="e.g. 15%"
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.minDownPayment}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, minDownPayment: e.target.value }))}
                     />
@@ -838,7 +838,7 @@ export default function FinancingManagement() {
                     <input 
                       type="text" 
                       placeholder="e.g. Rs. 3,000"
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.processingFee}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, processingFee: e.target.value }))}
                     />
@@ -849,7 +849,7 @@ export default function FinancingManagement() {
                     <textarea 
                       rows={3}
                       placeholder="Describe target customer profiles, requirements or advantages."
-                      className="w-full p-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all resize-none focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full p-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all resize-none focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.description}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, description: e.target.value }))}
                     />
@@ -860,7 +860,7 @@ export default function FinancingManagement() {
                     <input 
                       type="text" 
                       placeholder="+1 (555) 019-2834"
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.contactPhone}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, contactPhone: e.target.value }))}
                     />
@@ -871,7 +871,7 @@ export default function FinancingManagement() {
                     <input 
                       type="email" 
                       placeholder="underwriting@bank.com"
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.contactEmail}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, contactEmail: e.target.value }))}
                     />
@@ -881,7 +881,7 @@ export default function FinancingManagement() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted dark:text-apple-text-muted/80 ml-1">Sort Order</label>
                     <input 
                       type="number" 
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20"
                       value={companyForm.order}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, order: Number(e.target.value) }))}
                     />
@@ -890,7 +890,7 @@ export default function FinancingManagement() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-apple-text-muted dark:text-apple-text-muted/80 ml-1">Silo Status</label>
                     <select 
-                      className="w-full h-12 px-4 rounded-2xl bg-[var(--text-primary)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20 cursor-pointer"
+                      className="w-full h-12 px-4 rounded-2xl bg-[var(--bg-inset)] dark:bg-white/5 border border-transparent focus:border-apple-blue/30 text-xs font-bold text-[var(--text-primary)] dark:text-white outline-none transition-all focus:bg-white dark:focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-apple-blue/20 cursor-pointer"
                       value={companyForm.status}
                       onChange={(e) => setCompanyForm(prev => ({ ...prev, status: e.target.value as any }))}
                     >
@@ -928,7 +928,7 @@ export default function FinancingManagement() {
                 type="button" 
                 variant="ghost" 
                 onClick={() => setIsCompanyModalOpen(false)}
-                className="w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest text-apple-text-muted hover:bg-[var(--text-primary)] dark:hover:bg-white/5"
+                className="w-full h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest text-apple-text-muted hover:bg-[var(--bg-inset)] dark:hover:bg-white/5"
               >
                 Abort & Return
               </Button>

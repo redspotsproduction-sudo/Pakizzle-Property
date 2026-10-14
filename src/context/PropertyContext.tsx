@@ -20,6 +20,7 @@ export interface PropertyContextType {
   generateUniqueReferenceId: () => string;
   confirmListingActive: (id: string) => Promise<void>;
   reactivateListing: (id: string) => Promise<void>;
+  markListingSold: (id: string) => Promise<void>;
   loading: boolean;
   recentlyViewed: string[]; // Stores property IDs
   addToRecentlyViewed: (propertyId: string) => void;
@@ -159,45 +160,9 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
       if (error?.code === 'unavailable' || error?.message?.includes('offline')) {
         console.warn('[PropertyContext] Operating in offline mode. Serving cached catalog.');
       } else {
-        // Fallback to checking 'vehicles' legacy collection if 'properties' is not provisioned
-        const legacyQ = query(collection(db, 'vehicles'), orderBy('createdAt', 'desc'));
-        const legUnsub = onSnapshot(legacyQ, (legSnap) => {
-          const legProps = legSnap.docs.map(doc => doc.data() as Property);
-          const merged = [...legProps];
-          MOCK_PROPERTIES.forEach(mock => {
-            if (!merged.find(p => p.id === mock.id)) {
-              merged.push(mock);
-            }
-          });
-
-          const knownIds = new Set<string>();
-          merged.forEach(p => {
-            if (p.reference_id) knownIds.add(p.reference_id);
-          });
-          const normalized = merged.map(p => {
-            const resolvedPropertyType = p.propertyType || p.make || (p.type === 'plot' ? 'Plot' : p.type === 'commercial' ? 'Commercial' : 'House');
-            let refId = p.reference_id;
-            if (!refId) {
-              const generated = generateReferenceId(knownIds);
-              knownIds.add(generated);
-              refId = generated;
-            }
-            return {
-              ...p,
-              propertyType: resolvedPropertyType,
-              make: p.make || resolvedPropertyType,
-              reference_id: refId
-            };
-          });
-
-          setProperties(normalized);
-          setLoading(false);
-        }, (err) => {
-          console.warn('[PropertyContext] Legacy snapshot error:', err.message);
-          setLoading(false);
-        });
-        return () => legUnsub();
+        console.warn('[PropertyContext] Firestore subscription note:', error?.message);
       }
+      setProperties(MOCK_PROPERTIES);
       setLoading(false);
     });
 
@@ -206,40 +171,41 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
 
   const addProperty = useCallback(async (property: Property) => {
     try {
-      // Ensure unique, non-enumerable 7-digit reference_id is assigned
-      const refId = property.reference_id || generateUniqueReferenceId();
-      const listingWithRef: Property = {
-        ...property,
-        reference_id: refId,
-        purpose: property.purpose || 'for-sale'
+      // Create allowlist: (id, seller, status 'pending', price, createdAt, content fields)
+      // Block title_deed_status, titleDeedStatus, title_deed_verified, isTitleDeedVerified, reference_id, views, favorites, isAuctionVerified
+      const {
+        title_deed_status,
+        titleDeedStatus,
+        title_deed_verified,
+        isTitleDeedVerified,
+        reference_id,
+        views,
+        favorites,
+        isAuctionVerified,
+        isFeatured,
+        featuredUntil,
+        badges,
+        ...contentFields
+      } = property as any;
+
+      const sanitizedProperty = {
+        ...contentFields,
+        id: property.id,
+        seller: {
+          uid: property.seller?.uid || 'user',
+          name: property.seller?.name || 'Authorized Seller',
+          rating: property.seller?.rating || 5.0
+        },
+        status: 'pending',
+        price: Number(property.price) || 0,
+        createdAt: property.createdAt || new Date().toISOString()
       };
 
-      await setDoc(doc(db, 'properties', property.id), listingWithRef);
-      
-      // Permanently reserve reference_id so it can never be reused
-      try {
-        await setDoc(doc(db, 'reserved_reference_ids', refId), {
-          reference_id: refId,
-          listing_id: property.id,
-          assigned_at: new Date().toISOString(),
-          is_deleted: false
-        });
-      } catch (_) {}
-
-      // Dual-sync to legacy collection for backwards-compat queries
-      try {
-        await setDoc(doc(db, 'vehicles', property.id), listingWithRef);
-      } catch (_) {}
-
-      if (listingWithRef.status === 'active' || !listingWithRef.status) {
-        import('../services/savedSearchService').then(({ savedSearchService }) => {
-          savedSearchService.checkAllSavedSearchesAgainstVehicle(listingWithRef);
-        }).catch(err => console.error("Error checking saved searches against property:", err));
-      }
+      await setDoc(doc(db, 'properties', property.id), sanitizedProperty);
     } catch (error) {
       handleFirestoreError(error, OperationType.CREATE, `properties/${property.id}`);
     }
-  }, [generateUniqueReferenceId]);
+  }, []);
 
   const updateProperty = useCallback(async (id: string, updates: Partial<Property>) => {
     try {
@@ -249,19 +215,16 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
         const safeUpdates = { ...updates };
         if (currentProperty.reference_id) {
           delete safeUpdates.reference_id;
-        } else if (safeUpdates.status === 'active' && !safeUpdates.reference_id) {
-          // Assign reference_id upon approval if not yet assigned
-          safeUpdates.reference_id = generateUniqueReferenceId();
         }
 
-        if (updates.status && updates.status !== currentProperty.status && currentProperty.seller.uid) {
+        if (updates.status && updates.status !== currentProperty.status && currentProperty.seller?.uid) {
           let title = '';
           let message = '';
           let type: 'listing' | 'update' | 'auction' = 'listing';
 
           if (updates.status === 'active') {
             title = 'Property Listing Approved! 🏡✨';
-            message = `Your ${currentProperty.make} "${currentProperty.model}" (Property ID: ${currentProperty.reference_id || safeUpdates.reference_id}) is now live.`;
+            message = `Your ${currentProperty.make} "${currentProperty.model}" is now live.`;
             type = 'listing';
           } else if (updates.status === 'rejected') {
             title = 'Property Listing Action Required';
@@ -279,36 +242,22 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
               metadata: { propertyId: id, referenceId: currentProperty.reference_id, oldStatus: currentProperty.status, newStatus: updates.status }
             });
           }
-
-          if (updates.status === 'active') {
-            const mergedProperty = { ...currentProperty, ...safeUpdates };
-            import('../services/savedSearchService').then(({ savedSearchService }) => {
-              savedSearchService.checkAllSavedSearchesAgainstVehicle(mergedProperty);
-            }).catch(err => console.error("Error checking saved searches against property:", err));
-          }
         }
 
         const merged = { ...currentProperty, ...safeUpdates };
         await setDoc(doc(db, 'properties', id), merged);
-        try {
-          await setDoc(doc(db, 'vehicles', id), merged);
-        } catch (_) {}
       } else {
         await setDoc(doc(db, 'properties', id), updates, { merge: true });
-        try {
-          await setDoc(doc(db, 'vehicles', id), updates, { merge: true });
-        } catch (_) {}
       }
     } catch (error) {
       handleFirestoreError(error, OperationType.UPDATE, `properties/${id}`);
     }
-  }, [properties, generateUniqueReferenceId]);
+  }, [properties]);
 
   const deleteProperty = useCallback(async (id: string) => {
     try {
       const target = properties.find(p => p.id === id);
       if (target?.reference_id) {
-        // Mark as retired/deleted in registry to ensure it is NEVER reused
         try {
           await setDoc(doc(db, 'reserved_reference_ids', target.reference_id), {
             reference_id: target.reference_id,
@@ -321,9 +270,6 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
 
       setProperties(prev => prev.filter(p => p.id !== id));
       await deleteDoc(doc(db, 'properties', id));
-      try {
-        await deleteDoc(doc(db, 'vehicles', id));
-      } catch (_) {}
     } catch (error) {
       handleFirestoreError(error, OperationType.DELETE, `properties/${id}`);
     }
@@ -334,7 +280,6 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     const updates: Partial<Property> = {
       last_confirmed_active: timestamp,
       status: 'active',
-      freshness_status: 'fresh',
       updatedAt: timestamp
     };
     setProperties(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
@@ -347,7 +292,16 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
       last_confirmed_active: timestamp,
       reactivated_at: timestamp,
       status: 'active',
-      freshness_status: 'fresh',
+      updatedAt: timestamp
+    };
+    setProperties(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    await updateProperty(id, updates);
+  }, [updateProperty]);
+
+  const markListingSold = useCallback(async (id: string) => {
+    const timestamp = new Date().toISOString();
+    const updates: Partial<Property> = {
+      status: 'sold',
       updatedAt: timestamp
     };
     setProperties(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
@@ -368,6 +322,7 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     generateUniqueReferenceId,
     confirmListingActive,
     reactivateListing,
+    markListingSold,
     loading,
     recentlyViewed,
     addToRecentlyViewed,
@@ -382,6 +337,7 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     generateUniqueReferenceId,
     confirmListingActive,
     reactivateListing,
+    markListingSold,
     loading,
     recentlyViewed,
     addToRecentlyViewed,
